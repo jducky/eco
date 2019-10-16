@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xml:lang="ko"><Esri><CreaDate>20171204</CreaDate><CreaTime>16363200</CreaTime><ArcGISFormat>1.0</ArcGISFormat><SyncOnce>TRUE</SyncOnce><DataProperties><lineage><Process Name="Raster to ASCII" ToolSource="c:\program files (x86)\arcgis\desktop10.3\ArcToolbox\Toolboxes\Conversion Tools.tbx\RasterToASCII" Date="20171204" Time="163632">RasterToASCII C:\Users\shinms\Documents\ArcGIS\Default.gdb\Extract_tif1 A:\Kangbb\A01_Worldclim\current\bioclim_1k\current_real\bio01.ASC</Process></lineage></DataProperties></Esri></metadata>
