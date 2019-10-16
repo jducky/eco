@@ -1,5 +1,8 @@
 
-shinyServer(function(input, output) {
+
+shinyServer(function(input, output, session) {
+  
+  
 
   output$SE_Dir_Project <- renderText({G$SE_Dir_Project})
   output$SE_Dir_Climate <- renderText({G$SE_Dir_Climate})
@@ -25,6 +28,7 @@ shinyServer(function(input, output) {
     G$SE_Dir_Project <<- parseDirPath(volumes, input$SE_Dir_Project)
     output$SE_Dir_Project <- renderText({G$SE_Dir_Project})
   })
+  
   
   observeEvent(input$SE_Dir_Climate, {
     volumes <- getVolumes()
