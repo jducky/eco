@@ -3,6 +3,8 @@ shinyUI(
 
    fluidPage(h4(System_Name),
              
+             shinythemes::themeSelector(),
+             
              tags$hr(),
 
 #   setBackgroundColor(
