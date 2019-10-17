@@ -78,6 +78,37 @@ shinyServer(function(input, output, session) {
     ls <- length(slist)
     tl <- ld * lc * ly * ls
     withProgress(message = 'Runing SDM model.........', value = 0, {
+      
+      
+      
+      # 191017
+      
+      cat('input$SDM_MO_Climate_model: ')
+      print(isolate(input$SDM_MO_Climate_model))
+      
+      cat('input$SDM_MO_Climate_scenario: ')
+      print(isolate(input$SDM_MO_Climate_scenario))
+      
+      cat('input$SDM_MO_Protect_year: ')
+      print(isolate(input$SDM_MO_Protect_year))
+      
+      cat('as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID): ')
+      print(isolate(as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID)))
+      
+      
+      cat('SDM_Name_CD_Models_selected: ')
+      print(SDM_Name_CD_Models_selected)
+      
+      cat('SDM_Name_CD_Scenarios_selected: ')
+      print(SDM_Name_CD_Scenarios_selected)
+      
+      cat('SDM_Name_CD_Year_selected: ')
+      print(SDM_Name_CD_Year_selected)
+      
+      cat('SDM_Name_CD_Variables_selected: ')
+      print(SDM_Name_CD_Variables_selected)
+      
+      
 
         ##############################################################
         ### Species Distribution Modeling
@@ -227,7 +258,7 @@ shinyServer(function(input, output, session) {
         #####========================================================
         ##### Modeling loop =========================================
         
-        for (s in slist) {h
+        for (s in slist) {
           n <- n + 1
           ##### Setting Environmental variables ======================= 
           SPECIES_ID <- s
