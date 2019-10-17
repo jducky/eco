@@ -10,6 +10,14 @@ shinyUI(
                 #SE_Dir_Project {
                   display: inline;
                 }
+                
+                #SDM_MO_SDM_run {
+                	position: relative;
+                  bottom: 200px;
+                  width: 200px;
+                  height: 70px;
+                  font-size: 3rem;
+                }
             
                
              '))),
@@ -230,24 +238,25 @@ shinyUI(
                          verbatimTextOutput("SDM_SP_Selection"),
                          column(6, DT::dataTableOutput("SDM_SP_Info")),
                          column(4, 
-                                checkboxGroupInput("SDM_MO_Climate_model", SDM_Name_CD_Models,
-                                                   choices = c(SDM_Name_CD_Models_list),
-                                                   selected = SDM_Name_CD_Models_selected
-                                ),
-                                # Input: Checkbox if file has header ----
-                                checkboxGroupInput("SDM_MO_Climate_scenario", SDM_Name_CD_Scenarios,
-                                                   choices = c(SDM_Name_CD_Scenarios_list),
-                                                   selected = SDM_Name_CD_Scenarios_selected
-                                ),
-                                
-                                #            # Input: Checkbox if file has header ----
-                                checkboxGroupInput("SDM_MO_Protect_year", SDM_Name_CD_Year,
-                                                   choices = c(SDM_Name_CD_Year_list),
-                                                   selected = SDM_Name_CD_Year_selected
+                                div( style = "display: inline-block;",
+                                    checkboxGroupInput("SDM_MO_Climate_model", SDM_Name_CD_Models,
+                                                       choices = c(SDM_Name_CD_Models_list),
+                                                       selected = SDM_Name_CD_Models_selected
+                                    ),
+                                    # Input: Checkbox if file has header ----
+                                    checkboxGroupInput("SDM_MO_Climate_scenario", SDM_Name_CD_Scenarios,
+                                                       choices = c(SDM_Name_CD_Scenarios_list),
+                                                       selected = SDM_Name_CD_Scenarios_selected
+                                    ),
+                                    
+                                    #            # Input: Checkbox if file has header ----
+                                    checkboxGroupInput("SDM_MO_Protect_year", SDM_Name_CD_Year,
+                                                       choices = c(SDM_Name_CD_Year_list),
+                                                       selected = SDM_Name_CD_Year_selected
+                                    )
                                 ),
 
                                 
-                                tags$hr(),
                                 useShinyalert(),  # Set up shinyalert
                                 actionButton("SDM_MO_SDM_run", label = SDM_Name_models_run))
                            )
@@ -282,11 +291,16 @@ shinyUI(
                                         ),
                                         
                                         # Input: Checkbox if file has header ----
-                                        radioButtons("SDM_OU_Project_year", SDM_Name_CD_Year_out,
-                                                     choices = c(SDM_Name_CD_Year_out_list),
-                                                     selected = SDM_Name_CD_Year_out_selected
-                                        )
-                           ),
+                                        # radioButtons("SDM_OU_Project_year", SDM_Name_CD_Year_out,
+                                        #              choices = c(SDM_Name_CD_Year_out_list),
+                                        #              selected = SDM_Name_CD_Year_out_selected
+                                        # )
+                                        
+                                        sliderInput("SDM_OU_Project_year", label = SDM_Name_CD_Year_out, min = 2000,
+                                                    max = 2080, value = 2000, step = 10)
+                                        ),
+        
+                          
                            
                            # Main panel for displaying outputs ----
                            mainPanel(
@@ -319,30 +333,53 @@ shinyUI(
                                           )
                                         )
                                ),
-                               tabPanel("Probability Map", 
+                               
+                               tabPanel("Map", 
                                         tags$head(
                                           # Include our custom CSS
                                           includeCSS("styles.css"),
                                           includeScript("gomap.js")
                                         ),
                                         tags$hr(),
-                                        leafletOutput("SDM_OU_Probability_map", width = "800", height = "600"),
-                                        tags$hr(),
-                                        column(10, verbatimTextOutput("SDM_OU_PROJ_Summary")),
-                                        column(10, plotOutput("SDM_OU_PROJ_Histogram"))
-                                        ),
-                               tabPanel("Predicted Map", 
-                                        tags$head(
-                                          # Include our custom CSS
-                                          includeCSS("styles.css"),
-                                          includeScript("gomap.js")
-                                        ),
-                                        tags$hr(),
-                                        leafletOutput("SDM_OU_Predicted_map", width = "800", height = "600"),
-                                        tags$hr(),
-                                        column(10, verbatimTextOutput("SDM_OU_PRED_Summary")),
-                                        column(10, plotOutput("SDM_OU_PRED_Histogram"))
+                                        fluidRow(
+                                          
+                                          column(5, 
+                                                     tags$h3("<Probability Map>", style = "text-align: center;"),
+                                                     # leafletOutput("SDM_OU_Probability_map", width = "800", height = "600"),
+                                                     leafletOutput("SDM_OU_Probability_map"),
+                                                     tags$hr(),
+                                                     column(12, verbatimTextOutput("SDM_OU_PROJ_Summary")),
+                                                     column(12, plotOutput("SDM_OU_PROJ_Histogram"))
+                                                 ),
+                                          
+                                          column(5, 
+                                                     tags$h3("<Predicted Map>", style = "text-align: center;"),
+                                                     # leafletOutput("SDM_OU_Predicted_map", width = "800", height = "600"),
+                                                     leafletOutput("SDM_OU_Predicted_map"),
+                                                     tags$hr(),
+                                                     column(12, verbatimTextOutput("SDM_OU_PRED_Summary")),
+                                                     column(12, plotOutput("SDM_OU_PRED_Histogram"))
+                                                 )
+                                        )
+                                        
                                )
+                               
+                               # tabPanel("Probability Map", 
+                               # 
+                               #          tags$hr(),
+                               #          leafletOutput("SDM_OU_Probability_map", width = "800", height = "600"),
+                               #          tags$hr(),
+                               #          column(10, verbatimTextOutput("SDM_OU_PROJ_Summary")),
+                               #          column(10, plotOutput("SDM_OU_PROJ_Histogram"))
+                               #          ),
+                               # tabPanel("Predicted Map", 
+                               # 
+                               #          tags$hr(),
+                               #          leafletOutput("SDM_OU_Predicted_map", width = "800", height = "600"),
+                               #          tags$hr(),
+                               #          column(10, verbatimTextOutput("SDM_OU_PRED_Summary")),
+                               #          column(10, plotOutput("SDM_OU_PRED_Histogram"))
+                               # )
                              )
                            )
                          )
