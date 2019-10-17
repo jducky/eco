@@ -3,6 +3,43 @@
 shinyServer(function(input, output, session) {
   
   
+  output$CM_UI <- renderUI({
+    actionButton("CM_btn", input$SDM_OU_Climate_model, style = "display: inline-block;")
+  })
+  
+  output$CS_UI <- renderUI({
+    actionButton("CS_btn", input$SDM_OU_Climate_scenario, style = "display: inline-block;")
+  })
+  
+  output$PY_UI <- renderUI({
+    actionButton("PY_btn", input$SDM_OU_Project_year, style = "display: inline-block;")
+  })
+  
+  # output$SYNC_UI <- renderUI({
+  #   actionButton("SYNC_btn", '동기화', style = "display: inline-block;")
+  # })
+  # 
+  # observeEvent(input$SYNC_btn, {
+  #   
+  # 
+  #   
+  #   
+  #   
+  # })
+  
+  observeEvent(input$SDM_OU_Probability_map_bounds, {
+    
+    coords <- isolate(input$SDM_OU_Probability_map_bounds)
+    if (!is.null(coords)) {
+      leafletProxy("SDM_OU_Predicted_map") %>%
+        fitBounds(coords$west,
+                  coords$south,
+                  coords$east,
+                  coords$north)
+    }
+  })
+  
+  
 
   output$SE_Dir_Project <- renderText({G$SE_Dir_Project})
   output$SE_Dir_Climate <- renderText({G$SE_Dir_Climate})
@@ -659,6 +696,9 @@ shinyServer(function(input, output, session) {
     
   output$SP_Map <- renderLeaflet({
     rs <- input$SP_Info_rows_selected  # G_FILE_specieslocation   # st_read("species.shp")
+    cat('rs: ')
+    print(rs)
+    
     if (length(rs)) {
        species_data <- inner_join(G_FILE_specieslocation, G_FILE_speciesinfo[rs, , drop = FALSE], by = "ID")
        leaflet(data = species_data) %>%
@@ -790,7 +830,13 @@ shinyServer(function(input, output, session) {
   
   
   
-  output$SDM_SP_Info <- DT::renderDataTable(G_FILE_speciesinfo, server = TRUE)    
+  # output$SDM_SP_Info <- DT::renderDataTable(G_FILE_speciesinfo, server = TRUE)    
+  output$SDM_SP_Info <- DT::renderDataTable({
+    
+    input$resetSpeciesInfo
+    G_FILE_speciesinfo                                        
+    
+  }, server = TRUE)
   
   # output$SDM_SP_Selection = renderPrint({
   #   s_id <- as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID)
@@ -848,8 +894,8 @@ shinyServer(function(input, output, session) {
     SDM_Name_Projection_Models_list <- as.character(G_FILE_species_evaluation$Projection)
     SDM_Name_Projection_Models_selected <- SDM_Name_Projection_Models_list[1]
     selectInput("SDM_OU_Projection_model", "Select Projection models",
-                       choices = c(SDM_Name_Projection_Models_list)
-                       # selected = SDM_Name_Projection_Models_selected
+                       choices = "PA1_Full_GAM"
+                       
                       
     )
   })
