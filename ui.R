@@ -18,6 +18,16 @@ shinyUI(
                   height: 70px;
                   font-size: 3rem;
                 }
+                
+                #CM_UI, #CS_UI, #PY_UI, #SYNC_UI {
+                  display: inline-block;
+                  
+                }
+                
+                #CM_btn, #CS_btn, #PY_btn {
+                  color: #fff;
+                  background-color: #0080ff;
+                }
             
                
              '))),
@@ -236,7 +246,10 @@ shinyUI(
                            fluidRow(
                          tags$hr(),
                          verbatimTextOutput("SDM_SP_Selection"),
-                         column(6, DT::dataTableOutput("SDM_SP_Info")),
+                         column(6, 
+                                actionButton('resetSpeciesInfo',label = "Reset", style = ""),
+                                DT::dataTableOutput("SDM_SP_Info")
+                                ),
                          column(4, 
                                 div( style = "display: inline-block;",
                                     checkboxGroupInput("SDM_MO_Climate_model", SDM_Name_CD_Models,
@@ -343,8 +356,17 @@ shinyUI(
                                         tags$hr(),
                                         fluidRow(
                                           
-                                          column(5, 
-                                                     tags$h3("<Probability Map>", style = "text-align: center;"),
+                                          column(6, 
+                                                     # tags$h3("<Probability Map>", style = "text-align: center;"),
+                                                     tags$h3("<Probability Map>", style = "display: inline-block;"),
+                                             
+                                                     uiOutput('CM_UI'),
+                                                     uiOutput('CS_UI'),
+                                                     uiOutput('PY_UI'),
+                                                 
+                                                     # uiOutput('SYNC_UI'),
+                                                 
+                                                 
                                                      # leafletOutput("SDM_OU_Probability_map", width = "800", height = "600"),
                                                      leafletOutput("SDM_OU_Probability_map"),
                                                      tags$hr(),
@@ -352,8 +374,10 @@ shinyUI(
                                                      column(12, plotOutput("SDM_OU_PROJ_Histogram"))
                                                  ),
                                           
-                                          column(5, 
-                                                     tags$h3("<Predicted Map>", style = "text-align: center;"),
+                                          column(6, 
+                                                     # tags$h3("<Predicted Map>", style = "text-align: center;"),
+                                                     tags$h3("<Predicted Map>"),
+                                                 
                                                      # leafletOutput("SDM_OU_Predicted_map", width = "800", height = "600"),
                                                      leafletOutput("SDM_OU_Predicted_map"),
                                                      tags$hr(),
