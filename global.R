@@ -272,7 +272,10 @@ if (SE_Language == "English") {
     SDM_Name_CD_Year_selected <- "2000"
     SDM_Name_models <- "Model types"
     SDM_Name_models_list <- SDM_models_list
+<<<<<<< Updated upstream
     # SDM_Name_models_selected <- "GLM"
+=======
+>>>>>>> Stashed changes
     SDM_Name_models_selected <- "GAM"
     SDM_Name_EMmodels <- "Ensemble"
     SDM_Name_models_run <- "Run"

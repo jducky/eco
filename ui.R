@@ -224,6 +224,7 @@ shinyUI(
      tabPanel(SDM_Name,
                 tabsetPanel(
                 tabPanel("Modeling",
+<<<<<<< Updated upstream
                          
                            fluidRow(
                          tags$hr(),
@@ -252,6 +253,38 @@ shinyUI(
                                 useShinyalert(),  # Set up shinyalert
                                 actionButton("SDM_MO_SDM_run", label = SDM_Name_models_run))
                            )
+=======
+                   tabsetPanel(
+                   tabPanel("Species selection",
+                            fluidRow(
+                              tags$hr(),
+                              verbatimTextOutput("SDM_SP_Selection"),
+                              column(6, DT::dataTableOutput("SDM_SP_Info")),
+                                  column(4, checkboxGroupInput("SDM_MO_Climate_model", SDM_Name_CD_Models,
+                                                               choices = c(SDM_Name_CD_Models_list),
+                                                               selected = SDM_Name_CD_Models_selected
+                                  ),
+                                  # Input: Checkbox if file has header ----
+                                  checkboxGroupInput("SDM_MO_Climate_scenario", SDM_Name_CD_Scenarios,
+                                                     choices = c(SDM_Name_CD_Scenarios_list),
+                                                     selected = SDM_Name_CD_Scenarios_selected
+                                  ),
+                                  
+                                  #            # Input: Checkbox if file has header ----
+                                  checkboxGroupInput("SDM_MO_Protect_year", SDM_Name_CD_Year,
+                                                     choices = c(SDM_Name_CD_Year_list),
+                                                     selected = SDM_Name_CD_Year_selected
+                                  ),
+                                  # tags$hr(),
+                                  # checkboxInput("SDM_MO_SDM_EMmodel", label = SDM_Name_EMmodels, value = FALSE),
+                                  
+                                  tags$hr(),
+                                  useShinyalert(),  # Set up shinyalert
+                                  actionButton("SDM_MO_SDM_run", label = SDM_Name_models_run))
+                                )
+                              
+                            )
+>>>>>>> Stashed changes
 
                                    
                          
@@ -291,6 +324,7 @@ shinyUI(
                    #          )
                    #          ),
 
+<<<<<<< Updated upstream
           #          tabPanel("Variable selection",  
           #                   tags$hr(),
           #                   fluidRow(
@@ -310,6 +344,10 @@ shinyUI(
 
 
           # tabPanel("SDM selection",
+=======
+
+          # tabPanel("SDM selection",  
+>>>>>>> Stashed changes
           #          tags$hr(),
           #          fluidRow(
           #            # Sidebar panel for inputs ----

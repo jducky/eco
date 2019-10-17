@@ -185,7 +185,8 @@ shinyServer(function(input, output, session) {
         # setting speices and environmental data
         FILE_SPECIES_NAME <- G$SE_speciesindex
         FILE_SPECIES_LOCATION <- G$SE_specieslocation
-        ENV_VARIABLES <<- input$SDM_MO_Variables   # c("bio01.asc", "bio02.asc", "bio03.asc", "bio12.asc", "bio13.asc", "bio14.asc")
+        # ENV_VARIABLES <<- input$SDM_MO_Variables   # c("bio01.asc", "bio02.asc", "bio03.asc", "bio12.asc", "bio13.asc", "bio14.asc")
+        ENV_VARIABLES <<- SDM_Name_CD_Variables_selected
         
         # Defining Models Data Options using default options.
         BIOMOD_eval.resp.var <- NULL
@@ -201,7 +202,8 @@ shinyServer(function(input, output, session) {
         BIOMOD_na.rm <- TRUE
         
         # Defining Models Options using default options.
-        BIOMOD_models <- input$SDM_MO_SDM_model # c('GAM', 'GLM')  # c('MAXENT.Phillips') 
+        # BIOMOD_models <- input$SDM_MO_SDM_model # c('GAM', 'GLM')  # c('MAXENT.Phillips') 
+        BIOMOD_models <- c(SDM_Name_models_selected)
         BIOMOD_models.options <- BIOMOD_ModelingOptions()
         BIOMOD_NbRunEval <- 1
         BIOMOD_DataSplit <- 100
