@@ -384,7 +384,8 @@ shinyServer(function(input, output, session) {
               ##### Modeling ensemble model ===================================
               # Runing ensemble modelling
               
-              if(input$SDM_MO_SDM_EMmodel) {
+              # if(input$SDM_MO_SDM_EMmodel) {
+              if(F) {
               myBiomodEM <- BIOMOD_EnsembleModeling(modeling.output = myBiomodModelOut,
                                                     chosen.models = EM_chosen.models,
                                                     em.by = EM_em.by,
@@ -465,7 +466,8 @@ shinyServer(function(input, output, session) {
             }
           }
           
-          if(input$SDM_MO_SDM_EMmodel) {
+          # if(input$SDM_MO_SDM_EMmodel) {
+          if(F) {
           destfile <- file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(as.name(paste(SPECIES_NAME, "_EM_eval.csv", sep = "")), sep = "", collapse = "--"))
           if (!file.exists(destfile))
             return
