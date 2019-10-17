@@ -272,7 +272,8 @@ if (SE_Language == "English") {
     SDM_Name_CD_Year_selected <- "2000"
     SDM_Name_models <- "Model types"
     SDM_Name_models_list <- SDM_models_list
-    SDM_Name_models_selected <- "GLM"
+    # SDM_Name_models_selected <- "GLM"
+    SDM_Name_models_selected <- "GAM"
     SDM_Name_EMmodels <- "Ensemble"
     SDM_Name_models_run <- "Run"
     SDM_Name_models_out <- "Model types"

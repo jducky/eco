@@ -137,12 +137,15 @@ shinyServer(function(input, output, session) {
           dir.create(file.path(PATH_PROJECT, "Vulnerable_Species"))
         }
         
-        
+        print("####111")
         PATH_MODEL_OUTPUT  <- file.path(PATH_PROJECT, "Species_Distribution")
-
+        print("####222")
+        print(file.path(getwd()))
         file.copy(file.path(getwd(), "maxent.jar"), PATH_MODEL_OUTPUT)
+        print("####333")
         setwd(PATH_MODEL_OUTPUT)
         # Setting Column Name of species data
+        print("####444")
         NAME_ID <- "ID"
         NAME_SPECIES <- "K_NAME"
         NAME_LONG <- "Longitude"
@@ -207,6 +210,8 @@ shinyServer(function(input, output, session) {
         #####=========================================================
         ##### Setting path and data ==================================
         # creating working a project
+        
+        print("####555")
 
         # Loading speices data
         DATA_SPECIES_NAME <- read.table(file.path(PATH_SPECIES, FILE_SPECIES_NAME), header = T, sep = ",")
@@ -222,7 +227,7 @@ shinyServer(function(input, output, session) {
         #####========================================================
         ##### Modeling loop =========================================
         
-        for (s in slist) {
+        for (s in slist) {h
           n <- n + 1
           ##### Setting Environmental variables ======================= 
           SPECIES_ID <- s
@@ -232,7 +237,7 @@ shinyServer(function(input, output, session) {
           
           myResp <- as.numeric(SPECIES_DATA[,NAME_ID] <- 1)
           myResp <- as.numeric(SPECIES_DATA[,NAME_ID])
-          
+           
           CUR_PATH <- getwd()
           setwd(PATH_ENV_INPUT)
           myExpl <- stack(ENV_VARIABLES)
@@ -731,15 +736,42 @@ shinyServer(function(input, output, session) {
   
   output$SDM_SP_Info <- DT::renderDataTable(G_FILE_speciesinfo, server = TRUE)    
   
+  # output$SDM_SP_Selection = renderPrint({
+  #   s_id <- as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID)
+  #   s_kname <- as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$K_NAME)
+  #   if (length(s_id)) {
+  #     cat('Speices ID:')
+  #     cat(s_id, sep = ', ')
+  #     cat('\n\n')
+  #     cat("Species Name:")
+  #     cat(s_kname, sep = ', ')
+  #   }
+  # })
+  
   output$SDM_SP_Selection = renderPrint({
     s_id <- as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID)
     s_kname <- as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$K_NAME)
     if (length(s_id)) {
-      cat('Speices ID:\n\n')
+      cat('Speices ID: ')
       cat(s_id, sep = ', ')
       cat('\n\n')
-      cat("Species Name:\n\n")
+      
+      cat("Species Name: ")
       cat(s_kname, sep = ', ')
+      cat('\n\n')
+      
+      cat('Climate Models: ')
+      cat(input$SDM_MO_Climate_model, sep = ', ')
+      cat('\n\n')
+      
+      cat("Climate Scenarios: ")
+      cat(input$SDM_MO_Climate_scenario, sep = ', ')
+      cat('\n\n')
+      
+      cat('Projecting Years: ')
+      cat(input$SDM_MO_Protect_year, sep = ', ')
+      
+
     }
   })
   
