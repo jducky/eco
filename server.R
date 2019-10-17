@@ -94,6 +94,7 @@ shinyServer(function(input, output, session) {
       
       cat('as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID): ')
       print(isolate(as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID)))
+      print(isolate(as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$K_NAME)))
       
       
       cat('SDM_Name_CD_Models_selected: ')
@@ -486,6 +487,7 @@ shinyServer(function(input, output, session) {
             sk <- ek - (lr - 1)  
             new_EM_eval$Model[sk:ek] <- sub(paste0(".*(", SPECIES_NAME, "_)"), "", sub("(.Testing.data).*", "", colnames(old_EM_eval[k])))
             
+            
             n <- 0
             for (j in sk:ek) {
               n <- n + 1
@@ -547,7 +549,26 @@ shinyServer(function(input, output, session) {
         #####========================================================        
         
         
-      })        
+      })
+    
+    #런 생성 성공 시 알람창
+    shinyalert(
+      title = "",
+      text = "성공적으로 생성되었습니다.",
+      closeOnEsc = TRUE,
+      closeOnClickOutside = TRUE,
+      html = FALSE,
+      type = "success",
+      showConfirmButton = TRUE,
+      showCancelButton = FALSE,
+      confirmButtonText = "OK",
+      confirmButtonCol = "#00AEFF",
+      timer = 0,
+      imageUrl = "",
+      animation = TRUE
+    )
+    
+    
   })
   
   observeEvent(input$DM_MO_Action, {
@@ -789,19 +810,19 @@ shinyServer(function(input, output, session) {
     if (length(s_id)) {
       cat('Speices ID: ')
       cat(s_id, sep = ', ')
-      cat('\n\n')
+      cat('\n')
       
       cat("Species Name: ")
       cat(s_kname, sep = ', ')
-      cat('\n\n')
+      cat('\n')
       
       cat('Climate Models: ')
       cat(input$SDM_MO_Climate_model, sep = ', ')
-      cat('\n\n')
+      cat('\n')
       
       cat("Climate Scenarios: ")
       cat(input$SDM_MO_Climate_scenario, sep = ', ')
-      cat('\n\n')
+      cat('\n')
       
       cat('Projecting Years: ')
       cat(input$SDM_MO_Protect_year, sep = ', ')
@@ -827,8 +848,9 @@ shinyServer(function(input, output, session) {
     SDM_Name_Projection_Models_list <- as.character(G_FILE_species_evaluation$Projection)
     SDM_Name_Projection_Models_selected <- SDM_Name_Projection_Models_list[1]
     selectInput("SDM_OU_Projection_model", "Select Projection models",
-                       choices = c(SDM_Name_Projection_Models_list),
-                       selected = SDM_Name_Projection_Models_selected
+                       choices = c(SDM_Name_Projection_Models_list)
+                       # selected = SDM_Name_Projection_Models_selected
+                      
     )
   })
   
