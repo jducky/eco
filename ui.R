@@ -2,9 +2,38 @@
 
 shinyUI(
 
-   fluidPage(h4(System_Name),
+   fluidPage(h4(System_Name, style = "display: inline-block;"),
              
              shinythemes::themeSelector(),
+             
+             tags$head(tags$style(HTML('
+            
+                #SE_Dir_Project {
+                  display: inline;
+                }
+            
+               
+             '))),
+             
+             # div( style = "display: inline-block;",
+                  
+               div( style = "display: inline-block;",
+                    shinyDirButton("SE_Dir_Project", "Working Project", "Working Project"),
+                    verbatimTextOutput("SE_Dir_Project", placeholder = TRUE)
+               ),
+  
+               div( style = "display: inline-block;",
+                  
+                 a("한국어", style = "cursor:pointer; margin-right: 5px;" ),
+                 a("English", style = "cursor:pointer; margin-right: 5px; " ),
+                 a("CONTACT US", style = "cursor:pointer; margin-right: 5px; " ),
+                 a("LOGOUT", style = "cursor:pointer; margin-right: 5px;" )
+               ),
+               
+             # ),
+             br(),
+             
+             
              
              tags$hr(),
 
@@ -18,44 +47,46 @@ shinyUI(
 
              
     tabsetPanel(
-      tabPanel(SE_Name,
-                 tabsetPanel(
-                   tabPanel("Working Environment",
-                        fluidRow(column(6,
-                            tags$hr(),
-                            shinyDirButton("SE_Dir_Project", "Working Project", "Working Project"),
-                            verbatimTextOutput("SE_Dir_Project", placeholder = TRUE)
-                            ))
-                   ),
-                   tabPanel("Data Environment", 
-                        fluidRow(column(6,
-                          tags$hr(),
-                          shinyDirButton("SE_Dir_Climate", "Climate Data Path", "Climate Data Path"),
-                          verbatimTextOutput("SE_Dir_Climate", placeholder = TRUE),
-                          shinyDirButton("SE_Dir_Link", "Link Data Path", "Link Data Path"),
-                          verbatimTextOutput("SE_Dir_Link", placeholder = TRUE),
-                          shinyDirButton("SE_Dir_Species", "Species Data Path", "Species Data Path"),
-                          verbatimTextOutput("SE_Dir_Species", placeholder = TRUE),
-                          tags$hr(),
-                          fileInput("SE_speciesinfo", "Select species index data (CSV file)",
-                                    accept = c(
-                                      "text/csv",
-                                      "text/comma-separated-values,text/plain",
-                                      ".csv")
-                          ),
-                          verbatimTextOutput("SE_speciesindex", placeholder = TRUE),
-                          tags$hr(),                         
-                          fileInput("SE_speciesdata1", "Select species location data (CSV file)",
-                                    accept = c(
-                                      "text/csv",
-                                      "text/comma-separated-values,text/plain",
-                                      ".csv")
-                          ), 
-                          verbatimTextOutput("SE_specieslocation", placeholder = TRUE)
-                        ))
-                      )
-                    )
-      ),       
+      # tabPanel(SE_Name,
+      #            tabsetPanel(
+      #              tabPanel("Working Environment",
+      #                   fluidRow(column(6,
+      #                       NULL
+      #                       # tags$hr(),
+      #                       # shinyDirButton("SE_Dir_Project", "Working Project", "Working Project"),
+      #                       # verbatimTextOutput("SE_Dir_Project", placeholder = TRUE)
+      #                       ))
+      #              )
+      #              # ,
+      #              # tabPanel("Data Environment", 
+      #              #      fluidRow(column(6,
+      #              #        tags$hr(),
+      #              #        shinyDirButton("SE_Dir_Climate", "Climate Data Path", "Climate Data Path"),
+      #              #        verbatimTextOutput("SE_Dir_Climate", placeholder = TRUE),
+      #              #        shinyDirButton("SE_Dir_Link", "Link Data Path", "Link Data Path"),
+      #              #        verbatimTextOutput("SE_Dir_Link", placeholder = TRUE),
+      #              #        shinyDirButton("SE_Dir_Species", "Species Data Path", "Species Data Path"),
+      #              #        verbatimTextOutput("SE_Dir_Species", placeholder = TRUE),
+      #              #        tags$hr(),
+      #              #        fileInput("SE_speciesinfo", "Select species index data (CSV file)",
+      #              #                  accept = c(
+      #              #                    "text/csv",
+      #              #                    "text/comma-separated-values,text/plain",
+      #              #                    ".csv")
+      #              #        ),
+      #              #        verbatimTextOutput("SE_speciesindex", placeholder = TRUE),
+      #              #        tags$hr(),                         
+      #              #        fileInput("SE_speciesdata1", "Select species location data (CSV file)",
+      #              #                  accept = c(
+      #              #                    "text/csv",
+      #              #                    "text/comma-separated-values,text/plain",
+      #              #                    ".csv")
+      #              #        ), 
+      #              #        verbatimTextOutput("SE_specieslocation", placeholder = TRUE)
+      #              #      ))
+      #              #    )
+      #               )
+      # ),       
                                   
     tabPanel(SP_Name,
              tabsetPanel(
@@ -194,82 +225,35 @@ shinyUI(
      tabPanel(SDM_Name,
                 tabsetPanel(
                 tabPanel("Modeling",
-                   tabsetPanel(
-                   tabPanel("Species selection",
-                            fluidRow(
-                              tags$hr(),
-                              column(6, DT::dataTableOutput("SDM_SP_Info")),
-                              column(4, verbatimTextOutput("SDM_SP_Selection"))
-                              )
-                            ),
-                   tabPanel("Projection selection",
-                            tags$hr(),
-                            fluidRow(
-                              # Sidebar panel for inputs ----
-                              sidebarPanel(width = 4,
-                             # Input: Checkbox if file has header ----
-                             checkboxGroupInput("SDM_MO_Climate_model", SDM_Name_CD_Models,
-                                                choices = c(SDM_Name_CD_Models_list),
-                                                selected = SDM_Name_CD_Models_selected
-                             ),
+                         
+                           fluidRow(
+                         tags$hr(),
+                         verbatimTextOutput("SDM_SP_Selection"),
+                         column(6, DT::dataTableOutput("SDM_SP_Info")),
+                         column(4, 
+                                checkboxGroupInput("SDM_MO_Climate_model", SDM_Name_CD_Models,
+                                                   choices = c(SDM_Name_CD_Models_list),
+                                                   selected = SDM_Name_CD_Models_selected
+                                ),
+                                # Input: Checkbox if file has header ----
+                                checkboxGroupInput("SDM_MO_Climate_scenario", SDM_Name_CD_Scenarios,
+                                                   choices = c(SDM_Name_CD_Scenarios_list),
+                                                   selected = SDM_Name_CD_Scenarios_selected
+                                ),
+                                
+                                #            # Input: Checkbox if file has header ----
+                                checkboxGroupInput("SDM_MO_Protect_year", SDM_Name_CD_Year,
+                                                   choices = c(SDM_Name_CD_Year_list),
+                                                   selected = SDM_Name_CD_Year_selected
+                                ),
 
-                             # Input: Checkbox if file has header ----
-                             checkboxGroupInput("SDM_MO_Climate_scenario", SDM_Name_CD_Scenarios,
-                                                choices = c(SDM_Name_CD_Scenarios_list),
-                                                selected = SDM_Name_CD_Scenarios_selected
-                              ),
-
-                              # Input: Checkbox if file has header ----
-                              checkboxGroupInput("SDM_MO_Protect_year", SDM_Name_CD_Year,
-                                                 choices = c(SDM_Name_CD_Year_list),
-                                                 selected = SDM_Name_CD_Year_selected
-                              )
-                            )
-                            )
-                            ),
-
-                   tabPanel("Variable selection",  
-                            tags$hr(),
-                            fluidRow(
-                              # Sidebar panel for inputs ----
-                              sidebarPanel(width = 5,
-             
-             # Horizontal line ----
-             #                              tags$hr(),
-             
-             checkboxGroupInput("SDM_MO_Variables", SDM_Name_CD_Variables,
-                                choices = c(SDM_Name_CD_Variables_list),
-                                selected = SDM_Name_CD_Variables_selected
-                               )
-                             )
-                            )
-          ),
-
-
-          tabPanel("SDM selection",  
-                   tags$hr(),
-                   fluidRow(
-                     # Sidebar panel for inputs ----
-                     sidebarPanel(width = 4,
-
-             checkboxGroupInput("SDM_MO_SDM_model", SDM_Name_models,
-                                choices = c(SDM_Name_models_list),
-                         selected = c(SDM_Name_models_selected)
-             ),
-             tags$hr(), 
-             checkboxInput("SDM_MO_SDM_EMmodel", label = SDM_Name_EMmodels, value = FALSE),
-
-             tags$hr(), 
-             useShinyalert(),  # Set up shinyalert
-             actionButton("SDM_MO_SDM_run", label = SDM_Name_models_run)
-             
-          )
-                   )
-          )
-
-        )
-
-      ),
+                                
+                                tags$hr(),
+                                useShinyalert(),  # Set up shinyalert
+                                actionButton("SDM_MO_SDM_run", label = SDM_Name_models_run))
+                           )
+                ),
+                   
 
                 
         tabPanel("Model Outputs", fluid = TRUE,

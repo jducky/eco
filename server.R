@@ -1,5 +1,8 @@
 
-shinyServer(function(input, output) {
+
+shinyServer(function(input, output, session) {
+  
+  
 
   output$SE_Dir_Project <- renderText({G$SE_Dir_Project})
   output$SE_Dir_Climate <- renderText({G$SE_Dir_Climate})
@@ -25,6 +28,7 @@ shinyServer(function(input, output) {
     G$SE_Dir_Project <<- parseDirPath(volumes, input$SE_Dir_Project)
     output$SE_Dir_Project <- renderText({G$SE_Dir_Project})
   })
+  
   
   observeEvent(input$SE_Dir_Climate, {
     volumes <- getVolumes()
@@ -74,6 +78,37 @@ shinyServer(function(input, output) {
     ls <- length(slist)
     tl <- ld * lc * ly * ls
     withProgress(message = 'Runing SDM model.........', value = 0, {
+      
+      
+      
+      # 191017
+      
+      cat('input$SDM_MO_Climate_model: ')
+      print(isolate(input$SDM_MO_Climate_model))
+      
+      cat('input$SDM_MO_Climate_scenario: ')
+      print(isolate(input$SDM_MO_Climate_scenario))
+      
+      cat('input$SDM_MO_Protect_year: ')
+      print(isolate(input$SDM_MO_Protect_year))
+      
+      cat('as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID): ')
+      print(isolate(as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID)))
+      
+      
+      cat('SDM_Name_CD_Models_selected: ')
+      print(SDM_Name_CD_Models_selected)
+      
+      cat('SDM_Name_CD_Scenarios_selected: ')
+      print(SDM_Name_CD_Scenarios_selected)
+      
+      cat('SDM_Name_CD_Year_selected: ')
+      print(SDM_Name_CD_Year_selected)
+      
+      cat('SDM_Name_CD_Variables_selected: ')
+      print(SDM_Name_CD_Variables_selected)
+      
+      
 
         ##############################################################
         ### Species Distribution Modeling
@@ -133,12 +168,15 @@ shinyServer(function(input, output) {
           dir.create(file.path(PATH_PROJECT, "Vulnerable_Species"))
         }
         
-        
+        print("####111")
         PATH_MODEL_OUTPUT  <- file.path(PATH_PROJECT, "Species_Distribution")
-
+        print("####222")
+        print(file.path(getwd()))
         file.copy(file.path(getwd(), "maxent.jar"), PATH_MODEL_OUTPUT)
+        print("####333")
         setwd(PATH_MODEL_OUTPUT)
         # Setting Column Name of species data
+        print("####444")
         NAME_ID <- "ID"
         NAME_SPECIES <- "K_NAME"
         NAME_LONG <- "Longitude"
@@ -147,7 +185,8 @@ shinyServer(function(input, output) {
         # setting speices and environmental data
         FILE_SPECIES_NAME <- G$SE_speciesindex
         FILE_SPECIES_LOCATION <- G$SE_specieslocation
-        ENV_VARIABLES <<- input$SDM_MO_Variables   # c("bio01.asc", "bio02.asc", "bio03.asc", "bio12.asc", "bio13.asc", "bio14.asc")
+        # ENV_VARIABLES <<- input$SDM_MO_Variables   # c("bio01.asc", "bio02.asc", "bio03.asc", "bio12.asc", "bio13.asc", "bio14.asc")
+        ENV_VARIABLES <<- SDM_Name_CD_Variables_selected
         
         # Defining Models Data Options using default options.
         BIOMOD_eval.resp.var <- NULL
@@ -163,7 +202,8 @@ shinyServer(function(input, output) {
         BIOMOD_na.rm <- TRUE
         
         # Defining Models Options using default options.
-        BIOMOD_models <- input$SDM_MO_SDM_model # c('GAM', 'GLM')  # c('MAXENT.Phillips') 
+        # BIOMOD_models <- input$SDM_MO_SDM_model # c('GAM', 'GLM')  # c('MAXENT.Phillips') 
+        BIOMOD_models <- c(SDM_Name_models_selected)
         BIOMOD_models.options <- BIOMOD_ModelingOptions()
         BIOMOD_NbRunEval <- 1
         BIOMOD_DataSplit <- 100
@@ -203,6 +243,8 @@ shinyServer(function(input, output) {
         #####=========================================================
         ##### Setting path and data ==================================
         # creating working a project
+        
+        print("####555")
 
         # Loading speices data
         DATA_SPECIES_NAME <- read.table(file.path(PATH_SPECIES, FILE_SPECIES_NAME), header = T, sep = ",")
@@ -228,7 +270,7 @@ shinyServer(function(input, output) {
           
           myResp <- as.numeric(SPECIES_DATA[,NAME_ID] <- 1)
           myResp <- as.numeric(SPECIES_DATA[,NAME_ID])
-          
+           
           CUR_PATH <- getwd()
           setwd(PATH_ENV_INPUT)
           myExpl <- stack(ENV_VARIABLES)
@@ -342,7 +384,8 @@ shinyServer(function(input, output) {
               ##### Modeling ensemble model ===================================
               # Runing ensemble modelling
               
-              if(input$SDM_MO_SDM_EMmodel) {
+              # if(input$SDM_MO_SDM_EMmodel) {
+              if(F) {
               myBiomodEM <- BIOMOD_EnsembleModeling(modeling.output = myBiomodModelOut,
                                                     chosen.models = EM_chosen.models,
                                                     em.by = EM_em.by,
@@ -423,7 +466,8 @@ shinyServer(function(input, output) {
             }
           }
           
-          if(input$SDM_MO_SDM_EMmodel) {
+          # if(input$SDM_MO_SDM_EMmodel) {
+          if(F) {
           destfile <- file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(as.name(paste(SPECIES_NAME, "_EM_eval.csv", sep = "")), sep = "", collapse = "--"))
           if (!file.exists(destfile))
             return
@@ -727,15 +771,42 @@ shinyServer(function(input, output) {
   
   output$SDM_SP_Info <- DT::renderDataTable(G_FILE_speciesinfo, server = TRUE)    
   
+  # output$SDM_SP_Selection = renderPrint({
+  #   s_id <- as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID)
+  #   s_kname <- as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$K_NAME)
+  #   if (length(s_id)) {
+  #     cat('Speices ID:')
+  #     cat(s_id, sep = ', ')
+  #     cat('\n\n')
+  #     cat("Species Name:")
+  #     cat(s_kname, sep = ', ')
+  #   }
+  # })
+  
   output$SDM_SP_Selection = renderPrint({
     s_id <- as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID)
     s_kname <- as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$K_NAME)
     if (length(s_id)) {
-      cat('Speices ID:\n\n')
+      cat('Speices ID: ')
       cat(s_id, sep = ', ')
       cat('\n\n')
-      cat("Species Name:\n\n")
+      
+      cat("Species Name: ")
       cat(s_kname, sep = ', ')
+      cat('\n\n')
+      
+      cat('Climate Models: ')
+      cat(input$SDM_MO_Climate_model, sep = ', ')
+      cat('\n\n')
+      
+      cat("Climate Scenarios: ")
+      cat(input$SDM_MO_Climate_scenario, sep = ', ')
+      cat('\n\n')
+      
+      cat('Projecting Years: ')
+      cat(input$SDM_MO_Protect_year, sep = ', ')
+      
+
     }
   })
   
