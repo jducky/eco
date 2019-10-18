@@ -77,6 +77,15 @@ shinyUI(
                 #SS_Analy_Box > div > div:nth-child(5) {
                   width: 18%;
                 }
+                
+                #CD_Summary, #CD_Histogram {
+                  display: inline-block;
+                  width: 40%;
+                }
+                
+                ##CD_Histogram {
+                  width: 40%;
+                }
             
                
              '))),
@@ -179,7 +188,7 @@ shinyUI(
                         ),
                         tags$hr(),
                         fluidRow(
-                          column(6, DT::dataTableOutput("SP_Info")),
+                          column(4, DT::dataTableOutput("SP_Info")),
                           column(6, leafletOutput("SP_Map", width = "500", height = "600"))
                         ),
                         fluidRow(
@@ -233,23 +242,19 @@ shinyUI(
                              
                              # Main panel for displaying outputs ----
                              mainPanel(
-                               tabsetPanel(
-                                 tabPanel("Map", 
-                                          tags$head(
-                                            # Include our custom CSS
-                                            includeCSS("styles.css"),
-                                            includeScript("gomap.js")
-                                          ),
-                                          tags$hr(),
-                                          column(6, leafletOutput("LD_Map", width = "800", height = "650"))),
-                                 tabPanel("Summary",
-                                          tags$hr(),
-                                          column(10, verbatimTextOutput("LD_Summary")),
-                                          column(10, plotOutput("LD_Histogram")))
-                               )
+                                        bsCollapse(
+                                                   bsCollapsePanel("Summary", verbatimTextOutput("LD_Summary"), style = "info"),
+                                                   bsCollapsePanel("Histogram", plotOutput("LD_Histogram"),style = "info")
+                                                   ,multiple  = TRUE),
+                                        tags$head(
+                                          # Include our custom CSS
+                                          includeCSS("styles.css"),
+                                          includeScript("gomap.js")
+                                        ),
+                                        tags$hr(),
+                                        column(6, leafletOutput("LD_Map", width = "800", height = "650"))
                              )
                           )
-              
      ),  
      
      tabPanel(CD_Name, fluid = TRUE,
@@ -282,20 +287,23 @@ shinyUI(
                            
                            # Main panel for displaying outputs ----
                            mainPanel(
-                             tabsetPanel(
-                               tabPanel("Map", 
-                                        tags$head(
-                                          # Include our custom CSS
-                                          includeCSS("styles.css"),
-                                          includeScript("gomap.js")
-                                        ),
-                                        tags$hr(),
-                                        column(6, leafletOutput("CD_Map", width = "800", height = "650"))),
-                               tabPanel("Summary",
-                                        tags$hr(),
-                                        column(10, verbatimTextOutput("CD_Summary")),
-                                        column(10, plotOutput("CD_Histogram")))
-                             )
+ 
+                             bsCollapse(
+                               bsCollapsePanel("Summary & Chart",
+                                                 fluidRow(
+                                                   column(6,verbatimTextOutput("CD_Summary")),
+                                                   column(6,plotOutput("LD_Histogram2"))
+                                                 ) 
+                                               )
+                             ),
+                             
+                             tags$head(
+                               # Include our custom CSS
+                               includeCSS("styles.css"),
+                               includeScript("gomap.js")
+                             ),
+                             leafletOutput("CD_Map", width = "800", height = "650")
+
                            )
                          )
                          
@@ -1322,9 +1330,9 @@ tabPanel(VH_Name,
   hr(),
   print("MOTIVE ECOSYSTEM(생태계 기후변화 영향 및 취약성평가모형)")
   )
+
+
 )
-
-
 
 )
 )

@@ -735,7 +735,12 @@ shinyServer(function(input, output, session) {
   })
   
     
-  output$SP_Info <- DT::renderDataTable(G_FILE_speciesinfo, server = TRUE)
+  output$SP_Info <- DT::renderDataTable(
+    
+     G_FILE_speciesinfo[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
+    , server = TRUE)
+    
+    
 
   output$SP_Summary <- renderPrint({
    
@@ -820,6 +825,20 @@ shinyServer(function(input, output, session) {
          main = "Histogram")
     
   })  
+  
+  output$LD_Histogram2 <- renderPlot({
+    
+    #    r_asc <- read.asc(file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = "")))
+    x <- raster(file.path("C:/Projects/2019_DATA/4. forest fire, landslide/forest fire/S251", "barrier11.tif"))
+    #    bins <- seq(which.min(x), which.max(x), length.out = input$bins + 1)
+    
+    hist(x, # breaks = bins, 
+         col="orange",
+         border="brown",
+         xlab = input$CD_Variables,
+         main = "Histogram")
+    
+  }) 
   
   output$LD_Map <- renderLeaflet({
     
