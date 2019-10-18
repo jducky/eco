@@ -1,7 +1,27 @@
 
 shinyUI(
+  
+  
+  
+  dashboardPage(
+    
+    dashboardHeader(title = "Info boxes"),
+    dashboardSidebar(),
+    dashboardBody(
+      
+      shinyjs::useShinyjs(),
+      
+      # document.querySelector("#SDM_SP_Selection div:nth-child(2)").classList.add("sdm-mod-condition-run-box");'
+      
 
    fluidPage(h4(System_Name, style = "display: inline-block;"),
+             
+             tags$script(HTML(
+               
+               'document.querySelector("body").classList.add("sidebar-collapse");'
+               
+               
+             )),
              
              shinythemes::themeSelector(),
              
@@ -19,6 +39,11 @@ shinyUI(
                   font-size: 3rem;
                 }
                 
+                #DM_MO_Action {
+                  width: 200px;
+                  height: 70px;
+                }
+                
                 #CM_UI, #CS_UI, #PY_UI, #SYNC_UI {
                   display: inline-block;
                   
@@ -28,9 +53,34 @@ shinyUI(
                   color: #fff;
                   background-color: #0080ff;
                 }
+                
+                #SS_Analy_Box > div > div {
+                  padding-left: 0;
+                  padding-right: 15px;
+                }
+                
+                #SS_Analy_Box > div > div:first-child,
+                #SS_Analy_Box > div > div:last-child {
+                  width: 20%;
+                }
+                
+                #SS_Analy_Box > div > div:nth-child(2),
+                #SS_Analy_Box > div > div:nth-child(3) {
+                  width: 13%;
+                }
+                
+                #SS_Analy_Box > div > div:nth-child(4) {
+                  width: 15%;
+                }
+                
+                #SS_Analy_Box > div > div:nth-child(5) {
+                  width: 18%;
+                }
             
                
              '))),
+             
+             
              
              # div( style = "display: inline-block;",
                   
@@ -284,7 +334,9 @@ shinyUI(
 
                                 
                                 useShinyalert(),  # Set up shinyalert
-                                actionButton("SDM_MO_SDM_run", label = SDM_Name_models_run))
+                                actionButton("SDM_MO_SDM_run", label = SDM_Name_models_run)
+                                )
+                         
                            )
                 ),
                    
@@ -361,6 +413,15 @@ shinyUI(
                                # ),
                                
                                tabPanel("Validation & Contribution",
+                                        
+                                        hr(),
+                                        
+                                        fluidRow(
+                                          infoBox("New Orders", 10 * 2, icon = icon("credit-card"), width = 4) ,
+                                          infoBox("New Orders", 10 * 2, icon = icon("credit-card"), fill = TRUE, width = 4)
+                                        ),
+                                        
+                                        
                                         fluidRow(
                                           hr(),
                                           column(6, DT::dataTableOutput("SDM_OU_Validation")
@@ -457,8 +518,13 @@ tabPanel(DM_Name,
                     tags$hr(),
                     fluidRow(
                       
+                      verbatimTextOutput("DM_CD_Selection"),
+                      
                       # Sidebar panel for inputs ----
                       sidebarPanel(width = 3,
+                                   
+                                   
+                                   
                                    
                                    # Horizontal line ----
                                    #                           tags$hr(),
@@ -627,14 +693,24 @@ tabPanel(DM_Name,
                       # Main panel for displaying outputs ----
                       mainPanel(
                         tabsetPanel(
-                          tabPanel("Summary", verbatimTextOutput("DM_OU_Summary")), 
-                          tabPanel("DIspersal Map", 
-                                   tags$head(
-                                     # Include our custom CSS
-                                     includeCSS("styles.css"),
-                                     includeScript("gomap.js")
-                                   ),
-                                   leafletOutput("DM_OU_DIspersal_map", width = "800", height = "600"))
+                          # tabPanel("Summary", verbatimTextOutput("DM_OU_Summary")), 
+                          # tabPanel("DIspersal Map", 
+                          #          tags$head(
+                          #            # Include our custom CSS
+                          #            includeCSS("styles.css"),
+                          #            includeScript("gomap.js")
+                          #          ),
+                          #          leafletOutput("DM_OU_DIspersal_map", width = "800", height = "600"))
+                          
+                          tabPanel("Summary & Dispersal Map", 
+                                   
+                                   
+                                   bsCollapse( bsCollapsePanel("Summary",
+                                                               verbatimTextOutput("DM_OU_Summary"), style = "info") )
+                                   ) ,
+                          
+                          leafletOutput("DM_OU_DIspersal_map", width = "800", height = "600")
+                          
                         )
                       )
                     )
@@ -642,10 +718,13 @@ tabPanel(DM_Name,
          )
 ), 
      
-     
+
 tabPanel(SS_Name,
          tabsetPanel(
            tabPanel("Change Analysis", fluid = TRUE,
+                    
+                    uiOutput("SS_Analy_Box"),
+                    
                     tags$hr(),
                     fluidRow(
                       sidebarPanel(width = 3, Fluid = TRUE,
@@ -1209,6 +1288,31 @@ tabPanel(VH_Name,
                tags$hr(),
               sidebarPanel(width = 5,
                 helpText("MOTIVE ECOSYSTEM(생태계 기후변화 영향 및 취약성평가모형)은 환경부 기후변화 R&D 과제의 결과물입니다.")
+                ,
+                
+                fluidRow(
+                  infoBox("New Orders", 10 * 2, icon = icon("credit-card"), width = 12)  
+                ),
+                
+                fluidRow(
+                  infoBox("New Orders", 10 * 2, icon = icon("credit-card"), fill = TRUE, width = 12)
+                ),
+                
+                fluidRow(
+                  infoBox("Progress", "25%", icon = icon("list"), width = 12, color = "purple")
+                ),
+                
+                fluidRow(
+                  infoBox("Approval", paste0(80, "%"), icon = icon("thumbs-up", lib = "glyphicon") ,width = 12, color = "yellow")
+                )
+                
+                
+                
+                
+                
+
+                
+                
               )
       )
       
@@ -1217,3 +1321,7 @@ tabPanel(VH_Name,
   )
 )
 
+
+
+)
+)
