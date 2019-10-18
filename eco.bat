@@ -1,0 +1,1 @@
+"C:/Program Files/R/R-3.6.1/bin/R.exe" -e "shiny::runApp('C:/MOTIVE_Ecosystem/R/Programs/ecosystem', launch.browser = TRUE)"
