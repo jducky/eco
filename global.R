@@ -4,8 +4,8 @@
 #####=========================================================
 ##### installing and Loading packages ========================
 # Setting packages and library
-packages <- c("shiny", "shinyWidgets", "shinyFiles", "shinyalert", "tiff", "sf", "SDMTools", "proj4", "gdata", "colorspace", "plyr", "leaflet", "RColorBrewer", "scales", "lattice", "dplyr", "maps", "sp", "biomod2", "raster", "rgdal", "ggplot2", "hrbrthemes", "plotly", "grid", "reshape", "stringr", "rgdal", "MigClim", "mgcv", "gsubfn", "DT", "fmsb", "data.table", "scales", "leaflet.minicharts", "manipulateWidget")
-libraries <- c("shiny", "shinyWidgets", "shinyFiles", "shinyalert", "tiff", "sf", "SDMTools", "proj4", "gdata", "colorspace", "plyr", "leaflet", "RColorBrewer", "scales", "lattice", "dplyr", "maps", "sp", "biomod2", "raster", "rgdal", "ggplot2", "hrbrthemes", "plotly", "grid", "reshape", "stringr", "rgdal", "MigClim", "mgcv", "gsubfn", "DT", "fmsb", "data.table", "scales", "leaflet.minicharts", "manipulateWidget")
+packages <- c("shiny", "shinyWidgets", "shinyFiles", "shinyalert", "tiff", "sf", "SDMTools", "proj4", "gdata", "colorspace", "plyr", "leaflet", "RColorBrewer", "scales", "lattice", "dplyr", "maps", "sp", "biomod2", "raster", "rgdal", "ggplot2", "hrbrthemes", "plotly", "grid", "reshape", "stringr", "rgdal", "MigClim", "mgcv", "gsubfn", "DT", "fmsb", "data.table", "scales", "leaflet.minicharts", "manipulateWidget", "shinydashboard", "shinyBS")
+libraries <- c("shiny", "shinyWidgets", "shinyFiles", "shinyalert", "tiff", "sf", "SDMTools", "proj4", "gdata", "colorspace", "plyr", "leaflet", "RColorBrewer", "scales", "lattice", "dplyr", "maps", "sp", "biomod2", "raster", "rgdal", "ggplot2", "hrbrthemes", "plotly", "grid", "reshape", "stringr", "rgdal", "MigClim", "mgcv", "gsubfn", "DT", "fmsb", "data.table", "scales", "leaflet.minicharts", "manipulateWidget", "shinydashboard", "shinyBS")
 
 # installing packages 
 CHK_packages <- setdiff(packages, rownames(installed.packages()))

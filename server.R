@@ -3,6 +3,60 @@
 shinyServer(function(input, output, session) {
   
   
+  output$SS_Analy_Box = renderUI({
+    
+    div(
+      infoBox("Species", toString(input$SS_CA_Species) , icon = icon("credit-card"), width = 3),
+      infoBox("Dispersal type", toString(input$SS_CA_Dispersal_type) , icon = icon("credit-card"), width = 2),
+      infoBox("Climate model", toString(input$SS_CA_Climate_model) , icon = icon("credit-card"), width = 2),
+      infoBox("Climate scenario", toString(input$SS_CA_Climate_scenario) , icon = icon("credit-card"), width = 2),
+      infoBox("Project year", toString(input$SS_CA_Project_year) , icon = icon("credit-card"), width = 3),
+      infoBox("Models", toString(input$SS_CA_SDM_model) , icon = icon("credit-card"), width = 3)
+      
+    )
+    
+  })
+  
+  
+  output$DM_CD_Selection = renderPrint({
+    
+    cat("Species Name: ")
+    if(input[["DM-MO_Species"]] == "option1") {
+      cat("구상나무", sep = ', ')  
+      
+    } else if(input[["DM-MO_Species"]] == "option2") {
+      cat("가문비나무", sep = ', ')  
+    }
+    
+    cat('\n')
+    
+    cat("Model Types: ")
+    cat(input[["DM-MO_SDM_model"]], sep = ', ')
+    cat('\n')
+    
+    cat('Climate Models: ')
+    cat(input[["DM-MO_Climate_model"]], sep = ', ')
+    cat('\n')
+    
+    cat("Climate Scenarios: ")
+    cat(input[["DM-MO_Climate_scenario"]], sep = ', ')
+    cat('\n')
+    
+    cat('Projecting Years: ')
+    cat(input[["DM-MO_Protect_year"]], sep = ', ')
+    cat('\n')
+    
+    cat('Select Barrier Data: ')
+    cat(input[["DM-MO_Barrier"]], sep = ', ')
+    cat('\n')
+    
+    cat('Dispersal Types: ')
+    cat(input[["DM-MO_Dispersal_type"]], sep = ', ')
+    
+    
+  })
+  
+  
   observeEvent(input$Reset_Probability_View, {
     
     leafletProxy("SDM_OU_Probability_map") %>%
