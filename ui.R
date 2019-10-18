@@ -6,7 +6,7 @@ shinyUI(
   
   dashboardPage(
     
-    dashboardHeader(title = "Info boxes"),
+    dashboardHeader(title = "MOTIVE Ecosystem"),
     dashboardSidebar(),
     dashboardBody(
       
