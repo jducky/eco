@@ -3,6 +3,21 @@
 shinyServer(function(input, output, session) {
   
   
+  observeEvent(input$Reset_Probability_View, {
+    
+    leafletProxy("SDM_OU_Probability_map") %>%
+      setView(lng = 127.00, lat = 36.00, zoom = 6)
+    
+  })
+  
+  observeEvent(input$Reset_Predicted_View, {
+    
+    leafletProxy("SDM_OU_Predicted_map") %>%
+      setView(lng = 127.00, lat = 36.00, zoom = 6)
+    
+  })
+  
+
   output$CM_UI <- renderUI({
     actionButton("CM_btn", input$SDM_OU_Climate_model, style = "display: inline-block;")
   })
@@ -918,8 +933,10 @@ shinyServer(function(input, output, session) {
     destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2", paste(as.name(paste(input$SDM_OU_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
-    all_eval
+    t(all_eval)
+    
   })
+  
   
   
   output$SDM_OU_Validation_BoxPlot <- renderPlot({
@@ -1039,7 +1056,7 @@ shinyServer(function(input, output, session) {
         addRasterImage(r, colors = pal, opacity = 0.8,) %>%
         addLegend(pal = pal, values = values(r), title = "Legend")  %>%
       
-        setView(lng = 127.00, lat = 38.00, zoom = 6)
+        setView(lng = 127.00, lat = 36.00, zoom = 6)
       
   })
   

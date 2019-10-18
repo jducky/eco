@@ -61,7 +61,7 @@ shinyUI(
 #     direction = "bottom"
 #   ),
 
-    setBackgroundColor("ghostwhite"),
+    # setBackgroundColor("ghostwhite"),
 
              
     tabsetPanel(
@@ -104,7 +104,20 @@ shinyUI(
       #              #      ))
       #              #    )
       #               )
-      # ),       
+      # ),   
+      
+      
+      
+    tabPanel("Main",
+             
+             hr(),
+             mainPanel(
+               img(src="eco01.png"),
+               hr(),
+               img(src="eco02.png"),
+               br(),br()
+             )
+    ),         
                                   
     tabPanel(SP_Name,
              tabsetPanel(
@@ -319,34 +332,56 @@ shinyUI(
                            # Main panel for displaying outputs ----
                            mainPanel(
                              tabsetPanel(
-                               tabPanel("Validation",
-                                        tags$hr(),
+                               # tabPanel("Validation",
+                               #          tags$hr(),
+                               #          fluidRow(
+                               #            column(6, 
+                               #                 DT::dataTableOutput("SDM_OU_Validation")
+                               #            )
+                               #          ),
+                               #          fluidRow(
+                               #            column(8, 
+                               #            tags$hr(),
+                               #            plotOutput("SDM_OU_Validation_BoxPlot")
+                               #            )
+                               #          )
+                               #          ),
+                               # tabPanel("Contribution",
+                               #          tags$hr(),
+                               #          fluidRow(
+                               #            column(6, 
+                               #                   DT::dataTableOutput("SDM_OU_Contribution")
+                               #            )
+                               #          ),
+                               #          fluidRow(
+                               #            column(8, 
+                               #                   tags$hr(),
+                               #                   column(10, plotOutput("SDM_OU_Contribution_Radarchart"))
+                               #            )
+                               #          )
+                               # ),
+                               
+                               tabPanel("Validation & Contribution",
                                         fluidRow(
-                                          column(6, 
-                                               DT::dataTableOutput("SDM_OU_Validation")
-                                          )
-                                        ),
-                                        fluidRow(
-                                          column(8, 
-                                          tags$hr(),
-                                          plotOutput("SDM_OU_Validation_BoxPlot")
-                                          )
+                                          hr(),
+                                          column(6, DT::dataTableOutput("SDM_OU_Validation")
+                                                    
+                                                    # tags$hr(),
+                                                    # plotOutput("SDM_OU_Validation_BoxPlot")
+                                                 ),
+                                          column(6, DT::dataTableOutput("SDM_OU_Contribution"),
+                                                    plotOutput("SDM_OU_Contribution_Radarchart")
+                                                 )
                                         )
-                                        ),
-                               tabPanel("Contribution",
-                                        tags$hr(),
-                                        fluidRow(
-                                          column(6, 
-                                                 DT::dataTableOutput("SDM_OU_Contribution")
-                                          )
-                                        ),
-                                        fluidRow(
-                                          column(8, 
-                                                 tags$hr(),
-                                                 column(10, plotOutput("SDM_OU_Contribution_Radarchart"))
-                                          )
-                                        )
+                                        
+                                 
                                ),
+                               
+                               
+                               
+                               
+                               
+                               
                                
                                tabPanel("Map", 
                                         tags$head(
@@ -370,6 +405,8 @@ shinyUI(
                                                  
                                                      # leafletOutput("SDM_OU_Probability_map", width = "800", height = "600"),
                                                      leafletOutput("SDM_OU_Probability_map"),
+                                                     br(),
+                                                     actionButton("Reset_Probability_View", label = "Reset"),
                                                      tags$hr(),
                                                      column(12, verbatimTextOutput("SDM_OU_PROJ_Summary")),
                                                      column(12, plotOutput("SDM_OU_PROJ_Histogram"))
@@ -381,6 +418,8 @@ shinyUI(
                                                  
                                                      # leafletOutput("SDM_OU_Predicted_map", width = "800", height = "600"),
                                                      leafletOutput("SDM_OU_Predicted_map"),
+                                                     br(),
+                                                     actionButton("Reset_Predicted_View", label = "Reset"),
                                                      tags$hr(),
                                                      column(12, verbatimTextOutput("SDM_OU_PRED_Summary")),
                                                      column(12, plotOutput("SDM_OU_PRED_Histogram"))
