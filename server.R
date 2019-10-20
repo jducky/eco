@@ -1,4 +1,4 @@
-
+### JD Edition
 
 shinyServer(function(input, output, session) {
   
@@ -70,8 +70,29 @@ shinyServer(function(input, output, session) {
       setView(lng = 127.00, lat = 36.00, zoom = 6)
     
   })
-  
 
+  # valueBoxOutput("Value_CM")
+  # valueBoxOutput("Value_CS")
+  # valueBoxOutput("Value_YR")
+  output$Value_CM <- renderValueBox({
+    valueBox(input$SDM_OU_Climate_model, "Climate Models",
+             icon = icon("credit-card"), color = "blue", width = 3
+    )
+  })
+  
+  output$Value_CS <- renderValueBox({
+    valueBox(input$SDM_OU_Climate_scenario, "Climate Scenarios",
+             icon = icon("list"), color = "purple", width = 3
+    )
+  })  
+  
+  output$Value_YR <- renderValueBox({
+    valueBox(input$SDM_OU_Project_year, "Projecting Years",
+             icon = icon("thumbs-up"), color = "yellow", width = 3
+    )
+  })  
+
+  
   output$CM_UI <- renderUI({
     actionButton("CM_btn", input$SDM_OU_Climate_model, style = "display: inline-block;")
   })
@@ -757,11 +778,11 @@ shinyServer(function(input, output, session) {
     rs <- input$SP_Info_rows_selected  # G_FILE_specieslocation   # st_read("species.shp")
     if (length(rs) > 0) {
       species_info <- G_FILE_speciesinfo[rs, , drop = FALSE]
-    
     hist(species_info$n, # breaks = bins, 
          col="orange",
          border="brown",
          xlab = "Species Number",
+         height = "50px",
          main = "Histogram")
     }
     

@@ -1,5 +1,4 @@
-### JD's Branch Test
-
+### JD Edition
 
 #####=========================================================
 ##### installing and Loading packages ========================
@@ -229,7 +228,10 @@ DM_Models_list <- c("No Dispersal" = "ND",
                     "Unlimited Dispersal" = "UD")
 
 if (SE_Language == "English") {
-  System_Name <- "MOTIVE ECOSYSTEM (Climate Change Impact and Vulnerability Assessment Model for Ecosystem)" 
+  # System_Name <- "Climate Change Impact and Vulnerability Assessment Model for Ecosystem)"
+  System_Name <- "생태계 기후변화 영향 및 취약성 평가모형" 
+  # OV_Name <- "Overview"
+  OV_Name <- "모형개요"
   SE_Name <- "Setting"
     SE_Name_Language <- "Language"
   SP_Name <- "Species Data" 

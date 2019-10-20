@@ -1,11 +1,12 @@
-## JD's Git Merge Test
+### JD Edition
+library(shinythemes)
+ST_Name <- "info"
 
+###
 shinyUI(
-  
-  
-  
+
   dashboardPage(
-    
+    skin = "blue",
     dashboardHeader(title = "MOTIVE Ecosystem"),
     dashboardSidebar(),
     dashboardBody(
@@ -24,6 +25,7 @@ shinyUI(
                
              )),
              
+             theme = shinytheme("united"),
              shinythemes::themeSelector(),
              
              tags$head(tags$style(HTML('
@@ -101,7 +103,7 @@ shinyUI(
   
                div( style = "display: inline-block;",
                   
-                 a("한국어", style = "cursor:pointer; margin-right: 5px;" ),
+                 a("   한국어", style = "cursor:pointer; margin-right: 5px;" ),
                  a("English", style = "cursor:pointer; margin-right: 5px; " ),
                  a("CONTACT US", style = "cursor:pointer; margin-right: 5px; " ),
                  a("LOGOUT", style = "cursor:pointer; margin-right: 5px;" )
@@ -167,7 +169,7 @@ shinyUI(
       
       
       
-    tabPanel("Main",
+    tabPanel(OV_Name,
              
              hr(),
              mainPanel(
@@ -187,17 +189,27 @@ shinyUI(
                           includeScript("gomap.js")
                         ),
                         tags$hr(),
+                        bsCollapse(
+                          bsCollapsePanel("Summary & Histogram",
+                                          style = ST_Name,
+                                          fluidRow(
+                                            column(3,verbatimTextOutput("SP_Summary")),
+                                            column(4,plotOutput("SP_Histogram"))
+                                          ) 
+                          )
+                        ),
+                        
                         fluidRow(
                           column(4, DT::dataTableOutput("SP_Info")),
                           column(6, leafletOutput("SP_Map", width = "500", height = "600"))
-                        ),
-                        fluidRow(
-                          tags$hr(),
-                          column(6, 
-                               verbatimTextOutput("SP_Summary"),
-                               plotOutput("SP_Histogram")
-                          )
                         )
+                        # fluidRow(
+                        #   tags$hr(),
+                        #   column(6, 
+                        #        verbatimTextOutput("SP_Summary"),
+                        #        plotOutput("SP_Histogram")
+                        #   )
+                        # )
                  ),
                tabPanel("Species Location",
                         tags$head(
@@ -207,7 +219,8 @@ shinyUI(
                         ),
                         tags$hr(),
                         column(6, DT::dataTableOutput("SP_LOC_Info")),
-                        column(6, leafletOutput("SP_LOC_Map", width = "500", height = "600")))               
+                        column(6, leafletOutput("SP_LOC_Map", width = "500", height = "600"))
+               )
              )
      ),  
 
@@ -243,8 +256,8 @@ shinyUI(
                              # Main panel for displaying outputs ----
                              mainPanel(
                                         bsCollapse(
-                                                   bsCollapsePanel("Summary", verbatimTextOutput("LD_Summary"), style = "info"),
-                                                   bsCollapsePanel("Histogram", plotOutput("LD_Histogram"),style = "info")
+                                                   bsCollapsePanel("Summary", verbatimTextOutput("LD_Summary"),style = ST_Name),
+                                                   bsCollapsePanel("Histogram", plotOutput("LD_Histogram"),style = ST_Name)
                                                    ,multiple  = TRUE),
                                         tags$head(
                                           # Include our custom CSS
@@ -289,9 +302,10 @@ shinyUI(
                            mainPanel(
  
                              bsCollapse(
-                               bsCollapsePanel("Summary & Chart",
+                               bsCollapsePanel("Summary & Histogram",
+                                               style = ST_Name,
                                                  fluidRow(
-                                                   column(6,verbatimTextOutput("CD_Summary")),
+                                                   column(4,verbatimTextOutput("CD_Summary")),
                                                    column(6,plotOutput("LD_Histogram2"))
                                                  ) 
                                                )
@@ -314,12 +328,14 @@ shinyUI(
      tabPanel(SDM_Name,
                 tabsetPanel(
                 tabPanel("Modeling",
-                         
+
                            fluidRow(
                          tags$hr(),
                          verbatimTextOutput("SDM_SP_Selection"),
                          column(6, 
-                                actionButton('resetSpeciesInfo',label = "Reset", style = ""),
+                                actionButton('resetSpeciesInfo',label = "Reset", style = ST_Name),
+                                tags$style(type='text/css', "button#resetSpeciesInfo {margin-left: 90%;}"),
+                                tags$hr(),
                                 DT::dataTableOutput("SDM_SP_Info")
                                 ),
                          column(4, 
@@ -357,13 +373,13 @@ shinyUI(
                            sidebarPanel(width = 3, Fluid = TRUE,
 
                                         uiOutput("SDM_OU_Species"),
-                                        tags$hr(),
+                                        # tags$hr(),
 
                                         uiOutput("SDM_OU_Projection_model"),
-                                        tags$hr(),
+                                        # tags$hr(),
                                         
                                         uiOutput("SDM_OU_Prediction_model"),
-                                        tags$hr(),
+                                        # tags$hr(),
 
                                         # Input: Checkbox if file has header ----
                                         radioButtons("SDM_OU_Climate_model", SDM_Name_CD_Models_out,
@@ -384,7 +400,8 @@ shinyUI(
                                         # )
                                         
                                         sliderInput("SDM_OU_Project_year", label = SDM_Name_CD_Year_out, min = 2000,
-                                                    max = 2080, value = 2000, step = 10)
+                                                    max = 2080, value = 2000, step = 10, sep = "",
+                                                    animate = animationOptions(interval = 10000))
                                         ),
         
                           
@@ -423,14 +440,8 @@ shinyUI(
                                
                                tabPanel("Validation & Contribution",
                                         
-                                        hr(),
-                                        
-                                        fluidRow(
-                                          infoBox("New Orders", 10 * 2, icon = icon("credit-card"), width = 4) ,
-                                          infoBox("New Orders", 10 * 2, icon = icon("credit-card"), fill = TRUE, width = 4)
-                                        ),
-                                        
-                                        
+                                        # hr(),
+
                                         fluidRow(
                                           hr(),
                                           column(6, DT::dataTableOutput("SDM_OU_Validation")
@@ -445,13 +456,7 @@ shinyUI(
                                         
                                  
                                ),
-                               
-                               
-                               
-                               
-                               
-                               
-                               
+
                                tabPanel("Map", 
                                         tags$head(
                                           # Include our custom CSS
@@ -460,14 +465,28 @@ shinyUI(
                                         ),
                                         tags$hr(),
                                         fluidRow(
+                                          # valueBox("KMA", "Climate Models", icon = icon("credit-card"), color = "blue", width = 3),
+                                          # valueBox("RCP4.5", "Climate Scenarios", icon = icon("list"), color = "purple", width = 3),
+                                          # valueBox("2050", "Projecting Years", icon = icon("thumbs-up"), color = "yellow", width = 3),
+                                          valueBoxOutput("Value_CM"),
+                                          valueBoxOutput("Value_CS"),
+                                          valueBoxOutput("Value_YR")
+                                          # infoBox("New Orders", 10 * 2, icon = icon("credit-card"), width = 3) ,
+                                          # infoBox("New Orders", 10 * 2, icon = icon("credit-card"), fill = TRUE, width = 3)
+                                          
+                                        ),
+                                        fluidRow(
                                           
                                           column(6, 
                                                      # tags$h3("<Probability Map>", style = "text-align: center;"),
-                                                     tags$h3("<Probability Map>", style = "display: inline-block;"),
+                                                 box(
+                                                   title = "PROBABILITY MAP", width = 12, background = "green"
+                                                 ),
+                                                     # tags$h3("<Probability Map>", style = "display: inline-block;"),
                                              
-                                                     uiOutput('CM_UI'),
-                                                     uiOutput('CS_UI'),
-                                                     uiOutput('PY_UI'),
+                                                     # uiOutput('CM_UI'),
+                                                     # uiOutput('CS_UI'),
+                                                     # uiOutput('PY_UI'),
                                                  
                                                      # uiOutput('SYNC_UI'),
                                                  
@@ -483,7 +502,10 @@ shinyUI(
                                           
                                           column(6, 
                                                      # tags$h3("<Predicted Map>", style = "text-align: center;"),
-                                                     tags$h3("<Predicted Map>"),
+                                                 box(
+                                                   title = "PREDICTED MAP", width = 12, background = "light-blue"
+                                                 ),
+                                                     # tags$h3("<Predicted Map>"),
                                                  
                                                      # leafletOutput("SDM_OU_Predicted_map", width = "800", height = "600"),
                                                      leafletOutput("SDM_OU_Predicted_map"),
@@ -715,7 +737,7 @@ tabPanel(DM_Name,
                                    
                                    
                                    bsCollapse( bsCollapsePanel("Summary",
-                                                               verbatimTextOutput("DM_OU_Summary"), style = "info") )
+                                                               verbatimTextOutput("DM_OU_Summary"), style = ST_Name)
                                    ) ,
                           
                           leafletOutput("DM_OU_DIspersal_map", width = "800", height = "600")
@@ -725,6 +747,7 @@ tabPanel(DM_Name,
                     )
            )
          )
+)
 ), 
      
 
@@ -1326,11 +1349,10 @@ tabPanel(VH_Name,
       )
       
       
-    ),
-  hr(),
-  print("MOTIVE ECOSYSTEM(생태계 기후변화 영향 및 취약성평가모형)")
-  )
-
+    )
+  ),
+tags$hr(), # theme에 따라서 선이 보이지 않을 수 있음!!
+tags$footer("MOTIVE ECOSYSTEM(생태계 기후변화 영향 및 취약성평가모형)")
 
 )
 
