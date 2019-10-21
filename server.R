@@ -3,6 +3,56 @@
 shinyServer(function(input, output, session) {
   
   
+  
+  
+  output$DM_Sel_Box = renderUI({
+    
+    div(
+      infoBox("선택종명", toString(input[['DM-MO_Species']]), icon = icon("check"), width = 2),
+      infoBox("기후모델", toString(input[['DM-MO_SDM_model']]), icon = icon("sun"), width = 2),
+      infoBox("기후시나리오", toString(input[['DM-MO_Climate_scenario']]), icon = icon("clock"), width = 2),
+      infoBox("YEAR", toString(input[['DM-MO_Protect_year']]), icon = icon("calendar"), width = 2),
+      infoBox("Barrier ", toString(input[['DM-MO_Barrier']]), icon = icon("chart-area"), width = 2),
+      infoBox("Dispersal", toString(input[['DM-MO_Dispersal_type']]), icon = icon("external-link-square-alt"), width = 2)
+    )
+    
+  })
+  
+  
+  
+  output$Species_Link <- renderUI({
+
+    rs <- input$SP_Info_rows_selected
+    rowsLen <- length(rs)
+    
+    if (rowsLen > 0) {
+      
+      species_info <- G_FILE_speciesinfo[rs, , drop = FALSE]
+      
+      cat('species_info$K_NAME: ')
+      print(species_info$K_NAME[1])
+      
+      # print('for...')
+      # i <- 1
+      # while(rowsLen >= i) {
+      #   print(species_info$K_NAME[i])
+      # }
+      # i <- i + 1
+      
+      
+      
+      x <- a(href='https://species.nibr.go.kr/home/mainHome.do?searchType=total&cont_link=009&subMenu=009001&contCd=009001&searchField=%EA%B5%AC%EC%83%81%EB%82%98%EB%AC%B4&x=0&y=0',
+             species_info$K_NAME[1], target = '_blank', class = "btn btn-default")
+      return (x)
+      
+    } else {
+      return (NULL)
+    }
+    
+  })
+  
+  
+  
   output$SS_Analy_Box = renderUI({
     
     div(
@@ -764,8 +814,9 @@ shinyServer(function(input, output, session) {
     
 
   output$SP_Summary <- renderPrint({
-   
+
     rs <- input$SP_Info_rows_selected  # G_FILE_specieslocation   # st_read("species.shp")
+    
     if (length(rs) > 0) {
       species_info <- G_FILE_speciesinfo[rs, , drop = FALSE]
       summary(species_info$n)
@@ -803,7 +854,7 @@ shinyServer(function(input, output, session) {
          ) %>%
 
         addMarkers(~Longitude, ~Latitude, popup = ~as.character(ID), label = ~as.character(ID)) %>%
-        setView(lng = 127.00, lat = 38.00, zoom = 6)
+        setView(lng = 127.00, lat = 37.00, zoom = 6)
     }
   })
 
@@ -822,7 +873,7 @@ shinyServer(function(input, output, session) {
         ) %>%
         
         addMarkers(~Longitude, ~Latitude, popup = ~as.character(ID), label = ~as.character(ID)) %>%
-        setView(lng = 127.00, lat = 38.00, zoom = 6)
+        setView(lng = 127.00, lat = 37.00, zoom = 6)
     }
   })  
 
@@ -878,7 +929,7 @@ shinyServer(function(input, output, session) {
       addRasterImage(r, colors = pal, opacity = 0.8,) %>%
       addLegend(pal = pal, values = values(r), title = "Legend")  %>%
       
-      setView(lng = 127.00, lat = 38.00, zoom = 7)
+      setView(lng = 128.00, lat = 36.00, zoom = 7)
   })   
 
     
@@ -1251,7 +1302,7 @@ shinyServer(function(input, output, session) {
       addRasterImage(r, colors = pal, opacity = 0.8,) %>%
       addLegend(pal = pal, values = values(r), title = "Legend")  %>%
       
-      setView(lng = 127.00, lat = 38.00, zoom = 6)
+      setView(lng = 128.00, lat = 36.00, zoom = 7)
   })
   
   output$SS_CA_Species <- renderUI({
