@@ -1,12 +1,12 @@
 ### JD Edition
 library(shinythemes)
-ST_Name <- "info"
+ST_Name <- "success"
 
 ###
 shinyUI(
   
   dashboardPage(
-    skin = "blue",
+    skin = "green",
     dashboardHeader(title = "MOTIVE Ecosystem"),
     dashboardSidebar(),
     dashboardBody(
@@ -25,7 +25,7 @@ shinyUI(
                   
                 )),
                 
-                theme = shinytheme("united"),
+                theme = shinytheme("yeti"),
                 shinythemes::themeSelector(),
                 
                 tags$head(tags$style(HTML('
@@ -201,8 +201,8 @@ shinyUI(
                                       
                                       fluidRow(
                                         column(4, DT::dataTableOutput("SP_Info")),
-                                        column(6, leafletOutput("SP_Map", width = "600", height = "600")),
-                                        column(2, uiOutput("Species_Link"))
+                                        column(1, uiOutput("Species_Link")),
+                                        column(6, leafletOutput("SP_Map", width = "600", height = "600"))
                                       )
                                       # fluidRow(
                                       #   tags$hr(),
@@ -235,6 +235,10 @@ shinyUI(
                                                       selected = LD_Name_Variables_selected
                                           ),
                                           
+                                          valueBoxOutput("LD_Value_TY"),
+                                          tags$hr(),
+                                          
+
                                           # Input: Checkbox if file has header ----
                                           radioButtons("LD_Climate_model", LD_Name_Models,
                                                        choices = LD_Name_Models_list,
@@ -256,16 +260,28 @@ shinyUI(
                              
                              # Main panel for displaying outputs ----
                              mainPanel(
-                               bsCollapse(
-                                 bsCollapsePanel("Summary", verbatimTextOutput("LD_Summary"),style = ST_Name),
-                                 bsCollapsePanel("Histogram", plotOutput("LD_Histogram"),style = ST_Name)
-                                 ,multiple  = TRUE),
+                               bsCollapsePanel("Summary & Histogram",
+                                               style = ST_Name,
+                                               fluidRow(
+                                                 column(4,verbatimTextOutput("LD_Summary")),
+                                                 column(6,plotOutput("LD_Histogram"))
+                                               ) 
+                               ),
+                               # bsCollapse(
+                                 # bsCollapsePanel("Summary", verbatimTextOutput("LD_Summary"),style = ST_Name),
+                                 # bsCollapsePanel("Histogram", plotOutput("LD_Histogram"),style = ST_Name)
+                                 # ,multiple  = TRUE),
                                tags$head(
                                  # Include our custom CSS
                                  includeCSS("styles.css"),
                                  includeScript("gomap.js")
                                ),
-                               tags$hr(),
+                               # tags$hr(),
+                               fluidRow(
+                                 valueBoxOutput("LD_Value_CM"),
+                                 valueBoxOutput("LD_Value_CS"),
+                                 valueBoxOutput("LD_Value_YR")
+                               ),
                                column(6, leafletOutput("LD_Map", width = "800", height = "650"))
                              )
                            )
@@ -314,7 +330,11 @@ shinyUI(
                                                  ) 
                                  )
                                ),
-                               
+                               fluidRow(
+                                 valueBoxOutput("CD_Value_CM"),
+                                 valueBoxOutput("CD_Value_CS"),
+                                 valueBoxOutput("CD_Value_YR")
+                               ),
                                tags$head(
                                  # Include our custom CSS
                                  includeCSS("styles.css"),

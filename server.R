@@ -167,6 +167,52 @@ shinyServer(function(input, output, session) {
   # valueBoxOutput("Value_CM")
   # valueBoxOutput("Value_CS")
   # valueBoxOutput("Value_YR")
+
+  ## LD Value
+  output$LD_Value_TY <- renderValueBox({
+    valueBox(input$LD_Type, "Climate Models",
+             icon = icon("credit-card"), color = "blue", width = 2
+    )
+  })
+  
+  output$LD_Value_CM <- renderValueBox({
+    valueBox(input$LD_Climate_model, "Climate Models",
+             icon = icon("credit-card"), color = "blue", width = 1
+    )
+  })
+  
+  output$LD_Value_CS <- renderValueBox({
+    valueBox(input$LD_Climate_scenario, "Climate Scenarios",
+             icon = icon("list"), color = "purple", width = 1.5
+    )
+  })  
+  
+  output$LD_Value_YR <- renderValueBox({
+    valueBox(input$LD_Project_year, "Projecting Years",
+             icon = icon("thumbs-up"), color = "yellow", width = 2
+    )
+  })  
+  
+  ## CD Value
+  output$CD_Value_CM <- renderValueBox({
+    valueBox(input$CD_Climate_model, "Climate Models",
+             icon = icon("credit-card"), color = "blue", width = 3
+    )
+  })
+  
+  output$CD_Value_CS <- renderValueBox({
+    valueBox(input$CD_Climate_scenario, "Climate Scenarios",
+             icon = icon("list"), color = "purple", width = 3
+    )
+  })  
+  
+  output$CD_Value_YR <- renderValueBox({
+    valueBox(input$CD_Project_year, "Projecting Years",
+             icon = icon("thumbs-up"), color = "yellow", width = 3
+    )
+  })  
+  
+  ## SDM Value
   output$Value_CM <- renderValueBox({
     valueBox(input$SDM_OU_Climate_model, "Climate Models",
              icon = icon("credit-card"), color = "blue", width = 3
