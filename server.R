@@ -68,12 +68,12 @@ shinyServer(function(input, output, session) {
   output$DM_Sel_Box = renderUI({
     
     div(
-      infoBox("선택종명", toString(input[['DM-MO_Species']]), icon = icon("check"), width = 2),
-      infoBox("기후모델", toString(input[['DM-MO_SDM_model']]), icon = icon("sun"), width = 2),
+      # infoBox("선택종명", toString(input[['DM-MO_Species']]), icon = icon("tree"), width = 2),
+      infoBox("기후모델", toString(input[['DM-MO_Climate_model']]), icon = icon("sun"), width = 2),
       infoBox("기후시나리오", toString(input[['DM-MO_Climate_scenario']]), icon = icon("clock"), width = 2),
       infoBox("YEAR", toString(input[['DM-MO_Protect_year']]), icon = icon("calendar"), width = 2),
-      infoBox("Barrier ", toString(input[['DM-MO_Barrier']]), icon = icon("chart-area"), width = 2),
-      infoBox("Dispersal", toString(input[['DM-MO_Dispersal_type']]), icon = icon("external-link-square-alt"), width = 2)
+      infoBox("Barrier ", toString(input[['DM-MO_Barrier']]), icon = icon("chart-area"), width = 3),
+      infoBox("Dispersal", toString(input[['DM-MO_Dispersal_type']]), icon = icon("external-link-square-alt"), width = 3)
     )
     
   })
@@ -196,7 +196,7 @@ shinyServer(function(input, output, session) {
   })
 
   ## LD Value
-  output$LD_Value_TY <- renderValueBox(
+  output$LD_Value_TY <- reactive(
     input$LD_Value_TY
   )
   
@@ -258,6 +258,31 @@ shinyServer(function(input, output, session) {
   
   output$Value_YR <- renderValueBox({
     valueBox(input$SDM_OU_Project_year, "Projecting Years",
+             icon = icon("thumbs-up"), color = "yellow", width = 3
+    )
+  })  
+  
+  ## DM Value
+  output$DM_Value_SP <- renderValueBox({
+    valueBox("구상나무", "선택종명",
+             icon = icon("tree"), color = "green", width =3
+    )
+  })
+  
+  output$DM_Value_CM <- renderValueBox({
+    valueBox(input$DM_OU_Climate_model, "Climate Models",
+             icon = icon("credit-card"), color = "blue", width = 3
+    )
+  })
+  
+  output$DM_Value_CS <- renderValueBox({
+    valueBox(input$DM_OU_Climate_scenario, "Climate Scenarios",
+             icon = icon("list"), color = "purple", width = 3
+    )
+  })  
+  
+  output$DM_Value_YR <- renderValueBox({
+    valueBox(input$DM_OU_Project_year, "Projecting Years",
              icon = icon("thumbs-up"), color = "yellow", width = 3
     )
   })  

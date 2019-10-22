@@ -32,7 +32,7 @@ shinyUI(
                 )),
                 
                 theme = shinytheme("yeti"),
-                shinythemes::themeSelector(),
+                # shinythemes::themeSelector(),
                 
                 tags$head(tags$style(HTML('
             
@@ -249,20 +249,20 @@ shinyUI(
                            tags$hr(),
                            sidebarLayout(
                              sidebarPanel(width = 3, Fluid = TRUE,
-                                          
                                           selectInput("LD_Type", LD_Name_Variables,
                                                       choices = LD_Name_Variables_list,
                                                       selected = LD_Name_Variables_selected
                                           ),
                                           
                                           fluidRow(
+                                            
                                             # actionButton('LD_Value_TY',label = "Type", style = ST_Name)
                                             
                                             # box(status = "primary", solidHeader = T,
                                             #     title = "LD Type", width = 50, height = 45, collapsible = F, collapsed = T
                                             # )
                                             
-                                            valueBoxOutput("LD_Value_TY")
+                                            # valueBoxOutput("LD_Value_TY")
                                           ),
                                           
                                           # Input: Checkbox if file has header ----
@@ -301,19 +301,19 @@ shinyUI(
                                  # bsCollapsePanel("Summary", verbatimTextOutput("LD_Summary"),style = ST_Name),
                                  # bsCollapsePanel("Histogram", plotOutput("LD_Histogram"),style = ST_Name)
                                  # ,multiple  = TRUE),
+                               
                                tags$head(
                                  # Include our custom CSS
                                  includeCSS("styles.css"),
                                  includeScript("gomap.js")
                                ),
-                               # tags$hr(),
-                               
+
                                fluidRow(
                                  valueBoxOutput("LD_Value_CM"),
                                  valueBoxOutput("LD_Value_CS"),
                                  valueBoxOutput("LD_Value_YR")
                                ),
-                               column(6, leafletOutput("LD_Map", width = "800", height = "650"))
+                               leafletOutput("LD_Map", width = "800", height = "650")
                              )
                            )
                   ),  
@@ -366,11 +366,11 @@ shinyUI(
                                  valueBoxOutput("CD_Value_CS"),
                                  valueBoxOutput("CD_Value_YR")
                                ),
-                               tags$head(
-                                 # Include our custom CSS
-                                 includeCSS("styles.css"),
-                                 includeScript("gomap.js")
-                               ),
+                               # tags$head(
+                               #   # Include our custom CSS
+                               #   includeCSS("styles.css"),
+                               #   includeScript("gomap.js")
+                               # ),
                                leafletOutput("CD_Map", width = "800", height = "650")
                                
                              )
@@ -607,7 +607,16 @@ shinyUI(
                              tabPanel("Modeling", fluid = TRUE,
                                       tags$hr(),
                                       fluidRow(
-                                        uiOutput("DM_Sel_Box")
+                                        column(2,
+                                               # valueBoxOutput("DM_Value_SP")
+                                               valueBox("구상나무", "선택종명",
+                                                        icon = icon("tree"), color = "green", width = 12
+                                               )
+                                        ),
+                                        
+                                        column(10,
+                                          uiOutput("DM_Sel_Box")
+                                        )
                                       ),
                                       tags$hr(),
                                       fluidRow(
@@ -656,9 +665,9 @@ shinyUI(
                                                      
                                                      # Input: Checkbox if file has header ----
                                                      checkboxGroupInput("DM-MO_Climate_scenario", "Climate Scenarios",
-                                                                        choices = c("RCP 4.5" = "rcp4.5",
-                                                                                    "RCP 8.5" = "rcp8.5"),
-                                                                        selected = "rcp4.5"
+                                                                        choices = c("RCP 4.5" = "RCP4.5",
+                                                                                    "RCP 8.5" = "RCP8.5"),
+                                                                        selected = "RCP4.5"
                                                      )
                                                      
                                                      # Input: Checkbox if file has header ----
@@ -770,14 +779,14 @@ shinyUI(
                                                      ),
                                                      
                                                      # Input: Checkbox if file has header ----
-                                                     radioButtons("DM-OU_Climate_model", "Climate Models",
+                                                     radioButtons("DM_OU_Climate_model", "Climate Models",
                                                                   choices = c("KMA" = "KMA",
                                                                               "KEI" = "KEI"),
                                                                   selected = "KMA"
                                                      ),
                                                      
                                                      # Input: Checkbox if file has header ----
-                                                     radioButtons("DM-OU_Climate_scenario", "Climate Scenarios",
+                                                     radioButtons("DM_OU_Climate_scenario", "Climate Scenarios",
                                                                   choices = c("RCP 4.5" = "rcp4.5",
                                                                               "RCP 8.5" = "rcp8.5"),
                                                                   selected = "rcp4.5"
@@ -798,7 +807,7 @@ shinyUI(
                                                      # )
                                                      
                                                      
-                                                     sliderInput("DM-OU_Project_year", label = "Projection Year", min = 2000,
+                                                     sliderInput("DM_OU_Project_year", label = "Projection Year", min = 2000,
                                                                  max = 2080, value = 2000, step = 10, sep = "",
                                                                  animate = animationOptions(interval = 3000))
                                         ),
@@ -808,6 +817,11 @@ shinyUI(
                                           bsCollapse(
                                             bsCollapsePanel("Summary",
                                                             verbatimTextOutput("DM_OU_Summary"), style = ST_Name)
+                                          ),
+                                          fluidRow(
+                                            valueBoxOutput("DM_Value_CM"),
+                                            valueBoxOutput("DM_Value_CS"),
+                                            valueBoxOutput("DM_Value_YR")
                                           ),
                                           leafletOutput("DM_OU_DIspersal_map", width = "800", height = "650")
                                           
