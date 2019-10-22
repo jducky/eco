@@ -1,186 +1,7 @@
-### JD Edition
+### Seo Edition
 
-shinyServer(function(input, output, session) {
+shinyServer(function(input, output) {
   
-  
-  
-  
-  output$DM_Sel_Box = renderUI({
-    
-    div(
-      infoBox("선택종명", toString(input[['DM-MO_Species']]), icon = icon("check"), width = 2),
-      infoBox("기후모델", toString(input[['DM-MO_SDM_model']]), icon = icon("sun"), width = 2),
-      infoBox("기후시나리오", toString(input[['DM-MO_Climate_scenario']]), icon = icon("clock"), width = 2),
-      infoBox("YEAR", toString(input[['DM-MO_Protect_year']]), icon = icon("calendar"), width = 2),
-      infoBox("Barrier ", toString(input[['DM-MO_Barrier']]), icon = icon("chart-area"), width = 2),
-      infoBox("Dispersal", toString(input[['DM-MO_Dispersal_type']]), icon = icon("external-link-square-alt"), width = 2)
-    )
-    
-  })
-  
-  
-  
-  output$Species_Link <- renderUI({
-
-    rs <- input$SP_Info_rows_selected
-    rowsLen <- length(rs)
-    
-    if (rowsLen > 0) {
-      
-      species_info <- G_FILE_speciesinfo[rs, , drop = FALSE]
-      
-      cat('species_info$K_NAME: ')
-      print(species_info$K_NAME[1])
-      
-      # print('for...')
-      # i <- 1
-      # while(rowsLen >= i) {
-      #   print(species_info$K_NAME[i])
-      # }
-      # i <- i + 1
-      
-      
-      
-      x <- a(href='https://species.nibr.go.kr/home/mainHome.do?searchType=total&cont_link=009&subMenu=009001&contCd=009001&searchField=%EA%B5%AC%EC%83%81%EB%82%98%EB%AC%B4&x=0&y=0',
-             species_info$K_NAME[1], target = '_blank', class = "btn btn-default")
-      return (x)
-      
-    } else {
-      return (NULL)
-    }
-    
-  })
-  
-  
-  
-  output$SS_Analy_Box = renderUI({
-    
-    div(
-      infoBox("Species", toString(input$SS_CA_Species) , icon = icon("credit-card"), width = 3),
-      infoBox("Dispersal type", toString(input$SS_CA_Dispersal_type) , icon = icon("credit-card"), width = 2),
-      infoBox("Climate model", toString(input$SS_CA_Climate_model) , icon = icon("credit-card"), width = 2),
-      infoBox("Climate scenario", toString(input$SS_CA_Climate_scenario) , icon = icon("credit-card"), width = 2),
-      infoBox("Project year", toString(input$SS_CA_Project_year) , icon = icon("credit-card"), width = 3),
-      infoBox("Models", toString(input$SS_CA_SDM_model) , icon = icon("credit-card"), width = 3)
-      
-    )
-    
-  })
-  
-  
-  output$DM_CD_Selection = renderPrint({
-    
-    cat("Species Name: ")
-    if(input[["DM-MO_Species"]] == "option1") {
-      cat("구상나무", sep = ', ')  
-      
-    } else if(input[["DM-MO_Species"]] == "option2") {
-      cat("가문비나무", sep = ', ')  
-    }
-    
-    cat('\n')
-    
-    cat("Model Types: ")
-    cat(input[["DM-MO_SDM_model"]], sep = ', ')
-    cat('\n')
-    
-    cat('Climate Models: ')
-    cat(input[["DM-MO_Climate_model"]], sep = ', ')
-    cat('\n')
-    
-    cat("Climate Scenarios: ")
-    cat(input[["DM-MO_Climate_scenario"]], sep = ', ')
-    cat('\n')
-    
-    cat('Projecting Years: ')
-    cat(input[["DM-MO_Protect_year"]], sep = ', ')
-    cat('\n')
-    
-    cat('Select Barrier Data: ')
-    cat(input[["DM-MO_Barrier"]], sep = ', ')
-    cat('\n')
-    
-    cat('Dispersal Types: ')
-    cat(input[["DM-MO_Dispersal_type"]], sep = ', ')
-    
-    
-  })
-  
-  
-  observeEvent(input$Reset_Probability_View, {
-    
-    leafletProxy("SDM_OU_Probability_map") %>%
-      setView(lng = 127.00, lat = 36.00, zoom = 6)
-    
-  })
-  
-  observeEvent(input$Reset_Predicted_View, {
-    
-    leafletProxy("SDM_OU_Predicted_map") %>%
-      setView(lng = 127.00, lat = 36.00, zoom = 6)
-    
-  })
-
-  # valueBoxOutput("Value_CM")
-  # valueBoxOutput("Value_CS")
-  # valueBoxOutput("Value_YR")
-  output$Value_CM <- renderValueBox({
-    valueBox(input$SDM_OU_Climate_model, "Climate Models",
-             icon = icon("credit-card"), color = "blue", width = 3
-    )
-  })
-  
-  output$Value_CS <- renderValueBox({
-    valueBox(input$SDM_OU_Climate_scenario, "Climate Scenarios",
-             icon = icon("list"), color = "purple", width = 3
-    )
-  })  
-  
-  output$Value_YR <- renderValueBox({
-    valueBox(input$SDM_OU_Project_year, "Projecting Years",
-             icon = icon("thumbs-up"), color = "yellow", width = 3
-    )
-  })  
-
-  
-  output$CM_UI <- renderUI({
-    actionButton("CM_btn", input$SDM_OU_Climate_model, style = "display: inline-block;")
-  })
-  
-  output$CS_UI <- renderUI({
-    actionButton("CS_btn", input$SDM_OU_Climate_scenario, style = "display: inline-block;")
-  })
-  
-  output$PY_UI <- renderUI({
-    actionButton("PY_btn", input$SDM_OU_Project_year, style = "display: inline-block;")
-  })
-  
-  # output$SYNC_UI <- renderUI({
-  #   actionButton("SYNC_btn", '동기화', style = "display: inline-block;")
-  # })
-  # 
-  # observeEvent(input$SYNC_btn, {
-  #   
-  # 
-  #   
-  #   
-  #   
-  # })
-  
-  observeEvent(input$SDM_OU_Probability_map_bounds, {
-    
-    coords <- isolate(input$SDM_OU_Probability_map_bounds)
-    if (!is.null(coords)) {
-      leafletProxy("SDM_OU_Predicted_map") %>%
-        fitBounds(coords$west,
-                  coords$south,
-                  coords$east,
-                  coords$north)
-    }
-  })
-  
-  
-
   output$SE_Dir_Project <- renderText({G$SE_Dir_Project})
   output$SE_Dir_Climate <- renderText({G$SE_Dir_Climate})
   output$SE_Dir_Link <- renderText({G$SE_Dir_Link})
@@ -188,8 +9,8 @@ shinyServer(function(input, output, session) {
   output$SE_speciesindex <- renderText({G$SE_speciesindex})
   output$SE_specieslocation <- renderText({G$SE_specieslocation})
   
-
-
+  
+  
   observeEvent(input$login, {
     showModal(modalDialog(
       title = "You have logged in.",
@@ -198,14 +19,13 @@ shinyServer(function(input, output, session) {
       footer = NULL
     ))
   })
-    
+  
   observeEvent(input$SE_Dir_Project, {
     volumes <- getVolumes()
     shinyDirChoose(input, 'SE_Dir_Project', roots = volumes)
     G$SE_Dir_Project <<- parseDirPath(volumes, input$SE_Dir_Project)
     output$SE_Dir_Project <- renderText({G$SE_Dir_Project})
   })
-  
   
   observeEvent(input$SE_Dir_Climate, {
     volumes <- getVolumes()
@@ -247,7 +67,7 @@ shinyServer(function(input, output, session) {
     clist <- input$SDM_MO_Climate_scenario  # c("RCP4.5") # c("RCP4.5", "RCP8.5")
     ylist <- input$SDM_MO_Protect_year  # c("2000", "2050") # c("2000", "2050", "2070")
     slist <- as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID) #c("S251") # input$SDM_MO_Species  # c("S251") # c("S015", "S134", "S145")
-
+    
     n <- 0
     ld <- length(dlist)
     lc <- length(clist)
@@ -256,262 +76,223 @@ shinyServer(function(input, output, session) {
     tl <- ld * lc * ly * ls
     withProgress(message = 'Runing SDM model.........', value = 0, {
       
+      ##############################################################
+      ### Species Distribution Modeling
+      ### Biomod2
+      ###
+      ### by Changwan Seo
+      ##############################################################
+      
+      #####=========================================================
+      ##### Setting variables ======================================
+      
+      # setting Paths
+      PATH_SPECIES   <- G$SE_Dir_Species
+      PATH_ENV       <- G$SE_Dir_Climate
+      PATH_ENV_INPUT <- file.path(PATH_ENV, "2000", sep = "")
+      PATH_PROJECT   <- G$SE_Dir_Project
+      #        PATH_MODEL_OUTPUT  <- PATH_PROJECT
+      #        setwd(PATH_PROJECT)
+      
+      # creating Species_Distribution output path
+      if (dir.exists(file.path(PATH_PROJECT, "Species_Distribution"))) {
+        cat(paste("Species_Distribution exists in", PATH_PROJECT, "and is a directory"))
+      } else if (file.exists(file.path(PATH_PROJECT, "Species_Distribution"))) {
+        cat(paste("Species_Distribution exists exists in", PATH_PROJECT, "but is a file"))
+      } else {
+        cat(paste("Species_Distribution does not exist in", PATH_PROJECT, "- creating"))
+        dir.create(file.path(PATH_PROJECT, "Species_Distribution"))
+      }
+      
+      # creating Sensitive_Species output path
+      if (dir.exists(file.path(PATH_PROJECT, "Sensitive_Species"))) {
+        cat(paste("Sensitive_Species exists in", PATH_PROJECT, "and is a directory"))
+      } else if (file.exists(file.path(PATH_PROJECT, "Sensitive_Species"))) {
+        cat(paste("Sensitive_Species exists exists in", PATH_PROJECT, "but is a file"))
+      } else {
+        cat(paste("Sensitive_Species does not exist in", PATH_PROJECT, "- creating"))
+        dir.create(file.path(PATH_PROJECT, "Sensitive_Species"))
+      }
+      
+      # creating Invasive_Species output path
+      if (dir.exists(file.path(PATH_PROJECT, "Invasive_Species"))) {
+        cat(paste("Invasive_Species exists in", PATH_PROJECT, "and is a directory"))
+      } else if (file.exists(file.path(PATH_PROJECT, "Invasive_Species"))) {
+        cat(paste("Invasive_Species exists exists in", PATH_PROJECT, "but is a file"))
+      } else {
+        cat(paste("Invasive_Species does not exist in", PATH_PROJECT, "- creating"))
+        dir.create(file.path(PATH_PROJECT, "Invasive_Species"))
+      }
+      
+      # creating Vulnerable_Species output path
+      if (dir.exists(file.path(PATH_PROJECT, "Vulnerable_Species"))) {
+        cat(paste("Vulnerable_Species exists in", PATH_PROJECT, "and is a directory"))
+      } else if (file.exists(file.path(PATH_PROJECT, "Vulnerable_Species"))) {
+        cat(paste("Vulnerable_Species exists exists in", PATH_PROJECT, "but is a file"))
+      } else {
+        cat(paste("Vulnerable_Species does not exist in", PATH_PROJECT, "- creating"))
+        dir.create(file.path(PATH_PROJECT, "Vulnerable_Species"))
+      }
       
       
-      # 191017
+      PATH_MODEL_OUTPUT  <- file.path(PATH_PROJECT, "Species_Distribution")
       
-      cat('input$SDM_MO_Climate_model: ')
-      print(isolate(input$SDM_MO_Climate_model))
+      file.copy(file.path(getwd(), "maxent.jar"), PATH_MODEL_OUTPUT)
+      setwd(PATH_MODEL_OUTPUT)
+      # Setting Column Name of species data
+      NAME_ID <- "ID"
+      NAME_SPECIES <- "K_NAME"
+      NAME_LONG <- "Longitude"
+      NAME_LAT <- "Latitude"
       
-      cat('input$SDM_MO_Climate_scenario: ')
-      print(isolate(input$SDM_MO_Climate_scenario))
+      # setting speices and environmental data
+      FILE_SPECIES_NAME <- G$SE_speciesindex
+      FILE_SPECIES_LOCATION <- G$SE_specieslocation
+      ENV_VARIABLES <<- input$SDM_MO_Variables   # c("bio01.asc", "bio02.asc", "bio03.asc", "bio12.asc", "bio13.asc", "bio14.asc")
       
-      cat('input$SDM_MO_Protect_year: ')
-      print(isolate(input$SDM_MO_Protect_year))
+      # Defining Models Data Options using default options.
+      BIOMOD_eval.resp.var <- NULL
+      BIOMOD_eval.expl.var <- NULL
+      BIOMOD_eval.resp.xy <- NULL
+      BIOMOD_PA.nb.rep <- 1
+      BIOMOD_PA.nb.absences <- 1000
+      BIOMOD_PA.strategy <- 'random'
+      BIOMOD_PA.dist.min <- 0
+      BIOMOD_PA.dist.max <- NULL
+      BIOMOD_PA.sre.quant <- 0.025
+      BIOMOD_PA.table <- NULL
+      BIOMOD_na.rm <- TRUE
       
-      cat('as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID): ')
-      print(isolate(as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID)))
-      print(isolate(as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$K_NAME)))
+      # Defining Models Options using default options.
+      BIOMOD_models <- input$SDM_MO_SDM_model # c('GAM', 'GLM')  # c('MAXENT.Phillips') 
+      BIOMOD_models.options <- BIOMOD_ModelingOptions()
+      BIOMOD_NbRunEval <- 1
+      BIOMOD_DataSplit <- 100
+      BIOMOD_Yweights <- NULL
+      BIOMOD_VarImport <- 5
+      BIOMOD_models.eval.meth <- c('ROC', 'TSS') # c('KAPPA', 'ROC', 'TSS')
+      BIOMOD_SaveObj <- TRUE
+      BIOMOD_rescal.all.models <- TRUE
+      BIOMOD_do.full.models <- TRUE
+      
+      # Defining projection Options using default options.
+      BIOMOD_selected.models = 'all'
+      BIOMOD_binary.meth = c('ROC', 'TSS') # c('KAPPA', 'ROC', 'TSS')
+      BIOMOD_compress = FALSE
+      BIOMOD_build.clamping.mask = FALSE
+      BIOMOD_output.format = '.img'
+      BIOMOD_do.stack = TRUE
+      
+      # Defining ensemble modelling Options using default options.
+      EM_chosen.models <- 'all'
+      EM_em.by <- 'PA_dataset+repet'
+      EM_eval.metric <- 'all'
+      EM_eval.metric.quality.threshold <- NULL
+      EM_models.eval.meth = c('ROC', 'TSS') # c('KAPPA', 'ROC', 'TSS')
+      EM_prob.mean <- T
+      EM_prob.cv <- F
+      EM_prob.ci <- F
+      EM_prob.ci.alpha <- 0.05
+      EM_prob.median <- F
+      EM_committee.averaging <- F
+      EM_prob.mean.weight <- T
+      EM_prob.mean.weight.decay <- 'proportional'
+      ##### End Setting variables ==================================
+      #####=========================================================
       
       
-      cat('SDM_Name_CD_Models_selected: ')
-      print(SDM_Name_CD_Models_selected)
+      #####=========================================================
+      ##### Setting path and data ==================================
+      # creating working a project
       
-      cat('SDM_Name_CD_Scenarios_selected: ')
-      print(SDM_Name_CD_Scenarios_selected)
-      
-      cat('SDM_Name_CD_Year_selected: ')
-      print(SDM_Name_CD_Year_selected)
-      
-      cat('SDM_Name_CD_Variables_selected: ')
-      print(SDM_Name_CD_Variables_selected)
+      # Loading speices data
+      DATA_SPECIES_NAME <- read.table(file.path(PATH_SPECIES, FILE_SPECIES_NAME), header = T, sep = ",")
+      DATA_SPECIES_LOCATION <- read.table(file.path(PATH_SPECIES, FILE_SPECIES_LOCATION), header = T, sep = ",")
+      ##### End Path and Data setting =============================
+      #####=========================================================
       
       
-
-        ##############################################################
-        ### Species Distribution Modeling
-        ### Biomod2
-        ###
-        ### by Changwan Seo
-        ##############################################################
+      #####========================================================
+      #####============ Rinning models ============================
+      #####========================================================
+      
+      #####========================================================
+      ##### Modeling loop =========================================
+      
+      for (s in slist) {
+        n <- n + 1
+        ##### Setting Environmental variables ======================= 
+        SPECIES_ID <- s
+        SPECIES_NAME <- subset(DATA_SPECIES_NAME, get(NAME_ID) == SPECIES_ID, select = c(get(NAME_SPECIES)))
+        SPECIES_NAME <- as.character(SPECIES_NAME$K_NAME)
+        SPECIES_DATA <- subset(DATA_SPECIES_LOCATION, get(NAME_ID) == SPECIES_ID, select = c(NAME_ID, NAME_LONG, NAME_LAT))
         
-        #####=========================================================
-        ##### Setting variables ======================================
-
-        # setting Paths
-        PATH_SPECIES   <- G$SE_Dir_Species
-        PATH_ENV       <- G$SE_Dir_Climate
-        PATH_ENV_INPUT <- file.path(PATH_ENV, "2000", sep = "")
-        PATH_PROJECT   <- G$SE_Dir_Project
-#        PATH_MODEL_OUTPUT  <- PATH_PROJECT
-#        setwd(PATH_PROJECT)
+        myResp <- as.numeric(SPECIES_DATA[,NAME_ID] <- 1)
+        myResp <- as.numeric(SPECIES_DATA[,NAME_ID])
         
-        # creating Species_Distribution output path
-        if (dir.exists(file.path(PATH_PROJECT, "Species_Distribution"))) {
-          cat(paste("Species_Distribution exists in", PATH_PROJECT, "and is a directory"))
-        } else if (file.exists(file.path(PATH_PROJECT, "Species_Distribution"))) {
-          cat(paste("Species_Distribution exists exists in", PATH_PROJECT, "but is a file"))
+        CUR_PATH <- getwd()
+        setwd(PATH_ENV_INPUT)
+        myExpl <- stack(ENV_VARIABLES)
+        setwd(CUR_PATH)
+        
+        myRespXY <- SPECIES_DATA[,c(NAME_LONG, NAME_LAT)]
+        myRespName <- SPECIES_NAME
+        ##### End Setting Environmental variables ===================
+        
+        
+        ##### BIOMOD ================================================
+        ### Formatting Data
+        myBiomodData <- BIOMOD_FormatingData(resp.var = myResp,
+                                             expl.var = myExpl,
+                                             resp.xy = myRespXY,
+                                             resp.name = myRespName,
+                                             eval.resp.var = BIOMOD_eval.resp.var,
+                                             eval.expl.var = BIOMOD_eval.expl.var,
+                                             eval.resp.xy = BIOMOD_eval.resp.xy,
+                                             PA.nb.rep = BIOMOD_PA.nb.rep,
+                                             PA.nb.absences = BIOMOD_PA.nb.absences,
+                                             PA.strategy = BIOMOD_PA.strategy,
+                                             PA.dist.min = BIOMOD_PA.dist.min,
+                                             PA.dist.max = BIOMOD_PA.dist.max,
+                                             PA.sre.quant = BIOMOD_PA.sre.quant,
+                                             PA.table = BIOMOD_PA.table,
+                                             na.rm = BIOMOD_na.rm)
+        ### End Formatting Data
+        
+        ### Modeling BIOMOD
+        # Running BIOMOD
+        myBiomodModelOut <- BIOMOD_Modeling( myBiomodData,
+                                             models = BIOMOD_models,
+                                             models.options = BIOMOD_models.options,
+                                             NbRunEval = BIOMOD_NbRunEval,
+                                             DataSplit = BIOMOD_DataSplit, 
+                                             Yweights = BIOMOD_Yweights, 
+                                             VarImport = BIOMOD_VarImport, 
+                                             models.eval.meth = BIOMOD_models.eval.meth, 
+                                             SaveObj = BIOMOD_SaveObj, 
+                                             rescal.all.models = BIOMOD_rescal.all.models, 
+                                             do.full.models = BIOMOD_do.full.models)
+        
+        # creating Biomod2 output path
+        if (dir.exists(file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2"))) {
+          cat(paste("BIOMOD2 exists in", PATH_MODEL_OUTPUT, "/", SPECIES_NAME, "and is a directory"))
+        } else if (file.exists(file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2"))) {
+          cat(paste("BIOMOD2 exists in", PATH_MODEL_OUTPUT, "/", SPECIES_NAME, "but is a file"))
         } else {
-          cat(paste("Species_Distribution does not exist in", PATH_PROJECT, "- creating"))
-          dir.create(file.path(PATH_PROJECT, "Species_Distribution"))
+          cat(paste("BIOMOD2 does not exist in", PATH_MODEL_OUTPUT, "/", SPECIES_NAME, "- creating"))
+          dir.create(file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2"))
         }
         
-        # creating Sensitive_Species output path
-        if (dir.exists(file.path(PATH_PROJECT, "Sensitive_Species"))) {
-          cat(paste("Sensitive_Species exists in", PATH_PROJECT, "and is a directory"))
-        } else if (file.exists(file.path(PATH_PROJECT, "Sensitive_Species"))) {
-          cat(paste("Sensitive_Species exists exists in", PATH_PROJECT, "but is a file"))
-        } else {
-          cat(paste("Sensitive_Species does not exist in", PATH_PROJECT, "- creating"))
-          dir.create(file.path(PATH_PROJECT, "Sensitive_Species"))
-        }
+        # Evaluating the model
+        myBiomodModelEval <- get_evaluations(myBiomodModelOut)
+        write.csv(myBiomodModelEval, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(SPECIES_NAME, "_eval.csv", sep = "", collapse = "--")))
+        myBiomodModelImport <- get_variables_importance(myBiomodModelOut)
+        write.csv(myBiomodModelImport, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(SPECIES_NAME, "_impot.csv",  sep = "", collapse = "--")))
+        ### End Modeling BIOMOD
         
-        # creating Invasive_Species output path
-        if (dir.exists(file.path(PATH_PROJECT, "Invasive_Species"))) {
-          cat(paste("Invasive_Species exists in", PATH_PROJECT, "and is a directory"))
-        } else if (file.exists(file.path(PATH_PROJECT, "Invasive_Species"))) {
-          cat(paste("Invasive_Species exists exists in", PATH_PROJECT, "but is a file"))
-        } else {
-          cat(paste("Invasive_Species does not exist in", PATH_PROJECT, "- creating"))
-          dir.create(file.path(PATH_PROJECT, "Invasive_Species"))
-        }
-        
-        # creating Vulnerable_Species output path
-        if (dir.exists(file.path(PATH_PROJECT, "Vulnerable_Species"))) {
-          cat(paste("Vulnerable_Species exists in", PATH_PROJECT, "and is a directory"))
-        } else if (file.exists(file.path(PATH_PROJECT, "Vulnerable_Species"))) {
-          cat(paste("Vulnerable_Species exists exists in", PATH_PROJECT, "but is a file"))
-        } else {
-          cat(paste("Vulnerable_Species does not exist in", PATH_PROJECT, "- creating"))
-          dir.create(file.path(PATH_PROJECT, "Vulnerable_Species"))
-        }
-        
-        print("####111")
-        PATH_MODEL_OUTPUT  <- file.path(PATH_PROJECT, "Species_Distribution")
-        print("####222")
-        print(file.path(getwd()))
-        file.copy(file.path(getwd(), "maxent.jar"), PATH_MODEL_OUTPUT)
-        print("####333")
-        setwd(PATH_MODEL_OUTPUT)
-        # Setting Column Name of species data
-        print("####444")
-        NAME_ID <- "ID"
-        NAME_SPECIES <- "K_NAME"
-        NAME_LONG <- "Longitude"
-        NAME_LAT <- "Latitude"
-        
-        # setting speices and environmental data
-        FILE_SPECIES_NAME <- G$SE_speciesindex
-        FILE_SPECIES_LOCATION <- G$SE_specieslocation
-        # ENV_VARIABLES <<- input$SDM_MO_Variables   # c("bio01.asc", "bio02.asc", "bio03.asc", "bio12.asc", "bio13.asc", "bio14.asc")
-        ENV_VARIABLES <<- SDM_Name_CD_Variables_selected
-        
-        # Defining Models Data Options using default options.
-        BIOMOD_eval.resp.var <- NULL
-        BIOMOD_eval.expl.var <- NULL
-        BIOMOD_eval.resp.xy <- NULL
-        BIOMOD_PA.nb.rep <- 1
-        BIOMOD_PA.nb.absences <- 1000
-        BIOMOD_PA.strategy <- 'random'
-        BIOMOD_PA.dist.min <- 0
-        BIOMOD_PA.dist.max <- NULL
-        BIOMOD_PA.sre.quant <- 0.025
-        BIOMOD_PA.table <- NULL
-        BIOMOD_na.rm <- TRUE
-        
-        # Defining Models Options using default options.
-        # BIOMOD_models <- input$SDM_MO_SDM_model # c('GAM', 'GLM')  # c('MAXENT.Phillips') 
-        BIOMOD_models <- c(SDM_Name_models_selected)
-        BIOMOD_models.options <- BIOMOD_ModelingOptions()
-        BIOMOD_NbRunEval <- 1
-        BIOMOD_DataSplit <- 100
-        BIOMOD_Yweights <- NULL
-        BIOMOD_VarImport <- 5
-        BIOMOD_models.eval.meth <- c('ROC', 'TSS') # c('KAPPA', 'ROC', 'TSS')
-        BIOMOD_SaveObj <- TRUE
-        BIOMOD_rescal.all.models <- TRUE
-        BIOMOD_do.full.models <- TRUE
-        
-        # Defining projection Options using default options.
-        BIOMOD_selected.models = 'all'
-        BIOMOD_binary.meth = c('ROC', 'TSS') # c('KAPPA', 'ROC', 'TSS')
-        BIOMOD_compress = FALSE
-        BIOMOD_build.clamping.mask = FALSE
-        BIOMOD_output.format = '.img'
-        BIOMOD_do.stack = TRUE
-        
-        # Defining ensemble modelling Options using default options.
-        EM_chosen.models <- 'all'
-        EM_em.by <- 'PA_dataset+repet'
-        EM_eval.metric <- 'all'
-        EM_eval.metric.quality.threshold <- NULL
-        EM_models.eval.meth = c('ROC', 'TSS') # c('KAPPA', 'ROC', 'TSS')
-        EM_prob.mean <- T
-        EM_prob.cv <- F
-        EM_prob.ci <- F
-        EM_prob.ci.alpha <- 0.05
-        EM_prob.median <- F
-        EM_committee.averaging <- F
-        EM_prob.mean.weight <- T
-        EM_prob.mean.weight.decay <- 'proportional'
-        ##### End Setting variables ==================================
-        #####=========================================================
-
-        
-        #####=========================================================
-        ##### Setting path and data ==================================
-        # creating working a project
-        
-        print("####555")
-
-        # Loading speices data
-        DATA_SPECIES_NAME <- read.table(file.path(PATH_SPECIES, FILE_SPECIES_NAME), header = T, sep = ",")
-        DATA_SPECIES_LOCATION <- read.table(file.path(PATH_SPECIES, FILE_SPECIES_LOCATION), header = T, sep = ",")
-        ##### End Path and Data setting =============================
-        #####=========================================================
-        
-        
-        #####========================================================
-        #####============ Rinning models ============================
-        #####========================================================
-        
-        #####========================================================
-        ##### Modeling loop =========================================
-        
-        for (s in slist) {
-          n <- n + 1
-          ##### Setting Environmental variables ======================= 
-          SPECIES_ID <- s
-          SPECIES_NAME <- subset(DATA_SPECIES_NAME, get(NAME_ID) == SPECIES_ID, select = c(get(NAME_SPECIES)))
-          SPECIES_NAME <- as.character(SPECIES_NAME$K_NAME)
-          SPECIES_DATA <- subset(DATA_SPECIES_LOCATION, get(NAME_ID) == SPECIES_ID, select = c(NAME_ID, NAME_LONG, NAME_LAT))
-          
-          myResp <- as.numeric(SPECIES_DATA[,NAME_ID] <- 1)
-          myResp <- as.numeric(SPECIES_DATA[,NAME_ID])
-           
-          CUR_PATH <- getwd()
-          setwd(PATH_ENV_INPUT)
-          myExpl <- stack(ENV_VARIABLES)
-          setwd(CUR_PATH)
-          
-          myRespXY <- SPECIES_DATA[,c(NAME_LONG, NAME_LAT)]
-          myRespName <- SPECIES_NAME
-          ##### End Setting Environmental variables ===================
-          
-          
-          ##### BIOMOD ================================================
-          ### Formatting Data
-          myBiomodData <- BIOMOD_FormatingData(resp.var = myResp,
-                                               expl.var = myExpl,
-                                               resp.xy = myRespXY,
-                                               resp.name = myRespName,
-                                               eval.resp.var = BIOMOD_eval.resp.var,
-                                               eval.expl.var = BIOMOD_eval.expl.var,
-                                               eval.resp.xy = BIOMOD_eval.resp.xy,
-                                               PA.nb.rep = BIOMOD_PA.nb.rep,
-                                               PA.nb.absences = BIOMOD_PA.nb.absences,
-                                               PA.strategy = BIOMOD_PA.strategy,
-                                               PA.dist.min = BIOMOD_PA.dist.min,
-                                               PA.dist.max = BIOMOD_PA.dist.max,
-                                               PA.sre.quant = BIOMOD_PA.sre.quant,
-                                               PA.table = BIOMOD_PA.table,
-                                               na.rm = BIOMOD_na.rm)
-          ### End Formatting Data
-          
-          ### Modeling BIOMOD
-          # Running BIOMOD
-          myBiomodModelOut <- BIOMOD_Modeling( myBiomodData,
-                                               models = BIOMOD_models,
-                                               models.options = BIOMOD_models.options,
-                                               NbRunEval = BIOMOD_NbRunEval,
-                                               DataSplit = BIOMOD_DataSplit, 
-                                               Yweights = BIOMOD_Yweights, 
-                                               VarImport = BIOMOD_VarImport, 
-                                               models.eval.meth = BIOMOD_models.eval.meth, 
-                                               SaveObj = BIOMOD_SaveObj, 
-                                               rescal.all.models = BIOMOD_rescal.all.models, 
-                                               do.full.models = BIOMOD_do.full.models)
-          
-          # creating Biomod2 output path
-          if (dir.exists(file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2"))) {
-            cat(paste("BIOMOD2 exists in", PATH_MODEL_OUTPUT, "/", SPECIES_NAME, "and is a directory"))
-          } else if (file.exists(file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2"))) {
-            cat(paste("BIOMOD2 exists in", PATH_MODEL_OUTPUT, "/", SPECIES_NAME, "but is a file"))
-          } else {
-            cat(paste("BIOMOD2 does not exist in", PATH_MODEL_OUTPUT, "/", SPECIES_NAME, "- creating"))
-            dir.create(file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2"))
-          }
-          
-          # Evaluating the model
-          myBiomodModelEval <- get_evaluations(myBiomodModelOut)
-          write.csv(myBiomodModelEval, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(SPECIES_NAME, "_eval.csv", sep = "", collapse = "--")))
-          myBiomodModelImport <- get_variables_importance(myBiomodModelOut)
-          write.csv(myBiomodModelImport, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(SPECIES_NAME, "_impot.csv",  sep = "", collapse = "--")))
-          ### End Modeling BIOMOD
-          
-          ### Projection on current and future environemental conditions
-          # Projecting loop
-          for (d in dlist) {
+        ### Projection on current and future environemental conditions
+        # Projecting loop
+        for (d in dlist) {
           for (c in clist) {
             for (y in ylist) {
               incProgress(1/tl, detail = paste("Doing part", n, "/", ls, "(", SPECIES_NAME, ")", "_", d, "_", c, "_", y))
@@ -562,90 +343,88 @@ shinyServer(function(input, output, session) {
               ##### Modeling ensemble model ===================================
               # Runing ensemble modelling
               
-              # if(input$SDM_MO_SDM_EMmodel) {
-              if(F) {
-              myBiomodEM <- BIOMOD_EnsembleModeling(modeling.output = myBiomodModelOut,
-                                                    chosen.models = EM_chosen.models,
-                                                    em.by = EM_em.by,
-                                                    eval.metric = EM_eval.metric,
-                                                    eval.metric.quality.threshold = EM_eval.metric.quality.threshold,
-                                                    models.eval.meth = EM_models.eval.meth,
-                                                    prob.mean = EM_prob.mean,
-                                                    prob.cv = EM_prob.cv,
-                                                    prob.ci = EM_prob.ci,
-                                                    prob.ci.alpha = EM_prob.ci.alpha,
-                                                    prob.median = EM_prob.median,
-                                                    committee.averaging = EM_committee.averaging,
-                                                    prob.mean.weight = EM_prob.mean.weight,
-                                                    prob.mean.weight.decay = EM_prob.mean.weight.decay)
-              
-              # get evaluation scores
-              myBiomodEMEval <- get_evaluations(myBiomodEM)
-              write.csv(myBiomodEMEval, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(SPECIES_NAME, "_EM_eval.csv", sep = "", collapse = "--")))
-              
-              
-              # Ensemble Models Projections
-              myBiomodEnsembleForecasting <- BIOMOD_EnsembleForecasting(projection.output = myBiomodProjection,
-                                                                        EM.output = myBiomodEM)
-              
-              # save projections and prodictions projections and prodictions
-              EM_all_proj <- get_predictions(myBiomodEnsembleForecasting)
-              EM_mod_proj <- get_projected_models(myBiomodEnsembleForecasting)
-              EM_sel_proj <- grep(SPECIES_NAME, EM_mod_proj, value = TRUE)
-              emlist <- c(EM_sel_proj)
-              for (i in emlist) {
-                proj <- EM_all_proj[[i]]
-                proj[proj > 1000] <- 1000
-                writeRaster(proj, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(as.name(paste("PROJ_", BIOMOD_proj.name, "_", i, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+              if(input$SDM_MO_SDM_EMmodel) {
+                myBiomodEM <- BIOMOD_EnsembleModeling(modeling.output = myBiomodModelOut,
+                                                      chosen.models = EM_chosen.models,
+                                                      em.by = EM_em.by,
+                                                      eval.metric = EM_eval.metric,
+                                                      eval.metric.quality.threshold = EM_eval.metric.quality.threshold,
+                                                      models.eval.meth = EM_models.eval.meth,
+                                                      prob.mean = EM_prob.mean,
+                                                      prob.cv = EM_prob.cv,
+                                                      prob.ci = EM_prob.ci,
+                                                      prob.ci.alpha = EM_prob.ci.alpha,
+                                                      prob.median = EM_prob.median,
+                                                      committee.averaging = EM_committee.averaging,
+                                                      prob.mean.weight = EM_prob.mean.weight,
+                                                      prob.mean.weight.decay = EM_prob.mean.weight.decay)
                 
-                for (j in EM_models.eval.meth) {
-                  if (!is.na(eval(parse(text = as.name(paste("myBiomodEMEval$", i))))[j, "Cutoff"])) {
-                    cutoffvalue <- as.integer(eval(parse(text = as.name(paste("myBiomodEMEval$", i))))[j, "Cutoff"])
-                    pred <- BinaryTransformation(proj, cutoffvalue)
-                    writeRaster(pred, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(as.name(paste("PRED_", BIOMOD_proj.name, "_", i, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                # get evaluation scores
+                myBiomodEMEval <- get_evaluations(myBiomodEM)
+                write.csv(myBiomodEMEval, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(SPECIES_NAME, "_EM_eval.csv", sep = "", collapse = "--")))
+                
+                
+                # Ensemble Models Projections
+                myBiomodEnsembleForecasting <- BIOMOD_EnsembleForecasting(projection.output = myBiomodProjection,
+                                                                          EM.output = myBiomodEM)
+                
+                # save projections and prodictions projections and prodictions
+                EM_all_proj <- get_predictions(myBiomodEnsembleForecasting)
+                EM_mod_proj <- get_projected_models(myBiomodEnsembleForecasting)
+                EM_sel_proj <- grep(SPECIES_NAME, EM_mod_proj, value = TRUE)
+                emlist <- c(EM_sel_proj)
+                for (i in emlist) {
+                  proj <- EM_all_proj[[i]]
+                  proj[proj > 1000] <- 1000
+                  writeRaster(proj, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(as.name(paste("PROJ_", BIOMOD_proj.name, "_", i, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  
+                  for (j in EM_models.eval.meth) {
+                    if (!is.na(eval(parse(text = as.name(paste("myBiomodEMEval$", i))))[j, "Cutoff"])) {
+                      cutoffvalue <- as.integer(eval(parse(text = as.name(paste("myBiomodEMEval$", i))))[j, "Cutoff"])
+                      pred <- BinaryTransformation(proj, cutoffvalue)
+                      writeRaster(pred, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(as.name(paste("PRED_", BIOMOD_proj.name, "_", i, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                    }
                   }
                 }
-              }
               }
               ##### End ensemble modelling =================================
               
             } # End Year loop y
           } # End climate change Scenarios loop c
-          } # End climate data loop d
+        } # End climate data loop d
+        
+        
+        ### Creating species evaluation information 
+        destfile <- file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(as.name(paste(SPECIES_NAME, "_eval.csv", sep = "")), sep = "", collapse = "--"))
+        if (!file.exists(destfile))
+          return
+        
+        old_eval <- read.csv(destfile)
+        lc <- length(colnames(old_eval))
+        lr <- length(row.names(old_eval))
+        nc <- (lc - 1) / 4
+        nr <- nc * lr
+        
+        new_eval <- setNames(data.frame(matrix(ncol = 6, nrow = nr)), c("Model", "Type", "Accuracy", "Cutoff", "Sensitivity", "specificity")) 
+        
+        for (i in 1:nc) {
+          k <- (2 + (i * 4)) - 4  
+          ek <- i*lr
+          sk <- ek - (lr - 1)  
+          new_eval$Model[sk:ek] <- sub(".*(Testing.data.)", "", colnames(old_eval[k]))
           
-          
-          ### Creating species evaluation information 
-          destfile <- file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(as.name(paste(SPECIES_NAME, "_eval.csv", sep = "")), sep = "", collapse = "--"))
-          if (!file.exists(destfile))
-            return
-          
-          old_eval <- read.csv(destfile)
-          lc <- length(colnames(old_eval))
-          lr <- length(row.names(old_eval))
-          nc <- (lc - 1) / 4
-          nr <- nc * lr
-          
-          new_eval <- setNames(data.frame(matrix(ncol = 6, nrow = nr)), c("Model", "Type", "Accuracy", "Cutoff", "Sensitivity", "specificity")) 
-          
-          for (i in 1:nc) {
-            k <- (2 + (i * 4)) - 4  
-            ek <- i*lr
-            sk <- ek - (lr - 1)  
-            new_eval$Model[sk:ek] <- sub(".*(Testing.data.)", "", colnames(old_eval[k]))
-            
-            n <- 0
-            for (j in sk:ek) {
-              n <- n + 1
-              new_eval$Type[j] <- as.character(old_eval[n,1])
-              new_eval$Accuracy[j] <- old_eval[n,k]
-              new_eval$Cutoff[j] <- old_eval[n,k+1]
-              new_eval$Sensitivity[j] <- old_eval[n,k+2]
-              new_eval$specificity[j] <- old_eval[n,k+3]
-            }
+          n <- 0
+          for (j in sk:ek) {
+            n <- n + 1
+            new_eval$Type[j] <- as.character(old_eval[n,1])
+            new_eval$Accuracy[j] <- old_eval[n,k]
+            new_eval$Cutoff[j] <- old_eval[n,k+1]
+            new_eval$Sensitivity[j] <- old_eval[n,k+2]
+            new_eval$specificity[j] <- old_eval[n,k+3]
           }
-          
-          # if(input$SDM_MO_SDM_EMmodel) {
-          if(F) {
+        }
+        
+        if(input$SDM_MO_SDM_EMmodel) {
           destfile <- file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(as.name(paste(SPECIES_NAME, "_EM_eval.csv", sep = "")), sep = "", collapse = "--"))
           if (!file.exists(destfile))
             return
@@ -664,7 +443,6 @@ shinyServer(function(input, output, session) {
             sk <- ek - (lr - 1)  
             new_EM_eval$Model[sk:ek] <- sub(paste0(".*(", SPECIES_NAME, "_)"), "", sub("(.Testing.data).*", "", colnames(old_EM_eval[k])))
             
-            
             n <- 0
             for (j in sk:ek) {
               n <- n + 1
@@ -675,77 +453,58 @@ shinyServer(function(input, output, session) {
               new_EM_eval$specificity[j] <- old_EM_eval[n,k+3]
             }
           }
-          }
-          
-          if(exists("new_eval") && exists("new_EM_eval")) {
-            all_eval <- rbind(new_eval, new_EM_eval)
-          } else {
-            all_eval <- new_eval
-          }
-          
-          Eval_data <- all_eval
-          for (i in 1:length(all_eval[,1])) {
-            if (grepl("EM", Eval_data$Model[i])) {
-              Eval_data$Projection[i] <- Eval_data$Model[i]
-              Eval_data$Prediction[i] <- Eval_data$Model[i]
-            } else if (grepl("MAXENT", Eval_data$Model[i])) {
-              a1 <- sub("\\..*", "", Eval_data$Model[i])
-              a234 <- sub(".*?\\.", "", Eval_data$Model[i])
-              a2 <- sub("\\..*", "", a234)
-              a34 <- sub(".*?\\.", "", a234)
-              a3 <- sub("\\..*", "", a34)
-              a4 <- sub(".*\\.", "", a34)
-              Projection <- paste(a4, "_", a3, "_", a1, ".", a2, sep="")
-              Prediction <- paste(a4, "_", a3, "_", a1, ".", a2, "_by", Eval_data$Type[i], sep="")
-              Eval_data$Projection[i] <- Projection
-              Eval_data$Prediction[i] <- Prediction
-            } else{
-              a1 <- sub("\\..*", "", Eval_data$Model[i])
-              a23 <- sub(".*?\\.", "", Eval_data$Model[i])
-              a2 <- sub("\\..*", "", a23)
-              a3 <- sub(".*\\.", "", a23)
-              Projection <- paste(a3, "_", a2, "_", a1, sep="")
-              Prediction <- paste(a3, "_", a2, "_", a1, "_by", Eval_data$Type[i], sep="")
-              Eval_data$Projection[i] <- Projection
-              Eval_data$Prediction[i] <- Prediction
-            }	  
-          }
-          
-          write.csv(Eval_data, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(SPECIES_NAME, "_ALL_eval.csv", sep = "", collapse = "--")))
-          
-          ### End Creating species evaluation information
-          
-          
-        } # End Speices loop s
+        }
         
-        ##### End Modeling loop =====================================
-        #####========================================================
+        if(exists("new_eval") && exists("new_EM_eval")) {
+          all_eval <- rbind(new_eval, new_EM_eval)
+        } else {
+          all_eval <- new_eval
+        }
         
-        #####========================================================
-        #####============ End Models Rinning ========================
-        #####========================================================        
+        Eval_data <- all_eval
+        for (i in 1:length(all_eval[,1])) {
+          if (grepl("EM", Eval_data$Model[i])) {
+            Eval_data$Projection[i] <- Eval_data$Model[i]
+            Eval_data$Prediction[i] <- Eval_data$Model[i]
+          } else if (grepl("MAXENT", Eval_data$Model[i])) {
+            a1 <- sub("\\..*", "", Eval_data$Model[i])
+            a234 <- sub(".*?\\.", "", Eval_data$Model[i])
+            a2 <- sub("\\..*", "", a234)
+            a34 <- sub(".*?\\.", "", a234)
+            a3 <- sub("\\..*", "", a34)
+            a4 <- sub(".*\\.", "", a34)
+            Projection <- paste(a4, "_", a3, "_", a1, ".", a2, sep="")
+            Prediction <- paste(a4, "_", a3, "_", a1, ".", a2, "_by", Eval_data$Type[i], sep="")
+            Eval_data$Projection[i] <- Projection
+            Eval_data$Prediction[i] <- Prediction
+          } else{
+            a1 <- sub("\\..*", "", Eval_data$Model[i])
+            a23 <- sub(".*?\\.", "", Eval_data$Model[i])
+            a2 <- sub("\\..*", "", a23)
+            a3 <- sub(".*\\.", "", a23)
+            Projection <- paste(a3, "_", a2, "_", a1, sep="")
+            Prediction <- paste(a3, "_", a2, "_", a1, "_by", Eval_data$Type[i], sep="")
+            Eval_data$Projection[i] <- Projection
+            Eval_data$Prediction[i] <- Prediction
+          }	  
+        }
+        
+        write.csv(Eval_data, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(SPECIES_NAME, "_ALL_eval.csv", sep = "", collapse = "--")))
+        
+        ### End Creating species evaluation information
         
         
-      })
-    
-    #런 생성 성공 시 알람창
-    shinyalert(
-      title = "",
-      text = "성공적으로 생성되었습니다.",
-      closeOnEsc = TRUE,
-      closeOnClickOutside = TRUE,
-      html = FALSE,
-      type = "success",
-      showConfirmButton = TRUE,
-      showCancelButton = FALSE,
-      confirmButtonText = "OK",
-      confirmButtonCol = "#00AEFF",
-      timer = 0,
-      imageUrl = "",
-      animation = TRUE
-    )
-    
-    
+      } # End Speices loop s
+      
+      ##### End Modeling loop =====================================
+      #####========================================================
+      
+      #####========================================================
+      #####============ End Models Rinning ========================
+      #####========================================================        
+      
+      
+    })        
   })
   
   observeEvent(input$DM_MO_Action, {
@@ -754,9 +513,9 @@ shinyServer(function(input, output, session) {
     })
   })
   
-
   
-
+  
+  
   observeEvent(input$SS_IV_Action_vindex, {
     withProgress(message = 'Runing Invasive species expansion.........', value = 2, {
       Sys.sleep(10.0)
@@ -805,18 +564,12 @@ shinyServer(function(input, output, session) {
     })
   })
   
-    
-  output$SP_Info <- DT::renderDataTable(
-    
-     G_FILE_speciesinfo[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
-    , server = TRUE)
-    
-    
-
+  
+  output$SP_Info <- DT::renderDataTable(G_FILE_speciesinfo, server = TRUE)
+  
   output$SP_Summary <- renderPrint({
-
-    rs <- input$SP_Info_rows_selected  # G_FILE_specieslocation   # st_read("species.shp")
     
+    rs <- input$SP_Info_rows_selected  # G_FILE_specieslocation   # st_read("species.shp")
     if (length(rs) > 0) {
       species_info <- G_FILE_speciesinfo[rs, , drop = FALSE]
       summary(species_info$n)
@@ -829,35 +582,32 @@ shinyServer(function(input, output, session) {
     rs <- input$SP_Info_rows_selected  # G_FILE_specieslocation   # st_read("species.shp")
     if (length(rs) > 0) {
       species_info <- G_FILE_speciesinfo[rs, , drop = FALSE]
-    hist(species_info$n, # breaks = bins, 
-         col="orange",
-         border="brown",
-         xlab = "Species Number",
-         height = "50px",
-         main = "Histogram")
+      
+      hist(species_info$n, # breaks = bins, 
+           col="orange",
+           border="brown",
+           xlab = "Species Number",
+           main = "Histogram")
     }
     
   })
   
-    
+  
   output$SP_Map <- renderLeaflet({
     rs <- input$SP_Info_rows_selected  # G_FILE_specieslocation   # st_read("species.shp")
-    cat('rs: ')
-    print(rs)
-    
     if (length(rs)) {
-       species_data <- inner_join(G_FILE_specieslocation, G_FILE_speciesinfo[rs, , drop = FALSE], by = "ID")
-       leaflet(data = species_data) %>%
-         addTiles(
-                           urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
-                        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
-         ) %>%
-
+      species_data <- inner_join(G_FILE_specieslocation, G_FILE_speciesinfo[rs, , drop = FALSE], by = "ID")
+      leaflet(data = species_data) %>%
+        addTiles(
+          urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+          attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+        ) %>%
+        
         addMarkers(~Longitude, ~Latitude, popup = ~as.character(ID), label = ~as.character(ID)) %>%
-        setView(lng = 127.00, lat = 37.00, zoom = 6)
+        setView(lng = 127.00, lat = 38.00, zoom = 6)
     }
   })
-
+  
   
   output$SP_LOC_Info <- DT::renderDataTable(inner_join(G_FILE_specieslocation, G_FILE_speciesinfo[input$SP_Info_rows_selected, , drop = FALSE], by = "ID"), server = TRUE)
   
@@ -873,32 +623,18 @@ shinyServer(function(input, output, session) {
         ) %>%
         
         addMarkers(~Longitude, ~Latitude, popup = ~as.character(ID), label = ~as.character(ID)) %>%
-        setView(lng = 127.00, lat = 37.00, zoom = 6)
+        setView(lng = 127.00, lat = 38.00, zoom = 6)
     }
   })  
-
+  
   output$LD_Summary <- renderPrint({
     
     r <- raster(file.path("C:/Projects/2019_DATA/4. forest fire, landslide/forest fire/S251", "barrier11.tif"))
     
     summary(r)
   })
-
-  output$LD_Histogram <- renderPlot({
-    
-#    r_asc <- read.asc(file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = "")))
-    x <- raster(file.path("C:/Projects/2019_DATA/4. forest fire, landslide/forest fire/S251", "barrier11.tif"))
-    #    bins <- seq(which.min(x), which.max(x), length.out = input$bins + 1)
-    
-    hist(x, # breaks = bins, 
-         col="orange",
-         border="brown",
-         xlab = input$CD_Variables,
-         main = "Histogram")
-    
-  })  
   
-  output$LD_Histogram2 <- renderPlot({
+  output$LD_Histogram <- renderPlot({
     
     #    r_asc <- read.asc(file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = "")))
     x <- raster(file.path("C:/Projects/2019_DATA/4. forest fire, landslide/forest fire/S251", "barrier11.tif"))
@@ -910,7 +646,7 @@ shinyServer(function(input, output, session) {
          xlab = input$CD_Variables,
          main = "Histogram")
     
-  }) 
+  })  
   
   output$LD_Map <- renderLeaflet({
     
@@ -929,23 +665,23 @@ shinyServer(function(input, output, session) {
       addRasterImage(r, colors = pal, opacity = 0.8,) %>%
       addLegend(pal = pal, values = values(r), title = "Legend")  %>%
       
-      setView(lng = 128.00, lat = 36.00, zoom = 7)
+      setView(lng = 127.00, lat = 38.00, zoom = 7)
   })   
-
-    
-
+  
+  
+  
   output$CD_Summary <- renderPrint({
     
-#    file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = ""))
-#    r_asc <- read.asc(file)
-#    r <- raster(r_asc)
+    #    file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = ""))
+    #    r_asc <- read.asc(file)
+    #    r <- raster(r_asc)
     file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".tif", sep = ""))
     r <- raster(file)
     crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
-
+    
     summary(r)
   })
-
+  
   output$CD_Histogram <- renderPlot({
     
     #    file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = ""))
@@ -954,7 +690,7 @@ shinyServer(function(input, output, session) {
     file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".tif", sep = ""))
     x <- raster(file)
     crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
-#    bins <- seq(which.min(x), which.max(x), length.out = input$bins + 1)
+    #    bins <- seq(which.min(x), which.max(x), length.out = input$bins + 1)
     
     hist(x, # breaks = bins, 
          col="orange",
@@ -963,7 +699,7 @@ shinyServer(function(input, output, session) {
          main = "Histogram")
     
   })
-
+  
   output$CD_Map <- renderLeaflet({
     
     #    file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = ""))
@@ -974,14 +710,14 @@ shinyServer(function(input, output, session) {
     crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
     
     pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r),
-                      na.color = "transparent")
+                        na.color = "transparent")
     
     leaflet() %>%
       addTiles(
-                        urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
-                        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+        urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
       ) %>%        
-       
+      
       addRasterImage(r, colors = pal, opacity = 0.8) %>%
       addLegend(pal = pal, values = values(r), title = "Legend")  %>%
       
@@ -990,61 +726,28 @@ shinyServer(function(input, output, session) {
   
   
   
-  # output$SDM_SP_Info <- DT::renderDataTable(G_FILE_speciesinfo, server = TRUE)    
-  output$SDM_SP_Info <- DT::renderDataTable({
-    
-    input$resetSpeciesInfo
-    G_FILE_speciesinfo                                        
-    
-  }, server = TRUE)
-  
-  # output$SDM_SP_Selection = renderPrint({
-  #   s_id <- as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID)
-  #   s_kname <- as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$K_NAME)
-  #   if (length(s_id)) {
-  #     cat('Speices ID:')
-  #     cat(s_id, sep = ', ')
-  #     cat('\n\n')
-  #     cat("Species Name:")
-  #     cat(s_kname, sep = ', ')
-  #   }
-  # })
+  output$SDM_SP_Info <- DT::renderDataTable(G_FILE_speciesinfo, server = TRUE)    
   
   output$SDM_SP_Selection = renderPrint({
     s_id <- as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID)
     s_kname <- as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$K_NAME)
     if (length(s_id)) {
-      cat('Speices ID: ')
+      cat('Speices ID:\n\n')
       cat(s_id, sep = ', ')
-      cat('\n')
-      
-      cat("Species Name: ")
+      cat('\n\n')
+      cat("Species Name:\n\n")
       cat(s_kname, sep = ', ')
-      cat('\n')
-      
-      cat('Climate Models: ')
-      cat(input$SDM_MO_Climate_model, sep = ', ')
-      cat('\n')
-      
-      cat("Climate Scenarios: ")
-      cat(input$SDM_MO_Climate_scenario, sep = ', ')
-      cat('\n')
-      
-      cat('Projecting Years: ')
-      cat(input$SDM_MO_Protect_year, sep = ', ')
-      
-
     }
   })
   
-
+  
   output$SDM_OU_Species <- renderUI({
-      SDM_Name_Species_list <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution"), full.names = FALSE, recursive = FALSE)
-      SDM_Name_Species_selected <- SDM_Name_Species_list[1]
-      selectInput("SDM_OU_Species", "Select a species",
-             choices = c(SDM_Name_Species_list),
-             selected = SDM_Name_Species_selected
-      )
+    SDM_Name_Species_list <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution"), full.names = FALSE, recursive = FALSE)
+    SDM_Name_Species_selected <- SDM_Name_Species_list[1]
+    selectInput("SDM_OU_Species", "Select a species",
+                choices = c(SDM_Name_Species_list),
+                selected = SDM_Name_Species_selected
+    )
   })
   
   output$SDM_OU_Projection_model <- renderUI({
@@ -1054,9 +757,8 @@ shinyServer(function(input, output, session) {
     SDM_Name_Projection_Models_list <- as.character(G_FILE_species_evaluation$Projection)
     SDM_Name_Projection_Models_selected <- SDM_Name_Projection_Models_list[1]
     selectInput("SDM_OU_Projection_model", "Select Projection models",
-                       choices = "PA1_Full_GAM"
-                       
-                      
+                choices = c(SDM_Name_Projection_Models_list),
+                selected = SDM_Name_Projection_Models_selected
     )
   })
   
@@ -1071,33 +773,31 @@ shinyServer(function(input, output, session) {
                 selected = SDM_Name_Prediction_Models_selected
     )
   })
-
-
+  
+  
   output$SDM_OU_Validation <- DT::renderDataTable({
-
+    
     destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2", paste(as.name(paste(input$SDM_OU_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
-    t(all_eval)
-    
+    all_eval
   })
   
   
-  
   output$SDM_OU_Validation_BoxPlot <- renderPlot({
-
+    
     rs <- input$SDM_OU_Validation_rows_selected  # G_FILE_specieslocation   # st_read("species.shp")
     if (length(rs)) {
       Eval_data <- G_FILE_species_evaluation[rs, , drop = FALSE]
       
       boxplot(Accuracy~Type,
-            data=Eval_data,
-            main="Boxplots by Type",
-            xlab="Type",
-            ylab="Value",
-            varwidth = TRUE,
-            col="orange",
-            border="brown"
+              data=Eval_data,
+              main="Boxplots by Type",
+              xlab="Type",
+              ylab="Value",
+              varwidth = TRUE,
+              col="orange",
+              border="brown"
       )
     }
     
@@ -1112,13 +812,13 @@ shinyServer(function(input, output, session) {
     }
     
     new_import <- read.csv(destfile)
-
+    
     data <- data.frame(t(new_import[-1]))
     colnames(data) <- new_import[, 1]
     # To use the fmsb package, I have to add 2 lines to the dataframe: the max and min of each variable to show on the plot!
     data <- rbind(rep(1,length(colnames(data))) , rep(0,length(colnames(data))) , data)
     data[-c(1,2),]
- 
+    
   })
   
   output$SDM_OU_Contribution_Radarchart <- renderPlot({
@@ -1140,7 +840,7 @@ shinyServer(function(input, output, session) {
     if (length(rs) > 0) {
       data <- data[rs, , drop = FALSE]
       data <- rbind(rep(1,length(colnames(data))) , rep(0,length(colnames(data))) , data)
-    radarchart(data)
+      radarchart(data)
     }
   })
   
@@ -1159,7 +859,7 @@ shinyServer(function(input, output, session) {
     # To use the fmsb package, I have to add 2 lines to the dataframe: the max and min of each variable to show on the plot!
     data <- rbind(rep(1,length(colnames(data))) , rep(0,length(colnames(data))) , data)
     
-#    radarchart(data)
+    #    radarchart(data)
     
     # Set graphic colors
     library(RColorBrewer)
@@ -1184,25 +884,25 @@ shinyServer(function(input, output, session) {
   
   output$SDM_OU_Probability_map <- renderLeaflet({
     
-      dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2")
-      Map <- paste("PROJ", "_", input$SDM_OU_Climate_model, "_", input$SDM_OU_Climate_scenario, "_", input$SDM_OU_Project_year, "_", input$SDM_OU_Species, "_", input$SDM_OU_Projection_model, ".tif", sep = "")
-      r <- raster(file.path(dir_path, Map))
-      
-      crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
-      pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r),
+    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2")
+    Map <- paste("PROJ", "_", input$SDM_OU_Climate_model, "_", input$SDM_OU_Climate_scenario, "_", input$SDM_OU_Project_year, "_", input$SDM_OU_Species, "_", input$SDM_OU_Projection_model, ".tif", sep = "")
+    r <- raster(file.path(dir_path, Map))
+    
+    crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+    pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r),
                         na.color = "transparent")
     
-      leaflet() %>%
-        addTiles(
-          urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
-          attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
-        ) %>%        
+    leaflet() %>%
+      addTiles(
+        urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+      ) %>%        
       
-        addRasterImage(r, colors = pal, opacity = 0.8,) %>%
-        addLegend(pal = pal, values = values(r), title = "Legend")  %>%
+      addRasterImage(r, colors = pal, opacity = 0.8,) %>%
+      addLegend(pal = pal, values = values(r), title = "Legend")  %>%
       
-        setView(lng = 127.00, lat = 36.00, zoom = 6)
-      
+      setView(lng = 127.00, lat = 38.00, zoom = 6)
+    
   })
   
   output$SDM_OU_PROJ_Summary <- renderPrint({
@@ -1210,8 +910,8 @@ shinyServer(function(input, output, session) {
     dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2")
     Map <- paste("PROJ", "_", input$SDM_OU_Climate_model, "_", input$SDM_OU_Climate_scenario, "_", input$SDM_OU_Project_year, "_", input$SDM_OU_Species, "_", input$SDM_OU_Projection_model, ".tif", sep = "")
     r <- raster(file.path(dir_path, Map))
-      summary(r)
-
+    summary(r)
+    
   })
   
   output$SDM_OU_PROJ_Histogram <- renderPlot({
@@ -1219,13 +919,13 @@ shinyServer(function(input, output, session) {
     dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2")
     Map <- paste("PROJ", "_", input$SDM_OU_Climate_model, "_", input$SDM_OU_Climate_scenario, "_", input$SDM_OU_Project_year, "_", input$SDM_OU_Species, "_", input$SDM_OU_Projection_model, ".tif", sep = "")
     x <- raster(file.path(dir_path, Map))
-
+    
     hist(x, # breaks = bins, 
          col="orange",
          border="brown",
          xlab = "Projected Value",
          main = "Histogram")
-
+    
     
   })
   
@@ -1235,22 +935,22 @@ shinyServer(function(input, output, session) {
     dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2")
     Map <- paste("PRED", "_", input$SDM_OU_Climate_model, "_", input$SDM_OU_Climate_scenario, "_", input$SDM_OU_Project_year, "_", input$SDM_OU_Species, "_", input$SDM_OU_Prediction_model, ".tif", sep = "")
     r <- raster(file.path(dir_path, Map))
-      crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+    crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+    
+    pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r),
+                        na.color = "transparent")
+    
+    leaflet() %>%
+      addTiles(
+        urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+      ) %>%        
       
-      pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r),
-                          na.color = "transparent")
+      addRasterImage(r, colors = pal, opacity = 0.8,) %>%
+      addLegend(pal = pal, values = values(r), title = "Legend")  %>%
       
-      leaflet() %>%
-        addTiles(
-          urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
-          attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
-        ) %>%        
-        
-        addRasterImage(r, colors = pal, opacity = 0.8,) %>%
-        addLegend(pal = pal, values = values(r), title = "Legend")  %>%
-        
-        setView(lng = 127.00, lat = 38.00, zoom = 6)
-      
+      setView(lng = 127.00, lat = 38.00, zoom = 6)
+    
   })  
   
   output$SDM_OU_PRED_Summary <- renderPrint({
@@ -1276,7 +976,7 @@ shinyServer(function(input, output, session) {
     
   })
   
-
+  
   output$DM_OU_Summary <- renderPrint({
     
     r <- raster(file.path("C:/Projects/2019_DATA/1. unlimited dispersal/1. 민감종 57종", "S002b_HR8580.tif"))
@@ -1302,19 +1002,19 @@ shinyServer(function(input, output, session) {
       addRasterImage(r, colors = pal, opacity = 0.8,) %>%
       addLegend(pal = pal, values = values(r), title = "Legend")  %>%
       
-      setView(lng = 128.00, lat = 36.00, zoom = 7)
+      setView(lng = 127.00, lat = 38.00, zoom = 6)
   })
   
   output$SS_CA_Species <- renderUI({
     SS_Name_Species_list <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution"), full.names = FALSE, recursive = FALSE)
     SS_Name_Species_selected <- SS_Name_Species_list[1]
     checkboxGroupInput("SS_CA_Species", "Select a species",
-                choices = c(SS_Name_Species_list),
-                selected = SS_Name_Species_selected
+                       choices = c(SS_Name_Species_list),
+                       selected = SS_Name_Species_selected
     )
   })
   
-
+  
   output$SS_CA_SDM_model <- renderUI({
     destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SS_CA_Species[1], "BIOMOD2", paste(as.name(paste(input$SS_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
     all_eval <- read.csv(destfile)
@@ -1339,14 +1039,14 @@ shinyServer(function(input, output, session) {
     mlist <- input$SS_CA_SDM_model # c("PA1_Full_GLM_byROC")
     ylist <- input$SS_CA_Project_year
     #	dtlist <- input$SS_SP_Dispersal_type
-
+    
     n <- 0
     ls <- length(slist)
     ld <- length(dlist)
     lc <- length(clist)
     lm <- length(mlist)
     ly <- length(ylist)
-
+    
     tl <- ls * ld * lc * lm * ly
     withProgress(message = 'Runing GAP Analysis model.........', value = 0, {
       
@@ -1444,7 +1144,7 @@ shinyServer(function(input, output, session) {
                   "Area_Gain_Ratio_Outside_Reverse",
                   "Vulnerability_Area_Loss_Ratio", 
                   "Vulnerability_Area_LossIN_GainOUT_Ratio")
-#    Tab_gap <- setNames(data.frame(matrix(ncol = 18, nrow = tl)), col_list)  
+    #    Tab_gap <- setNames(data.frame(matrix(ncol = 18, nrow = tl)), col_list)  
     
     withProgress(message = 'Runing GAP Analysis model.........', value = 0, {
       
@@ -1458,36 +1158,7 @@ shinyServer(function(input, output, session) {
             for (m in mlist) {
               if (ly > 0) {
                 if (ly == 1 & ylist[1] == "2000") {
-                
-                n_tl <- n_tl + 1
-                Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
-                R_Map1 <- raster(file.path(dir_path, Map1))
-                
-                T_Area0 <- freq(R_Map1, value = 0)
-                T_Area1 <- freq(R_Map1, value = 1)
-                T_Area <- T_Area0 + T_Area1
-                
-                Tab_gap$Species[n_tl] <- s
-                Tab_gap$Climate_Model[n_tl] <- d
-                Tab_gap$Climate_Scenario[n_tl] <- c
-                Tab_gap$Model[n_tl] <- m
-                Tab_gap$Year[n_tl] <- ylist[1]
-                Tab_gap$Area[n_tl] <- freq(R_Map1, value = 1)
-                Tab_gap$Area_Loss[n_tl] <- 0
-                Tab_gap$Area_Stay[n_tl] <- Tab_gap$Area[n_tl]
-                Tab_gap$Area_Gain[n_tl] <- 0
-                Tab_gap$Area_Ratio[n_tl] <- 1
-                Tab_gap$Area_Loss_Ratio[n_tl] <- (Tab_gap$Area_Loss[n_tl] / Tab_gap$Area[n_tl]) * 100
-                Tab_gap$Area_Stay_Ratio[n_tl] <- (Tab_gap$Area_Stay[n_tl] / Tab_gap$Area[n_tl]) * 100
-                Tab_gap$Area_Gain_Ratio[n_tl] <- (Tab_gap$Area_Gain[n_tl] / Tab_gap$Area[n_tl]) * 100
-                Tab_gap$Area_Gain_Ratio_Reverse[n_tl] <- Tab_gap$Area_Gain_Ratio[n_tl] * -1
-                Tab_gap$Area_Gain_Ratio_Outside[n_tl] <- (Tab_gap$Area_Gain[n_tl] / (T_Area - Tab_gap$Area[n_tl])) * 100
-                Tab_gap$Area_Gain_Ratio_Outside_Reverse[n_tl] <- Tab_gap$Area_Gain_Ratio_Outside[n_tl] * -1
-                Tab_gap$Vulnerability_Area_Loss_Ratio[n_tl] <- 1 - Tab_gap$Area_Ratio[n_tl]
-                Tab_gap$Vulnerability_Area_LossIN_GainOUT_Ratio[n_tl] <- (Tab_gap$Area_Loss_Ratio[n_tl] / 100) - (Tab_gap$Area_Gain_Ratio_Outside[n_tl] / 100)
-                
-                } else if (ly > 1 & ylist[1] == "2000") {
-                
+                  
                   n_tl <- n_tl + 1
                   Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
                   R_Map1 <- raster(file.path(dir_path, Map1))
@@ -1515,43 +1186,72 @@ shinyServer(function(input, output, session) {
                   Tab_gap$Vulnerability_Area_Loss_Ratio[n_tl] <- 1 - Tab_gap$Area_Ratio[n_tl]
                   Tab_gap$Vulnerability_Area_LossIN_GainOUT_Ratio[n_tl] <- (Tab_gap$Area_Loss_Ratio[n_tl] / 100) - (Tab_gap$Area_Gain_Ratio_Outside[n_tl] / 100)
                   
-                for (y in 2:ly) {
-                  incProgress(1/tl, detail = paste("Doing part", n, "/", ls, "(", s, ")", "_", d, "_", c, "_", m, "_", y))
-                  n_tl <- n_tl + 1
-                  Map2 <- paste("GAP_", "PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
-                  R_gap <- raster(file.path(dir_path, Map2))
+                } else if (ly > 1 & ylist[1] == "2000") {
                   
-                  T_Area0 <- freq(R_gap, value = 0)
-                  T_Area1 <- freq(R_gap, value = 1)
-                  T_Area2 <- freq(R_gap, value = -1)
-                  T_Area3 <- freq(R_gap, value = -2)
-                  T_Area <- T_Area0 + T_Area1 + T_Area2 + T_Area3
-                  Map0_Area0 <- freq(R_gap, value = 0)
-                  Map0_Area1 <- freq(R_gap, value = -1)
-                  Map0_Area <- Map0_Area0 + Map0_Area1
-                  Map_Area0 <- freq(R_gap, value = 0)
-                  Map_Area1 <- freq(R_gap, value = 1)
-                  Map_Area <- Map_Area0 + Map_Area1
+                  n_tl <- n_tl + 1
+                  Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
+                  R_Map1 <- raster(file.path(dir_path, Map1))
+                  
+                  T_Area0 <- freq(R_Map1, value = 0)
+                  T_Area1 <- freq(R_Map1, value = 1)
+                  T_Area <- T_Area0 + T_Area1
                   
                   Tab_gap$Species[n_tl] <- s
                   Tab_gap$Climate_Model[n_tl] <- d
                   Tab_gap$Climate_Scenario[n_tl] <- c
                   Tab_gap$Model[n_tl] <- m
-                  Tab_gap$Year[n_tl] <- ylist[y]
-                  Tab_gap$Area[n_tl] <- Map_Area
-                  Tab_gap$Area_Loss[n_tl] <- T_Area2
-                  Tab_gap$Area_Stay[n_tl] <- T_Area0
-                  Tab_gap$Area_Gain[n_tl] <- T_Area1
-                  Tab_gap$Area_Ratio[n_tl] <- Map_Area / Map0_Area
-                  Tab_gap$Area_Loss_Ratio[n_tl] <- (Tab_gap$Area_Loss[n_tl] / Map0_Area) * 100
-                  Tab_gap$Area_Stay_Ratio[n_tl] <- (Tab_gap$Area_Stay[n_tl] / Map0_Area) * 100
-                  Tab_gap$Area_Gain_Ratio[n_tl] <- (Tab_gap$Area_Gain[n_tl] / Map0_Area) * 100
+                  Tab_gap$Year[n_tl] <- ylist[1]
+                  Tab_gap$Area[n_tl] <- freq(R_Map1, value = 1)
+                  Tab_gap$Area_Loss[n_tl] <- 0
+                  Tab_gap$Area_Stay[n_tl] <- Tab_gap$Area[n_tl]
+                  Tab_gap$Area_Gain[n_tl] <- 0
+                  Tab_gap$Area_Ratio[n_tl] <- 1
+                  Tab_gap$Area_Loss_Ratio[n_tl] <- (Tab_gap$Area_Loss[n_tl] / Tab_gap$Area[n_tl]) * 100
+                  Tab_gap$Area_Stay_Ratio[n_tl] <- (Tab_gap$Area_Stay[n_tl] / Tab_gap$Area[n_tl]) * 100
+                  Tab_gap$Area_Gain_Ratio[n_tl] <- (Tab_gap$Area_Gain[n_tl] / Tab_gap$Area[n_tl]) * 100
                   Tab_gap$Area_Gain_Ratio_Reverse[n_tl] <- Tab_gap$Area_Gain_Ratio[n_tl] * -1
                   Tab_gap$Area_Gain_Ratio_Outside[n_tl] <- (Tab_gap$Area_Gain[n_tl] / (T_Area - Tab_gap$Area[n_tl])) * 100
                   Tab_gap$Area_Gain_Ratio_Outside_Reverse[n_tl] <- Tab_gap$Area_Gain_Ratio_Outside[n_tl] * -1
                   Tab_gap$Vulnerability_Area_Loss_Ratio[n_tl] <- 1 - Tab_gap$Area_Ratio[n_tl]
                   Tab_gap$Vulnerability_Area_LossIN_GainOUT_Ratio[n_tl] <- (Tab_gap$Area_Loss_Ratio[n_tl] / 100) - (Tab_gap$Area_Gain_Ratio_Outside[n_tl] / 100)
-                }
+                  
+                  for (y in 2:ly) {
+                    incProgress(1/tl, detail = paste("Doing part", n, "/", ls, "(", s, ")", "_", d, "_", c, "_", m, "_", y))
+                    n_tl <- n_tl + 1
+                    Map2 <- paste("GAP_", "PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
+                    R_gap <- raster(file.path(dir_path, Map2))
+                    
+                    T_Area0 <- freq(R_gap, value = 0)
+                    T_Area1 <- freq(R_gap, value = 1)
+                    T_Area2 <- freq(R_gap, value = -1)
+                    T_Area3 <- freq(R_gap, value = -2)
+                    T_Area <- T_Area0 + T_Area1 + T_Area2 + T_Area3
+                    Map0_Area0 <- freq(R_gap, value = 0)
+                    Map0_Area1 <- freq(R_gap, value = -1)
+                    Map0_Area <- Map0_Area0 + Map0_Area1
+                    Map_Area0 <- freq(R_gap, value = 0)
+                    Map_Area1 <- freq(R_gap, value = 1)
+                    Map_Area <- Map_Area0 + Map_Area1
+                    
+                    Tab_gap$Species[n_tl] <- s
+                    Tab_gap$Climate_Model[n_tl] <- d
+                    Tab_gap$Climate_Scenario[n_tl] <- c
+                    Tab_gap$Model[n_tl] <- m
+                    Tab_gap$Year[n_tl] <- ylist[y]
+                    Tab_gap$Area[n_tl] <- Map_Area
+                    Tab_gap$Area_Loss[n_tl] <- T_Area2
+                    Tab_gap$Area_Stay[n_tl] <- T_Area0
+                    Tab_gap$Area_Gain[n_tl] <- T_Area1
+                    Tab_gap$Area_Ratio[n_tl] <- Map_Area / Map0_Area
+                    Tab_gap$Area_Loss_Ratio[n_tl] <- (Tab_gap$Area_Loss[n_tl] / Map0_Area) * 100
+                    Tab_gap$Area_Stay_Ratio[n_tl] <- (Tab_gap$Area_Stay[n_tl] / Map0_Area) * 100
+                    Tab_gap$Area_Gain_Ratio[n_tl] <- (Tab_gap$Area_Gain[n_tl] / Map0_Area) * 100
+                    Tab_gap$Area_Gain_Ratio_Reverse[n_tl] <- Tab_gap$Area_Gain_Ratio[n_tl] * -1
+                    Tab_gap$Area_Gain_Ratio_Outside[n_tl] <- (Tab_gap$Area_Gain[n_tl] / (T_Area - Tab_gap$Area[n_tl])) * 100
+                    Tab_gap$Area_Gain_Ratio_Outside_Reverse[n_tl] <- Tab_gap$Area_Gain_Ratio_Outside[n_tl] * -1
+                    Tab_gap$Vulnerability_Area_Loss_Ratio[n_tl] <- 1 - Tab_gap$Area_Ratio[n_tl]
+                    Tab_gap$Vulnerability_Area_LossIN_GainOUT_Ratio[n_tl] <- (Tab_gap$Area_Loss_Ratio[n_tl] / 100) - (Tab_gap$Area_Gain_Ratio_Outside[n_tl] / 100)
+                  }
                 } else {
                   for (y in 1:ly) {
                     incProgress(1/tl, detail = paste("Doing part", n, "/", ls, "(", s, ")", "_", d, "_", c, "_", m, "_", y))
@@ -1589,16 +1289,16 @@ shinyServer(function(input, output, session) {
                     Tab_gap$Area_Gain_Ratio_Outside_Reverse[n_tl] <- Tab_gap$Area_Gain_Ratio_Outside[n_tl] * -1
                     Tab_gap$Vulnerability_Area_Loss_Ratio[n_tl] <- 1 - Tab_gap$Area_Ratio[n_tl]
                     Tab_gap$Vulnerability_Area_LossIN_GainOUT_Ratio[n_tl] <- (Tab_gap$Area_Loss_Ratio[n_tl] / 100) - (Tab_gap$Area_Gain_Ratio_Outside[n_tl] / 100)
-                } 
+                  } 
                 }
               }
             }
           }
         }
         write.csv(Tab_gap, file = file.path(dir_path, paste(s, "_VINDEX.csv", sep = "", collapse = "--")))
-#        Tab_gap_1 <- rbind(Tab_gap_1, Tab_gap)
+        #        Tab_gap_1 <- rbind(Tab_gap_1, Tab_gap)
       }
-    
+      
     })
     ##### End GAP analyzing =========================================    
     
@@ -1654,7 +1354,7 @@ shinyServer(function(input, output, session) {
     
     ws <- nc * 500
     hs <- nr * 500
-
+    
     plotOutput("SS_AO_OU_plot", width = ws, height = hs)
     
   })
@@ -1688,40 +1388,40 @@ shinyServer(function(input, output, session) {
     
     par(mfrow = c(nr,nc), cex.main = 1.2)
     
-      for (s in slist) {
-        dir_path <- file.path(isolate(G$SE_Dir_Project), "Species_Distribution", s, "BIOMOD2")
-        for (d in dlist) {
-          for (c in clist) {
-            for (m in mlist) {
-              if (ly > 0) {
-                if (ly == 1 && ylist[1] == "2000") {
-                  Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
-                  R_Map1 <- raster(file.path(dir_path, Map1))
-                  plot(R_Map1, main = Map1)
-                } else if (ly > 1 && ylist[1] == "2000") {
-                  Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
-                  R_Map1 <- raster(file.path(dir_path, Map1))
-                  plot(R_Map1, main = Map1)
-                  for (y in 2:ly) {
-                    Map2 <- paste("GAP_", "PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
-                    R_Map2 <- raster(file.path(dir_path, Map2))
-                    plot(R_Map2, main = Map2)
-                  }
-                } else {
-                  for (y in 1:ly) {
-                    Map2 <- paste("GAP_", "PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
-                    R_Map2 <- raster(file.path(dir_path, Map2))
-                    plot(R_Map2, main = Map2)
-                  }
+    for (s in slist) {
+      dir_path <- file.path(isolate(G$SE_Dir_Project), "Species_Distribution", s, "BIOMOD2")
+      for (d in dlist) {
+        for (c in clist) {
+          for (m in mlist) {
+            if (ly > 0) {
+              if (ly == 1 && ylist[1] == "2000") {
+                Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
+                R_Map1 <- raster(file.path(dir_path, Map1))
+                plot(R_Map1, main = Map1)
+              } else if (ly > 1 && ylist[1] == "2000") {
+                Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
+                R_Map1 <- raster(file.path(dir_path, Map1))
+                plot(R_Map1, main = Map1)
+                for (y in 2:ly) {
+                  Map2 <- paste("GAP_", "PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
+                  R_Map2 <- raster(file.path(dir_path, Map2))
+                  plot(R_Map2, main = Map2)
+                }
+              } else {
+                for (y in 1:ly) {
+                  Map2 <- paste("GAP_", "PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
+                  R_Map2 <- raster(file.path(dir_path, Map2))
+                  plot(R_Map2, main = Map2)
                 }
               }
             }
           }
         }
       }
-#    })
+    }
+    #    })
     ##### End Plot GAP output =========================================
-
+    
   })
   
   
@@ -1741,11 +1441,11 @@ shinyServer(function(input, output, session) {
       vindex <- G_FILE_species_vindex[rs, , drop = FALSE]
       
       plot_ly(x = vindex$Area_Loss_Ratio, y = vindex$Area_Gain_Ratio, z = vindex$Area_Stay_Ratio, type = "scatter3d", mode = "markers", color = as.character(vindex$Year))
-    
+      
       #      plot_ly(vindex, aes(x = Area_Loss_Ratio, y = Area_Gain_Ratio, z = Area_Stay_Ratio, type = "scatter3d", mode = "markers", color = Year))
-#      +
-#             geom_point(size = 6) +
-#             labs(title = "Vulnerability", x = "Loss", y = "Gain", z = "Stay")
+      #      +
+      #             geom_point(size = 6) +
+      #             labs(title = "Vulnerability", x = "Loss", y = "Gain", z = "Stay")
     }
     
   })
@@ -1804,8 +1504,8 @@ shinyServer(function(input, output, session) {
   
   output$SS_AO_IV_UI_plot2 <- renderUI({
     selectInput("SS_AO_IV_UI_plot2", "Select a group",
-                       choices = c(SS_Name_Group2_list),
-                       selected = SS_Name_Group2_selected
+                choices = c(SS_Name_Group2_list),
+                selected = SS_Name_Group2_selected
     )
   })
   
@@ -1921,7 +1621,7 @@ shinyServer(function(input, output, session) {
   })
   
   observeEvent(input$IS_VA_Dir_Folder, {
-
+    
     volumes <- c(main = isolate(G$SE_Dir_Project))
     shinyDirChoose(input, 'IS_VA_Dir_Folder', roots = volumes) # , defaultPath = "/MOTIVE_projects", defaultRoot = G$SE_Dir_Project)
     G$IS_VA_Dir_Folder <<- parseDirPath(volumes, input$IS_VA_Dir_Folder)
@@ -1955,90 +1655,90 @@ shinyServer(function(input, output, session) {
     
     withProgress(message = 'Runing Invasive Species Impact and Vulnerability Analysis.........', value = 0, {
       
-    for (d in dlist) {
-      for (c in clist) {
-        for (m in mlist) {
-          for (y in ylist) {
-            if (length(ylist) > 1 && ylist[1] == "2000") {
-              if(y == ylist[1]) {
-                incProgress(1/tl, detail = paste("Doing part", d, "_", c, "_", m, "_", y))
-                for (s in slist) {
-                  dir_path <- file.path(isolate(G$SE_Dir_Project), "Species_Distribution", s, "BIOMOD2")
-                  img <- file.path(dir_path, paste("PRED", "_", d, "_", c, "_", y, "_", s, "_", m, ".tif", sep = ""))
-                  sr_list <- c(sr_list, img)
-                }
-                save_path <- isolate(G$IS_VA_Dir_Folder)
-                sr_list <- grep("PRED", sr_list, value = TRUE)
-                sr_stack <- stack(sr_list)
-                sr_raster <- overlay(sr_stack, fun=sum)
-                sr_raster1 <- sr_raster
-                writeRaster(sr_raster, file = file.path(save_path, paste(as.name(paste("IS_SR_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
-                vi1_raster <- sr_raster
-                vi1_raster[] <- 0
-                vi2_raster <- sr_raster
-                vi2_raster[] <- 0
-                vi3_raster <- sr_raster
-                vi3_raster[] <- 0
-                writeRaster(vi1_raster, file = file.path(save_path, paste(as.name(paste("IS_VI1_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
-                writeRaster(vi2_raster, file = file.path(save_path, paste(as.name(paste("IS_VI2_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
-                writeRaster(vi3_raster, file = file.path(save_path, paste(as.name(paste("IS_VI3_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
-                sr_list <- ""
-                loss_list <- ""
-                stay_list <- ""
-                gain_list <- ""
-              } else {					  
-                for (s in slist) {
-                  dir_path <- file.path(isolate(G$SE_Dir_Project), "Species_Distribution", s, "BIOMOD2")
-                  img <- file.path(dir_path, paste("PRED", "_", d, "_", c, "_", y, "_", s, "_", m, ".tif", sep = ""))
-                  sr_list <- c(sr_list, img)
-                  img <- file.path(dir_path, paste("LOSS_", "PRED", "_", d, "_", c, "_", y, "_", s, "_", m, ".tif", sep = ""))
-                  loss_list <- c(loss_list, img)
-                  img <- file.path(dir_path, paste("STAY_", "PRED", "_", d, "_", c, "_", y, "_", s, "_", m, ".tif", sep = ""))
-                  stay_list <- c(stay_list, img)
-                  img <- file.path(dir_path, paste("GAIN_", "PRED", "_", d, "_", c, "_", y, "_", s, "_", m, ".tif", sep = ""))
-                  gain_list <- c(gain_list, img)
-                }
-                save_path <- isolate(G$IS_VA_Dir_Folder)
-                sr_list <- grep("PRED", sr_list, value = TRUE)
-                sr_stack <- stack(sr_list)
-                sr_raster <- overlay(sr_stack, fun=sum)
-                sr_raster2 <- sr_raster
-                losssr_raster <- sr_raster2 - sr_raster1
-                writeRaster(sr_raster, file = file.path(save_path, paste(as.name(paste("IS_SR_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
-                writeRaster(losssr_raster, file = file.path(save_path, paste(as.name(paste("IS_VI1_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
-                
-                loss_list <- grep("LOSS", loss_list, value = TRUE)
-                loss_stack <- stack(loss_list)
-                loss_raster <- overlay(loss_stack, fun=sum)
-                writeRaster(loss_raster, file = file.path(save_path, paste(as.name(paste("IS_LOSS_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
-                
-                stay_list <- grep("STAY", stay_list, value = TRUE)
-                stay_stack <- stack(stay_list)
-                stay_raster <- overlay(stay_stack, fun=sum)
-                writeRaster(stay_raster, file = file.path(save_path, paste(as.name(paste("IS_STAY_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
-                
-                gain_list <- grep("GAIN", gain_list, value = TRUE)
-                gain_stack <- stack(gain_list)
-                gain_raster <- overlay(gain_stack, fun=sum)
-                writeRaster(gain_raster, file = file.path(save_path, paste(as.name(paste("IS_GAIN_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
-                
-                vi2_raster <- sr_raster
-                vi2_raster <- loss_raster / sr_raster1
-                writeRaster(vi2_raster, file = file.path(save_path, paste(as.name(paste("IS_VI2_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
-                vi3_raster <- sr_raster
-                vi3_raster <- (1 - (loss_raster / sr_raster1)) + (gain_raster / (length(slist) - sr_raster1))
-                writeRaster(vi3_raster, file = file.path(save_path, paste(as.name(paste("IS_VI3_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
-                
-                sr_list <- ""
-                loss_list <- ""
-                stay_list <- ""
-                gain_list <- ""
-              }				    
-            } 
+      for (d in dlist) {
+        for (c in clist) {
+          for (m in mlist) {
+            for (y in ylist) {
+              if (length(ylist) > 1 && ylist[1] == "2000") {
+                if(y == ylist[1]) {
+                  incProgress(1/tl, detail = paste("Doing part", d, "_", c, "_", m, "_", y))
+                  for (s in slist) {
+                    dir_path <- file.path(isolate(G$SE_Dir_Project), "Species_Distribution", s, "BIOMOD2")
+                    img <- file.path(dir_path, paste("PRED", "_", d, "_", c, "_", y, "_", s, "_", m, ".tif", sep = ""))
+                    sr_list <- c(sr_list, img)
+                  }
+                  save_path <- isolate(G$IS_VA_Dir_Folder)
+                  sr_list <- grep("PRED", sr_list, value = TRUE)
+                  sr_stack <- stack(sr_list)
+                  sr_raster <- overlay(sr_stack, fun=sum)
+                  sr_raster1 <- sr_raster
+                  writeRaster(sr_raster, file = file.path(save_path, paste(as.name(paste("IS_SR_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  vi1_raster <- sr_raster
+                  vi1_raster[] <- 0
+                  vi2_raster <- sr_raster
+                  vi2_raster[] <- 0
+                  vi3_raster <- sr_raster
+                  vi3_raster[] <- 0
+                  writeRaster(vi1_raster, file = file.path(save_path, paste(as.name(paste("IS_VI1_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  writeRaster(vi2_raster, file = file.path(save_path, paste(as.name(paste("IS_VI2_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  writeRaster(vi3_raster, file = file.path(save_path, paste(as.name(paste("IS_VI3_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  sr_list <- ""
+                  loss_list <- ""
+                  stay_list <- ""
+                  gain_list <- ""
+                } else {					  
+                  for (s in slist) {
+                    dir_path <- file.path(isolate(G$SE_Dir_Project), "Species_Distribution", s, "BIOMOD2")
+                    img <- file.path(dir_path, paste("PRED", "_", d, "_", c, "_", y, "_", s, "_", m, ".tif", sep = ""))
+                    sr_list <- c(sr_list, img)
+                    img <- file.path(dir_path, paste("LOSS_", "PRED", "_", d, "_", c, "_", y, "_", s, "_", m, ".tif", sep = ""))
+                    loss_list <- c(loss_list, img)
+                    img <- file.path(dir_path, paste("STAY_", "PRED", "_", d, "_", c, "_", y, "_", s, "_", m, ".tif", sep = ""))
+                    stay_list <- c(stay_list, img)
+                    img <- file.path(dir_path, paste("GAIN_", "PRED", "_", d, "_", c, "_", y, "_", s, "_", m, ".tif", sep = ""))
+                    gain_list <- c(gain_list, img)
+                  }
+                  save_path <- isolate(G$IS_VA_Dir_Folder)
+                  sr_list <- grep("PRED", sr_list, value = TRUE)
+                  sr_stack <- stack(sr_list)
+                  sr_raster <- overlay(sr_stack, fun=sum)
+                  sr_raster2 <- sr_raster
+                  losssr_raster <- sr_raster2 - sr_raster1
+                  writeRaster(sr_raster, file = file.path(save_path, paste(as.name(paste("IS_SR_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  writeRaster(losssr_raster, file = file.path(save_path, paste(as.name(paste("IS_VI1_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  
+                  loss_list <- grep("LOSS", loss_list, value = TRUE)
+                  loss_stack <- stack(loss_list)
+                  loss_raster <- overlay(loss_stack, fun=sum)
+                  writeRaster(loss_raster, file = file.path(save_path, paste(as.name(paste("IS_LOSS_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  
+                  stay_list <- grep("STAY", stay_list, value = TRUE)
+                  stay_stack <- stack(stay_list)
+                  stay_raster <- overlay(stay_stack, fun=sum)
+                  writeRaster(stay_raster, file = file.path(save_path, paste(as.name(paste("IS_STAY_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  
+                  gain_list <- grep("GAIN", gain_list, value = TRUE)
+                  gain_stack <- stack(gain_list)
+                  gain_raster <- overlay(gain_stack, fun=sum)
+                  writeRaster(gain_raster, file = file.path(save_path, paste(as.name(paste("IS_GAIN_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  
+                  vi2_raster <- sr_raster
+                  vi2_raster <- loss_raster / sr_raster1
+                  writeRaster(vi2_raster, file = file.path(save_path, paste(as.name(paste("IS_VI2_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  vi3_raster <- sr_raster
+                  vi3_raster <- (1 - (loss_raster / sr_raster1)) + (gain_raster / (length(slist) - sr_raster1))
+                  writeRaster(vi3_raster, file = file.path(save_path, paste(as.name(paste("IS_VI3_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  
+                  sr_list <- ""
+                  loss_list <- ""
+                  stay_list <- ""
+                  gain_list <- ""
+                }				    
+              } 
+            }
           }
         }
       }
-    }
     })
     
   })
@@ -2101,7 +1801,7 @@ shinyServer(function(input, output, session) {
       nr <- round((tl + 0.1) / nc)
     }
     
-#    par(mfrow = c(nr,nc), cex.main = 1.2)
+    #    par(mfrow = c(nr,nc), cex.main = 1.2)
     dir_path <- file.path(isolate(G$IS_AO_Dir_Folder))
     for (o in olist) {
       for (d in dlist) {
@@ -2129,7 +1829,7 @@ shinyServer(function(input, output, session) {
     ##### Plot GAP output =========================================
     
     # setting Climate change scenarios, Future time, Species and current environmental path
-#    slist <- input$IS_AO_Species
+    #    slist <- input$IS_AO_Species
     olist <- input$IS_AO_Output_option2
     dlist <- input$IS_AO_Climate_model  # c("KMA") # c("KMA", "KEI", "WORLDCLIM")
     clist <- input$IS_AO_Climate_scenario  # c("RCP4.5") # c("RCP4.5", "RCP8.5")
@@ -2137,7 +1837,7 @@ shinyServer(function(input, output, session) {
     ylist <- input$IS_AO_Project_year
     #	dtlist <- input$SS_AO_Dispersal_type
     
-#    ls <- length(slist)
+    #    ls <- length(slist)
     lo <- length(olist)
     ld <- length(dlist)
     lc <- length(clist)
@@ -2159,17 +1859,17 @@ shinyServer(function(input, output, session) {
         for (c in clist) {
           for (m in mlist) {
             for (y in ylist) {
-                if (ly > 0) {
-                  Map1 <- paste(o, "_", d, "_", c, "_", m, "_", y, ".tif", sep = "")
-                  R_Map1 <- raster(file.path(isolate(G$IS_AO_Dir_Folder), Map1))
-                  plot(R_Map1, main = Map1)
-                }
+              if (ly > 0) {
+                Map1 <- paste(o, "_", d, "_", c, "_", m, "_", y, ".tif", sep = "")
+                R_Map1 <- raster(file.path(isolate(G$IS_AO_Dir_Folder), Map1))
+                plot(R_Map1, main = Map1)
               }
             }
           }
         }
       }
-
+    }
+    
     ##### End Plot GAP output =========================================
     
   })
@@ -2179,8 +1879,8 @@ shinyServer(function(input, output, session) {
     #    file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = ""))
     #    r_asc <- read.asc(file)
     #    r <- raster(r_asc)
-#    file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".tif", sep = ""))
-#    r <- raster(file)
+    #    file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".tif", sep = ""))
+    #    r <- raster(file)
     
     # setting Climate change scenarios, Future time, Species and current environmental path
     #    slist <- input$IS_AO_Species
@@ -2206,7 +1906,7 @@ shinyServer(function(input, output, session) {
       nr <- round((tl + 0.1) / nc)
     }
     
-#    par(mfrow = c(nr,nc), cex.main = 1.2)
+    #    par(mfrow = c(nr,nc), cex.main = 1.2)
     
     for (o in olist) {
       for (d in dlist) {
@@ -2215,9 +1915,9 @@ shinyServer(function(input, output, session) {
             for (y in ylist) {
               if (ly > 0) {
                 Map1 <- paste(o, "_", d, "_", c, "_", m, "_", y, ".tif", sep = "")
-#                R_Map1 <- raster(file.path(isolate(G$IS_AO_Dir_Folder), Map1))
+                #                R_Map1 <- raster(file.path(isolate(G$IS_AO_Dir_Folder), Map1))
                 r <- raster(file.path(isolate(G$IS_AO_Dir_Folder), Map1))
-#                plot(R_Map1, main = Map1)
+                #                plot(R_Map1, main = Map1)
               }
             }
           }
@@ -2332,16 +2032,16 @@ shinyServer(function(input, output, session) {
   
   output$IS_OU_EX_SIDO_Stat <- renderPlot({
     df2 <- data.frame(시도 = rep(c("서울", "경기도"), each=3),
-                      연도 = rep(c("Current", "2030", "2050"),2),
-                      외래종 = c(6.8, 15, 33, 4.2, 10, 29.5))
+                        연도 = rep(c("Current", "2030", "2050"),2),
+                        외래종 = c(6.8, 15, 33, 4.2, 10, 29.5))
     head(df2)
-#    df_sorted <- arrange(df2, dose, supp) 
-#    head(df_sorted)
+    #    df_sorted <- arrange(df2, dose, supp) 
+    #    head(df_sorted)
     
     # Calculate the cumulative sum of len for each dose
-#    df_cumsum <- ddply(df_sorted, "dose",
-#                       transform, label_ypos=cumsum(len))
-#    head(df_cumsum)
+    #    df_cumsum <- ddply(df_sorted, "dose",
+    #                       transform, label_ypos=cumsum(len))
+    #    head(df_cumsum)
     
     ggplot(data=df2, aes(x=연도, y=외래종, fill=시도)) +
       geom_bar(stat="identity", position=position_dodge())+
@@ -2500,7 +2200,7 @@ shinyServer(function(input, output, session) {
                        selected = VH_Name_Models_selected
     )
   })
-
+  
   
   output$VH_OU_SR_Map <- renderLeaflet({
     
@@ -2544,8 +2244,8 @@ shinyServer(function(input, output, session) {
   
   output$VH_OU_SR_Habitat_Stat <- renderPlot({
     df2 <- data.frame(서식지 = rep(c("백두대간", "지리산국립공원"), each=3),
-                        연도 = rep(c("Current", "2030", "2050"),2),
-                        종수 = c(6.8, 15, 33, 4.2, 10, 29.5))
+                         연도 = rep(c("Current", "2030", "2050"),2),
+                         종수 = c(6.8, 15, 33, 4.2, 10, 29.5))
     head(df2)
     #    df_sorted <- arrange(df2, dose, supp) 
     #    head(df_sorted)
@@ -2722,7 +2422,6 @@ shinyServer(function(input, output, session) {
       
       setView(lng = 127.00, lat = 38.00, zoom = 6)
   })
-    
+  
 })
 
-  
