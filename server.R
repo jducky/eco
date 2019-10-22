@@ -9,23 +9,25 @@ shinyServer(function(input, output, session) {
     
     x <- NULL
     
-    x <- div( style = "display: inline-block;",
-         checkboxGroupInput("SDM_MO_Climate_model", SDM_Name_CD_Models,
-                            choices = c(SDM_Name_CD_Models_list),
-                            selected = SDM_Name_CD_Models_selected
-         ),
-         # Input: Checkbox if file has header ----
-         checkboxGroupInput("SDM_MO_Climate_scenario", SDM_Name_CD_Scenarios,
-                            choices = c(SDM_Name_CD_Scenarios_list),
-                            selected = SDM_Name_CD_Scenarios_selected
-         ),
-         
-         #            # Input: Checkbox if file has header ----
-         checkboxGroupInput("SDM_MO_Protect_year", SDM_Name_CD_Year,
-                            choices = c(SDM_Name_CD_Year_list),
-                            selected = SDM_Name_CD_Year_selected
-         )
-    )
+    x <- sidebarPanel(  width = 9,
+                                  div( style = "display: inline-block;",
+                                       checkboxGroupInput("SDM_MO_Climate_model", SDM_Name_CD_Models,
+                                                          choices = c(SDM_Name_CD_Models_list),
+                                                          selected = SDM_Name_CD_Models_selected
+                                       ),
+                                       # Input: Checkbox if file has header ----
+                                       checkboxGroupInput("SDM_MO_Climate_scenario", SDM_Name_CD_Scenarios,
+                                                          choices = c(SDM_Name_CD_Scenarios_list),
+                                                          selected = SDM_Name_CD_Scenarios_selected
+                                       ),
+                                       
+                                       #            # Input: Checkbox if file has header ----
+                                       checkboxGroupInput("SDM_MO_Protect_year", SDM_Name_CD_Year,
+                                                          choices = c(SDM_Name_CD_Year_list),
+                                                          selected = SDM_Name_CD_Year_selected
+                                       )
+                                  )
+                      )
     
     return (x)
     
