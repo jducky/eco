@@ -234,8 +234,10 @@ if (SE_Language == "English") {
   OV_Name <- "모형개요"
   SE_Name <- "Setting"
     SE_Name_Language <- "Language"
-  SP_Name <- "Species Data" 
-  LD_Name <- "Link Data"
+  # SP_Name <- "Species Data" 
+  SP_Name <- "종자료"
+  # LD_Name <- "Link Data"
+  LD_Name <- "연계자료"
     LD_Name_Variables <- "Link Data"
     LD_Name_Variables_list <- LD_Variables_list
     LD_Name_Variables_selected <- "forestfire"
@@ -248,7 +250,8 @@ if (SE_Language == "English") {
     LD_Name_Year <- "Projecting Years"
     LD_Name_Year_list <- CD_Year_list
     LD_Name_Year_selected <- "2000"       
-  CD_Name <- "Climate Data"
+  # CD_Name <- "Climate Data"
+  CD_Name <- "기후자료"
     CD_Name_Variables <- "Climate Variables"
     CD_Name_Variables_list <- CD_Variables_list
     CD_Name_Variables_selected <- "bio01"
@@ -261,7 +264,8 @@ if (SE_Language == "English") {
     CD_Name_Year <- "Projecting Years"
     CD_Name_Year_list <- CD_Year_list
     CD_Name_Year_selected <- "2000"     
-  SDM_Name <- "Species Distribution Model"
+  # SDM_Name <- "Species Distribution Model"
+  SDM_Name <- "종분포모형"
     SDM_Name_CD_Variables <- "Climate Variables"
     SDM_Name_CD_Variables_list <- SDM_Variables_list
     SDM_Name_CD_Variables_selected <- c(paste("bio01.", Input_img, sep = ""), paste("bio02.", Input_img, sep = ""), paste("bio03.", Input_img, sep = ""), paste("bio12.", Input_img, sep = ""), paste("bio13.", Input_img, sep = ""), paste("bio14.", Input_img, sep = ""))
@@ -295,11 +299,13 @@ if (SE_Language == "English") {
     SDM_Name_CD_Year_out <- "Projecting Years"
     SDM_Name_CD_Year_out_list <- CD_Year_list
     SDM_Name_CD_Year_out_selected <- "2000"
-  DM_Name <- "Dispesal Model"
+  # DM_Name <- "Dispesal Model"
+  DM_Name <- "종확산모형"
     DM_Name_DM_Models <- "DIspersal Models"
     DM_Name_DM_Models_list <- DM_Models_list
     DM_Name_DM_Models_selected <- "UD" 
-  SS_Name <- "Climate Sensitive Species"
+  # SS_Name <- "Climate Sensitive Species"
+  SS_Name <- "기후변화민감종"
     SS_Name_DM_Models <- "DIspersal Types"
     SS_Name_DM_Models_list <- DM_Models_list
     SS_Name_DM_Models_selected <- "UD"    
@@ -340,7 +346,8 @@ if (SE_Language == "English") {
                              "by Climate Scenario" = "Climate_Scenario",
                              "by Model" = "Model")
     SS_Name_Group2_selected <- "Model"
-  IS_Name <- "Invasive Species"
+  # IS_Name <- "Invasive Species"
+  IS_Name <- "외래종"
     IS_Name_DM_Models <- "DIspersal Types"
     IS_Name_DM_Models_list <- DM_Models_list
     IS_Name_DM_Models_selected <- "UD"    
@@ -392,7 +399,8 @@ if (SE_Language == "English") {
                                  "Vulnerability2 (Species Loss Ratio)" = "IS_VI2",
                                  "Vulnerability3 (Species Inside Loss Outside Gain)" = "IS_VI3")
     IS_Name_OU_Option2_selected <- "IS_VI1"
-  VH_Name <- "Climate Vulnerable Habitat"
+  # VH_Name <- "Climate Vulnerable Habitat"
+  VH_Name <- "취약서식지"
     VH_Name_DM_Models <- "DIspersal Types"
     VH_Name_DM_Models_list <- DM_Models_list
     VH_Name_DM_Models_selected <- "UD"    
@@ -433,7 +441,8 @@ if (SE_Language == "English") {
                            "by Climate Scenario" = "Climate_Scenario",
                            "by Model" = "Model")
     VH_Name_Group2_selected <- "Model"
-  HELP_Name <- "Help"
+  # HELP_Name <- "Help"
+  HELP_Name <- "도움말"
 
   
 } else if (SE_Language == "Korean") {

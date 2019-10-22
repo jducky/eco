@@ -13,11 +13,17 @@ shinyUI(
       
       shinyjs::useShinyjs(),
       
-      # document.querySelector("#SDM_SP_Selection div:nth-child(2)").classList.add("sdm-mod-condition-run-box");'
       
-      
-      fluidPage(h4(System_Name, style = "display: inline-block;"),
-                
+      fluidPage( div(
+          h4(System_Name, style = "display: inline-block; color: white; font-size: 200%; margin-left: 20px; position: absolute; line-height: 8vh;"), 
+          div( style = "display: inline-block; margin-left: 80%; margin-top: 10px; font-size: 110%; color: white;",
+                     
+                     a("   한국어", style = "cursor:pointer; margin-right: 5px; color: white;" ),
+                     a("English", style = "cursor:pointer; margin-right: 5px; color: white; " ),
+                     a("CONTACT US", style = "cursor:pointer; margin-right: 5px; color: white; " ),
+                     a("LOGOUT", style = "cursor:pointer; margin-right: 5px; color: white;" )
+                )
+            , style = "background-image: url(eco_title.png); height: 10vh; position: relative;"),
                 tags$script(HTML(
                   
                   'document.querySelector("body").classList.add("sidebar-collapse");'
@@ -35,8 +41,6 @@ shinyUI(
                 }
                 
                 #SDM_MO_SDM_run {
-                	position: relative;
-                  bottom: 200px;
                   width: 200px;
                   height: 70px;
                   font-size: 3rem;
@@ -88,6 +92,8 @@ shinyUI(
                 ##CD_Histogram {
                   width: 40%;
                 }
+                
+                
             
                
              '))),
@@ -96,26 +102,23 @@ shinyUI(
                 
                 # div( style = "display: inline-block;",
                 
-                div( style = "display: inline-block;",
-                     shinyDirButton("SE_Dir_Project", "Working Project", "Working Project"),
-                     verbatimTextOutput("SE_Dir_Project", placeholder = TRUE)
-                ),
+                # div( style = "display: inline-block;",
+                #      shinyDirButton("SE_Dir_Project", "Working Project", "Working Project"),
+                #      verbatimTextOutput("SE_Dir_Project", placeholder = TRUE)
+                # ),
                 
-                div( style = "display: inline-block;",
-                     
-                     a("   한국어", style = "cursor:pointer; margin-right: 5px;" ),
-                     a("English", style = "cursor:pointer; margin-right: 5px; " ),
-                     a("CONTACT US", style = "cursor:pointer; margin-right: 5px; " ),
-                     a("LOGOUT", style = "cursor:pointer; margin-right: 5px;" )
-                ),
+                # div( style = "display: inline-block; margin-left: 60%;",
+                #      
+                #      a("   한국어", style = "cursor:pointer; margin-right: 5px;" ),
+                #      a("English", style = "cursor:pointer; margin-right: 5px; " ),
+                #      a("CONTACT US", style = "cursor:pointer; margin-right: 5px; " ),
+                #      a("LOGOUT", style = "cursor:pointer; margin-right: 5px;" )
+                # ),
                 
                 # ),
                 br(),
                 
-                
-                
-                tags$hr(),
-                
+
                 #   setBackgroundColor(
                 #     color = c("white", "green"),
                 #     gradient = "linear",
@@ -180,7 +183,7 @@ shinyUI(
                            )
                   ),         
                   
-                  tabPanel(SP_Name,
+                  tabPanel(SP_Name, icon = icon("folder-open"),
                            tabsetPanel(
                              tabPanel("Species Information",
                                       tags$head(
@@ -225,7 +228,7 @@ shinyUI(
                            )
                   ),  
                   
-                  tabPanel(LD_Name, fluid = TRUE,
+                  tabPanel(LD_Name, fluid = TRUE, icon = icon("folder-open"),
                            tags$hr(),
                            sidebarLayout(
                              sidebarPanel(width = 3, Fluid = TRUE,
@@ -252,10 +255,14 @@ shinyUI(
                                           ),
                                           
                                           # Input: Checkbox if file has header ----
-                                          radioButtons("LD_Project_year", LD_Name_Year,
-                                                       choices = LD_Name_Year_list,
-                                                       selected = LD_Name_Year_selected
-                                          )
+                                          # radioButtons("LD_Project_year", LD_Name_Year,
+                                          #              choices = LD_Name_Year_list,
+                                          #              selected = LD_Name_Year_selected
+                                          # )
+                                          
+                                          sliderInput("LD_Project_year", label = LD_Name_Year, min = 2000,
+                                                      max = 2080, value = 2000, step = 10, sep = "",
+                                                      animate = animationOptions(interval = 3000))
                              ),
                              
                              # Main panel for displaying outputs ----
@@ -287,7 +294,7 @@ shinyUI(
                            )
                   ),  
                   
-                  tabPanel(CD_Name, fluid = TRUE,
+                  tabPanel(CD_Name, fluid = TRUE, icon = icon("folder-open"),
                            tags$hr(),
                            sidebarLayout(
                              sidebarPanel(width = 3, Fluid = TRUE,
@@ -349,7 +356,7 @@ shinyUI(
                   
                   
                   
-                  tabPanel(SDM_Name,
+                  tabPanel(SDM_Name, icon = icon("pie-chart"),
                            tabsetPanel(
                              tabPanel("Modeling",
                                       
@@ -357,35 +364,39 @@ shinyUI(
                                         tags$hr(),
                                         # verbatimTextOutput("SDM_SP_Selection"),
                                         uiOutput("SDM_Sel_Box"),
-                                        column(5, 
+                                        column(4, 
                                                actionButton('resetSpeciesInfo',label = "Reset", style = ST_Name),
                                                tags$style(type='text/css', "button#resetSpeciesInfo {margin-left: 90%;}"),
-                                               tags$hr(),
+                                               br(),br(),
                                                DT::dataTableOutput("SDM_SP_Info")
                                         ),
                                         column(4,
-                                               div( style = "display: inline-block;",
-                                                    checkboxGroupInput("SDM_MO_Climate_model", SDM_Name_CD_Models,
-                                                                       choices = c(SDM_Name_CD_Models_list),
-                                                                       selected = SDM_Name_CD_Models_selected
-                                                    ),
-                                                    # Input: Checkbox if file has header ----
-                                                    checkboxGroupInput("SDM_MO_Climate_scenario", SDM_Name_CD_Scenarios,
-                                                                       choices = c(SDM_Name_CD_Scenarios_list),
-                                                                       selected = SDM_Name_CD_Scenarios_selected
-                                                    ),
-                                                    
-                                                    #            # Input: Checkbox if file has header ----
-                                                    checkboxGroupInput("SDM_MO_Protect_year", SDM_Name_CD_Year,
-                                                                       choices = c(SDM_Name_CD_Year_list),
-                                                                       selected = SDM_Name_CD_Year_selected
-                                                    )
-                                               ),
                                                
-                                               
+                                               # div( style = "display: inline-block;",
+                                               #      checkboxGroupInput("SDM_MO_Climate_model", SDM_Name_CD_Models,
+                                               #                         choices = c(SDM_Name_CD_Models_list),
+                                               #                         selected = SDM_Name_CD_Models_selected
+                                               #      ),
+                                               #      # Input: Checkbox if file has header ----
+                                               #      checkboxGroupInput("SDM_MO_Climate_scenario", SDM_Name_CD_Scenarios,
+                                               #                         choices = c(SDM_Name_CD_Scenarios_list),
+                                               #                         selected = SDM_Name_CD_Scenarios_selected
+                                               #      ),
+                                               #      
+                                               #      #            # Input: Checkbox if file has header ----
+                                               #      checkboxGroupInput("SDM_MO_Protect_year", SDM_Name_CD_Year,
+                                               #                         choices = c(SDM_Name_CD_Year_list),
+                                               #                         selected = SDM_Name_CD_Year_selected
+                                               #      )
+                                               # )
+
+                                               uiOutput('SDM_MO_Condition_CheckBoxGroup')
+                                        ),
+                                        column(4,
                                                useShinyalert(),  # Set up shinyalert
                                                actionButton("SDM_MO_SDM_run", label = SDM_Name_models_run)
-                                        )
+                                               )
+                                        
                                       )
                              ),
                              
@@ -568,7 +579,7 @@ shinyUI(
                   ),  
                   
                   
-                  tabPanel(DM_Name,
+                  tabPanel(DM_Name, icon = icon("pie-chart"),
                            tabsetPanel(
                              tabPanel("Modeling", fluid = TRUE,
                                       tags$hr(),
@@ -750,18 +761,23 @@ shinyUI(
                                                      ),
                                                      
                                                      # Input: Checkbox if file has header ----
-                                                     radioButtons("DM-OU_Project_year", "Projection Year",
-                                                                  choices = c("Current" = "00",
-                                                                              "2010" = "10",
-                                                                              "2020" = "20",
-                                                                              "2030" = "30",
-                                                                              "2040" = "40",
-                                                                              "2050" = "50",
-                                                                              "2060" = "60",
-                                                                              "2070" = "70",
-                                                                              "2080" = "80"),
-                                                                  selected = "30"
-                                                     )
+                                                     # radioButtons("DM-OU_Project_year", "Projection Year",
+                                                     #              choices = c("Current" = "00",
+                                                     #                          "2010" = "10",
+                                                     #                          "2020" = "20",
+                                                     #                          "2030" = "30",
+                                                     #                          "2040" = "40",
+                                                     #                          "2050" = "50",
+                                                     #                          "2060" = "60",
+                                                     #                          "2070" = "70",
+                                                     #                          "2080" = "80"),
+                                                     #              selected = "30"
+                                                     # )
+                                                     
+                                                     
+                                                     sliderInput("DM-OU_Project_year", label = "Projection Year", min = 2000,
+                                                                 max = 2080, value = 2000, step = 10, sep = "",
+                                                                 animate = animationOptions(interval = 3000))
                                         ),
                                         
                                         # Main panel for displaying outputs ----
@@ -799,7 +815,7 @@ shinyUI(
                   ), 
                   
                   
-                  tabPanel(SS_Name,
+                  tabPanel(SS_Name, icon = icon("table"),
                            tabsetPanel(
                              tabPanel("Change Analysis", fluid = TRUE,
                                       
@@ -927,7 +943,7 @@ shinyUI(
                            )
                   ),      
                   
-                  tabPanel(IS_Name,
+                  tabPanel(IS_Name, icon = icon("table"),
                            tabsetPanel(
                              tabPanel("Change Analysis", fluid = TRUE,
                                       tags$hr(),
@@ -1134,7 +1150,7 @@ shinyUI(
                   
                   
                   
-                  tabPanel(VH_Name,
+                  tabPanel(VH_Name, icon = icon("table"),
                            tabsetPanel(
                              tabPanel("Change Analysis", fluid = TRUE,
                                       tags$hr(),
