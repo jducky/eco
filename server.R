@@ -4,6 +4,35 @@ shinyServer(function(input, output, session) {
   
   
   
+  output$SDM_Sel_Box = renderUI({
+    
+    s_id <- as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID)
+    s_kname <- as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$K_NAME)
+    
+    
+    
+    x <- NULL
+    
+    if(length(s_id)) {
+      
+      x <- div(
+        infoBox("Speices ID", toString(s_id), icon = icon("check"), width = 2),
+        infoBox("Species Name", toString(s_kname), icon = icon("sun"), width = 2),
+        infoBox("Climate Models", toString(input$SDM_MO_Climate_model), icon = icon("clock"), width = 2),
+        infoBox("Climate Scenarios", toString(input$SDM_MO_Climate_scenario), icon = icon("calendar"), width = 2),
+        infoBox("Projecting Years", toString(input$SDM_MO_Protect_year), icon = icon("chart-area"), width = 2)
+      )
+      
+    }
+    
+    return (x)
+    
+    
+    
+  })
+  
+  
+  
   
   output$DM_Sel_Box = renderUI({
     
@@ -32,16 +61,30 @@ shinyServer(function(input, output, session) {
       cat('species_info$K_NAME: ')
       print(species_info$K_NAME[1])
       
+      
       # print('for...')
+      # rowsLen <- length(species_info$K_NAME)
       # i <- 1
+      # aList <- NULL
+      # 
       # while(rowsLen >= i) {
-      #   print(species_info$K_NAME[i])
+      # 
+      #   url <- URLencode(paste0('https://species.nibr.go.kr/home/mainHome.do?searchType=total&cont_link=009&subMenu=009001&contCd=009001&searchField=', species_info$K_NAME[i] ))
+      #   aList <- aList + a(href=url, species_info$K_NAME[i], target = '_blank', class = "btn btn-default"),
+      #   i <- i + 1
       # }
-      # i <- i + 1
+      # 
+      # div(
+      #   
+      # )
+      
+      # cat('len:')
+      # print(length(species_info$K_NAME))
       
       
+      url <- paste0('https://species.nibr.go.kr/home/mainHome.do?searchType=total&cont_link=009&subMenu=009001&contCd=009001&searchField=', URLencode( iconv(species_info$K_NAME[1] , to = 'UTF-8')) )
       
-      x <- a(href='https://species.nibr.go.kr/home/mainHome.do?searchType=total&cont_link=009&subMenu=009001&contCd=009001&searchField=%EA%B5%AC%EC%83%81%EB%82%98%EB%AC%B4&x=0&y=0',
+      x <- a(href=url,
              species_info$K_NAME[1], target = '_blank', class = "btn btn-default")
       return (x)
       
@@ -998,44 +1041,33 @@ shinyServer(function(input, output, session) {
     
   }, server = TRUE)
   
+  
   # output$SDM_SP_Selection = renderPrint({
   #   s_id <- as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID)
   #   s_kname <- as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$K_NAME)
   #   if (length(s_id)) {
-  #     cat('Speices ID:')
+  #     cat('Speices ID: ')
   #     cat(s_id, sep = ', ')
-  #     cat('\n\n')
-  #     cat("Species Name:")
+  #     cat('\n')
+  #     
+  #     cat("Species Name: ")
   #     cat(s_kname, sep = ', ')
+  #     cat('\n')
+  #     
+  #     cat('Climate Models: ')
+  #     cat(input$SDM_MO_Climate_model, sep = ', ')
+  #     cat('\n')
+  #     
+  #     cat("Climate Scenarios: ")
+  #     cat(input$SDM_MO_Climate_scenario, sep = ', ')
+  #     cat('\n')
+  #     
+  #     cat('Projecting Years: ')
+  #     cat(input$SDM_MO_Protect_year, sep = ', ')
+  #     
+  # 
   #   }
   # })
-  
-  output$SDM_SP_Selection = renderPrint({
-    s_id <- as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID)
-    s_kname <- as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$K_NAME)
-    if (length(s_id)) {
-      cat('Speices ID: ')
-      cat(s_id, sep = ', ')
-      cat('\n')
-      
-      cat("Species Name: ")
-      cat(s_kname, sep = ', ')
-      cat('\n')
-      
-      cat('Climate Models: ')
-      cat(input$SDM_MO_Climate_model, sep = ', ')
-      cat('\n')
-      
-      cat("Climate Scenarios: ")
-      cat(input$SDM_MO_Climate_scenario, sep = ', ')
-      cat('\n')
-      
-      cat('Projecting Years: ')
-      cat(input$SDM_MO_Protect_year, sep = ', ')
-      
-
-    }
-  })
   
 
   output$SDM_OU_Species <- renderUI({

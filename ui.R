@@ -335,7 +335,8 @@ shinyUI(
                                       
                                       fluidRow(
                                         tags$hr(),
-                                        verbatimTextOutput("SDM_SP_Selection"),
+                                        # verbatimTextOutput("SDM_SP_Selection"),
+                                        uiOutput("SDM_Sel_Box"),
                                         column(5, 
                                                actionButton('resetSpeciesInfo',label = "Reset", style = ST_Name),
                                                tags$style(type='text/css', "button#resetSpeciesInfo {margin-left: 90%;}"),
