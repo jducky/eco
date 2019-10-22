@@ -3,6 +3,35 @@
 shinyServer(function(input, output, session) {
   
   
+  output$SDM_MO_Condition_CheckBoxGroup = renderUI({
+    
+    input$resetSpeciesInfo
+    
+    x <- NULL
+    
+    x <- div( style = "display: inline-block;",
+         checkboxGroupInput("SDM_MO_Climate_model", SDM_Name_CD_Models,
+                            choices = c(SDM_Name_CD_Models_list),
+                            selected = SDM_Name_CD_Models_selected
+         ),
+         # Input: Checkbox if file has header ----
+         checkboxGroupInput("SDM_MO_Climate_scenario", SDM_Name_CD_Scenarios,
+                            choices = c(SDM_Name_CD_Scenarios_list),
+                            selected = SDM_Name_CD_Scenarios_selected
+         ),
+         
+         #            # Input: Checkbox if file has header ----
+         checkboxGroupInput("SDM_MO_Protect_year", SDM_Name_CD_Year,
+                            choices = c(SDM_Name_CD_Year_list),
+                            selected = SDM_Name_CD_Year_selected
+         )
+    )
+    
+    return (x)
+    
+  })
+  
+  
   
   output$SDM_Sel_Box = renderUI({
     
@@ -17,7 +46,7 @@ shinyServer(function(input, output, session) {
       
       x <- div(
         infoBox("Speices ID", toString(s_id), icon = icon("check"), width = 2),
-        infoBox("Species Name", toString(s_kname), icon = icon("sun"), width = 2),
+        infoBox("Species Name", toString(s_kname), icon = icon("sun"), width = 3),
         infoBox("Climate Models", toString(input$SDM_MO_Climate_model), icon = icon("clock"), width = 2),
         infoBox("Climate Scenarios", toString(input$SDM_MO_Climate_scenario), icon = icon("calendar"), width = 2),
         infoBox("Projecting Years", toString(input$SDM_MO_Protect_year), icon = icon("chart-area"), width = 2)
@@ -224,7 +253,7 @@ shinyServer(function(input, output, session) {
   
   
 
-  output$SE_Dir_Project <- renderText({G$SE_Dir_Project})
+  # output$SE_Dir_Project <- renderText({G$SE_Dir_Project})
   output$SE_Dir_Climate <- renderText({G$SE_Dir_Climate})
   output$SE_Dir_Link <- renderText({G$SE_Dir_Link})
   output$SE_Dir_Species <- renderText({G$SE_Dir_Species})
@@ -1037,7 +1066,9 @@ shinyServer(function(input, output, session) {
   output$SDM_SP_Info <- DT::renderDataTable({
     
     input$resetSpeciesInfo
-    G_FILE_speciesinfo                                        
+    
+    # G_FILE_speciesinfo          
+    G_FILE_speciesinfo[, c("ID", "INSTITUTE", "TYPE"	, "K_NAME", "N_POINT"), drop = F]
     
   }, server = TRUE)
   
