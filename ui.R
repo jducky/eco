@@ -94,6 +94,23 @@ shinyUI(
                 }
                 
                 
+                .fa-folder-open {
+                	color: #3498db;
+                }
+                
+                .fa-pie-chart {
+                	color: #9b59b6;
+                }
+                
+                .fa-table {
+                	color: #e74c3c;
+                }
+                
+                .container-fluid > .tabbable > .nav-tabs {
+                	font-weight: bold;
+                }
+                
+                
             
                
              '))),
