@@ -248,10 +248,14 @@ shinyUI(
                                           ),
                                           
                                           # Input: Checkbox if file has header ----
-                                          radioButtons("LD_Project_year", LD_Name_Year,
-                                                       choices = LD_Name_Year_list,
-                                                       selected = LD_Name_Year_selected
-                                          )
+                                          # radioButtons("LD_Project_year", LD_Name_Year,
+                                          #              choices = LD_Name_Year_list,
+                                          #              selected = LD_Name_Year_selected
+                                          # )
+                                          
+                                          sliderInput("LD_Project_year", label = LD_Name_Year, min = 2000,
+                                                      max = 2080, value = 2000, step = 10, sep = "",
+                                                      animate = animationOptions(interval = 3000))
                              ),
                              
                              # Main panel for displaying outputs ----
@@ -730,18 +734,23 @@ shinyUI(
                                                      ),
                                                      
                                                      # Input: Checkbox if file has header ----
-                                                     radioButtons("DM-OU_Project_year", "Projection Year",
-                                                                  choices = c("Current" = "00",
-                                                                              "2010" = "10",
-                                                                              "2020" = "20",
-                                                                              "2030" = "30",
-                                                                              "2040" = "40",
-                                                                              "2050" = "50",
-                                                                              "2060" = "60",
-                                                                              "2070" = "70",
-                                                                              "2080" = "80"),
-                                                                  selected = "30"
-                                                     )
+                                                     # radioButtons("DM-OU_Project_year", "Projection Year",
+                                                     #              choices = c("Current" = "00",
+                                                     #                          "2010" = "10",
+                                                     #                          "2020" = "20",
+                                                     #                          "2030" = "30",
+                                                     #                          "2040" = "40",
+                                                     #                          "2050" = "50",
+                                                     #                          "2060" = "60",
+                                                     #                          "2070" = "70",
+                                                     #                          "2080" = "80"),
+                                                     #              selected = "30"
+                                                     # )
+                                                     
+                                                     
+                                                     sliderInput("DM-OU_Project_year", label = "Projection Year", min = 2000,
+                                                                 max = 2080, value = 2000, step = 10, sep = "",
+                                                                 animate = animationOptions(interval = 3000))
                                         ),
                                         
                                         # Main panel for displaying outputs ----
