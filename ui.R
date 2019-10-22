@@ -238,10 +238,16 @@ shinyUI(
                                                       selected = LD_Name_Variables_selected
                                           ),
                                           
-                                          valueBoxOutput("LD_Value_TY"),
-                                          tags$hr(),
+                                          fluidRow(
+                                            # actionButton('LD_Value_TY',label = "Type", style = ST_Name)
+                                            
+                                            # box(status = "primary", solidHeader = T,
+                                            #     title = "LD Type", width = 50, height = 45, collapsible = F, collapsed = T
+                                            # )
+                                            
+                                            valueBoxOutput("LD_Value_TY")
+                                          ),
                                           
-
                                           # Input: Checkbox if file has header ----
                                           radioButtons("LD_Climate_model", LD_Name_Models,
                                                        choices = LD_Name_Models_list,
@@ -284,6 +290,7 @@ shinyUI(
                                  includeScript("gomap.js")
                                ),
                                # tags$hr(),
+                               
                                fluidRow(
                                  valueBoxOutput("LD_Value_CM"),
                                  valueBoxOutput("LD_Value_CS"),
@@ -399,7 +406,6 @@ shinyUI(
                                         
                                       )
                              ),
-                             
                              
                              
                              tabPanel("Model Outputs", fluid = TRUE,

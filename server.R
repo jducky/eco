@@ -193,26 +193,26 @@ shinyServer(function(input, output, session) {
     
   })
 
-  # valueBoxOutput("Value_CM")
-  # valueBoxOutput("Value_CS")
-  # valueBoxOutput("Value_YR")
-
   ## LD Value
+  output$LD_Value_TY <- renderValueBox(
+    input$LD_Value_TY
+  )
+  
   output$LD_Value_TY <- renderValueBox({
     valueBox(input$LD_Type, "Climate Models",
-             icon = icon("credit-card"), color = "blue", width = 2
+             icon = icon("credit-card"), color = "blue"
     )
   })
   
   output$LD_Value_CM <- renderValueBox({
     valueBox(input$LD_Climate_model, "Climate Models",
-             icon = icon("credit-card"), color = "blue", width = 1
+             icon = icon("credit-card"), color = "blue", width = 2
     )
   })
   
   output$LD_Value_CS <- renderValueBox({
     valueBox(input$LD_Climate_scenario, "Climate Scenarios",
-             icon = icon("list"), color = "purple", width = 1.5
+             icon = icon("list"), color = "purple", width = 2
     )
   })  
   
