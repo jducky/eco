@@ -860,16 +860,14 @@ shinyUI(
                                       
                                       tags$hr(),
                                       fluidRow(
-                                        sidebarPanel(width = 3, Fluid = TRUE,
-                                                     uiOutput("SS_CA_Species")
-                                        ),
-                                        sidebarPanel(width = 3, Fluid = TRUE,             
-                                                     
+                                        sidebarPanel(width = 2, Fluid = TRUE,
+                                                     uiOutput("SS_CA_Species"),
                                                      checkboxGroupInput("SS_CA_Dispersal_type", SS_Name_DM_Models,
                                                                         choices = c(SS_Name_DM_Models_list),
                                                                         selected = SS_Name_DM_Models_selected
-                                                     ),
-                                                     
+                                                     )
+                                        ),
+                                        sidebarPanel(width = 2, Fluid = TRUE,             
                                                      # Input: Checkbox if file has header ----
                                                      checkboxGroupInput("SS_CA_Climate_model", SS_Name_CD_Models,
                                                                         choices = c(SS_Name_CD_Models_list),
@@ -888,11 +886,19 @@ shinyUI(
                                                                         selected = SS_Name_CD_Year_selected
                                                      )
                                         ),
-                                        sidebarPanel(width = 4,
-                                                     uiOutput("SS_CA_SDM_model"),
-                                                     tags$hr(),
+                                        sidebarPanel(width = 2,
+                                                     uiOutput("SS_CA_SDM_model")
+                                        ),
+                                        sidebarPanel(width = 1,
+                                                     cat("Hello"),
+                                                     # print("=====>"),
+                                                     tags$br(),
+                                                     tags$br()
+                                        ),
+                                        sidebarPanel(width = 3,
                                                      actionButton("SS_CA_Action_change", label = "Analayzing the change of Species Distribution"),
-                                                     tags$hr(),
+                                                     tags$br(),
+                                                     tags$br(),
                                                      actionButton("SS_CA_Action_Vindex", label = "Calculating the Climate Vulnerability Index of Species")
                                         )
                                       )
