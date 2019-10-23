@@ -1139,18 +1139,34 @@ shinyUI(
                                             # ),
                                             tabPanel(IS_Name_Out_SR,
                                                      tags$br(), tags$br(),
-                                                     column(4,
+                                                     # fluidRow(
+                                                     #   valueBoxOutput("IS_Value_CM"),
+                                                     #   valueBoxOutput("IS_Value_CS"),
+                                                     #   valueBoxOutput("IS_Value_YR")
+                                                     # ),
+                                                     fluidRow(
+                                                       valueBoxOutput("IS_Value_CM"),
+                                                       valueBoxOutput("IS_Value_CS"),
+                                                       valueBoxOutput("IS_Value_YR")
+                                                     ),
+                                                     fluidRow(
+                                                     column(4, class = "text-center",
+                                                            print("< 외래종 풍부도 >"),
                                                             leafletOutput("IS_AO_SR_Map", width = "400", height = "600")
                                                             # plotOutput("IS_AO_SR_SGG_Stat")
                                                             ),
-                                                     column(4,
-                                                            # leafletOutput("IS_AO_SR_SIDO_Map", width = "400", height = "600"),
+                                                     column(4, class = "text-center",
+                                                            print("< 시도 통계 >"),
+                                                            leafletOutput("IS_AO_SR_SIDO_Map", width = "400", height = "600"),
+                                                            tags$br(),
                                                             plotOutput("IS_AO_SR_SIDO_Stat")
                                                             ),
-                                                     column(4,
-                                                            # leafletOutput("IS_AO_SR_SGG_Map", width = "400", height = "600"),
-                                                            plotOutput("IS_AO_SR_SGG_Stat")
+                                                     column(4, class = "text-center",
+                                                            print("< 시군구 통계 >"),
+                                                            leafletOutput("IS_AO_SR_SGG_Map", width = "400", height = "600")
+                                                            # plotOutput("IS_AO_SR_SGG_Stat")
                                                             )
+                                                     )
                                                      ),
                                             tabPanel(IS_Name_Out_SI,
                                                      tabsetPanel(

@@ -287,6 +287,31 @@ shinyServer(function(input, output, session) {
     )
   })  
 
+  ## IS Value
+  output$IS_Value_CM <- renderValueBox({
+    valueBox(input$IS_AO_Dispersal_type, IS_Name_DM_Models,
+             icon = icon("credit-card"), color = "blue", width = 3
+    )
+  })
+  
+  output$IS_Value_CM <- renderValueBox({
+    valueBox(input$IS_AO_Climate_model, "Climate Models",
+             icon = icon("credit-card"), color = "blue", width = 3
+    )
+  })
+  
+  output$IS_Value_CS <- renderValueBox({
+    valueBox(input$IS_AO_Climate_scenario, "Climate Scenarios",
+             icon = icon("list"), color = "purple", width = 3
+    )
+  })  
+  
+  output$IS_Value_YR <- renderValueBox({
+    valueBox(input$IS_AO_Project_year, "Projecting Years",
+             icon = icon("thumbs-up"), color = "yellow", width = 3
+    )
+  })  
+  
   
   output$CM_UI <- renderUI({
     actionButton("CM_btn", input$SDM_OU_Climate_model, style = "display: inline-block;")
@@ -2790,7 +2815,7 @@ shinyServer(function(input, output, session) {
     ggplot(data=df, aes(x=df[[X_NAME]], y=df[[V_NAME]])) + #, fill=df[[X_NAME]])) +
       geom_bar(stat="identity", position=position_dodge()) +
       geom_text(aes(label=df[[V_NAME]]), vjust=1.6, color="white",
-                position = position_dodge(0.9), size=13.5) +
+                position = position_dodge(0.9), size=3.5) +
       scale_fill_brewer(palette="Paired") +
       theme_minimal() +
       coord_flip()
