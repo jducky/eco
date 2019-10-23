@@ -1140,8 +1140,8 @@ shinyUI(
                                             tabPanel(IS_Name_Out_SR,
                                                      tags$br(), tags$br(),
                                                      column(4,
-                                                            # leafletOutput("IS_AO_SR_Map", width = "400", height = "600"),
-                                                            plotOutput("IS_AO_SR_SGG_Stat")
+                                                            leafletOutput("IS_AO_SR_Map", width = "400", height = "600")
+                                                            # plotOutput("IS_AO_SR_SGG_Stat")
                                                             ),
                                                      column(4,
                                                             # leafletOutput("IS_AO_SR_SIDO_Map", width = "400", height = "600"),
