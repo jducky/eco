@@ -13,7 +13,12 @@ shinyUI(
     dashboardBody(
       
       shinyjs::useShinyjs(),
-      
+      tags$script(HTML(
+        
+        'document.querySelector("body").classList.add("sidebar-collapse");'
+        
+        
+      )),
       
       fluidPage( div(
           h4(System_Name, style = "display: inline-block; color: white; font-size: 200%; margin-left: 20px; position: absolute; line-height: 8vh;"), 
@@ -25,12 +30,7 @@ shinyUI(
                      a("LOGOUT", style = "cursor:pointer; margin-right: 5px; color: white;" )
                 )
             , style = "background-image: url(eco_title.png); height: 10vh; position: relative;"),
-                tags$script(HTML(
-                  
-                  'document.querySelector("body").classList.add("sidebar-collapse");'
-                  
-                  
-                )),
+                
                 
                 theme = shinytheme("yeti"),
                 # shinythemes::themeSelector(),
