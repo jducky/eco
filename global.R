@@ -1,10 +1,9 @@
-### Seo Edition
 
 #####=========================================================
 ##### installing and Loading packages ========================
 # Setting packages and library
-packages <- c("shiny", "shinyWidgets", "shinyFiles", "shinyalert", "shinyjs", "tiff", "sf", "SDMTools", "proj4", "gdata", "colorspace", "plyr", "leaflet", "RColorBrewer", "scales", "lattice", "dplyr", "maps", "maptools", "sp", "biomod2", "raster", "rgdal", "ggplot2", "hrbrthemes", "plotly", "grid", "reshape", "rgeos", "stringr", "rgdal", "MigClim", "mgcv", "gsubfn", "DT", "fmsb", "data.table", "foreign", "scales")
-libraries <- c("shiny", "shinyWidgets", "shinyFiles", "shinyalert", "shinyjs", "tiff", "sf", "SDMTools", "proj4", "gdata", "colorspace", "plyr", "leaflet", "RColorBrewer", "scales", "lattice", "dplyr", "maps", "maptools", "sp", "biomod2", "raster", "rgdal", "ggplot2", "hrbrthemes", "plotly", "grid", "reshape", "rgeos", "stringr", "rgdal", "MigClim", "mgcv", "gsubfn", "DT", "fmsb", "data.table", "foreign", "scales")
+packages <- c("shiny", "shinyWidgets", "shinyFiles", "shinyalert", "shinyjs", "tiff", "sf", "SDMTools", "proj4", "gdata", "colorspace", "plyr", "leaflet", "RColorBrewer", "scales", "lattice", "dplyr", "maps", "maptools", "sp", "biomod2", "raster", "rgdal", "ggplot2", "hrbrthemes", "plotly", "grid", "reshape", "rgeos", "stringr", "rgdal", "MigClim", "mgcv", "gsubfn", "DT", "fmsb", "data.table", "foreign", "scales", "leaflet.minicharts", "manipulateWidget", "shinydashboard", "shinyBS")
+libraries <- c("shiny", "shinyWidgets", "shinyFiles", "shinyalert", "shinyjs", "tiff", "sf", "SDMTools", "proj4", "gdata", "colorspace", "plyr", "leaflet", "RColorBrewer", "scales", "lattice", "dplyr", "maps", "maptools", "sp", "biomod2", "raster", "rgdal", "ggplot2", "hrbrthemes", "plotly", "grid", "reshape", "rgeos", "stringr", "rgdal", "MigClim", "mgcv", "gsubfn", "DT", "fmsb", "data.table", "foreign", "scales", "leaflet.minicharts", "manipulateWidget", "shinydashboard", "shinyBS")
 
 # installing packages 
 CHK_packages <- setdiff(packages, rownames(installed.packages()))
@@ -44,7 +43,7 @@ G$SE_Dir_Project <- "C:/MOTIVE_projects/proj1"
 G$SE_Dir_Climate <- "C:/MOTIVE_Ecosystem/DATA/Climate2"
 G$SE_Dir_Link <- "C:/MOTIVE_Ecosystem/DATA/Link" 
 G$SE_Dir_Species <- "C:/MOTIVE_Ecosystem/DATA/Species"
-G$SE_Dir_Admin <- "C:/MOTIVE_Ecosystem/DATA/Admin"
+G$SE_Dir_GIS <- "C:/MOTIVE_Ecosystem/DATA/GIS"
 G$SE_speciesindex <- "speciesname_final.csv"
 G$SE_specieslocation <- "shin_specieslocation.csv"
 G_FILE_speciesindex <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_speciesindex)), header = T, sep = ",")
@@ -325,6 +324,11 @@ if (SE_Language == "English") {
                            "by Climate Scenario" = "Climate_Scenario",
                            "by Model" = "Model")
   SS_Name_Group2_selected <- "Model"
+  SS_Name_Group3_list <- c("by Species" = "Species",
+                           "by Climate Model" = "Climate_Model",
+                           "by Climate Scenario" = "Climate_Scenario",
+                           "by Model" = "Model")
+  SS_Name_Group3_selected <- "Model"
   IS_Name <- "Invasive Species"
   IS_Name_Anlayis <- "Change Analysis"
   IS_Name_Out <- "Model Outputs"
@@ -681,6 +685,11 @@ if (SE_Language == "English") {
                            "기후시나리오별" = "Climate_Scenario",
                            "모델유형별" = "Model")
   SS_Name_Group2_selected <- "Model"
+  SS_Name_Group3_list <- c("생물종별" = "Species",
+                           "기후모델별" = "Climate_Model",
+                           "기후시나리오별" = "Climate_Scenario",
+                           "모델유형별" = "Model")
+  SS_Name_Group3_selected <- "Species"
   IS_Name <- "외래종"
   IS_Name_Anlayis <- "영향 평가"
   IS_Name_Out <- "평가결과"

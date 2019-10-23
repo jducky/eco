@@ -1,4 +1,3 @@
-### Seo Edition
 
 shinyServer(function(input, output) {
   
@@ -1130,6 +1129,7 @@ shinyServer(function(input, output) {
     lm <- length(mlist)
     ly <- length(ylist)
     tl <- ls * ld * lc * lm * ly
+    tr <- ld * lc * lm * ly
     
     col_list <- c("Species", 
                   "Climate_Model", 
@@ -1149,19 +1149,23 @@ shinyServer(function(input, output) {
                   "Area_Gain_Ratio_Outside_Reverse",
                   "Vulnerability_Area_Loss_Ratio", 
                   "Vulnerability_Area_LossIN_GainOUT_Ratio")
-    
+    Tab_gap_sum <- setNames(data.frame(matrix(ncol = 18, nrow = 0)), col_list)
+    save_path <- file.path(isolate(G$SE_Dir_Project), "Sensitive_Species")
+    #		Tab_gap <- setNames(data.frame(matrix(ncol = 18, nrow = tr)), col_list)
     withProgress(message = 'Runing GAP Analysis model.........', value = 0, {
       
-      n_tl <- 0
+      
       for (s in slist) {
         dir_path <- file.path(isolate(G$SE_Dir_Project), "Species_Distribution", s, "BIOMOD2")
-        Tab_gap <- setNames(data.frame(matrix(ncol = 18, nrow = tl)), col_list)
+        Tab_gap <- setNames(data.frame(matrix(ncol = 18, nrow = tr)), col_list)
         n <- n + 1
+        n_tl <- 0
         for (d in dlist) {
           for (c in clist) {
             for (m in mlist) {
               if (ly > 0) {
                 if (ly == 1 & ylist[1] == "2000") {
+                  incProgress(1/tl, detail = paste("Doing part", n, "/", ls, "(", s, ")", "_", d, "_", c, "_", m, "_", ylist[1]))
                   n_tl <- n_tl + 1
                   Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
                   R_Map1 <- raster(file.path(dir_path, Map1))
@@ -1189,6 +1193,7 @@ shinyServer(function(input, output) {
                   Tab_gap$Vulnerability_Area_Loss_Ratio[n_tl] <- 1 - Tab_gap$Area_Ratio[n_tl]
                   Tab_gap$Vulnerability_Area_LossIN_GainOUT_Ratio[n_tl] <- (Tab_gap$Area_Loss_Ratio[n_tl] / 100) - (Tab_gap$Area_Gain_Ratio_Outside[n_tl] / 100)
                 } else if (ly > 1 & ylist[1] == "2000") {
+                  incProgress(1/tl, detail = paste("Doing part", n, "/", ls, "(", s, ")", "_", d, "_", c, "_", m, "_", ylist[1]))
                   n_tl <- n_tl + 1
                   Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
                   R_Map1 <- raster(file.path(dir_path, Map1))
@@ -1216,7 +1221,7 @@ shinyServer(function(input, output) {
                   Tab_gap$Vulnerability_Area_Loss_Ratio[n_tl] <- 1 - Tab_gap$Area_Ratio[n_tl]
                   Tab_gap$Vulnerability_Area_LossIN_GainOUT_Ratio[n_tl] <- (Tab_gap$Area_Loss_Ratio[n_tl] / 100) - (Tab_gap$Area_Gain_Ratio_Outside[n_tl] / 100)   
                   for (y in 2:ly) {
-                    incProgress(1/tl, detail = paste("Doing part", n, "/", ls, "(", s, ")", "_", d, "_", c, "_", m, "_", y))
+                    incProgress(1/tl, detail = paste("Doing part", n, "/", ls, "(", s, ")", "_", d, "_", c, "_", m, "_", ylist[y]))
                     n_tl <- n_tl + 1
                     Map2 <- paste("GAP_", "PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
                     R_gap <- raster(file.path(dir_path, Map2))
@@ -1295,8 +1300,11 @@ shinyServer(function(input, output) {
             }
           }
         }
+        Tab_gap_sum <- rbind(Tab_gap_sum, Tab_gap)
         write.csv(Tab_gap, file = file.path(dir_path, paste(s, "_VINDEX.csv", sep = "", collapse = "--")))
-      }   
+      }
+      write.csv(Tab_gap_sum, file = file.path(save_path, "Speices_VINDEX.csv"))
+      #		write.csv(Tab_gap_sum, file = file.path(file.path(isolate(G$SE_Dir_Project), "Sensitive_Species"), paste("Speices_VINDEX.csv", sep = "", collapse = "--")))
     })
     ##### End GAP analyzing =========================================    
   })
@@ -1311,7 +1319,7 @@ shinyServer(function(input, output) {
   })
   
   output$SS_AO_SDM_model <- renderUI({
-    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SS_CA_Species, "BIOMOD2", paste(as.name(paste(input$SS_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SS_CA_Species[1], "BIOMOD2", paste(as.name(paste(input$SS_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
     SS_Name_Models_list <- as.character(G_FILE_species_evaluation$Prediction)
@@ -1515,7 +1523,7 @@ shinyServer(function(input, output) {
   })
   
   output$SS_AO_VP_Table <- DT::renderDataTable({
-    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SS_AO_Species, "BIOMOD2", paste(as.name(paste(input$SS_AO_Species, "_VINDEX.csv", sep = "")), sep = "", collapse = "--"))
+    destfile <- file.path(G$SE_Dir_Project, "Sensitive_Species", "Speices_VINDEX.csv") # , sep = "", collapse = "--")
     vindex <- read.csv(destfile)
     G_FILE_species_vindex <<- vindex
     vindex
@@ -1604,6 +1612,57 @@ shinyServer(function(input, output) {
         geom_point(shape = 21, color = "black", fill = "#69b3a2", size=6) +
         theme_ipsum() +
         labs(title = "Vulnerability (Area Loss Ratio)", x = "Year", y = "Vulnerability")
+    }
+  })
+  
+  output$SS_AO_VP_UI_plot3 <- renderUI({
+    selectInput("SS_AO_VP_UI_plot3", "Select a group",
+                choices = c(SS_Name_Group3_list),
+                selected = SS_Name_Group3_selected
+    )
+  })
+  
+  output$SS_AO_VP_Plot12 <- renderPlot({
+    rs <- input$SS_AO_VP_Table_rows_selected  # G_FILE_specieslocation   # st_read("species.shp")
+    if (length(rs)) {
+      vindex <- G_FILE_species_vindex[rs, , drop = FALSE]
+      
+      Group <- vindex[, input$SS_AO_VP_UI_plot3]
+      vindex$X <- ifelse(vindex$Vulnerability_Area_Loss_Ratio < 0, "below", "above")  # above / below avg flag
+      vindex <- vindex[order(vindex$Vulnerability_Area_Loss_Ratio), ]  # sort
+      vindex$Species <- factor(vindex$Species, ordered = is.ordered(vindex)) #, levels = vindex$Species)  # convert to factor to retain sorted order in plot.
+      
+      # Diverging Barcharts
+      ggplot(vindex, aes(x=Species, y=Vulnerability_Area_Loss_Ratio, label=Vulnerability_Area_Loss_Ratio)) + 
+        geom_bar(stat='identity', aes(fill=X), width=.5)  +
+        scale_fill_manual(name="Vulnerability", 
+                          labels = c("Above Average", "Below Average"), 
+                          values = c("above"="#00ba38", "below"="#f8766d")) + 
+        labs(subtitle="Species Vulnerability Index", 
+             title= "Diverging Bars") + 
+        coord_flip()
+    }
+  })
+  
+  output$SS_AO_VP_Plot22 <- renderPlot({
+    rs <- input$SS_AO_VP_Table_rows_selected  # G_FILE_specieslocation   # st_read("species.shp")
+    if (length(rs)) {
+      vindex <- G_FILE_species_vindex[rs, , drop = FALSE]
+      
+      Group <- vindex[, input$SS_AO_VP_UI_plot2]
+      vindex$X <- ifelse(vindex$Vulnerability_Area_LossIN_GainOUT_Ratio < 0, "below", "above")  # above / below avg flag
+      vindex <- vindex[order(vindex$Vulnerability_Area_LossIN_GainOUT_Ratio), ]  # sort
+      vindex$Species <- factor(vindex$Species, ordered = is.ordered(vindex)) #, levels = vindex$Species)  # convert to factor to retain sorted order in plot.
+      
+      # Diverging Barcharts
+      ggplot(vindex, aes(x=Species, y=Vulnerability_Area_LossIN_GainOUT_Ratio, label=Vulnerability_Area_LossIN_GainOUT_Ratio)) + 
+        geom_bar(stat='identity', aes(fill=X), width=.5)  +
+        scale_fill_manual(name="Vulnerability", 
+                          labels = c("Above Average", "Below Average"), 
+                          values = c("above"="#00ba38", "below"="#f8766d")) + 
+        labs(subtitle="Species Vulnerability Index", 
+             title= "Diverging Bars") + 
+        coord_flip()
     }
   })
   
@@ -1799,8 +1858,8 @@ shinyServer(function(input, output) {
       dir_path <- isolate(G$IS_VA_Dir_Folder)
       
       for (a in alist) {
-        poly <- readShapePoly(file.path(isolate(G$SE_Dir_Admin), paste(a, ".shp", sep = "")))
-        df <- read.dbf(file.path(isolate(G$SE_Dir_Admin), paste(a, ".dbf", sep = "")))
+        poly <- readShapePoly(file.path(isolate(G$SE_Dir_GIS), paste(a, ".shp", sep = "")))
+        df <- read.dbf(file.path(isolate(G$SE_Dir_GIS), paste(a, ".dbf", sep = "")))
         
         for (d in dlist) {
           for (c in clist) {
@@ -1836,7 +1895,7 @@ shinyServer(function(input, output) {
         
         #write to a CSV file
         write.csv(df, file = file.path(dir_path, paste("IS_", a, ".csv", sep="")))
-        write.dbf(df, file.path(isolate(G$SE_Dir_Admin), paste("O_", a, ".dbf", sep = "")))
+        write.dbf(df, file.path(isolate(G$SE_Dir_GIS), paste("O_", a, ".dbf", sep = "")))
       }
       
     })
@@ -2098,7 +2157,7 @@ shinyServer(function(input, output) {
   
   output$IS_AO_SR_SIDO_Map <- renderLeaflet({
     
-    poly <- readOGR(file.path(isolate(G$SE_Dir_Admin), paste("O_SD", ".shp", sep = "")))
+    poly <- readOGR(file.path(isolate(G$SE_Dir_GIS), paste("O_SD", ".shp", sep = "")))
     x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SD", ".csv", sep = "")))
     names(poly) <- c(names(x))
     X_NAME <- names(poly[5])
@@ -2165,7 +2224,7 @@ shinyServer(function(input, output) {
   #	geom_text(aes(label = Vulnerability_Area_Loss_Ratio), size = 3, hjust = 0.5, vjust = 3) + 
   
   output$IS_AO_SR_SGG_Map <- renderLeaflet({
-    poly <- readOGR(file.path(isolate(G$SE_Dir_Admin), paste("O_SGG", ".shp", sep = "")))
+    poly <- readOGR(file.path(isolate(G$SE_Dir_GIS), paste("O_SGG", ".shp", sep = "")))
     x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SGG", ".csv", sep = "")))
     names(poly) <- c(names(x[-1]))
     X_NAME <- names(poly[2])
@@ -2213,7 +2272,7 @@ shinyServer(function(input, output) {
   output$IS_AO_SR_SGG_Stat <- renderPlot({
     
     #	  df <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_", input$IS_VA_Admin, ".csv", sep = "")))
-    df <- read.dbf(file.path(isolate(G$SE_Dir_Admin), paste("O_SGG", ".dbf", sep = "")))
+    df <- read.dbf(file.path(isolate(G$SE_Dir_GIS), paste("O_SGG", ".dbf", sep = "")))
     df[df[, 2] == "gun",]
     x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SGG", ".csv", sep = "")))
     names(df) <- c(names(x[-1]))
@@ -2299,7 +2358,7 @@ shinyServer(function(input, output) {
   
   output$IS_AO_SI_SIDO_Map <- renderLeaflet({
     
-    poly <- readOGR(file.path(isolate(G$SE_Dir_Admin), paste("O_SD", ".shp", sep = "")))
+    poly <- readOGR(file.path(isolate(G$SE_Dir_GIS), paste("O_SD", ".shp", sep = "")))
     x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SD", ".csv", sep = "")))
     names(poly) <- c(names(x))
     X_NAME <- names(poly[5])
@@ -2366,7 +2425,7 @@ shinyServer(function(input, output) {
   #	geom_text(aes(label = Vulnerability_Area_Loss_Ratio), size = 3, hjust = 0.5, vjust = 3) + 
   
   output$IS_AO_SI_SGG_Map <- renderLeaflet({
-    poly <- readOGR(file.path(isolate(G$SE_Dir_Admin), paste("O_SGG", ".shp", sep = "")))
+    poly <- readOGR(file.path(isolate(G$SE_Dir_GIS), paste("O_SGG", ".shp", sep = "")))
     x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SGG", ".csv", sep = "")))
     names(poly) <- c(names(x[-1]))
     X_NAME <- names(poly[2])
@@ -2414,7 +2473,7 @@ shinyServer(function(input, output) {
   output$IS_AO_SI_SGG_Stat <- renderPlot({
     
     #	  df <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_", input$IS_VA_Admin, ".csv", sep = "")))
-    df <- read.dbf(file.path(isolate(G$SE_Dir_Admin), paste("O_SGG", ".dbf", sep = "")))
+    df <- read.dbf(file.path(isolate(G$SE_Dir_GIS), paste("O_SGG", ".dbf", sep = "")))
     df[df[, 2] == "gun",]
     x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SGG", ".csv", sep = "")))
     names(df) <- c(names(x[-1]))
@@ -2445,20 +2504,213 @@ shinyServer(function(input, output) {
   })
   
   output$VH_CA_SDM_model <- renderUI({
-    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$VH_CA_Species, "BIOMOD2", paste(as.name(paste(input$VH_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$VH_CA_Species[1], "BIOMOD2", paste(as.name(paste(input$VH_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
-    VH_Name_Models_lVHt <- as.character(G_FILE_species_evaluation$Prediction)
-    VH_Name_Models_selected <- VH_Name_Models_lVHt[1]
+    VH_Name_Models_list <- as.character(G_FILE_species_evaluation$Prediction)
+    VH_Name_Models_selected <- VH_Name_Models_list[1]
     checkboxGroupInput("VH_CA_SDM_model", "Select models",
-                       choices = c(VH_Name_Models_lVHt),
+                       choices = c(VH_Name_Models_list),
                        selected = VH_Name_Models_selected
     )
   })
   
+  observeEvent(input$VH_VA_Dir_Folder, {
+    volumes <- c(main = isolate(G$SE_Dir_Project))
+    shinyDirChoose(input, 'VH_VA_Dir_Folder', roots = volumes) # , defaultPath = "/MOTIVE_projects", defaultRoot = G$SE_Dir_Project)
+    G$VH_VA_Dir_Folder <<- parseDirPath(volumes, input$VH_VA_Dir_Folder)
+    output$VH_VA_Dir_Folder <- renderText({G$VH_VA_Dir_Folder})
+  })
+  
+  
+  observeEvent(input$VH_VA_Action_Analysis, {
+    # setting Climate change scenarios, Future time, Species and current environmental path
+    dlist <- input$VH_CA_Climate_model  # c("KMA") # c("KMA", "KEI", "WORLDCLIM")
+    clist <- input$VH_CA_Climate_scenario  # c("RCP4.5") # c("RCP4.5", "RCP8.5")
+    #	dtlist <- input$VH_CA_Dispersal_type
+    mlist <- input$VH_CA_SDM_model # c("PA1_Full_GLM_byROC")
+    ylist <- input$VH_CA_Project_year
+    slist <- input$VH_CA_Species
+    
+    n <- 0
+    ls <- length(slist)
+    ld <- length(dlist)
+    lc <- length(clist)
+    lm <- length(mlist)
+    ly <- length(ylist)
+    
+    tl <- ld * lc * lm
+    
+    sr_list <- ""
+    loss_list <- ""
+    stay_list <- ""
+    gain_list <- ""
+    
+    withProgress(message = 'Runing Invasive Species Impact and Vulnerability Analysis.........', value = 0, {
+      
+      for (d in dlist) {
+        for (c in clist) {
+          for (m in mlist) {
+            for (y in ylist) {
+              if (length(ylist) > 1 && ylist[1] == "2000") {
+                if(y == ylist[1]) {
+                  incProgress(1/tl, detail = paste("Doing part", d, "_", c, "_", m, "_", y))
+                  for (s in slist) {
+                    dir_path <- file.path(isolate(G$SE_Dir_Project), "Species_Distribution", s, "BIOMOD2")
+                    img <- file.path(dir_path, paste("PRED", "_", d, "_", c, "_", y, "_", s, "_", m, ".tif", sep = ""))
+                    sr_list <- c(sr_list, img)
+                  }
+                  save_path <- isolate(G$VH_VA_Dir_Folder)
+                  sr_list <- grep("PRED", sr_list, value = TRUE)
+                  sr_stack <- stack(sr_list)
+                  sr_raster <- overlay(sr_stack, fun=sum)
+                  sr_raster1 <- sr_raster
+                  writeRaster(sr_raster, file = file.path(save_path, paste(as.name(paste("VH_SR_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  vi1_raster <- sr_raster
+                  vi1_raster[] <- 0
+                  vi2_raster <- sr_raster
+                  vi2_raster[] <- 0
+                  vi3_raster <- sr_raster
+                  vi3_raster[] <- 0
+                  writeRaster(vi1_raster, file = file.path(save_path, paste(as.name(paste("VH_VI1_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  writeRaster(vi2_raster, file = file.path(save_path, paste(as.name(paste("VH_VI2_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  writeRaster(vi3_raster, file = file.path(save_path, paste(as.name(paste("VH_VI3_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  sr_list <- ""
+                  loss_list <- ""
+                  stay_list <- ""
+                  gain_list <- ""
+                } else {					  
+                  for (s in slist) {
+                    dir_path <- file.path(isolate(G$SE_Dir_Project), "Species_Distribution", s, "BIOMOD2")
+                    img <- file.path(dir_path, paste("PRED", "_", d, "_", c, "_", y, "_", s, "_", m, ".tif", sep = ""))
+                    sr_list <- c(sr_list, img)
+                    img <- file.path(dir_path, paste("LOSS_", "PRED", "_", d, "_", c, "_", y, "_", s, "_", m, ".tif", sep = ""))
+                    loss_list <- c(loss_list, img)
+                    img <- file.path(dir_path, paste("STAY_", "PRED", "_", d, "_", c, "_", y, "_", s, "_", m, ".tif", sep = ""))
+                    stay_list <- c(stay_list, img)
+                    img <- file.path(dir_path, paste("GAIN_", "PRED", "_", d, "_", c, "_", y, "_", s, "_", m, ".tif", sep = ""))
+                    gain_list <- c(gain_list, img)
+                  }
+                  save_path <- isolate(G$VH_VA_Dir_Folder)
+                  sr_list <- grep("PRED", sr_list, value = TRUE)
+                  sr_stack <- stack(sr_list)
+                  sr_raster <- overlay(sr_stack, fun=sum)
+                  sr_raster2 <- sr_raster
+                  losssr_raster <- sr_raster2 - sr_raster1
+                  writeRaster(sr_raster, file = file.path(save_path, paste(as.name(paste("VH_SR_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  writeRaster(losssr_raster, file = file.path(save_path, paste(as.name(paste("VH_VI1_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  
+                  loss_list <- grep("LOSS", loss_list, value = TRUE)
+                  loss_stack <- stack(loss_list)
+                  loss_raster <- overlay(loss_stack, fun=sum)
+                  writeRaster(loss_raster, file = file.path(save_path, paste(as.name(paste("VH_LOSS_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  
+                  stay_list <- grep("STAY", stay_list, value = TRUE)
+                  stay_stack <- stack(stay_list)
+                  stay_raster <- overlay(stay_stack, fun=sum)
+                  writeRaster(stay_raster, file = file.path(save_path, paste(as.name(paste("VH_STAY_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  
+                  gain_list <- grep("GAIN", gain_list, value = TRUE)
+                  gain_stack <- stack(gain_list)
+                  gain_raster <- overlay(gain_stack, fun=sum)
+                  writeRaster(gain_raster, file = file.path(save_path, paste(as.name(paste("VH_GAIN_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  
+                  vi2_raster <- sr_raster
+                  vi2_raster <- loss_raster / sr_raster1
+                  writeRaster(vi2_raster, file = file.path(save_path, paste(as.name(paste("VH_VI2_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  vi3_raster <- sr_raster
+                  vi3_raster <- (1 - (loss_raster / sr_raster1)) + (gain_raster / (length(slist) - sr_raster1))
+                  writeRaster(vi3_raster, file = file.path(save_path, paste(as.name(paste("VH_VI3_", d, "_", c, "_", m, "_", y, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  
+                  sr_list <- ""
+                  loss_list <- ""
+                  stay_list <- ""
+                  gain_list <- ""
+                }				    
+              } 
+            }
+          }
+        }
+      }
+    })
+  })
+  
+  observeEvent(input$VH_VA_Action_Habitat, {
+    # setting Climate change scenarios, Future time, Species and current environmental path
+    alist <- input$VH_VA_Habitat
+    dlist <- input$VH_CA_Climate_model  # c("KMA") # c("KMA", "KEI", "WORLDCLIM")
+    clist <- input$VH_CA_Climate_scenario  # c("RCP4.5") # c("RCP4.5", "RCP8.5")
+    #	dtlist <- input$VH_CA_Dispersal_type
+    mlist <- input$VH_CA_SDM_model # c("PA1_Full_GLM_byROC")
+    ylist <- input$VH_CA_Project_year
+    slist <- input$VH_CA_Species
+    vlist <- c("VH_SR", "VH_LOSS", "VH_STAY", "VH_GAIN", "VH_VI1", "VH_VI2", "VH_VI3") # c("VH_SR") # 
+    
+    n <- 0
+    la <- length(alist)
+    ls <- length(slist)
+    ld <- length(dlist)
+    lc <- length(clist)
+    lm <- length(mlist)
+    ly <- length(ylist)
+    lv <- length(vlist)
+    
+    tl <- la * ld * lc * lm * ly * lv
+    
+    withProgress(message = paste("Grouping by ", input$VH_VA_Habitat), value = 0, {
+      
+      dir_path <- isolate(G$VH_VA_Dir_Folder)
+      
+      for (a in alist) {
+        poly <- readShapePoly(file.path(isolate(G$SE_Dir_GIS), paste(a, ".shp", sep = "")))
+        df <- read.dbf(file.path(isolate(G$SE_Dir_GIS), paste(a, ".dbf", sep = "")))
+        
+        for (d in dlist) {
+          for (c in clist) {
+            for (m in mlist) {
+              for (y in ylist) {
+                if (length(ylist) > 1 && ylist[1] == "2000") {
+                  if(y == ylist[1]) {
+                    incProgress(1/tl, detail = paste("Doing part", d, "_", c, "_", m, "_", y, "_", vlist[1]))
+                    img <- file.path(dir_path, paste(vlist[1], "_",  d, "_", c, "_", m, "_", y, ".tif", sep = ""))
+                    r <- raster(img)
+                    df1 <- extract(r, poly, fun = max, na.rm = FALSE, df = TRUE)
+                    #write to a data frame
+                    df1 <- data.frame(df1)
+                    df1[is.na(df1)] <- 0
+                    df <- cbind(df, df1[-1])
+                  } else {
+                    for (v in vlist) {
+                      incProgress(1/tl, detail = paste("Doing part", d, "_", c, "_", m, "_", y, "_", v))
+                      img <- file.path(dir_path, paste(v, "_",  d, "_", c, "_", m, "_", y, ".tif", sep = ""))
+                      r <- raster(img)
+                      df1 <- extract(r, poly, fun = max, na.rm = FALSE, df=TRUE)
+                      #write to a data frame
+                      df1 <- data.frame(df1[-1])
+                      df1[is.na(df1)] <- 0
+                      df <- cbind(df, df1)
+                    }
+                  }
+                } 
+              }
+            }
+          }
+        }
+        
+        #write to a CSV file
+        write.csv(df, file = file.path(dir_path, paste("VH_", a, ".csv", sep="")))
+        write.dbf(df, file.path(isolate(G$SE_Dir_GIS), paste("O_", a, ".dbf", sep = "")))
+      }
+      
+    })
+  })
+  
+  
+  
+  
   output$VH_AO_Species <- renderUI({
-    VH_Name_Species_lVHt <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution"), full.names = FALSE, recursive = FALSE)
-    VH_Name_Species_selected <- VH_Name_Species_lVHt[1]
+    VH_Name_Species_list <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution"), full.names = FALSE, recursive = FALSE)
+    VH_Name_Species_selected <- VH_Name_Species_list[1]
     checkboxGroupInput("VH_AO_Species", "Select a species",
                        choices = c(VH_Name_Species_lVHt),
                        selected = VH_Name_Species_selected
@@ -2473,19 +2725,16 @@ shinyServer(function(input, output) {
   })
   
   output$VH_AO_SDM_model <- renderUI({
-    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$VH_CA_Species, "BIOMOD2", paste(as.name(paste(input$VH_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$VH_CA_Species[1], "BIOMOD2", paste(as.name(paste(input$VH_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
-    VH_Name_Models_lVHt <- as.character(G_FILE_species_evaluation$Prediction)
-    VH_Name_Models_selected <- VH_Name_Models_lVHt[1]
+    VH_Name_Models_list <- as.character(G_FILE_species_evaluation$Prediction)
+    VH_Name_Models_selected <- VH_Name_Models_list[1]
     radioButtons("VH_AO_SDM_model", "Select models",
-                 choices = c(VH_Name_Models_lVHt),
+                 choices = c(VH_Name_Models_list),
                  selected = VH_Name_Models_selected
     )
   })
-  
-  
-  
   
   output$VH_OU_SR_Habitat_Stat <- renderPlot({
     df2 <- data.frame(서식지 = rep(c("백두대간", "지리산국립공원"), each=3),
@@ -2504,8 +2753,8 @@ shinyServer(function(input, output) {
   output$VH_AO_SR_Map <- renderLeaflet({
     
     # setting Climate change scenarios, Future time, Species and current environmental path
-    #    slist <- input$IS_AO_Species
-    olist <- c("IS_SR")  # input$IS_AO_Output_option1
+    #    slist <- input$VH_AO_Species
+    olist <- c("VH_SR")  # input$VH_AO_Output_option1
     dlist <- input$VH_AO_Climate_model  # c("KMA") # c("KMA", "KEI", "WORLDCLIM")
     clist <- input$VH_AO_Climate_scenario  # c("RCP4.5") # c("RCP4.5", "RCP8.5")
     mlist <- input$VH_AO_SDM_model # c("PA1_Full_GLM_byROC")
@@ -2536,7 +2785,7 @@ shinyServer(function(input, output) {
             for (y in ylist) {
               if (ly > 0) {
                 Map1 <- paste(o, "_", d, "_", c, "_", m, "_", y, ".tif", sep = "")
-                #                R_Map1 <- raster(file.path(isolate(G$IS_AO_Dir_Folder), Map1))
+                #                R_Map1 <- raster(file.path(isolate(G$VH_AO_Dir_Folder), Map1))
                 r <- raster(file.path(isolate(G$VH_AO_Dir_Folder), Map1))
                 #                plot(R_Map1, main = Map1)
               }
@@ -2566,8 +2815,8 @@ shinyServer(function(input, output) {
   output$VH_AO_SL_Map <- renderLeaflet({
     
     # setting Climate change scenarios, Future time, Species and current environmental path
-    #    slist <- input$IS_AO_Species
-    olist <- c("IS_LOSS")  # input$IS_AO_Output_option1
+    #    slist <- input$VH_AO_Species
+    olist <- c("VH_LOSS")  # input$VH_AO_Output_option1
     dlist <- input$VH_AO_Climate_model  # c("KMA") # c("KMA", "KEI", "WORLDCLIM")
     clist <- input$VH_AO_Climate_scenario  # c("RCP4.5") # c("RCP4.5", "RCP8.5")
     mlist <- input$VH_AO_SDM_model # c("PA1_Full_GLM_byROC")
@@ -2598,7 +2847,7 @@ shinyServer(function(input, output) {
             for (y in ylist) {
               if (ly > 0) {
                 Map1 <- paste(o, "_", d, "_", c, "_", m, "_", y, ".tif", sep = "")
-                #                R_Map1 <- raster(file.path(isolate(G$IS_AO_Dir_Folder), Map1))
+                #                R_Map1 <- raster(file.path(isolate(G$VH_AO_Dir_Folder), Map1))
                 r <- raster(file.path(isolate(G$VH_AO_Dir_Folder), Map1))
                 #                plot(R_Map1, main = Map1)
               }
@@ -2628,8 +2877,8 @@ shinyServer(function(input, output) {
   output$VH_AO_SS_Map <- renderLeaflet({
     
     # setting Climate change scenarios, Future time, Species and current environmental path
-    #    slist <- input$IS_AO_Species
-    olist <- c("IS_STAY")  # input$IS_AO_Output_option1
+    #    slist <- input$VH_AO_Species
+    olist <- c("VH_STAY")  # input$VH_AO_Output_option1
     dlist <- input$VH_AO_Climate_model  # c("KMA") # c("KMA", "KEI", "WORLDCLIM")
     clist <- input$VH_AO_Climate_scenario  # c("RCP4.5") # c("RCP4.5", "RCP8.5")
     mlist <- input$VH_AO_SDM_model # c("PA1_Full_GLM_byROC")
@@ -2660,7 +2909,7 @@ shinyServer(function(input, output) {
             for (y in ylist) {
               if (ly > 0) {
                 Map1 <- paste(o, "_", d, "_", c, "_", m, "_", y, ".tif", sep = "")
-                #                R_Map1 <- raster(file.path(isolate(G$IS_AO_Dir_Folder), Map1))
+                #                R_Map1 <- raster(file.path(isolate(G$VH_AO_Dir_Folder), Map1))
                 r <- raster(file.path(isolate(G$VH_AO_Dir_Folder), Map1))
                 #                plot(R_Map1, main = Map1)
               }
@@ -2690,8 +2939,8 @@ shinyServer(function(input, output) {
   output$VH_AO_SI_Map <- renderLeaflet({
     
     # setting Climate change scenarios, Future time, Species and current environmental path
-    #    slist <- input$IS_AO_Species
-    olist <- c("IS_GAIN")  # input$IS_AO_Output_option1
+    #    slist <- input$VH_AO_Species
+    olist <- c("VH_GAIN")  # input$VH_AO_Output_option1
     dlist <- input$VH_AO_Climate_model  # c("KMA") # c("KMA", "KEI", "WORLDCLIM")
     clist <- input$VH_AO_Climate_scenario  # c("RCP4.5") # c("RCP4.5", "RCP8.5")
     mlist <- input$VH_AO_SDM_model # c("PA1_Full_GLM_byROC")
@@ -2722,7 +2971,7 @@ shinyServer(function(input, output) {
             for (y in ylist) {
               if (ly > 0) {
                 Map1 <- paste(o, "_", d, "_", c, "_", m, "_", y, ".tif", sep = "")
-                #                R_Map1 <- raster(file.path(isolate(G$IS_AO_Dir_Folder), Map1))
+                #                R_Map1 <- raster(file.path(isolate(G$VH_AO_Dir_Folder), Map1))
                 r <- raster(file.path(isolate(G$VH_AO_Dir_Folder), Map1))
                 #                plot(R_Map1, main = Map1)
               }
@@ -2752,8 +3001,8 @@ shinyServer(function(input, output) {
   output$VH_AO_VI1_Map <- renderLeaflet({
     
     # setting Climate change scenarios, Future time, Species and current environmental path
-    #    slist <- input$IS_AO_Species
-    olist <- c("IS_VI1")  # input$IS_AO_Output_option1
+    #    slist <- input$VH_AO_Species
+    olist <- c("VH_VI1")  # input$VH_AO_Output_option1
     dlist <- input$VH_AO_Climate_model  # c("KMA") # c("KMA", "KEI", "WORLDCLIM")
     clist <- input$VH_AO_Climate_scenario  # c("RCP4.5") # c("RCP4.5", "RCP8.5")
     mlist <- input$VH_AO_SDM_model # c("PA1_Full_GLM_byROC")
@@ -2784,7 +3033,7 @@ shinyServer(function(input, output) {
             for (y in ylist) {
               if (ly > 0) {
                 Map1 <- paste(o, "_", d, "_", c, "_", m, "_", y, ".tif", sep = "")
-                #                R_Map1 <- raster(file.path(isolate(G$IS_AO_Dir_Folder), Map1))
+                #                R_Map1 <- raster(file.path(isolate(G$VH_AO_Dir_Folder), Map1))
                 r <- raster(file.path(isolate(G$VH_AO_Dir_Folder), Map1))
                 #                plot(R_Map1, main = Map1)
               }
@@ -2814,8 +3063,8 @@ shinyServer(function(input, output) {
   output$VH_AO_VI2_Map <- renderLeaflet({
     
     # setting Climate change scenarios, Future time, Species and current environmental path
-    #    slist <- input$IS_AO_Species
-    olist <- c("IS_VI2")  # input$IS_AO_Output_option1
+    #    slist <- input$VH_AO_Species
+    olist <- c("VH_VI2")  # input$VH_AO_Output_option1
     dlist <- input$VH_AO_Climate_model  # c("KMA") # c("KMA", "KEI", "WORLDCLIM")
     clist <- input$VH_AO_Climate_scenario  # c("RCP4.5") # c("RCP4.5", "RCP8.5")
     mlist <- input$VH_AO_SDM_model # c("PA1_Full_GLM_byROC")
@@ -2846,7 +3095,7 @@ shinyServer(function(input, output) {
             for (y in ylist) {
               if (ly > 0) {
                 Map1 <- paste(o, "_", d, "_", c, "_", m, "_", y, ".tif", sep = "")
-                #                R_Map1 <- raster(file.path(isolate(G$IS_AO_Dir_Folder), Map1))
+                #                R_Map1 <- raster(file.path(isolate(G$VH_AO_Dir_Folder), Map1))
                 r <- raster(file.path(isolate(G$VH_AO_Dir_Folder), Map1))
                 #                plot(R_Map1, main = Map1)
               }
@@ -2876,8 +3125,8 @@ shinyServer(function(input, output) {
   output$VH_AO_VI3_Map <- renderLeaflet({
     
     # setting Climate change scenarios, Future time, Species and current environmental path
-    #    slist <- input$IS_AO_Species
-    olist <- c("IS_VI3")  # input$IS_AO_Output_option1
+    #    slist <- input$VH_AO_Species
+    olist <- c("VH_VI3")  # input$VH_AO_Output_option1
     dlist <- input$VH_AO_Climate_model  # c("KMA") # c("KMA", "KEI", "WORLDCLIM")
     clist <- input$VH_AO_Climate_scenario  # c("RCP4.5") # c("RCP4.5", "RCP8.5")
     mlist <- input$VH_AO_SDM_model # c("PA1_Full_GLM_byROC")
@@ -2908,7 +3157,7 @@ shinyServer(function(input, output) {
             for (y in ylist) {
               if (ly > 0) {
                 Map1 <- paste(o, "_", d, "_", c, "_", m, "_", y, ".tif", sep = "")
-                #                R_Map1 <- raster(file.path(isolate(G$IS_AO_Dir_Folder), Map1))
+                #                R_Map1 <- raster(file.path(isolate(G$VH_AO_Dir_Folder), Map1))
                 r <- raster(file.path(isolate(G$VH_AO_Dir_Folder), Map1))
                 #                plot(R_Map1, main = Map1)
               }
