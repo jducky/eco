@@ -202,7 +202,7 @@ shinyUI(
                   
                   tabPanel(SP_Name, icon = icon("folder-open"),
                            tabsetPanel(
-                             tabPanel("Species Information",
+                             tabPanel(SP_Name_Info,
                                       tags$head(
                                         # Include our custom CSS
                                         includeCSS("styles.css"),
@@ -382,7 +382,7 @@ shinyUI(
                   
                   tabPanel(SDM_Name, icon = icon("pie-chart"),
                            tabsetPanel(
-                             tabPanel("Modeling",
+                             tabPanel(SDM_Name_Model,
                                       
                                       fluidRow(
                                         tags$hr(),
@@ -425,7 +425,7 @@ shinyUI(
                              ),
                              
                              
-                             tabPanel("Model Outputs", fluid = TRUE,
+                             tabPanel(SDM_Name_Model_Out, fluid = TRUE,
                                       tags$hr(),
                                       sidebarLayout(
                                         sidebarPanel(width = 3, Fluid = TRUE,
@@ -604,7 +604,7 @@ shinyUI(
                   
                   tabPanel(DM_Name, icon = icon("pie-chart"),
                            tabsetPanel(
-                             tabPanel("Modeling", fluid = TRUE,
+                             tabPanel(DM_Name_Model, fluid = TRUE,
                                       tags$hr(),
                                       fluidRow(
                                         column(2,
@@ -740,7 +740,7 @@ shinyUI(
                              ),
                              
                              
-                             tabPanel("Model Outputs", fluid = TRUE,
+                             tabPanel(DM_Name_Model_Out, fluid = TRUE,
                                       tags$hr(),
                                       sidebarLayout(
                                         sidebarPanel(width = 3, Fluid = TRUE,
@@ -854,7 +854,7 @@ shinyUI(
                   
                   tabPanel(SS_Name, icon = icon("table"),
                            tabsetPanel(
-                             tabPanel("Change Analysis", fluid = TRUE,
+                             tabPanel(SS_Name_Analysis, fluid = TRUE,
                                       
                                       uiOutput("SS_Analy_Box"),
                                       
@@ -905,7 +905,7 @@ shinyUI(
                              ),
                              
                              
-                             tabPanel("Analysis Outputs", fluid = TRUE,
+                             tabPanel(SS_Name_Out, fluid = TRUE,
                                       tags$hr(),
                                       sidebarLayout(
                                         sidebarPanel(width = 3, Fluid = TRUE,
@@ -988,14 +988,13 @@ shinyUI(
                   
                   tabPanel(IS_Name, icon = icon("table"),
                            tabsetPanel(
-                             tabPanel("Change Analysis", fluid = TRUE,
+                             tabPanel(IS_Name_Anlayis, fluid = TRUE,
                                       tags$hr(),
                                       fluidRow(
                                         sidebarPanel(width = 3, Fluid = TRUE,
                                                      uiOutput("IS_CA_Species")
                                         ),
-                                        sidebarPanel(width = 3, Fluid = TRUE,             
-                                                     
+                                        sidebarPanel(width = 3, Fluid = TRUE,                                                      
                                                      checkboxGroupInput("IS_CA_Dispersal_type", IS_Name_DM_Models,
                                                                         choices = c(IS_Name_DM_Models_list),
                                                                         selected = IS_Name_DM_Models_selected
@@ -1022,180 +1021,187 @@ shinyUI(
                                         sidebarPanel(width = 4,
                                                      uiOutput("IS_CA_SDM_model"),
                                                      tags$hr(),
-                                                     checkboxGroupInput("IS-VA_Admin", "Select a administration type",
-                                                                        choices = c("SIDO" = "SIDO",
-                                                                                    "SIGUNGU" = "SIGUNGU"),
-                                                                        selected = c("SIDO", "SIGUNGU")
-                                                     ),
-                                                     
-                                                     tags$hr(),
-                                                     tags$hr(),
-                                                     shinyDirButton("IS_VA_Dir_Folder", "Invasive Assessment Output Folder", "Invasive Assessment Output Folder"),
+                                                     shinyDirButton("IS_VA_Dir_Folder", IS_Name_Dir, IS_Name_Dir),
                                                      verbatimTextOutput("IS_VA_Dir_Folder", placeholder = TRUE),
-                                                     br(),
+                                                     actionButton("IS_VA_Action_Analysis", label = IS_Name_Action),
                                                      tags$hr(),
-                                                     actionButton("IS_VA_Action_Analysis", label = "Assessing Impact and Vulnerabilty")
+                                                     br(),
+                                                     checkboxGroupInput("IS_VA_Admin", IS_Name_Admin,
+                                                                        choices = c(IS_Name_Admin_list),
+                                                                        selected = IS_Name_Admin_selected
+                                                     ),
+                                                     actionButton("IS_VA_Action_Admin", label = IS_Name_Action_Admin)
                                         )
                                       )
                              ),
                              
-                             tabPanel("Model Outputs", fluid = TRUE,
+                             tabPanel(IS_Name_Out, fluid = TRUE,
                                       tags$hr(),
                                       sidebarLayout(
                                         sidebarPanel(width = 3, Fluid = TRUE,
-                                                     #                                        uiOutput("IS_AO_Species"),
                                                      shinyDirButton("IS_AO_Dir_Folder", "Invasive Assessment Output Folder", "Invasive Assessment Output Folder"),
                                                      verbatimTextOutput("IS_AO_Dir_Folder", placeholder = TRUE),
                                                      tags$hr(),
+                                                     #uiOutput("IS_AO_Species"),
+                                                     uiOutput("IS_AO_Species"),
+                                                     tags$hr(),
                                                      
-                                                     checkboxGroupInput("IS_AO_Output_option1", IS_Name_OU_Option1,
-                                                                        choices = c(IS_Name_OU_Option1_list),
-                                                                        selected = IS_Name_OU_Option1_selected
-                                                     ),
+                                                     #							checkboxGroupInput("IS_AO_Output_option1", IS_Name_OU_Option1,
+                                                     #								choices = c(IS_Name_OU_Option1_list),
+                                                     #								selected = IS_Name_OU_Option1_selected
+                                                     #							),
                                                      
-                                                     checkboxGroupInput("IS_AO_Output_option2", IS_Name_OU_Option2,
-                                                                        choices = c(IS_Name_OU_Option2_list),
-                                                                        selected = IS_Name_OU_Option2_selected
-                                                     ),
+                                                     #							checkboxGroupInput("IS_AO_Output_option2", IS_Name_OU_Option2,
+                                                     #								choices = c(IS_Name_OU_Option2_list),
+                                                     #								selected = IS_Name_OU_Option2_selected
+                                                     #							),
                                                      
                                                      uiOutput("IS_AO_SDM_model"),
                                                      
-                                                     checkboxGroupInput("IS_AO_Dispersal_type", IS_Name_DM_Models,
-                                                                        choices = c(IS_Name_DM_Models_list),
-                                                                        selected = IS_Name_DM_Models_selected
+                                                     radioButtons("IS_AO_Dispersal_type", IS_Name_DM_Models,
+                                                                  choices = c(IS_Name_DM_Models_list),
+                                                                  selected = IS_Name_DM_Models_selected
                                                      ),
                                                      
                                                      # Input: Checkbox if file has header ----
-                                                     checkboxGroupInput("IS_AO_Climate_model", IS_Name_CD_Models,
-                                                                        choices = c(IS_Name_CD_Models_list),
-                                                                        selected = IS_Name_CD_Models_selected
+                                                     radioButtons("IS_AO_Climate_model", IS_Name_CD_Models,
+                                                                  choices = c(IS_Name_CD_Models_list),
+                                                                  selected = IS_Name_CD_Models_selected
                                                      ),
                                                      
                                                      # Input: Checkbox if file has header ----
-                                                     checkboxGroupInput("IS_AO_Climate_scenario", IS_Name_CD_Scenarios,
-                                                                        choices = c(IS_Name_CD_Scenarios_list),
-                                                                        selected = IS_Name_CD_Scenarios_selected
+                                                     radioButtons("IS_AO_Climate_scenario", IS_Name_CD_Scenarios,
+                                                                  choices = c(IS_Name_CD_Scenarios_list),
+                                                                  selected = IS_Name_CD_Scenarios_selected
                                                      ),
                                                      
                                                      # Input: Checkbox if file has header ----
-                                                     checkboxGroupInput("IS_AO_Project_year", IS_Name_CD_Year,
-                                                                        choices = c(IS_Name_CD_Year_list),
-                                                                        selected = IS_Name_CD_Year_selected
+                                                     radioButtons("IS_AO_Project_year", IS_Name_CD_Year,
+                                                                  choices = c(IS_Name_CD_Year_list),
+                                                                  selected = IS_Name_CD_Year_selected
                                                      )
                                         ),
                                         
                                         # Main panel for displaying outputs ----
                                         mainPanel(
                                           tabsetPanel(
-                                            tabPanel("Assessment Map", 
+                                            tabPanel(IS_Name_Out_Species, 
                                                      tags$head(
                                                        # Include our custom CSS
                                                        includeCSS("styles.css"),
                                                        includeScript("gomap.js")
                                                      ),
                                                      tags$hr(),
-                                                     column(6, leafletOutput("IS_AO_Map1", width = "800", height = "650"))),
-                                            tabPanel("Vulnerability Map", 
-                                                     tags$head(
-                                                       # Include our custom CSS
-                                                       includeCSS("styles.css"),
-                                                       includeScript("gomap.js")
-                                                     ),
+                                                     column(6, leafletOutput("IS_AO_SD_Map", width = "800", height = "650")),
                                                      tags$hr(),
-                                                     column(6, leafletOutput("IS_AO_Map2", width = "800", height = "650"))),
-                                            #                               tabPanel("Assessment Plot",
-                                            #                                        tags$hr(),
-                                            #                                        uiOutput("IS_AO_UI_plot1")
-                                            #                              ),
-                                            #                               tabPanel("Vulnerability Plot",
-                                            #                                        tags$hr(),
-                                            #                                        uiOutput("IS_AO_UI_plot2")
-                                            #                               ),
-                                            tabPanel("Invasive species Expansion",
+                                                     column(10, verbatimTextOutput("IS_AO_SD_Summary")),
+                                                     column(10, plotOutput("IS_AO_SD_Histogram"))
+                                            ),
+                                            # tabPanel(IS_Name_Out_SR,
+                                            #          tabsetPanel(
+                                            #            tabPanel(IS_Name_Out_Map,
+                                            #                     tags$head(
+                                            #                       # Include our custom CSS
+                                            #                       includeCSS("styles.css"),
+                                            #                       includeScript("gomap.js")
+                                            #                     ),
+                                            #                     leafletOutput("IS_AO_SR_Map", width = "800", height = "600")),
+                                            #            tabPanel(IS_Name_Out_SIDO,
+                                            #                     tabsetPanel(
+                                            #                       tabPanel(IS_Name_Out_Map,
+                                            #                                tags$head(
+                                            #                                  # Include our custom CSS
+                                            #                                  includeCSS("styles.css"),
+                                            #                                  includeScript("gomap.js")
+                                            #                                ),
+                                            #                                leafletOutput("IS_AO_SR_SIDO_Map", width = "800", height = "600")
+                                            #                       ),
+                                            #                       tabPanel(IS_Name_Out_Stat,
+                                            #                                plotOutput("IS_AO_SR_SIDO_Stat")
+                                            #                       )
+                                            #                     )
+                                            #            ),
+                                            #            tabPanel(IS_Name_Out_SGG,
+                                            #                     tabsetPanel(
+                                            #                       tabPanel(IS_Name_Out_Map, 
+                                            #                                tags$head(
+                                            #                                  # Include our custom CSS
+                                            #                                  includeCSS("styles.css"),
+                                            #                                  includeScript("gomap.js")
+                                            #                                ),
+                                            #                                leafletOutput("IS_AO_SR_SGG_Map", width = "800", height = "600")),
+                                            #                       tabPanel(IS_Name_Out_Stat, 
+                                            #                                plotOutput("IS_AO_SR_SGG_Stat")
+                                            #                       )
+                                            #                     )
+                                            #            )
+                                            #          )
+                                            # ),
+                                            tabPanel(IS_Name_Out_SR,
+                                                     tags$br(), tags$br(),
+                                                     column(4,
+                                                            # leafletOutput("IS_AO_SR_Map", width = "400", height = "600"),
+                                                            plotOutput("IS_AO_SR_SGG_Stat")
+                                                            ),
+                                                     column(4,
+                                                            # leafletOutput("IS_AO_SR_SIDO_Map", width = "400", height = "600"),
+                                                            plotOutput("IS_AO_SR_SIDO_Stat")
+                                                            ),
+                                                     column(4,
+                                                            # leafletOutput("IS_AO_SR_SGG_Map", width = "400", height = "600"),
+                                                            plotOutput("IS_AO_SR_SGG_Stat")
+                                                            )
+                                                     ),
+                                            tabPanel(IS_Name_Out_SI,
                                                      tabsetPanel(
-                                                       tabPanel("Map",
+                                                       tabPanel(IS_Name_Out_Map,
                                                                 tags$head(
                                                                   # Include our custom CSS
                                                                   includeCSS("styles.css"),
                                                                   includeScript("gomap.js")
                                                                 ),
-                                                                leafletOutput("IS_OU_EX_Map", width = "800", height = "600")),
-                                                       tabPanel("SIDO",
+                                                                leafletOutput("IS_AO_SI_Map", width = "800", height = "600")),
+                                                       tabPanel(IS_Name_Out_SIDO,
                                                                 tabsetPanel(
-                                                                  tabPanel("Map", 
+                                                                  tabPanel(IS_Name_Out_Map, 
                                                                            tags$head(
                                                                              # Include our custom CSS
                                                                              includeCSS("styles.css"),
                                                                              includeScript("gomap.js")
                                                                            ),
-                                                                           leafletOutput("IS_OU_EX_SIDO_Map", width = "800", height = "600")),
-                                                                  tabPanel("Statistics", plotOutput("IS_OU_EX_SIDO_Stat"))
+                                                                           leafletOutput("IS_AO_Si_SIDO_Map", width = "800", height = "600")
+                                                                  ),
+                                                                  tabPanel(IS_Name_Out_Stat, 
+                                                                           plotOutput("IS_AO_SI_SIDO_Stat")
+                                                                  )
                                                                 )
                                                        ),
-                                                       
-                                                       tabPanel("SIGUNGU",
+                                                       tabPanel(IS_Name_Out_SGG,
                                                                 tabsetPanel(
-                                                                  tabPanel("Map", 
+                                                                  tabPanel(IS_Name_Out_Map, 
                                                                            tags$head(
                                                                              # Include our custom CSS
                                                                              includeCSS("styles.css"),
                                                                              includeScript("gomap.js")
                                                                            ),
-                                                                           leafletOutput("IS_OU_EX_SIGUNGU_Map", width = "800", height = "600")),
-                                                                  tabPanel("Statistics", verbatimTextOutput("IS_OU_EX_SIGUNGU_Stat"))
+                                                                           leafletOutput("IS_AO_Si_SGG_Map", width = "800", height = "600")),
+                                                                  tabPanel(IS_Name_Out_Stat, 
+                                                                           plotOutput("IS_AO_SI_SGG_Stat")
+                                                                  )
                                                                 )
-                                                                
                                                        )
-                                                     )
-                                            ),
-                                            tabPanel("Invasive species Introduction",
-                                                     tabPanel("Map",
-                                                              tags$head(
-                                                                # Include our custom CSS
-                                                                includeCSS("styles.css"),
-                                                                includeScript("gomap.js")
-                                                              ),
-                                                              leafletOutput("IS_OU_SI_Map", width = "800", height = "600")),
-                                                     tabPanel("SIDO",
-                                                              tabsetPanel(
-                                                                tabPanel("Map", 
-                                                                         tags$head(
-                                                                           # Include our custom CSS
-                                                                           includeCSS("styles.css"),
-                                                                           includeScript("gomap.js")
-                                                                         ),
-                                                                         leafletOutput("IS_OU_SI_SIDO_Map", width = "800", height = "600")),
-                                                                tabPanel("Statistics", verbatimTextOutput("IS_OU_SI_SIDO_Stat"))
-                                                              )
-                                                     ),
-                                                     
-                                                     tabPanel("SIGUNGU",
-                                                              tabsetPanel(
-                                                                tabPanel("Map", 
-                                                                         tags$head(
-                                                                           # Include our custom CSS
-                                                                           includeCSS("styles.css"),
-                                                                           includeScript("gomap.js")
-                                                                         ),
-                                                                         leafletOutput("IS_OU_SI_SIGUNGU_Map", width = "800", height = "600")),
-                                                                tabPanel("Statistics", verbatimTextOutput("IS_OU_SI_SIGUNGU_Stat"))
-                                                              )
-                                                              
                                                      )
                                             )
                                           )
                                         )
                                       )
                              )
-                           )
-                           
+                           )    
                   ),     
-                  
-                  
                   
                   tabPanel(VH_Name, icon = icon("table"),
                            tabsetPanel(
-                             tabPanel("Change Analysis", fluid = TRUE,
+                             tabPanel(VH_Name_Analysis, fluid = TRUE,
                                       tags$hr(),
                                       fluidRow(
                                         sidebarPanel(width = 3, Fluid = TRUE,
@@ -1262,7 +1268,7 @@ shinyUI(
                                       
                              ), 
                              
-                             tabPanel("Model Outputs", fluid = TRUE,
+                             tabPanel(VH_Name_Out, fluid = TRUE,
                                       tags$hr(),
                                       sidebarLayout(
                                         sidebarPanel(width = 3, Fluid = TRUE,
