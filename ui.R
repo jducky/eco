@@ -1,9 +1,10 @@
 ### JD Edition
 library(shinythemes)
 ST_Name <- "success"
-
 ###
 shinyUI(
+  
+  
   
   dashboardPage(
     skin = "green",
@@ -108,6 +109,16 @@ shinyUI(
                 
                 .container-fluid > .tabbable > .nav-tabs {
                 	font-weight: bold;
+                }
+                
+                #Reset_SP_Map, #Reset_SP_LOC_Map, #Reset_LD_Map, #Reset_CD_Map, 
+                #Reset_DM_OU_DIspersal_map, #Reset_IS_AO_Map1, #Reset_IS_AO_Map2,
+                #Reset_IS_OU_EX_Map, #Reset_IS_OU_EX_SIDO_Map , #Reset_IS_OU_EX_SIGUNGU_Map,
+                #Reset_IS_OU_SI_Map, #Reset_IS_OU_SI_SIDO_Map, #Reset_IS_OU_SI_SIGUNGU_Map,
+                #Reset_VH_OU_SR_Map, #Reset_VH_OU_SR_Habitat_Map, #Reset_VH_OU_SRL_Map, #Reset_VH_OU_SRL_Habitat_Map,
+                #Reset_VH_OU_SL_Map, #Reset_VH_OU_SL_Habitat_Map, #Reset_VH_OU_SS_Map, #Reset_VH_OU_SS_Habitat_Map,
+                #Reset_VH_OU_SI_Map, #Reset_VH_OU_SI_Habitat_Map {
+                  margin-top: 17px;
                 }
                 
                 
@@ -220,9 +231,16 @@ shinyUI(
                                       ),
                                       
                                       fluidRow(
-                                        column(4, DT::dataTableOutput("SP_Info")),
+                                        
+                                        column(4, 
+                                               actionButton('reset_SP_Info',label = "Reset", style = "float: right; margin-bottom: 15px;"), br(),
+                                               DT::dataTableOutput("SP_Info")
+                                               ),
                                         column(1, uiOutput("Species_Link")),
-                                        column(6, leafletOutput("SP_Map", width = "600", height = "600"))
+                                        column(6, leafletOutput("SP_Map", width = "600", height = "600") %>% withSpinner(), 
+                                               uiOutput('SP_Map_Reset_UI')
+                                               
+                                               )
                                       )
                                       # fluidRow(
                                       #   tags$hr(),
@@ -239,8 +257,13 @@ shinyUI(
                                         includeScript("gomap.js")
                                       ),
                                       tags$hr(),
-                                      column(6, DT::dataTableOutput("SP_LOC_Info")),
-                                      column(6, leafletOutput("SP_LOC_Map", width = "600", height = "600"))
+                                      column(6, 
+                                             actionButton('reset_SP_Loc',label = "Reset", style = "float: right; margin-bottom: 15px;"),
+                                             DT::dataTableOutput("SP_LOC_Info")
+                                             ),
+                                      column(6, leafletOutput("SP_LOC_Map", width = "600", height = "600")  %>% withSpinner(),
+                                                uiOutput('SP_LOC_Map_Reset_UI')
+                                             )
                              )
                            )
                   ),  
@@ -313,7 +336,8 @@ shinyUI(
                                  valueBoxOutput("LD_Value_CS"),
                                  valueBoxOutput("LD_Value_YR")
                                ),
-                               leafletOutput("LD_Map", width = "800", height = "650")
+                               leafletOutput("LD_Map", width = "800", height = "650")  %>% withSpinner(),
+                               actionButton("Reset_LD_Map", label = "Reset")
                              )
                            )
                   ),  
@@ -371,7 +395,8 @@ shinyUI(
                                #   includeCSS("styles.css"),
                                #   includeScript("gomap.js")
                                # ),
-                               leafletOutput("CD_Map", width = "800", height = "650")
+                               leafletOutput("CD_Map", width = "800", height = "650") %>% withSpinner(),
+                               actionButton("Reset_CD_Map", label = "Reset")
                                
                              )
                            )
@@ -551,7 +576,7 @@ shinyUI(
                                                                      
                                                                      
                                                                      # leafletOutput("SDM_OU_Probability_map", width = "800", height = "600"),
-                                                                     leafletOutput("SDM_OU_Probability_map"),
+                                                                     leafletOutput("SDM_OU_Probability_map") %>% withSpinner(),
                                                                      br(),
                                                                      actionButton("Reset_Probability_View", label = "Reset"),
                                                                      tags$hr(),
@@ -567,7 +592,7 @@ shinyUI(
                                                                      # tags$h3("<Predicted Map>"),
                                                                      
                                                                      # leafletOutput("SDM_OU_Predicted_map", width = "800", height = "600"),
-                                                                     leafletOutput("SDM_OU_Predicted_map"),
+                                                                     leafletOutput("SDM_OU_Predicted_map") %>% withSpinner(),
                                                                      br(),
                                                                      actionButton("Reset_Predicted_View", label = "Reset"),
                                                                      tags$hr(),
@@ -621,112 +646,38 @@ shinyUI(
                                       tags$hr(),
                                       fluidRow(
                                         
-                                        # verbatimTextOutput("DM_CD_Selection"),
                                         
                                         # Sidebar panel for inputs ----
                                         sidebarPanel(width = 2,
                                                      
+                                                     uiOutput("DM_MO_Col_Box_01")
                                                      
-                                                     
-                                                     
-                                                     # Horizontal line ----
-                                                     #                           tags$hr(),
-                                                     
-                                                     selectInput("DM-MO_Species", "Select a species",
-                                                                 choices = c("구상나무" = "option1",
-                                                                             "가문비나무 " = "option2"),
-                                                                 selected = "option1"
-                                                     ),
-                                                     # tags$hr(),
-                                                     
-                                                     selectInput("DM-MO_SDM_model", "Model Types",
-                                                                 choices = c("GLM" = "GLM",
-                                                                             "GAM" = "GAM",
-                                                                             "GBM" = "GBM",
-                                                                             "CTA" = "CTA",
-                                                                             "ANN" = "ANN",
-                                                                             "SRE" = "SRE",
-                                                                             "FDA" = "FDA",
-                                                                             "MARS" = "MARS",
-                                                                             "RF" = "RF",
-                                                                             "MAXENT.Phillips" = "MAXENT.Phillips",
-                                                                             "MAXENT" = "MAXENT",
-                                                                             "Ensemble" = "Ensemble"),
-                                                                 selected = "MAXENT.Phillips"
-                                                     ),
-                                                     
-                                                     
-                                                     # Input: Checkbox if file has header ----
-                                                     checkboxGroupInput("DM-MO_Climate_model", "Climate Models",
-                                                                        choices = c("KMA" = "KMA",
-                                                                                    "KEI" = "KEI"),
-                                                                        selected = "KMA"
-                                                     ),
-                                                     
-                                                     # Input: Checkbox if file has header ----
-                                                     checkboxGroupInput("DM-MO_Climate_scenario", "Climate Scenarios",
-                                                                        choices = c("RCP 4.5" = "RCP4.5",
-                                                                                    "RCP 8.5" = "RCP8.5"),
-                                                                        selected = "RCP4.5"
-                                                     )
-                                                     
-                                                     # Input: Checkbox if file has header ----
-                                                     # checkboxGroupInput("DM-MO_Protect_year", "Projection Year",
-                                                     #                    choices = c("2010" = "10",
-                                                     #                                "2020" = "20",
-                                                     #                                "2030" = "30",
-                                                     #                                "2040" = "40",
-                                                     #                                "2050" = "50",
-                                                     #                                "2060" = "60",
-                                                     #                                "2070" = "70",
-                                                     #                                "2080" = "80"),
-                                                     #                    selected = c("10", "20", "30","40", "50", "60","70", "80")
-                                                     # )
+
                                         ),
                                         
                                         sidebarPanel(width = 2,
-                                                     # Input: Checkbox if file has header ----
-                                                     checkboxGroupInput("DM-MO_Protect_year", "Projection Year",
-                                                                        choices = c("2010" = "10",
-                                                                                    "2020" = "20",
-                                                                                    "2030" = "30",
-                                                                                    "2040" = "40",
-                                                                                    "2050" = "50",
-                                                                                    "2060" = "60",
-                                                                                    "2070" = "70",
-                                                                                    "2080" = "80"),
-                                                                        selected = c("10", "20", "30","40", "50", "60","70", "80")
-                                                     ),
                                                      
-                                                     # Horizontal line ----
-                                                     #                              tags$hr(),
-                                                     
-                                                     checkboxGroupInput("DM-MO_Barrier", "Select Barrier Data",
-                                                                        choices = c("토지이용" = "토지이용",
-                                                                                    "산불" = "FORESTFIRE",
-                                                                                    "산사태" = "산사태"),
-                                                                        selected = c("토지이용", "FORESTFIRE", "산사태")
-                                                     )
+                                                     uiOutput("DM_MO_Col_Box_02")
+
+                                                    
                                         ),
                                         
+                                        column( 3,
+                                               fluidRow( sidebarPanel(width = 12, Fluid = TRUE, 
+                                                                      uiOutput("DM_MO_Col_Box_03") 
+                                                                      )
+                                                        ),
+                                               
+                                          fluidRow( 
+                                                sidebarPanel(width = 12, Fluid = TRUE, 
+                                                                div( actionButton('reset_DM_MO',label = "Reset"), style = "margin: 0 60% 0 40%;" ) 
+                                                             )
+                                                  )
+                                                    
+                                            
+                                              ),
                                         
-                                        sidebarPanel(width = 3, Fluid = TRUE,
-                                                     
-                                                     
-                                                     checkboxGroupInput("DM-MO_Dispersal_type", "Dispersal Types",
-                                                                        choices = c("ND (No Dispersal)" = "ND",
-                                                                                    "SDD (Short Distance Dispersal)" = "SDD",
-                                                                                    "MDD (Middle Distance Dispersal)" = "MDD",
-                                                                                    "LDD (Long Distance Dispersal)" = "LDD",
-                                                                                    "UD (Unlimited Dispersal)" = "UD"),
-                                                                        selected = "LDD"
-                                                     ),
-                                                     
-                                                     
-                                                     
-                                                     sliderInput("DM-MO_Slider", label = h5("Select a dispersal distance"), min = 0, 
-                                                                 max = 10000, value = 1000, step = 50)
-                                        ),
+                                        
                                         
                                         sidebarPanel(width = 3, Fluid = TRUE,
                                                      tags$hr(),  
@@ -823,7 +774,8 @@ shinyUI(
                                             valueBoxOutput("DM_Value_CS"),
                                             valueBoxOutput("DM_Value_YR")
                                           ),
-                                          leafletOutput("DM_OU_DIspersal_map", width = "800", height = "650")
+                                          leafletOutput("DM_OU_DIspersal_map", width = "800", height = "650") %>% withSpinner(),
+                                          actionButton("Reset_DM_OU_DIspersal_map", label = "Reset")
                                           
                                           # tabsetPanel(
                                           # tabPanel("Summary", verbatimTextOutput("DM_OU_Summary")), 
@@ -862,32 +814,22 @@ shinyUI(
                                       fluidRow(
                                         sidebarPanel(width = 2, Fluid = TRUE,
                                                      uiOutput("SS_CA_Species"),
-                                                     checkboxGroupInput("SS_CA_Dispersal_type", SS_Name_DM_Models,
-                                                                        choices = c(SS_Name_DM_Models_list),
-                                                                        selected = SS_Name_DM_Models_selected
-                                                     )
+                                                     
+                                                     uiOutput("SS_CA_Types")
+                                                     
+                                                     
                                         ),
                                         sidebarPanel(width = 2, Fluid = TRUE,             
-                                                     # Input: Checkbox if file has header ----
-                                                     checkboxGroupInput("SS_CA_Climate_model", SS_Name_CD_Models,
-                                                                        choices = c(SS_Name_CD_Models_list),
-                                                                        selected = SS_Name_CD_Models_selected
-                                                     ),
                                                      
-                                                     # Input: Checkbox if file has header ----
-                                                     checkboxGroupInput("SS_CA_Climate_scenario", SS_Name_CD_Scenarios,
-                                                                        choices = c(SS_Name_CD_Scenarios_list),
-                                                                        selected = SS_Name_CD_Scenarios_selected
-                                                     ),
                                                      
-                                                     # Input: Checkbox if file has header ----
-                                                     checkboxGroupInput("SS_CA_Project_year", SS_Name_CD_Year,
-                                                                        choices = c(SS_Name_CD_Year_list),
-                                                                        selected = SS_Name_CD_Year_selected
-                                                     )
+                                                     uiOutput("SS_CA_Col_Box_02")
+                                                     
+                                                     
                                         ),
                                         sidebarPanel(width = 2,
-                                                     uiOutput("SS_CA_SDM_model")
+                                                     uiOutput("SS_CA_SDM_model"),
+                                                     br(),
+                                                     actionButton('reset_SS_CA', label = "Reset")
                                         ),
                                         sidebarPanel(width = 1,
                                                      cat("Hello"),
@@ -915,28 +857,9 @@ shinyUI(
                                                      
                                                      uiOutput("SS_AO_SDM_model"),
                                                      
-                                                     checkboxGroupInput("SS_AO_Dispersal_type", SS_Name_DM_Models,
-                                                                        choices = c(SS_Name_DM_Models_list),
-                                                                        selected = SS_Name_DM_Models_selected
-                                                     ),
-                                                     
-                                                     # Input: Checkbox if file has header ----
-                                                     checkboxGroupInput("SS_AO_Climate_model", SS_Name_CD_Models,
-                                                                        choices = c(SS_Name_CD_Models_list),
-                                                                        selected = SS_Name_CD_Models_selected
-                                                     ),
-                                                     
-                                                     # Input: Checkbox if file has header ----
-                                                     checkboxGroupInput("SS_AO_Climate_scenario", SS_Name_CD_Scenarios,
-                                                                        choices = c(SS_Name_CD_Scenarios_list),
-                                                                        selected = SS_Name_CD_Scenarios_selected
-                                                     ),
-                                                     
-                                                     # Input: Checkbox if file has header ----
-                                                     checkboxGroupInput("SS_AO_Project_year", SS_Name_CD_Year,
-                                                                        choices = c(SS_Name_CD_Year_list),
-                                                                        selected = SS_Name_CD_Year_selected
-                                                     )
+                                                     uiOutput("SS_AO_DT_CM_CS_PY"),
+                                                     hr(),
+                                                     actionButton('reset_SS_AO', label = "Reset")
                                         ),
                                         
                                         # Main panel for displaying outputs ----
@@ -994,41 +917,20 @@ shinyUI(
                                         sidebarPanel(width = 3, Fluid = TRUE,
                                                      uiOutput("IS_CA_Species")
                                         ),
-                                        sidebarPanel(width = 3, Fluid = TRUE,             
+                                        sidebarPanel(width = 3, Fluid = TRUE,   
                                                      
-                                                     checkboxGroupInput("IS_CA_Dispersal_type", IS_Name_DM_Models,
-                                                                        choices = c(IS_Name_DM_Models_list),
-                                                                        selected = IS_Name_DM_Models_selected
-                                                     ),
+                                                     uiOutput("IS_CA_Col_Box_02")
                                                      
-                                                     # Input: Checkbox if file has header ----
-                                                     checkboxGroupInput("IS_CA_Climate_model", IS_Name_CD_Models,
-                                                                        choices = c(IS_Name_CD_Models_list),
-                                                                        selected = IS_Name_CD_Models_selected
-                                                     ),
+                                                    
                                                      
-                                                     # Input: Checkbox if file has header ----
-                                                     checkboxGroupInput("IS_CA_Climate_scenario", IS_Name_CD_Scenarios,
-                                                                        choices = c(IS_Name_CD_Scenarios_list),
-                                                                        selected = IS_Name_CD_Scenarios_selected
-                                                     ),
-                                                     
-                                                     # Input: Checkbox if file has header ----
-                                                     checkboxGroupInput("IS_CA_Project_year", IS_Name_CD_Year,
-                                                                        choices = c(IS_Name_CD_Year_list),
-                                                                        selected = IS_Name_CD_Year_selected
-                                                     )
                                         ),
                                         sidebarPanel(width = 4,
                                                      uiOutput("IS_CA_SDM_model"),
                                                      tags$hr(),
-                                                     checkboxGroupInput("IS-VA_Admin", "Select a administration type",
-                                                                        choices = c("SIDO" = "SIDO",
-                                                                                    "SIGUNGU" = "SIGUNGU"),
-                                                                        selected = c("SIDO", "SIGUNGU")
-                                                     ),
+                                                     uiOutput("IS_CA_Admin"),
                                                      
                                                      tags$hr(),
+                                                     actionButton('reset_IS_CA', label = "Reset"),
                                                      tags$hr(),
                                                      shinyDirButton("IS_VA_Dir_Folder", "Invasive Assessment Output Folder", "Invasive Assessment Output Folder"),
                                                      verbatimTextOutput("IS_VA_Dir_Folder", placeholder = TRUE),
@@ -1094,7 +996,8 @@ shinyUI(
                                                        includeScript("gomap.js")
                                                      ),
                                                      tags$hr(),
-                                                     column(6, leafletOutput("IS_AO_Map1", width = "800", height = "650"))),
+                                                     column(6, leafletOutput("IS_AO_Map1", width = "800", height = "650") %>% withSpinner(),
+                                                            actionButton("Reset_IS_AO_Map1", label = "Reset") )),
                                             tabPanel("Vulnerability Map", 
                                                      tags$head(
                                                        # Include our custom CSS
@@ -1102,7 +1005,8 @@ shinyUI(
                                                        includeScript("gomap.js")
                                                      ),
                                                      tags$hr(),
-                                                     column(6, leafletOutput("IS_AO_Map2", width = "800", height = "650"))),
+                                                     column(6, leafletOutput("IS_AO_Map2", width = "800", height = "650") %>% withSpinner(),
+                                                            actionButton("Reset_IS_AO_Map2", label = "Reset") )),
                                             #                               tabPanel("Assessment Plot",
                                             #                                        tags$hr(),
                                             #                                        uiOutput("IS_AO_UI_plot1")
@@ -1119,7 +1023,8 @@ shinyUI(
                                                                   includeCSS("styles.css"),
                                                                   includeScript("gomap.js")
                                                                 ),
-                                                                leafletOutput("IS_OU_EX_Map", width = "800", height = "600")),
+                                                                leafletOutput("IS_OU_EX_Map", width = "800", height = "600") %>% withSpinner(),
+                                                                actionButton("Reset_IS_OU_EX_Map", label = "Reset") ),
                                                        tabPanel("SIDO",
                                                                 tabsetPanel(
                                                                   tabPanel("Map", 
@@ -1128,7 +1033,8 @@ shinyUI(
                                                                              includeCSS("styles.css"),
                                                                              includeScript("gomap.js")
                                                                            ),
-                                                                           leafletOutput("IS_OU_EX_SIDO_Map", width = "800", height = "600")),
+                                                                           leafletOutput("IS_OU_EX_SIDO_Map", width = "800", height = "600") %>% withSpinner(),
+                                                                           actionButton("Reset_IS_OU_EX_SIDO_Map", label = "Reset") ),
                                                                   tabPanel("Statistics", plotOutput("IS_OU_EX_SIDO_Stat"))
                                                                 )
                                                        ),
@@ -1141,7 +1047,8 @@ shinyUI(
                                                                              includeCSS("styles.css"),
                                                                              includeScript("gomap.js")
                                                                            ),
-                                                                           leafletOutput("IS_OU_EX_SIGUNGU_Map", width = "800", height = "600")),
+                                                                           leafletOutput("IS_OU_EX_SIGUNGU_Map", width = "800", height = "600") %>% withSpinner(),
+                                                                           actionButton("Reset_IS_OU_EX_SIGUNGU_Map", label = "Reset") ),
                                                                   tabPanel("Statistics", verbatimTextOutput("IS_OU_EX_SIGUNGU_Stat"))
                                                                 )
                                                                 
@@ -1149,13 +1056,15 @@ shinyUI(
                                                      )
                                             ),
                                             tabPanel("Invasive species Introduction",
+                                                     tabsetPanel(
                                                      tabPanel("Map",
                                                               tags$head(
                                                                 # Include our custom CSS
                                                                 includeCSS("styles.css"),
                                                                 includeScript("gomap.js")
                                                               ),
-                                                              leafletOutput("IS_OU_SI_Map", width = "800", height = "600")),
+                                                              leafletOutput("IS_OU_SI_Map", width = "800", height = "600") %>% withSpinner(),
+                                                              actionButton("Reset_IS_OU_SI_Map", label = "Reset") ),
                                                      tabPanel("SIDO",
                                                               tabsetPanel(
                                                                 tabPanel("Map", 
@@ -1164,7 +1073,8 @@ shinyUI(
                                                                            includeCSS("styles.css"),
                                                                            includeScript("gomap.js")
                                                                          ),
-                                                                         leafletOutput("IS_OU_SI_SIDO_Map", width = "800", height = "600")),
+                                                                         leafletOutput("IS_OU_SI_SIDO_Map", width = "800", height = "600") %>% withSpinner(),
+                                                                         actionButton("Reset_IS_OU_SI_SIDO_Map", label = "Reset") ),
                                                                 tabPanel("Statistics", verbatimTextOutput("IS_OU_SI_SIDO_Stat"))
                                                               )
                                                      ),
@@ -1177,11 +1087,13 @@ shinyUI(
                                                                            includeCSS("styles.css"),
                                                                            includeScript("gomap.js")
                                                                          ),
-                                                                         leafletOutput("IS_OU_SI_SIGUNGU_Map", width = "800", height = "600")),
+                                                                         leafletOutput("IS_OU_SI_SIGUNGU_Map", width = "800", height = "600") %>% withSpinner(),
+                                                                         actionButton("Reset_IS_OU_SI_SIGUNGU_Map", label = "Reset") ),
                                                                 tabPanel("Statistics", verbatimTextOutput("IS_OU_SI_SIGUNGU_Stat"))
                                                               )
                                                               
-                                                     )
+                                                     ))
+                                                     
                                             )
                                           )
                                         )
@@ -1202,51 +1114,19 @@ shinyUI(
                                                      uiOutput("VH_CA_Species")
                                         ),
                                         sidebarPanel(width = 3, Fluid = TRUE,             
+                                                     uiOutput("VH_CA_Col_Box_02")
                                                      
-                                                     checkboxGroupInput("VH_CA_Dispersal_type", VH_Name_DM_Models,
-                                                                        choices = c(VH_Name_DM_Models_list),
-                                                                        selected = VH_Name_DM_Models_selected
-                                                     ),
-                                                     
-                                                     # Input: Checkbox if file has header ----
-                                                     checkboxGroupInput("VH_CA_Climate_model", VH_Name_CD_Models,
-                                                                        choices = c(VH_Name_CD_Models_list),
-                                                                        selected = VH_Name_CD_Models_selected
-                                                     ),
-                                                     
-                                                     # Input: Checkbox if file has header ----
-                                                     checkboxGroupInput("VH_CA_Climate_scenario", VH_Name_CD_Scenarios,
-                                                                        choices = c(VH_Name_CD_Scenarios_list),
-                                                                        selected = VH_Name_CD_Scenarios_selected
-                                                     ),
-                                                     
-                                                     # Input: Checkbox if file has header ----
-                                                     checkboxGroupInput("VH_CA_Project_year", VH_Name_CD_Year,
-                                                                        choices = c(VH_Name_CD_Year_list),
-                                                                        selected = VH_Name_CD_Year_selected
-                                                     )
                                         ),
                                         sidebarPanel(width = 3,
                                                      uiOutput("VH_CA_SDM_model"),
                                                      tags$hr(),
                                                      
-                                                     # Horizontal line ----
-                                                     #                              tags$hr(),
+                                                     uiOutput("VH_CA_Habitat_Weighting"),
+                                                     tags$hr(),  
                                                      
-                                                     checkboxGroupInput("VH-VA_Habitat_type", "Select a habitat types",
-                                                                        choices = c("Protected Area" = "Protected",
-                                                                                    "Others" = "MISC"),
-                                                                        selected = "Protected"
-                                                     ),
-                                                     
-                                                     checkboxGroupInput("VH-VA_Weight", "Select a weighting type",
-                                                                        choices = c("None" = "W_NA",
-                                                                                    "Area" = "W_Area",
-                                                                                    "VUlnerabiity index" = "W_VIndex"),
-                                                                        selected = "W_NA"
-                                                     ),
-                                                     
+                                                     actionButton('reset_VH_CA', label = "Reset"),
                                                      tags$hr(),             
+                                                     
                                                      actionButton("VH_VA_Action_SR", label = "Species Richness"),
                                                      br(),
                                                      actionButton("VH_VA_Action_SRL", label = "Species Richness Loss"),
@@ -1272,28 +1152,10 @@ shinyUI(
                                                      
                                                      uiOutput("VH_AO_SDM_model"),
                                                      
-                                                     checkboxGroupInput("VH_AO_Dispersal_type", VH_Name_DM_Models,
-                                                                        choices = c(VH_Name_DM_Models_list),
-                                                                        selected = VH_Name_DM_Models_selected
-                                                     ),
-                                                     
-                                                     # Input: Checkbox if file has header ----
-                                                     checkboxGroupInput("VH_AO_Climate_model", VH_Name_CD_Models,
-                                                                        choices = c(VH_Name_CD_Models_list),
-                                                                        selected = VH_Name_CD_Models_selected
-                                                     ),
-                                                     
-                                                     # Input: Checkbox if file has header ----
-                                                     checkboxGroupInput("VH_AO_Climate_scenario", VH_Name_CD_Scenarios,
-                                                                        choices = c(VH_Name_CD_Scenarios_list),
-                                                                        selected = VH_Name_CD_Scenarios_selected
-                                                     ),
-                                                     
-                                                     # Input: Checkbox if file has header ----
-                                                     checkboxGroupInput("VH_AO_Project_year", VH_Name_CD_Year,
-                                                                        choices = c(VH_Name_CD_Year_list),
-                                                                        selected = VH_Name_CD_Year_selected
-                                                     )
+                                                     uiOutput("VH_AO_DT_CM_CS_PY"),
+                                                     hr(),
+                                                     actionButton('reset_VH_AO', label = "Reset")
+
                                         ),
                                         
                                         # Main panel for displaying outputs ----
@@ -1307,7 +1169,8 @@ shinyUI(
                                                                   includeCSS("styles.css"),
                                                                   includeScript("gomap.js")
                                                                 ),
-                                                                leafletOutput("VH_OU_SR_Map", width = "800", height = "600")),
+                                                                leafletOutput("VH_OU_SR_Map", width = "800", height = "600") %>% withSpinner(),
+                                                                actionButton("Reset_VH_OU_SR_Map", label = "Reset") ),
                                                        tabPanel("Habitat Type",
                                                                 tabsetPanel(
                                                                   tabPanel("Map", 
@@ -1316,7 +1179,8 @@ shinyUI(
                                                                              includeCSS("styles.css"),
                                                                              includeScript("gomap.js")
                                                                            ),
-                                                                           leafletOutput("VH_OU_SR_Habitat_Map", width = "800", height = "600")),
+                                                                           leafletOutput("VH_OU_SR_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
+                                                                           actionButton("Reset_VH_OU_SR_Habitat_Map", label = "Reset") ),
                                                                   tabPanel("Statistics", plotOutput("VH_OU_SR_Habitat_Stat"))
                                                                 )
                                                        )
@@ -1330,7 +1194,8 @@ shinyUI(
                                                                   includeCSS("styles.css"),
                                                                   includeScript("gomap.js")
                                                                 ),
-                                                                leafletOutput("VH_OU_SRL_Map", width = "800", height = "600")),
+                                                                leafletOutput("VH_OU_SRL_Map", width = "800", height = "600") %>% withSpinner(),
+                                                                actionButton("Reset_VH_OU_SRL_Map", label = "Reset") ),
                                                        tabPanel("Habitat Type",
                                                                 tabsetPanel(
                                                                   tabPanel("Map", 
@@ -1339,7 +1204,8 @@ shinyUI(
                                                                              includeCSS("styles.css"),
                                                                              includeScript("gomap.js")
                                                                            ),
-                                                                           leafletOutput("VH_OU_SRL_Habitat_Map", width = "800", height = "600")),
+                                                                           leafletOutput("VH_OU_SRL_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
+                                                                           actionButton("Reset_VH_OU_SRL_Habitat_Map", label = "Reset") ),
                                                                   tabPanel("Statistics", verbatimTextOutput("VH_OU_SRL_Habitat_Stat"))
                                                                 )
                                                        )
@@ -1353,7 +1219,8 @@ shinyUI(
                                                                   includeCSS("styles.css"),
                                                                   includeScript("gomap.js")
                                                                 ),
-                                                                leafletOutput("VH_OU_SL_Map", width = "800", height = "600")),
+                                                                leafletOutput("VH_OU_SL_Map", width = "800", height = "600") %>% withSpinner(),
+                                                                actionButton("Reset_VH_OU_SL_Map", label = "Reset") ),
                                                        tabPanel("Habitat Type",
                                                                 tabsetPanel(
                                                                   tabPanel("Map", 
@@ -1362,7 +1229,8 @@ shinyUI(
                                                                              includeCSS("styles.css"),
                                                                              includeScript("gomap.js")
                                                                            ),
-                                                                           leafletOutput("VH_OU_SL_Habitat_Map", width = "800", height = "600")),
+                                                                           leafletOutput("VH_OU_SL_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
+                                                                           actionButton("Reset_VH_OU_SL_Habitat_Map", label = "Reset") ),
                                                                   tabPanel("Statistics", verbatimTextOutput("VH_OU_SL_Habitat_Stat"))
                                                                 )
                                                        )
@@ -1376,7 +1244,8 @@ shinyUI(
                                                                   includeCSS("styles.css"),
                                                                   includeScript("gomap.js")
                                                                 ),
-                                                                leafletOutput("VH_OU_SS_Map", width = "800", height = "600")),
+                                                                leafletOutput("VH_OU_SS_Map", width = "800", height = "600") %>% withSpinner(),
+                                                                actionButton("Reset_VH_OU_SS_Map", label = "Reset") ),
                                                        tabPanel("Habitat Type",
                                                                 tabsetPanel(
                                                                   tabPanel("Map", 
@@ -1385,7 +1254,8 @@ shinyUI(
                                                                              includeCSS("styles.css"),
                                                                              includeScript("gomap.js")
                                                                            ),
-                                                                           leafletOutput("VH_OU_SS_Habitat_Map", width = "800", height = "600")),
+                                                                           leafletOutput("VH_OU_SS_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
+                                                                           actionButton("Reset_VH_OU_SS_Habitat_Map", label = "Reset") ),
                                                                   tabPanel("Statistics", verbatimTextOutput("VH_OU_SS_Habitat_Stat"))
                                                                 )
                                                        )
@@ -1399,7 +1269,8 @@ shinyUI(
                                                                   includeCSS("styles.css"),
                                                                   includeScript("gomap.js")
                                                                 ),
-                                                                leafletOutput("VH_OU_SI_Map", width = "800", height = "600")),
+                                                                leafletOutput("VH_OU_SI_Map", width = "800", height = "600") %>% withSpinner(),
+                                                                actionButton("Reset_VH_OU_SI_Map", label = "Reset") ),
                                                        tabPanel("Habitat Type",
                                                                 tabsetPanel(
                                                                   tabPanel("Map", 
@@ -1408,7 +1279,8 @@ shinyUI(
                                                                              includeCSS("styles.css"),
                                                                              includeScript("gomap.js")
                                                                            ),
-                                                                           leafletOutput("VH_OU_SI_Habitat_Map", width = "800", height = "600")),
+                                                                           leafletOutput("VH_OU_SI_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
+                                                                           actionButton("Reset_VH_OU_SI_Habitat_Map", label = "Reset") ),
                                                                   tabPanel("Statistics", verbatimTextOutput("VH_OU_SI_Habitat_Stat"))
                                                                 )
                                                        )

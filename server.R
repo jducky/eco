@@ -3,6 +3,531 @@
 shinyServer(function(input, output, session) {
   
   
+  observeEvent(input$Reset_VH_OU_SI_Map, {
+    
+    leafletProxy("VH_OU_SI_Map") %>%
+      setView(lng = 128.00, lat = 36.00, zoom = 6)
+    
+  })
+  
+  observeEvent(input$Reset_VH_OU_SI_Habitat_Map, {
+    
+    leafletProxy("VH_OU_SI_Habitat_Map") %>%
+      setView(lng = 128.00, lat = 36.00, zoom = 6)
+    
+  })
+  
+  
+  observeEvent(input$Reset_VH_OU_SS_Map, {
+    
+    leafletProxy("VH_OU_SS_Map") %>%
+      setView(lng = 128.00, lat = 36.00, zoom = 6)
+    
+  })
+  
+  observeEvent(input$Reset_VH_OU_SS_Habitat_Map, {
+    
+    leafletProxy("VH_OU_SS_Habitat_Map") %>%
+      setView(lng = 128.00, lat = 36.00, zoom = 6)
+    
+  })
+  
+  
+  observeEvent(input$Reset_VH_OU_SL_Map, {
+    
+    leafletProxy("VH_OU_SL_Map") %>%
+      setView(lng = 128.00, lat = 36.00, zoom = 6)
+    
+  })
+  
+  observeEvent(input$Reset_VH_OU_SL_Habitat_Map, {
+    
+    leafletProxy("VH_OU_SL_Habitat_Map") %>%
+      setView(lng = 128.00, lat = 36.00, zoom = 6)
+    
+  })
+  
+  
+  
+  observeEvent(input$Reset_VH_OU_SRL_Map, {
+    
+    leafletProxy("VH_OU_SRL_Map") %>%
+      setView(lng = 128.00, lat = 36.00, zoom = 6)
+    
+  })
+  
+  observeEvent(input$Reset_VH_OU_SRL_Habitat_Map, {
+    
+    leafletProxy("VH_OU_SRL_Habitat_Map") %>%
+      setView(lng = 128.00, lat = 36.00, zoom = 6)
+    
+  })
+  
+  
+  
+  
+  observeEvent(input$Reset_VH_OU_SR_Map, {
+    
+    leafletProxy("VH_OU_SR_Map") %>%
+      setView(lng = 128.00, lat = 36.00, zoom = 6)
+    
+  })
+  
+  observeEvent(input$Reset_VH_OU_SR_Habitat_Map, {
+    
+    leafletProxy("VH_OU_SR_Habitat_Map") %>%
+      setView(lng = 128.00, lat = 36.00, zoom = 6)
+    
+  })
+  
+  
+  
+  observeEvent(input$Reset_IS_OU_SI_Map, {
+    
+    leafletProxy("IS_OU_SI_Map") %>%
+      setView(lng = 128.00, lat = 36.00, zoom = 6)
+    
+  })
+  
+  observeEvent(input$Reset_IS_OU_SI_SIDO_Map, {
+    
+    leafletProxy("IS_OU_SI_SIDO_Map") %>%
+      setView(lng = 128.00, lat = 36.00, zoom = 6)
+    
+  })
+  
+  observeEvent(input$Reset_IS_OU_SI_SIGUNGU_Map, {
+    
+    leafletProxy("IS_OU_SI_SIGUNGU_Map") %>%
+      setView(lng = 128.00, lat = 36.00, zoom = 6)
+    
+  })
+  
+  
+  observeEvent(input$Reset_IS_OU_EX_Map, {
+    
+    leafletProxy("IS_OU_EX_Map") %>%
+      setView(lng = 128.00, lat = 36.00, zoom = 6)
+    
+  })
+  
+  observeEvent(input$Reset_IS_OU_EX_SIDO_Map, {
+    
+    leafletProxy("IS_OU_EX_SIDO_Map") %>%
+      setView(lng = 128.00, lat = 36.00, zoom = 6)
+    
+  })
+  
+  observeEvent(input$Reset_IS_OU_EX_SIGUNGU_Map, {
+    
+    leafletProxy("IS_OU_EX_SIGUNGU_Map") %>%
+      setView(lng = 128.00, lat = 36.00, zoom = 6)
+    
+  })
+  
+  
+  observeEvent(input$Reset_IS_AO_Map1, {
+    
+    leafletProxy("IS_AO_Map1") %>%
+      setView(lng = 128.00, lat = 36.00, zoom = 7)
+    
+  })
+  
+  observeEvent(input$Reset_IS_AO_Map2, {
+    
+    leafletProxy("IS_AO_Map2") %>%
+      setView(lng = 128.00, lat = 36.00, zoom = 7)
+    
+  })
+  
+  
+  observeEvent(input$Reset_DM_OU_DIspersal_map, {
+    
+    leafletProxy("DM_OU_DIspersal_map") %>%
+      setView(lng = 128.00, lat = 36.00, zoom = 7)
+    
+  })
+  
+  observeEvent(input$Reset_CD_Map, {
+    
+    leafletProxy("CD_Map") %>%
+      setView(lng = 128.00, lat = 36.00, zoom = 7)
+    
+  })
+  
+  observeEvent(input$Reset_LD_Map, {
+    
+    leafletProxy("LD_Map") %>%
+      setView(lng = 128.00, lat = 36.00, zoom = 7)
+    
+  })
+  
+  
+  output$SP_Map_Reset_UI = renderUI({
+    
+    x <- NULL
+    
+    if (length(input$SP_Info_rows_selected)) {
+      x <- actionButton("Reset_SP_Map", label = "Reset")
+    } 
+    
+    return (x)
+    
+  })
+  
+  
+  observeEvent(input$Reset_SP_Map, {
+    
+    leafletProxy("SP_Map") %>%
+      setView(lng = 127.00, lat = 36.00, zoom = 6)
+    
+  })
+  
+  
+  output$SP_LOC_Map_Reset_UI = renderUI({
+    
+    x <- NULL
+    
+    if (length(input$SP_LOC_Info_rows_selected)) {
+      x <- actionButton("Reset_SP_LOC_Map", label = "Reset")
+    } 
+    
+    return (x)
+    
+  })
+  
+  
+  observeEvent(input$Reset_SP_LOC_Map, {
+    
+    leafletProxy("SP_LOC_Map") %>%
+      setView(lng = 127.00, lat = 36.00, zoom = 6)
+    
+  })
+  
+  
+  output$VH_AO_DT_CM_CS_PY = renderUI({
+    x <- NULL
+    input$reset_VH_AO
+    x <- div(
+      
+                checkboxGroupInput("VH_AO_Dispersal_type", VH_Name_DM_Models,
+                                   choices = c(VH_Name_DM_Models_list),
+                                   selected = VH_Name_DM_Models_selected
+                ),
+          
+                # Input: Checkbox if file has header ----
+                checkboxGroupInput("VH_AO_Climate_model", VH_Name_CD_Models,
+                                   choices = c(VH_Name_CD_Models_list),
+                                   selected = VH_Name_CD_Models_selected
+                ),
+          
+                # Input: Checkbox if file has header ----
+                checkboxGroupInput("VH_AO_Climate_scenario", VH_Name_CD_Scenarios,
+                                   choices = c(VH_Name_CD_Scenarios_list),
+                                   selected = VH_Name_CD_Scenarios_selected
+                ),
+          
+                # Input: Checkbox if file has header ----
+                checkboxGroupInput("VH_AO_Project_year", VH_Name_CD_Year,
+                                   choices = c(VH_Name_CD_Year_list),
+                                   selected = VH_Name_CD_Year_selected
+                )
+      
+    )
+    
+    return (x)
+  })
+  
+  
+  
+  
+  output$VH_CA_Col_Box_02 = renderUI({
+    x <- NULL
+    input$reset_VH_CA
+    x <- div(
+                checkboxGroupInput("VH_CA_Dispersal_type", VH_Name_DM_Models,
+                                   choices = c(VH_Name_DM_Models_list),
+                                   selected = VH_Name_DM_Models_selected
+                ),
+                
+                # Input: Checkbox if file has header ----
+                checkboxGroupInput("VH_CA_Climate_model", VH_Name_CD_Models,
+                                   choices = c(VH_Name_CD_Models_list),
+                                   selected = VH_Name_CD_Models_selected
+                ),
+                
+                # Input: Checkbox if file has header ----
+                checkboxGroupInput("VH_CA_Climate_scenario", VH_Name_CD_Scenarios,
+                                   choices = c(VH_Name_CD_Scenarios_list),
+                                   selected = VH_Name_CD_Scenarios_selected
+                ),
+                
+                # Input: Checkbox if file has header ----
+                checkboxGroupInput("VH_CA_Project_year", VH_Name_CD_Year,
+                                   choices = c(VH_Name_CD_Year_list),
+                                   selected = VH_Name_CD_Year_selected
+                )
+          )
+    
+    return (x)
+  })
+  
+  
+  output$VH_CA_Habitat_Weighting = renderUI({
+    x <- NULL
+    input$reset_VH_CA
+    x <- div(
+      
+      checkboxGroupInput("VH-VA_Habitat_type", "Select a habitat types",
+                         choices = c("Protected Area" = "Protected",
+                                     "Others" = "MISC"),
+                         selected = "Protected"
+      ),
+      
+      checkboxGroupInput("VH-VA_Weight", "Select a weighting type",
+                         choices = c("None" = "W_NA",
+                                     "Area" = "W_Area",
+                                     "VUlnerabiity index" = "W_VIndex"),
+                         selected = "W_NA"
+      )
+      
+    )
+    
+    return (x)
+  })
+  
+  
+  
+  output$IS_CA_Col_Box_02 = renderUI({
+    x <- NULL
+    input$reset_IS_CA
+    x <- div(
+              checkboxGroupInput("IS_CA_Dispersal_type", IS_Name_DM_Models,
+                                 choices = c(IS_Name_DM_Models_list),
+                                 selected = IS_Name_DM_Models_selected
+              ),
+        
+              # Input: Checkbox if file has header ----
+              checkboxGroupInput("IS_CA_Climate_model", IS_Name_CD_Models,
+                                 choices = c(IS_Name_CD_Models_list),
+                                 selected = IS_Name_CD_Models_selected
+              ),
+        
+              # Input: Checkbox if file has header ----
+              checkboxGroupInput("IS_CA_Climate_scenario", IS_Name_CD_Scenarios,
+                                 choices = c(IS_Name_CD_Scenarios_list),
+                                 selected = IS_Name_CD_Scenarios_selected
+              ),
+        
+              # Input: Checkbox if file has header ----
+              checkboxGroupInput("IS_CA_Project_year", IS_Name_CD_Year,
+                                 choices = c(IS_Name_CD_Year_list),
+                                 selected = IS_Name_CD_Year_selected
+              )
+    )
+    
+    return (x)
+  })
+  
+  
+  output$IS_CA_Admin = renderUI({
+    x <- NULL
+    input$reset_IS_CA
+    x <- checkboxGroupInput("IS-VA_Admin", "Select a administration type",
+                            choices = c("SIDO" = "SIDO",
+                                        "SIGUNGU" = "SIGUNGU"),
+                            selected = c("SIDO", "SIGUNGU") )
+    
+    return (x)
+  })
+  
+  
+
+  
+  
+  output$SS_CA_Types = renderUI({
+    x <- NULL
+    input$reset_SS_CA
+    x <- div(
+              checkboxGroupInput("SS_CA_Dispersal_type", SS_Name_DM_Models,
+                                 choices = c(SS_Name_DM_Models_list),
+                                 selected = SS_Name_DM_Models_selected
+              )
+    )
+    return (x)
+  })
+  
+  
+  output$SS_CA_Col_Box_02 = renderUI({
+    x <- NULL
+    input$reset_SS_CA
+    x <- div(
+                # Input: Checkbox if file has header ----
+                checkboxGroupInput("SS_CA_Climate_model", SS_Name_CD_Models,
+                                   choices = c(SS_Name_CD_Models_list),
+                                   selected = SS_Name_CD_Models_selected
+                ),
+                
+                # Input: Checkbox if file has header ----
+                checkboxGroupInput("SS_CA_Climate_scenario", SS_Name_CD_Scenarios,
+                                   choices = c(SS_Name_CD_Scenarios_list),
+                                   selected = SS_Name_CD_Scenarios_selected
+                ),
+                
+                # Input: Checkbox if file has header ----
+                checkboxGroupInput("SS_CA_Project_year", SS_Name_CD_Year,
+                                   choices = c(SS_Name_CD_Year_list),
+                                   selected = SS_Name_CD_Year_selected
+                )
+      )
+    
+    return (x)
+  })
+  
+  
+  
+  
+  output$SS_AO_DT_CM_CS_PY = renderUI({
+    x <- NULL
+    input$reset_SS_AO
+    x <- div(
+      checkboxGroupInput("SS_AO_Dispersal_type", SS_Name_DM_Models,
+                         choices = c(SS_Name_DM_Models_list),
+                         selected = SS_Name_DM_Models_selected
+      ),
+      
+      # Input: Checkbox if file has header ----
+      checkboxGroupInput("SS_AO_Climate_model", SS_Name_CD_Models,
+                         choices = c(SS_Name_CD_Models_list),
+                         selected = SS_Name_CD_Models_selected
+      ),
+      
+      # Input: Checkbox if file has header ----
+      checkboxGroupInput("SS_AO_Climate_scenario", SS_Name_CD_Scenarios,
+                         choices = c(SS_Name_CD_Scenarios_list),
+                         selected = SS_Name_CD_Scenarios_selected
+      ),
+      
+      # Input: Checkbox if file has header ----
+      checkboxGroupInput("SS_AO_Project_year", SS_Name_CD_Year,
+                         choices = c(SS_Name_CD_Year_list),
+                         selected = SS_Name_CD_Year_selected
+      )
+    )
+    return (x)
+  })
+  
+  
+  
+
+  
+  
+  
+  output$DM_MO_Col_Box_01 = renderUI({
+    
+    x <- NULL
+    
+    input$reset_DM_MO
+    
+    x <- div(
+      selectInput("DM-MO_Species", "Select a species",
+                  choices = c("구상나무" = "option1",
+                              "가문비나무 " = "option2"),
+                  selected = "option1"
+      ),
+      # tags$hr(),
+      
+      selectInput("DM-MO_SDM_model", "Model Types",
+                  choices = c("GLM" = "GLM",
+                              "GAM" = "GAM",
+                              "GBM" = "GBM",
+                              "CTA" = "CTA",
+                              "ANN" = "ANN",
+                              "SRE" = "SRE",
+                              "FDA" = "FDA",
+                              "MARS" = "MARS",
+                              "RF" = "RF",
+                              "MAXENT.Phillips" = "MAXENT.Phillips",
+                              "MAXENT" = "MAXENT",
+                              "Ensemble" = "Ensemble"),
+                  selected = "MAXENT.Phillips"
+      ),
+      
+      
+      # Input: Checkbox if file has header ----
+      checkboxGroupInput("DM-MO_Climate_model", "Climate Models",
+                         choices = c("KMA" = "KMA",
+                                     "KEI" = "KEI"),
+                         selected = "KMA"
+      ),
+      
+      # Input: Checkbox if file has header ----
+      checkboxGroupInput("DM-MO_Climate_scenario", "Climate Scenarios",
+                         choices = c("RCP 4.5" = "RCP4.5",
+                                     "RCP 8.5" = "RCP8.5"),
+                         selected = "RCP4.5"
+      )
+    )
+      
+    
+    
+    return (x)
+    
+  })
+  
+  
+  output$DM_MO_Col_Box_02 = renderUI({
+    
+    x <- NULL
+    input$reset_DM_MO
+    x <- div(
+                checkboxGroupInput("DM-MO_Protect_year", "Projection Year",
+                                   choices = c("2010" = "10",
+                                               "2020" = "20",
+                                               "2030" = "30",
+                                               "2040" = "40",
+                                               "2050" = "50",
+                                               "2060" = "60",
+                                               "2070" = "70",
+                                               "2080" = "80"),
+                                   selected = c("10", "20", "30","40", "50", "60","70", "80")
+                ),
+                
+                
+                checkboxGroupInput("DM-MO_Barrier", "Select Barrier Data",
+                                   choices = c("토지이용" = "토지이용",
+                                               "산불" = "FORESTFIRE",
+                                               "산사태" = "산사태"),
+                                   selected = c("토지이용", "FORESTFIRE", "산사태")
+                )
+          )
+    return (x)
+    
+  })
+  
+  output$DM_MO_Col_Box_03 = renderUI({
+    
+    x <- NULL
+    input$reset_DM_MO
+    x <- div(
+      
+                checkboxGroupInput("DM-MO_Dispersal_type", "Dispersal Types",
+                                   choices = c("ND (No Dispersal)" = "ND",
+                                               "SDD (Short Distance Dispersal)" = "SDD",
+                                               "MDD (Middle Distance Dispersal)" = "MDD",
+                                               "LDD (Long Distance Dispersal)" = "LDD",
+                                               "UD (Unlimited Dispersal)" = "UD"),
+                                   selected = "LDD"),
+                
+                sliderInput("DM-MO_Slider", label = h5("Select a dispersal distance"), min = 0, 
+                            max = 10000, value = 1000, step = 50)
+        
+    )
+    return (x)
+    
+  })
+  
+
   output$SDM_MO_Condition_CheckBoxGroup = renderUI({
     
     input$resetSpeciesInfo
@@ -951,11 +1476,10 @@ shinyServer(function(input, output, session) {
   })
   
     
-  output$SP_Info <- DT::renderDataTable(
-    
-     G_FILE_speciesinfo[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
-    , server = TRUE)
-    
+  output$SP_Info <- DT::renderDataTable({
+    input$reset_SP_Info
+    G_FILE_speciesinfo[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
+  }, server = TRUE)
     
 
   output$SP_Summary <- renderPrint({
@@ -987,8 +1511,6 @@ shinyServer(function(input, output, session) {
     
   output$SP_Map <- renderLeaflet({
     rs <- input$SP_Info_rows_selected  # G_FILE_specieslocation   # st_read("species.shp")
-    cat('rs: ')
-    print(rs)
     
     if (length(rs)) {
        species_data <- inner_join(G_FILE_specieslocation, G_FILE_speciesinfo[rs, , drop = FALSE], by = "ID")
@@ -1004,7 +1526,10 @@ shinyServer(function(input, output, session) {
   })
 
   
-  output$SP_LOC_Info <- DT::renderDataTable(inner_join(G_FILE_specieslocation, G_FILE_speciesinfo[input$SP_Info_rows_selected, , drop = FALSE], by = "ID"), server = TRUE)
+  output$SP_LOC_Info <- DT::renderDataTable({
+    input$reset_SP_Loc
+    inner_join(G_FILE_specieslocation, G_FILE_speciesinfo[input$SP_Info_rows_selected, , drop = FALSE], by = "ID")
+    }, server = TRUE)
   
   
   output$SP_LOC_Map <- renderLeaflet({
@@ -1442,6 +1967,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$SS_CA_Species <- renderUI({
+    input$reset_SS_CA
     SS_Name_Species_list <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution"), full.names = FALSE, recursive = FALSE)
     SS_Name_Species_selected <- SS_Name_Species_list[1]
     checkboxGroupInput("SS_CA_Species", "Select a species",
@@ -1741,6 +2267,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$SS_AO_Species <- renderUI({
+    input$reset_SS_AO
     SS_Name_Species_list <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution"), full.names = FALSE, recursive = FALSE)
     SS_Name_Species_selected <- SS_Name_Species_list[1]
     checkboxGroupInput("SS_AO_Species", "Select a species",
@@ -1751,6 +2278,7 @@ shinyServer(function(input, output, session) {
   
   
   output$SS_AO_SDM_model <- renderUI({
+    input$reset_SS_AO
     destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SS_CA_Species, "BIOMOD2", paste(as.name(paste(input$SS_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
@@ -2035,6 +2563,7 @@ shinyServer(function(input, output, session) {
   
   
   output$IS_CA_Species <- renderUI({
+    input$reset_IS_CA
     IS_Name_Species_list <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution"), full.names = FALSE, recursive = FALSE)
     IS_Name_Species_selected <- IS_Name_Species_list[1]
     checkboxGroupInput("IS_CA_Species", "Select a species",
@@ -2045,6 +2574,7 @@ shinyServer(function(input, output, session) {
   
   
   output$IS_CA_SDM_model <- renderUI({
+    input$reset_IS_CA
     destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$IS_CA_Species[1], "BIOMOD2", paste(as.name(paste(input$IS_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
@@ -2594,6 +3124,7 @@ shinyServer(function(input, output, session) {
   
   
   output$VH_CA_Species <- renderUI({
+    input$reset_VH_CA
     VH_Name_Species_lVHt <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution"), full.names = FALSE, recursive = FALSE)
     VH_Name_Species_selected <- VH_Name_Species_lVHt[1]
     checkboxGroupInput("VH_CA_Species", "Select a species",
@@ -2616,6 +3147,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$VH_AO_Species <- renderUI({
+    input$reset_VH_AO
     VH_Name_Species_lVHt <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution"), full.names = FALSE, recursive = FALSE)
     VH_Name_Species_selected <- VH_Name_Species_lVHt[1]
     checkboxGroupInput("VH_AO_Species", "Select a species",
@@ -2626,6 +3158,7 @@ shinyServer(function(input, output, session) {
   
   
   output$VH_AO_SDM_model <- renderUI({
+    input$reset_VH_AO
     destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$VH_CA_Species, "BIOMOD2", paste(as.name(paste(input$VH_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
