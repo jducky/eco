@@ -1,8 +1,5 @@
 tabsetPanel(
-  
-  
-  
-  tabPanel(OV_Name,
+  tabPanel(TR$OV_Name,
            
            hr(),
            mainPanel(
@@ -11,11 +8,12 @@ tabsetPanel(
              img(src="eco02.png"),
              br(),br()
            )
-  ),         
+  ),    
   
-  tabPanel(SP_Name, icon = icon("folder-open"),
+  
+  tabPanel(TR$SP_Name, icon = icon("folder-open"),
            tabsetPanel(
-             tabPanel(SP_Name_Info,
+             tabPanel(TR$SP_Name_Info,
                       tags$head(
                         # Include our custom CSS
                         includeCSS("styles.css"),
@@ -44,13 +42,7 @@ tabsetPanel(
                                
                         )
                       )
-                      # fluidRow(
-                      #   tags$hr(),
-                      #   column(6, 
-                      #        verbatimTextOutput("SP_Summary"),
-                      #        plotOutput("SP_Histogram")
-                      #   )
-                      # )
+                      
              ),
              tabPanel("Species Location",
                       tags$head(
@@ -70,13 +62,18 @@ tabsetPanel(
            )
   ),  
   
-  tabPanel(LD_Name, fluid = TRUE, icon = icon("folder-open"),
+  
+  
+  tabPanel(TR$LD_Name, fluid = TRUE, icon = icon("folder-open"),
            tags$hr(),
            sidebarLayout(
              sidebarPanel(width = 3, Fluid = TRUE,
-                          selectInput("LD_Type", LD_Name_Variables,
-                                      choices = LD_Name_Variables_list,
-                                      selected = LD_Name_Variables_selected
+                          
+                          
+                          
+                          selectInput("LD_Type", TR$LD_Name_Variables,
+                                      choices = TR$LD_Name_Variables_list,
+                                      selected = TR$LD_Name_Variables_selected
                           ),
                           
                           fluidRow(
@@ -91,26 +88,23 @@ tabsetPanel(
                           ),
                           
                           # Input: Checkbox if file has header ----
-                          radioButtons("LD_Climate_model", LD_Name_Models,
-                                       choices = LD_Name_Models_list,
-                                       selected = LD_Name_Models_selected
+                          radioButtons("LD_Climate_model", TR$LD_Name_Models,
+                                       choices = TR$LD_Name_Models_list,
+                                       selected = TR$LD_Name_Models_selected
                           ),
                           
                           # Input: Checkbox if file has header ----
-                          radioButtons("LD_Climate_scenario", LD_Name_Scenarios,
-                                       choices = LD_Name_Scenarios_list,
-                                       selected = LD_Name_Scenarios_selected
+                          radioButtons("LD_Climate_scenario", TR$LD_Name_Scenarios,
+                                       choices = TR$LD_Name_Scenarios_list,
+                                       selected = TR$LD_Name_Scenarios_selected
                           ),
                           
-                          # Input: Checkbox if file has header ----
-                          # radioButtons("LD_Project_year", LD_Name_Year,
-                          #              choices = LD_Name_Year_list,
-                          #              selected = LD_Name_Year_selected
-                          # )
                           
-                          sliderInput("LD_Project_year", label = LD_Name_Year, min = 2000,
+                          sliderInput("LD_Project_year", label = TR$LD_Name_Year, min = 2000,
                                       max = 2080, value = 2000, step = 10, sep = "",
                                       animate = animationOptions(interval = 3000))
+                          
+                          
              ),
              
              # Main panel for displaying outputs ----
@@ -122,10 +116,6 @@ tabsetPanel(
                                  column(6,plotOutput("LD_Histogram"))
                                ) 
                ),
-               # bsCollapse(
-               # bsCollapsePanel("Summary", verbatimTextOutput("LD_Summary"),style = ST_Name),
-               # bsCollapsePanel("Histogram", plotOutput("LD_Histogram"),style = ST_Name)
-               # ,multiple  = TRUE),
                
                tags$head(
                  # Include our custom CSS
@@ -144,33 +134,29 @@ tabsetPanel(
            )
   ),  
   
-  tabPanel(CD_Name, fluid = TRUE, icon = icon("folder-open"),
+  tabPanel(TR$CD_Name, fluid = TRUE, icon = icon("folder-open"),
            tags$hr(),
            sidebarLayout(
              sidebarPanel(width = 3, Fluid = TRUE,
-                          selectInput("CD_Variables", CD_Name_Variables,
-                                      choices = CD_Name_Variables_list,
-                                      selected = CD_Name_Variables_selected
+                          selectInput("CD_Variables", TR$CD_Name_Variables,
+                                      choices = TR$CD_Name_Variables_list,
+                                      selected = TR$CD_Name_Variables_selected
                           ),
                           
                           # Input: Checkbox if file has header ----
-                          radioButtons("CD_Climate_model", CD_Name_Models,
-                                       choices = CD_Name_Models_list,
-                                       selected = CD_Name_Models_selected
+                          radioButtons("CD_Climate_model", TR$CD_Name_Models,
+                                       choices = TR$CD_Name_Models_list,
+                                       selected = TR$CD_Name_Models_selected
                           ),
                           
                           # Input: Checkbox if file has header ----
-                          radioButtons("CD_Climate_scenario", CD_Name_Scenarios,
-                                       choices = CD_Name_Scenarios_list,
-                                       selected = CD_Name_Scenarios_selected
+                          radioButtons("CD_Climate_scenario", TR$CD_Name_Scenarios,
+                                       choices = TR$CD_Name_Scenarios_list,
+                                       selected = TR$CD_Name_Scenarios_selected
                           ),
                           
-                          # Input: Checkbox if file has header ----
-                          # radioButtons("CD_Project_year", CD_Name_Year,
-                          #              choices = CD_Name_Year_list,
-                          #              selected = CD_Name_Year_selected
-                          # )
-                          sliderInput("CD_Project_year", label = CD_Name_Year, min = 2000,
+                          
+                          sliderInput("CD_Project_year", label = TR$CD_Name_Year, min = 2000,
                                       max = 2080, value = 2000, step = 10, sep = "",
                                       animate = animationOptions(interval = 3000))
              ),
@@ -207,13 +193,12 @@ tabsetPanel(
   
   
   
-  tabPanel(SDM_Name, icon = icon("pie-chart"),
+  tabPanel(TR$SDM_Name, icon = icon("pie-chart"),
            tabsetPanel(
-             tabPanel(SDM_Name_Model,
+             tabPanel(TR$SDM_Name_Model,
                       
                       fluidRow(
                         tags$hr(),
-                        # verbatimTextOutput("SDM_SP_Selection"),
                         uiOutput("SDM_Sel_Box"),
                         column(4, 
                                actionButton('resetSpeciesInfo',label = "Reset", style = ST_Name),
@@ -223,36 +208,19 @@ tabsetPanel(
                         ),
                         column(4,
                                
-                               # div( style = "display: inline-block;",
-                               #      checkboxGroupInput("SDM_MO_Climate_model", SDM_Name_CD_Models,
-                               #                         choices = c(SDM_Name_CD_Models_list),
-                               #                         selected = SDM_Name_CD_Models_selected
-                               #      ),
-                               #      # Input: Checkbox if file has header ----
-                               #      checkboxGroupInput("SDM_MO_Climate_scenario", SDM_Name_CD_Scenarios,
-                               #                         choices = c(SDM_Name_CD_Scenarios_list),
-                               #                         selected = SDM_Name_CD_Scenarios_selected
-                               #      ),
-                               #      
-                               #      #            # Input: Checkbox if file has header ----
-                               #      checkboxGroupInput("SDM_MO_Protect_year", SDM_Name_CD_Year,
-                               #                         choices = c(SDM_Name_CD_Year_list),
-                               #                         selected = SDM_Name_CD_Year_selected
-                               #      )
-                               # )
                                
                                uiOutput('SDM_MO_Condition_CheckBoxGroup')
                         ),
                         column(4,
                                useShinyalert(),  # Set up shinyalert
-                               actionButton("SDM_MO_SDM_run", label = SDM_Name_models_run)
+                               actionButton("SDM_MO_SDM_run", label = TR$SDM_Name_models_run)
                         )
                         
                       )
              ),
              
              
-             tabPanel(SDM_Name_Model_Out, fluid = TRUE,
+             tabPanel(TR$SDM_Name_Model_Out, fluid = TRUE,
                       tags$hr(),
                       sidebarLayout(
                         sidebarPanel(width = 3, Fluid = TRUE,
@@ -267,24 +235,19 @@ tabsetPanel(
                                      # tags$hr(),
                                      
                                      # Input: Checkbox if file has header ----
-                                     radioButtons("SDM_OU_Climate_model", SDM_Name_CD_Models_out,
-                                                  choices = c(SDM_Name_CD_Models_out_list),
-                                                  selected = SDM_Name_CD_Models_out_selected
+                                     radioButtons("SDM_OU_Climate_model", TR$SDM_Name_CD_Models_out,
+                                                  choices = c(TR$SDM_Name_CD_Models_out_list),
+                                                  selected = TR$SDM_Name_CD_Models_out_selected
                                      ),
                                      
                                      # Input: Checkbox if file has header ----
-                                     radioButtons("SDM_OU_Climate_scenario", SDM_Name_CD_Scenarios_out,
-                                                  choices = c(SDM_Name_CD_Scenarios_out_list),
-                                                  selected = SDM_Name_CD_Scenarios_out_selected
+                                     radioButtons("SDM_OU_Climate_scenario", TR$SDM_Name_CD_Scenarios_out,
+                                                  choices = c(TR$SDM_Name_CD_Scenarios_out_list),
+                                                  selected = TR$SDM_Name_CD_Scenarios_out_selected
                                      ),
                                      
-                                     # Input: Checkbox if file has header ----
-                                     # radioButtons("SDM_OU_Project_year", SDM_Name_CD_Year_out,
-                                     #              choices = c(SDM_Name_CD_Year_out_list),
-                                     #              selected = SDM_Name_CD_Year_out_selected
-                                     # )
                                      
-                                     sliderInput("SDM_OU_Project_year", label = SDM_Name_CD_Year_out, min = 2000,
+                                     sliderInput("SDM_OU_Project_year", label = TR$SDM_Name_CD_Year_out, min = 2000,
                                                  max = 2080, value = 2000, step = 10, sep = "",
                                                  animate = animationOptions(interval = 10000))
                         ),
@@ -294,34 +257,7 @@ tabsetPanel(
                         # Main panel for displaying outputs ----
                         mainPanel(
                           tabsetPanel(
-                            # tabPanel("Validation",
-                            #          tags$hr(),
-                            #          fluidRow(
-                            #            column(6, 
-                            #                 DT::dataTableOutput("SDM_OU_Validation")
-                            #            )
-                            #          ),
-                            #          fluidRow(
-                            #            column(8, 
-                            #            tags$hr(),
-                            #            plotOutput("SDM_OU_Validation_BoxPlot")
-                            #            )
-                            #          )
-                            #          ),
-                            # tabPanel("Contribution",
-                            #          tags$hr(),
-                            #          fluidRow(
-                            #            column(6, 
-                            #                   DT::dataTableOutput("SDM_OU_Contribution")
-                            #            )
-                            #          ),
-                            #          fluidRow(
-                            #            column(8, 
-                            #                   tags$hr(),
-                            #                   column(10, plotOutput("SDM_OU_Contribution_Radarchart"))
-                            #            )
-                            #          )
-                            # ),
+                            
                             
                             tabPanel("Validation & Contribution",
                                      
@@ -331,8 +267,6 @@ tabsetPanel(
                                        hr(),
                                        column(6, DT::dataTableOutput("SDM_OU_Validation")
                                               
-                                              # tags$hr(),
-                                              # plotOutput("SDM_OU_Validation_BoxPlot")
                                        ),
                                        column(6, DT::dataTableOutput("SDM_OU_Contribution"),
                                               plotOutput("SDM_OU_Contribution_Radarchart")
@@ -350,14 +284,9 @@ tabsetPanel(
                                      ),
                                      tags$hr(),
                                      fluidRow(
-                                       # valueBox("KMA", "Climate Models", icon = icon("credit-card"), color = "blue", width = 3),
-                                       # valueBox("RCP4.5", "Climate Scenarios", icon = icon("list"), color = "purple", width = 3),
-                                       # valueBox("2050", "Projecting Years", icon = icon("thumbs-up"), color = "yellow", width = 3),
                                        valueBoxOutput("Value_CM"),
                                        valueBoxOutput("Value_CS"),
                                        valueBoxOutput("Value_YR")
-                                       # infoBox("New Orders", 10 * 2, icon = icon("credit-card"), width = 3) ,
-                                       # infoBox("New Orders", 10 * 2, icon = icon("credit-card"), fill = TRUE, width = 3)
                                        
                                      ),
                                      fluidRow(class = "text-center",
@@ -365,19 +294,8 @@ tabsetPanel(
                                                      # tags$h3("<Probability Map>", style = "text-align: center;"),
                                                      box(status = "success",
                                                          title = "PROBABILITY MAP", width = 20, height = 45, collapsible = T, collapsed = T
-                                                         # verbatimTextOutput("SDM_OU_PROJ_Summary")
-                                                         # plotOutput("SDM_OU_PROJ_Histogram")
                                                      ),
-                                                     # tags$h3("<Probability Map>", style = "display: inline-block;"),
                                                      
-                                                     # uiOutput('CM_UI'),
-                                                     # uiOutput('CS_UI'),
-                                                     # uiOutput('PY_UI'),
-                                                     
-                                                     # uiOutput('SYNC_UI'),
-                                                     
-                                                     
-                                                     # leafletOutput("SDM_OU_Probability_map", width = "800", height = "600"),
                                                      leafletOutput("SDM_OU_Probability_map") %>% withSpinner(),
                                                      br(),
                                                      actionButton("Reset_Probability_View", label = "Reset"),
@@ -405,22 +323,6 @@ tabsetPanel(
                                      
                             )
                             
-                            # tabPanel("Probability Map", 
-                            # 
-                            #          tags$hr(),
-                            #          leafletOutput("SDM_OU_Probability_map", width = "800", height = "600"),
-                            #          tags$hr(),
-                            #          column(10, verbatimTextOutput("SDM_OU_PROJ_Summary")),
-                            #          column(10, plotOutput("SDM_OU_PROJ_Histogram"))
-                            #          ),
-                            # tabPanel("Predicted Map", 
-                            # 
-                            #          tags$hr(),
-                            #          leafletOutput("SDM_OU_Predicted_map", width = "800", height = "600"),
-                            #          tags$hr(),
-                            #          column(10, verbatimTextOutput("SDM_OU_PRED_Summary")),
-                            #          column(10, plotOutput("SDM_OU_PRED_Histogram"))
-                            # )
                           )
                         )
                       )
@@ -429,13 +331,13 @@ tabsetPanel(
   ),  
   
   
-  tabPanel(DM_Name, icon = icon("pie-chart"),
+  tabPanel(TR$DM_Name, icon = icon("pie-chart"),
            tabsetPanel(
-             tabPanel(DM_Name_Model, fluid = TRUE,
+             tabPanel(TR$DM_Name_Model, fluid = TRUE,
                       tags$hr(),
                       fluidRow(
                         column(2,
-                               # valueBoxOutput("DM_Value_SP")
+                               
                                valueBox("구상나무", "선택종명",
                                         icon = icon("tree"), color = "green", width = 12
                                )
@@ -493,7 +395,7 @@ tabsetPanel(
              ),
              
              
-             tabPanel(DM_Name_Model_Out, fluid = TRUE,
+             tabPanel(TR$DM_Name_Model_Out, fluid = TRUE,
                       tags$hr(),
                       sidebarLayout(
                         sidebarPanel(width = 3, Fluid = TRUE,
@@ -545,19 +447,7 @@ tabsetPanel(
                                                   selected = "rcp4.5"
                                      ),
                                      
-                                     # Input: Checkbox if file has header ----
-                                     # radioButtons("DM-OU_Project_year", "Projection Year",
-                                     #              choices = c("Current" = "00",
-                                     #                          "2010" = "10",
-                                     #                          "2020" = "20",
-                                     #                          "2030" = "30",
-                                     #                          "2040" = "40",
-                                     #                          "2050" = "50",
-                                     #                          "2060" = "60",
-                                     #                          "2070" = "70",
-                                     #                          "2080" = "80"),
-                                     #              selected = "30"
-                                     # )
+                                     
                                      
                                      
                                      sliderInput("DM_OU_Project_year", label = "Projection Year", min = 2000,
@@ -579,26 +469,7 @@ tabsetPanel(
                           leafletOutput("DM_OU_DIspersal_map", width = "800", height = "650") %>% withSpinner(),
                           actionButton("Reset_DM_OU_DIspersal_map", label = "Reset")
                           
-                          # tabsetPanel(
-                          # tabPanel("Summary", verbatimTextOutput("DM_OU_Summary")), 
-                          # tabPanel("DIspersal Map", 
-                          #          tags$head(
-                          #            # Include our custom CSS
-                          #            includeCSS("styles.css"),
-                          #            includeScript("gomap.js")
-                          #          ),
-                          #          leafletOutput("DM_OU_DIspersal_map", width = "800", height = "600"))
                           
-                          #   tabPanel("Summary & Dispersal Map", 
-                          #            
-                          #            
-                          #            bsCollapse( bsCollapsePanel("Summary",
-                          #                                        verbatimTextOutput("DM_OU_Summary"), style = ST_Name)
-                          #            ) ,
-                          #   
-                          #   leafletOutput("DM_OU_DIspersal_map", width = "800", height = "600")
-                          #   
-                          # )
                         )
                       )
              )
@@ -606,9 +477,9 @@ tabsetPanel(
   ), 
   
   
-  tabPanel(SS_Name, icon = icon("table"),
+  tabPanel(TR$SS_Name, icon = icon("table"),
            tabsetPanel(
-             tabPanel(SS_Name_Analysis, fluid = TRUE,
+             tabPanel(TR$SS_Name_Analysis, fluid = TRUE,
                       
                       uiOutput("SS_Analy_Box"),
                       
@@ -649,7 +520,7 @@ tabsetPanel(
              ),
              
              
-             tabPanel(SS_Name_Out, fluid = TRUE,
+             tabPanel(TR$SS_Name_Out, fluid = TRUE,
                       tags$hr(),
                       sidebarLayout(
                         sidebarPanel(width = 3, Fluid = TRUE,
@@ -711,23 +582,16 @@ tabsetPanel(
            )
   ),      
   
-  tabPanel(IS_Name, icon = icon("table"),
+  tabPanel(TR$IS_Name, icon = icon("table"),
            tabsetPanel(
-             tabPanel(IS_Name_Anlayis, fluid = TRUE,
+             tabPanel(TR$IS_Name_Anlayis, fluid = TRUE,
                       tags$hr(),
                       fluidRow(
                         sidebarPanel(width = 3, Fluid = TRUE,
                                      uiOutput("IS_CA_Species")
                         ),
                         
-                        
-                        
-                        sidebarPanel(width = 3, Fluid = TRUE,                                                      
-                                     checkboxGroupInput("IS_CA_Dispersal_type", IS_Name_DM_Models,
-                                                        choices = c(IS_Name_DM_Models_list),
-                                                        selected = IS_Name_DM_Models_selected
-                                     ),
-                                     
+                        sidebarPanel(width = 3, Fluid = TRUE,   
                                      
                                      
                                      uiOutput("IS_CA_Col_Box_02")
@@ -739,24 +603,27 @@ tabsetPanel(
                                      uiOutput("IS_CA_SDM_model"),
                                      tags$hr(),
                                      
+                                     uiOutput("IS_CA_Admin"),
                                      
-                                     shinyDirButton("IS_VA_Dir_Folder", IS_Name_Dir, IS_Name_Dir),
-                                     
+                                     tags$hr(),
+                                     actionButton('reset_IS_CA', label = "Reset"),
+                                     tags$hr(),
+                                     shinyDirButton("IS_VA_Dir_Folder", "Invasive Assessment Output Folder", "Invasive Assessment Output Folder"),
                                      
                                      verbatimTextOutput("IS_VA_Dir_Folder", placeholder = TRUE),
-                                     actionButton("IS_VA_Action_Analysis", label = IS_Name_Action),
+                                     actionButton("IS_VA_Action_Analysis", label = TR$IS_Name_Action),
                                      tags$hr(),
                                      br(),
-                                     checkboxGroupInput("IS_VA_Admin", IS_Name_Admin,
-                                                        choices = c(IS_Name_Admin_list),
-                                                        selected = IS_Name_Admin_selected
+                                     checkboxGroupInput("IS_VA_Admin", TR$IS_Name_Admin,
+                                                        choices = c(TR$IS_Name_Admin_list),
+                                                        selected = TR$IS_Name_Admin_selected
                                      ),
-                                     actionButton("IS_VA_Action_Admin", label = IS_Name_Action_Admin)
+                                     actionButton("IS_VA_Action_Admin", label = TR$IS_Name_Action_Admin)
                         )
                       )
              ),
              
-             tabPanel(IS_Name_Out, fluid = TRUE,
+             tabPanel(TR$IS_Name_Out, fluid = TRUE,
                       tags$hr(),
                       sidebarLayout(
                         sidebarPanel(width = 3, Fluid = TRUE,
@@ -767,46 +634,38 @@ tabsetPanel(
                                      uiOutput("IS_AO_Species"),
                                      tags$hr(),
                                      
-                                     #							checkboxGroupInput("IS_AO_Output_option1", IS_Name_OU_Option1,
-                                     #								choices = c(IS_Name_OU_Option1_list),
-                                     #								selected = IS_Name_OU_Option1_selected
-                                     #							),
                                      
-                                     #							checkboxGroupInput("IS_AO_Output_option2", IS_Name_OU_Option2,
-                                     #								choices = c(IS_Name_OU_Option2_list),
-                                     #								selected = IS_Name_OU_Option2_selected
-                                     #							),
                                      
                                      uiOutput("IS_AO_SDM_model"),
                                      
-                                     radioButtons("IS_AO_Dispersal_type", IS_Name_DM_Models,
-                                                  choices = c(IS_Name_DM_Models_list),
-                                                  selected = IS_Name_DM_Models_selected
+                                     radioButtons("IS_AO_Dispersal_type", TR$IS_Name_DM_Models,
+                                                  choices = c(TR$IS_Name_DM_Models_list),
+                                                  selected = TR$IS_Name_DM_Models_selected
                                      ),
                                      
                                      # Input: Checkbox if file has header ----
-                                     radioButtons("IS_AO_Climate_model", IS_Name_CD_Models,
-                                                  choices = c(IS_Name_CD_Models_list),
-                                                  selected = IS_Name_CD_Models_selected
+                                     radioButtons("IS_AO_Climate_model", TR$IS_Name_CD_Models,
+                                                  choices = c(TR$IS_Name_CD_Models_list),
+                                                  selected = TR$IS_Name_CD_Models_selected
                                      ),
                                      
                                      # Input: Checkbox if file has header ----
-                                     radioButtons("IS_AO_Climate_scenario", IS_Name_CD_Scenarios,
-                                                  choices = c(IS_Name_CD_Scenarios_list),
-                                                  selected = IS_Name_CD_Scenarios_selected
+                                     radioButtons("IS_AO_Climate_scenario", TR$IS_Name_CD_Scenarios,
+                                                  choices = c(TR$IS_Name_CD_Scenarios_list),
+                                                  selected = TR$IS_Name_CD_Scenarios_selected
                                      ),
                                      
                                      # Input: Checkbox if file has header ----
-                                     radioButtons("IS_AO_Project_year", IS_Name_CD_Year,
-                                                  choices = c(IS_Name_CD_Year_list),
-                                                  selected = IS_Name_CD_Year_selected
+                                     radioButtons("IS_AO_Project_year", TR$IS_Name_CD_Year,
+                                                  choices = c(TR$IS_Name_CD_Year_list),
+                                                  selected = TR$IS_Name_CD_Year_selected
                                      )
                         ),
                         
                         # Main panel for displaying outputs ----
                         mainPanel(
                           tabsetPanel(
-                            tabPanel(IS_Name_Out_Species, 
+                            tabPanel(TR$IS_Name_Out_Species, 
                                      tags$head(
                                        # Include our custom CSS
                                        includeCSS("styles.css"),
@@ -814,137 +673,109 @@ tabsetPanel(
                                      ),
                                      tags$hr(),
                                      
-                                     
-                                     column(6, leafletOutput("IS_AO_SD_Map", width = "800", height = "650")),
-                                     tags$hr(),
-                                     column(10, verbatimTextOutput("IS_AO_SD_Summary")),
-                                     column(10, plotOutput("IS_AO_SD_Histogram"))
-                            ),
-                            # tabPanel(IS_Name_Out_SR,
-                            #          tabsetPanel(
-                            #            tabPanel(IS_Name_Out_Map,
-                            #                     tags$head(
-                            #                       # Include our custom CSS
-                            #                       includeCSS("styles.css"),
-                            #                       includeScript("gomap.js")
-                            #                     ),
-                            #                     leafletOutput("IS_AO_SR_Map", width = "800", height = "600")),
-                            #            tabPanel(IS_Name_Out_SIDO,
-                            #                     tabsetPanel(
-                            #                       tabPanel(IS_Name_Out_Map,
-                            #                                tags$head(
-                            #                                  # Include our custom CSS
-                            #                                  includeCSS("styles.css"),
-                            #                                  includeScript("gomap.js")
-                            #                                ),
-                            #                                leafletOutput("IS_AO_SR_SIDO_Map", width = "800", height = "600")
-                            #                       ),
-                            #                       tabPanel(IS_Name_Out_Stat,
-                            #                                plotOutput("IS_AO_SR_SIDO_Stat")
-                            #                       )
-                            #                     )
-                            #            ),
-                            #            tabPanel(IS_Name_Out_SGG,
-                            #                     tabsetPanel(
-                            #                       tabPanel(IS_Name_Out_Map, 
-                            #                                tags$head(
-                            #                                  # Include our custom CSS
-                            #                                  includeCSS("styles.css"),
-                            #                                  includeScript("gomap.js")
-                            #                                ),
-                            #                                leafletOutput("IS_AO_SR_SGG_Map", width = "800", height = "600")),
-                            #                       tabPanel(IS_Name_Out_Stat, 
-                            #                                plotOutput("IS_AO_SR_SGG_Stat")
-                            #                       )
-                            #                     )
-                            #            )
-                            #          )
-                            # ),
-                            tabPanel(IS_Name_Out_SR,
-                                     tags$br(), tags$br(),
-                                     # fluidRow(
-                                     #   valueBoxOutput("IS_Value_CM"),
-                                     #   valueBoxOutput("IS_Value_CS"),
-                                     #   valueBoxOutput("IS_Value_YR")
-                                     # ),
-                                     fluidRow(
-                                       valueBoxOutput("IS_Value_CM"),
-                                       valueBoxOutput("IS_Value_CS"),
-                                       valueBoxOutput("IS_Value_YR")
+                                     column(6, leafletOutput("IS_AO_Map1", width = "800", height = "650") %>% withSpinner(),
+                                            actionButton("Reset_IS_AO_Map1", label = "Reset") )),
+                            tabPanel("Vulnerability Map", 
+                                     tags$head(
+                                       # Include our custom CSS
+                                       includeCSS("styles.css"),
+                                       includeScript("gomap.js")
                                      ),
-                                     fluidRow(
-                                       column(4, class = "text-center",
-                                              print("< 외래종 풍부도 >"),
-                                              leafletOutput("IS_AO_SR_Map", width = "400", height = "600")
-                                              # plotOutput("IS_AO_SR_SGG_Stat")
-                                       ),
-                                       column(4, class = "text-center",
-                                              print("< 시도 통계 >"),
-                                              leafletOutput("IS_AO_SR_SIDO_Map", width = "400", height = "600"),
-                                              tags$br(),
-                                              plotOutput("IS_AO_SR_SIDO_Stat")
-                                       ),
-                                       column(4, class = "text-center",
-                                              print("< 시군구 통계 >"),
-                                              leafletOutput("IS_AO_SR_SGG_Map", width = "400", height = "600")
-                                              # plotOutput("IS_AO_SR_SGG_Stat")
-                                       )
-                                     )
-                            ),
-                            tabPanel(IS_Name_Out_SI,
-                                     
+                                     tags$hr(),
+                                     column(6, leafletOutput("IS_AO_Map2", width = "800", height = "650") %>% withSpinner(),
+                                            actionButton("Reset_IS_AO_Map2", label = "Reset") )),
+                            #                               tabPanel("Assessment Plot",
+                            #                                        tags$hr(),
+                            #                                        uiOutput("IS_AO_UI_plot1")
+                            #                              ),
+                            #                               tabPanel("Vulnerability Plot",
+                            #                                        tags$hr(),
+                            #                                        uiOutput("IS_AO_UI_plot2")
+                            #                               ),
+                            tabPanel("Invasive species Expansion",
                                      
                                      tabsetPanel(
-                                       tabPanel(IS_Name_Out_Map,
+                                       tabPanel(TR$IS_Name_Out_Map,
                                                 tags$head(
                                                   # Include our custom CSS
                                                   includeCSS("styles.css"),
                                                   includeScript("gomap.js")
                                                 ),
                                                 
-                                                
-                                                leafletOutput("IS_AO_SI_Map", width = "800", height = "600")),
-                                       tabPanel(IS_Name_Out_SIDO,
-                                                
+                                                leafletOutput("IS_OU_EX_Map", width = "800", height = "600") %>% withSpinner(),
+                                                actionButton("Reset_IS_OU_EX_Map", label = "Reset") ),
+                                       tabPanel("SIDO",
                                                 
                                                 tabsetPanel(
-                                                  tabPanel(IS_Name_Out_Map, 
+                                                  tabPanel(TR$IS_Name_Out_Map, 
                                                            tags$head(
                                                              # Include our custom CSS
                                                              includeCSS("styles.css"),
                                                              includeScript("gomap.js")
                                                            ),
                                                            
-                                                           
-                                                           leafletOutput("IS_AO_Si_SIDO_Map", width = "800", height = "600")
-                                                  ),
-                                                  tabPanel(IS_Name_Out_Stat, 
-                                                           plotOutput("IS_AO_SI_SIDO_Stat")
-                                                  )
-                                                  
+                                                           leafletOutput("IS_OU_EX_SIDO_Map", width = "800", height = "600") %>% withSpinner(),
+                                                           actionButton("Reset_IS_OU_EX_SIDO_Map", label = "Reset") ),
+                                                  tabPanel("Statistics", plotOutput("IS_OU_EX_SIDO_Stat"))
                                                   
                                                 )
                                        ),
-                                       tabPanel(IS_Name_Out_SGG,
+                                       tabPanel(TR$IS_Name_Out_SGG,
                                                 tabsetPanel(
-                                                  tabPanel(IS_Name_Out_Map, 
+                                                  tabPanel(TR$IS_Name_Out_Map, 
                                                            tags$head(
                                                              # Include our custom CSS
                                                              includeCSS("styles.css"),
                                                              includeScript("gomap.js")
                                                            ),
                                                            
-                                                           
-                                                           leafletOutput("IS_AO_Si_SGG_Map", width = "800", height = "600")),
-                                                  tabPanel(IS_Name_Out_Stat, 
-                                                           plotOutput("IS_AO_SI_SGG_Stat")
-                                                  )
-                                                  
+                                                           leafletOutput("IS_OU_EX_SIGUNGU_Map", width = "800", height = "600") %>% withSpinner(),
+                                                           actionButton("Reset_IS_OU_EX_SIGUNGU_Map", label = "Reset") ),
+                                                  tabPanel("Statistics", verbatimTextOutput("IS_OU_EX_SIGUNGU_Stat"))
                                                   
                                                 )
                                        )
                                      )
                                      
+                            ),
+                            tabPanel("Invasive species Introduction",
+                                     tabsetPanel(
+                                       tabPanel("Map",
+                                                tags$head(
+                                                  # Include our custom CSS
+                                                  includeCSS("styles.css"),
+                                                  includeScript("gomap.js")
+                                                ),
+                                                leafletOutput("IS_OU_SI_Map", width = "800", height = "600") %>% withSpinner(),
+                                                actionButton("Reset_IS_OU_SI_Map", label = "Reset") ),
+                                       tabPanel("SIDO",
+                                                tabsetPanel(
+                                                  tabPanel("Map", 
+                                                           tags$head(
+                                                             # Include our custom CSS
+                                                             includeCSS("styles.css"),
+                                                             includeScript("gomap.js")
+                                                           ),
+                                                           leafletOutput("IS_OU_SI_SIDO_Map", width = "800", height = "600") %>% withSpinner(),
+                                                           actionButton("Reset_IS_OU_SI_SIDO_Map", label = "Reset") ),
+                                                  tabPanel("Statistics", verbatimTextOutput("IS_OU_SI_SIDO_Stat"))
+                                                )
+                                       ),
+                                       
+                                       tabPanel("SIGUNGU",
+                                                tabsetPanel(
+                                                  tabPanel("Map", 
+                                                           tags$head(
+                                                             # Include our custom CSS
+                                                             includeCSS("styles.css"),
+                                                             includeScript("gomap.js")
+                                                           ),
+                                                           leafletOutput("IS_OU_SI_SIGUNGU_Map", width = "800", height = "600") %>% withSpinner(),
+                                                           actionButton("Reset_IS_OU_SI_SIGUNGU_Map", label = "Reset") ),
+                                                  tabPanel("Statistics", verbatimTextOutput("IS_OU_SI_SIGUNGU_Stat"))
+                                                )
+                                                
+                                       ))
                                      
                                      
                             )
@@ -955,9 +786,9 @@ tabsetPanel(
            )    
   ),     
   
-  tabPanel(VH_Name, icon = icon("table"),
+  tabPanel(TR$VH_Name, icon = icon("table"),
            tabsetPanel(
-             tabPanel(VH_Name_Analysis, fluid = TRUE,
+             tabPanel(TR$VH_Name_Analysis, fluid = TRUE,
                       tags$hr(),
                       fluidRow(
                         sidebarPanel(width = 3, Fluid = TRUE,
@@ -992,7 +823,7 @@ tabsetPanel(
                       
              ), 
              
-             tabPanel(VH_Name_Out, fluid = TRUE,
+             tabPanel(TR$VH_Name_Out, fluid = TRUE,
                       tags$hr(),
                       sidebarLayout(
                         sidebarPanel(width = 3, Fluid = TRUE,
@@ -1144,7 +975,8 @@ tabsetPanel(
            
   ),          
   
-  tabPanel(HELP_Name, fluid = TRUE,
+  
+  tabPanel(TR$HELP_Name, fluid = TRUE,
            tags$hr(),
            sidebarPanel(width = 5,
                         helpText("MOTIVE ECOSYSTEM(생태계 기후변화 영향 및 취약성평가모형)은 환경부 기후변화 R&D 과제의 결과물입니다.")
@@ -1175,6 +1007,5 @@ tabsetPanel(
                         
            )
   )
-  
   
 )
