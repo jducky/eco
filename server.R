@@ -4,6 +4,41 @@ shinyServer(function(input, output, session) {
   
   
   
+  observeEvent(input$Reset_IS_AO_SR_Map, {
+    
+    leafletProxy("IS_AO_SR_Map") %>%
+      setView(lng = 128.00, lat = 36.00, zoom = 7)
+    
+  })
+  
+  observeEvent(input$IS_AO_SR_Map_bounds, {
+    
+    coords <- isolate(input$IS_AO_SR_Map_bounds)
+    if (!is.null(coords)) {
+      leafletProxy("IS_AO_SR_SIDO_Map") %>%
+        fitBounds(coords$west,
+                  coords$south,
+                  coords$east,
+                  coords$north)
+      
+    }
+  })
+  
+  
+  observeEvent(input$IS_AO_SR_SIDO_Map_bounds, {
+    
+    coords <- isolate(input$IS_AO_SR_SIDO_Map_bounds)
+    if (!is.null(coords)) {
+      leafletProxy("IS_AO_SR_SGG_Map") %>%
+        fitBounds(coords$west,
+                  coords$south,
+                  coords$east,
+                  coords$north)
+      
+    }
+  })
+  
+  
   output$all_Tabs <- renderUI({
     
   tabsetPanel(
@@ -720,16 +755,18 @@ shinyServer(function(input, output, session) {
                                        fluidRow(
                                          column(4, class = "text-center",
                                                 print("< 외래종 풍부도 >"),
-                                                leafletOutput("IS_AO_SR_Map", width = "400", height = "600")   ),
+                                                leafletOutput("IS_AO_SR_Map", width = "360", height = "600") %>% withSpinner()    ),
                                          column(4, class = "text-center",
                                                 print("< 시도 통계 >"),
-                                                leafletOutput("IS_AO_SR_SIDO_Map", width = "400", height = "600"),
-                                                tags$br(),
+                                                leafletOutput("IS_AO_SR_SIDO_Map", width = "360", height = "600") %>% withSpinner()  ,
+                                                tags$br(), tags$br(),
+                                                actionButton('Reset_IS_AO_SR_Map', label = 'Reset'),
+                                                tags$br(), tags$br(),
                                                 plotOutput("IS_AO_SR_SIDO_Stat")
                                          ),
                                          column(4, class = "text-center",
                                                 print("< 시군구 통계 >"),
-                                                leafletOutput("IS_AO_SR_SGG_Map", width = "400", height = "600")
+                                                leafletOutput("IS_AO_SR_SGG_Map", width = "360", height = "600") %>% withSpinner()
                                          )
                                        )
                               ),
