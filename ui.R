@@ -1,7 +1,6 @@
-### JD Edition
+### SEO2
 library(shinythemes)
 ST_Name <- "success"
-
 
 shinyUI(
   
