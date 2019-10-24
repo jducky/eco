@@ -599,7 +599,11 @@ shinyServer(function(input, output, session) {
                                        uiOutput("IS_CA_Species")
                           ),
                           
-                          sidebarPanel(width = 3, Fluid = TRUE,   
+                          sidebarPanel(width = 3, Fluid = TRUE,                                                      	
+                                       checkboxGroupInput("IS_CA_Dispersal_type", TR$IS_Name_DM_Models,	
+                                                          choices = c(TR$IS_Name_DM_Models_list),	
+                                                          selected = TR$IS_Name_DM_Models_selected	
+                                       ),
                                        
                                        
                                        uiOutput("IS_CA_Col_Box_02")
@@ -611,15 +615,11 @@ shinyServer(function(input, output, session) {
                                        uiOutput("IS_CA_SDM_model"),
                                        tags$hr(),
                                        
-                                       uiOutput("IS_CA_Admin"),
-                                       
-                                       tags$hr(),
-                                       actionButton('reset_IS_CA', label = "Reset"),
-                                       tags$hr(),
                                        shinyDirButton("IS_VA_Dir_Folder", "Invasive Assessment Output Folder", "Invasive Assessment Output Folder"),
-                                       
                                        verbatimTextOutput("IS_VA_Dir_Folder", placeholder = TRUE),
                                        actionButton("IS_VA_Action_Analysis", label = TR$IS_Name_Action),
+                                  
+                                    
                                        tags$hr(),
                                        br(),
                                        checkboxGroupInput("IS_VA_Admin", TR$IS_Name_Admin,
@@ -627,6 +627,17 @@ shinyServer(function(input, output, session) {
                                                           selected = TR$IS_Name_Admin_selected
                                        ),
                                        actionButton("IS_VA_Action_Admin", label = TR$IS_Name_Action_Admin)
+                                       
+                                       
+                                       # uiOutput("IS_CA_Admin"),
+                                       # 
+                                       # 
+                                       # actionButton('reset_IS_CA', label = "Reset"),
+                                       # tags$hr(),
+                                       
+                                       
+                                       
+                                       
                           )
                         )
                ),
@@ -681,17 +692,67 @@ shinyServer(function(input, output, session) {
                                        ),
                                        tags$hr(),
                                        
-                                       column(6, leafletOutput("IS_AO_Map1", width = "800", height = "650") %>% withSpinner(),
-                                              actionButton("Reset_IS_AO_Map1", label = "Reset") )),
-                              tabPanel("Vulnerability Map", 
-                                       tags$head(
-                                         # Include our custom CSS
-                                         includeCSS("styles.css"),
-                                         includeScript("gomap.js")
-                                       ),
+                                       
+                                       
+                                       
+                                       
+                                       column(6, leafletOutput("IS_AO_SD_Map", width = "800", height = "650")),
                                        tags$hr(),
-                                       column(6, leafletOutput("IS_AO_Map2", width = "800", height = "650") %>% withSpinner(),
-                                              actionButton("Reset_IS_AO_Map2", label = "Reset") )),
+                                       column(10, verbatimTextOutput("IS_AO_SD_Summary")),
+                                       column(10, plotOutput("IS_AO_SD_Histogram"))
+                              ),
+                              
+                              
+                              # 추가됨 시작
+                              
+                              tabPanel(TR$IS_Name_Out_SR,	
+                                       tags$br(), tags$br(),	
+                                       # fluidRow(	
+                                       #   valueBoxOutput("IS_Value_CM"),	
+                                       #   valueBoxOutput("IS_Value_CS"),	
+                                       #   valueBoxOutput("IS_Value_YR")	
+                                       # ),	
+                                       fluidRow(	
+                                         valueBoxOutput("IS_Value_CM"),	
+                                         valueBoxOutput("IS_Value_CS"),	
+                                         valueBoxOutput("IS_Value_YR")
+                                       ),
+                                       fluidRow(
+                                         column(4, class = "text-center",
+                                                print("< 외래종 풍부도 >"),
+                                                leafletOutput("IS_AO_SR_Map", width = "400", height = "600")   ),
+                                         column(4, class = "text-center",
+                                                print("< 시도 통계 >"),
+                                                leafletOutput("IS_AO_SR_SIDO_Map", width = "400", height = "600"),
+                                                tags$br(),
+                                                plotOutput("IS_AO_SR_SIDO_Stat")
+                                         ),
+                                         column(4, class = "text-center",
+                                                print("< 시군구 통계 >"),
+                                                leafletOutput("IS_AO_SR_SGG_Map", width = "400", height = "600")
+                                         )
+                                       )
+                              ),
+                              
+                              tabPanel(TR$IS_Name_Out_SI,
+                                       tabsetPanel(
+                                         tabPanel(TR$IS_Name_Out_Map,
+                                                
+                                                
+                              # 추가됨 끝         
+                                       
+                                       
+                              #          column(6, leafletOutput("IS_AO_Map1", width = "800", height = "650") %>% withSpinner(),
+                              #                 actionButton("Reset_IS_AO_Map1", label = "Reset") )),
+                              # tabPanel("Vulnerability Map", 
+                              #          tags$head(
+                              #            # Include our custom CSS
+                              #            includeCSS("styles.css"),
+                              #            includeScript("gomap.js")
+                              #          ),
+                                       # tags$hr(),
+                                       # column(6, leafletOutput("IS_AO_Map2", width = "800", height = "650") %>% withSpinner(),
+                                              # actionButton("Reset_IS_AO_Map2", label = "Reset") )),
                               #                               tabPanel("Assessment Plot",
                               #                                        tags$hr(),
                               #                                        uiOutput("IS_AO_UI_plot1")
@@ -700,19 +761,23 @@ shinyServer(function(input, output, session) {
                               #                                        tags$hr(),
                               #                                        uiOutput("IS_AO_UI_plot2")
                               #                               ),
-                              tabPanel("Invasive species Expansion",
+                              # tabPanel("Invasive species Expansion",
                                        
-                                       tabsetPanel(
-                                         tabPanel(TR$IS_Name_Out_Map,
+                                       # tabsetPanel(
+                                         # tabPanel(TR$IS_Name_Out_Map,
                                                   tags$head(
                                                     # Include our custom CSS
                                                     includeCSS("styles.css"),
                                                     includeScript("gomap.js")
                                                   ),
-                                                  
-                                                  leafletOutput("IS_OU_EX_Map", width = "800", height = "600") %>% withSpinner(),
-                                                  actionButton("Reset_IS_OU_EX_Map", label = "Reset") ),
-                                         tabPanel("SIDO",
+                              
+                                                  # leafletOutput("IS_OU_EX_Map", width = "800", height = "600") %>% withSpinner(),
+                                                  # actionButton("Reset_IS_OU_EX_Map", label = "Reset") ),
+                              
+                                                  leafletOutput("IS_AO_SI_Map", width = "800", height = "600")
+                              ),
+                              
+                                         tabPanel(TR$IS_Name_Out_SIDO,
                                                   
                                                   tabsetPanel(
                                                     tabPanel(TR$IS_Name_Out_Map, 
@@ -722,12 +787,22 @@ shinyServer(function(input, output, session) {
                                                                includeScript("gomap.js")
                                                              ),
                                                              
-                                                             leafletOutput("IS_OU_EX_SIDO_Map", width = "800", height = "600") %>% withSpinner(),
-                                                             actionButton("Reset_IS_OU_EX_SIDO_Map", label = "Reset") ),
-                                                    tabPanel("Statistics", plotOutput("IS_OU_EX_SIDO_Stat"))
+                                                             # leafletOutput("IS_OU_EX_SIDO_Map", width = "800", height = "600") %>% withSpinner(),
+                                                             # actionButton("Reset_IS_OU_EX_SIDO_Map", label = "Reset") ),
+                                                             leafletOutput("IS_AO_Si_SIDO_Map", width = "800", height = "600")
+                                                    ),
                                                     
+                                                    tabPanel(TR$IS_Name_Out_Stat, 	
+                                                             plotOutput("IS_AO_SI_SIDO_Stat")	
+                                                    )
                                                   )
                                          ),
+                                                    
+                                         #            tabPanel("Statistics", plotOutput("IS_OU_EX_SIDO_Stat"))
+                                         #            
+                                         #          )
+                                         # ),
+                              
                                          tabPanel(TR$IS_Name_Out_SGG,
                                                   tabsetPanel(
                                                     tabPanel(TR$IS_Name_Out_Map, 
@@ -737,62 +812,25 @@ shinyServer(function(input, output, session) {
                                                                includeScript("gomap.js")
                                                              ),
                                                              
-                                                             leafletOutput("IS_OU_EX_SIGUNGU_Map", width = "800", height = "600") %>% withSpinner(),
-                                                             actionButton("Reset_IS_OU_EX_SIGUNGU_Map", label = "Reset") ),
-                                                    tabPanel("Statistics", verbatimTextOutput("IS_OU_EX_SIGUNGU_Stat"))
+                                                             # leafletOutput("IS_OU_EX_SIGUNGU_Map", width = "800", height = "600") %>% withSpinner(),
+                                                             # actionButton("Reset_IS_OU_EX_SIGUNGU_Map", label = "Reset") ),
                                                     
+                                                    leafletOutput("IS_AO_Si_SGG_Map", width = "800", height = "600")),
+                                                    
+                                                    tabPanel(TR$IS_Name_Out_Stat, plotOutput("IS_AO_SI_SGG_Stat") 
+                                                    )
                                                   )
                                          )
                                        )
-                                       
-                              ),
-                              tabPanel("Invasive species Introduction",
-                                       tabsetPanel(
-                                         tabPanel("Map",
-                                                  tags$head(
-                                                    # Include our custom CSS
-                                                    includeCSS("styles.css"),
-                                                    includeScript("gomap.js")
-                                                  ),
-                                                  leafletOutput("IS_OU_SI_Map", width = "800", height = "600") %>% withSpinner(),
-                                                  actionButton("Reset_IS_OU_SI_Map", label = "Reset") ),
-                                         tabPanel("SIDO",
-                                                  tabsetPanel(
-                                                    tabPanel("Map", 
-                                                             tags$head(
-                                                               # Include our custom CSS
-                                                               includeCSS("styles.css"),
-                                                               includeScript("gomap.js")
-                                                             ),
-                                                             leafletOutput("IS_OU_SI_SIDO_Map", width = "800", height = "600") %>% withSpinner(),
-                                                             actionButton("Reset_IS_OU_SI_SIDO_Map", label = "Reset") ),
-                                                    tabPanel("Statistics", verbatimTextOutput("IS_OU_SI_SIDO_Stat"))
-                                                  )
-                                         ),
-                                         
-                                         tabPanel("SIGUNGU",
-                                                  tabsetPanel(
-                                                    tabPanel("Map", 
-                                                             tags$head(
-                                                               # Include our custom CSS
-                                                               includeCSS("styles.css"),
-                                                               includeScript("gomap.js")
-                                                             ),
-                                                             leafletOutput("IS_OU_SI_SIGUNGU_Map", width = "800", height = "600") %>% withSpinner(),
-                                                             actionButton("Reset_IS_OU_SI_SIGUNGU_Map", label = "Reset") ),
-                                                    tabPanel("Statistics", verbatimTextOutput("IS_OU_SI_SIGUNGU_Stat"))
-                                                  )
-                                                  
-                                         ))
-                                       
-                                       
                               )
                             )
                           )
                         )
                )
-             )    
-    ),     
+             )
+    ),
+                                                    
+                            
     
     tabPanel(TR$VH_Name, icon = icon("table"),
              tabsetPanel(
