@@ -1,4 +1,4 @@
-### HS Edition
+### hs03
 
 shinyServer(function(input, output, session) {
   

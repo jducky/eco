@@ -1,4 +1,4 @@
-### HS Edition
+### hs03
 library(shinythemes)
 ST_Name <- "success"
 ###
@@ -13,7 +13,12 @@ shinyUI(
     dashboardBody(
       
       shinyjs::useShinyjs(),
-      
+      tags$script(HTML(
+        
+        'document.querySelector("body").classList.add("sidebar-collapse");'
+        
+        
+      )),
       
       fluidPage( div(
           h4(System_Name, style = "display: inline-block; color: white; font-size: 200%; margin-left: 20px; position: absolute; line-height: 8vh;"), 
@@ -25,12 +30,7 @@ shinyUI(
                      a("LOGOUT", style = "cursor:pointer; margin-right: 5px; color: white;" )
                 )
             , style = "background-image: url(eco_title.png); height: 10vh; position: relative;"),
-                tags$script(HTML(
-                  
-                  'document.querySelector("body").classList.add("sidebar-collapse");'
-                  
-                  
-                )),
+                
                 
                 theme = shinytheme("yeti"),
                 # shinythemes::themeSelector(),
@@ -919,11 +919,13 @@ shinyUI(
                                         ),
 
 
+
                                         sidebarPanel(width = 3, Fluid = TRUE,                                                      
                                                      checkboxGroupInput("IS_CA_Dispersal_type", IS_Name_DM_Models,
                                                                         choices = c(IS_Name_DM_Models_list),
                                                                         selected = IS_Name_DM_Models_selected
                                                      ),
+
 
                                                      
                                                      uiOutput("IS_CA_Col_Box_02")
@@ -935,7 +937,9 @@ shinyUI(
                                                      uiOutput("IS_CA_SDM_model"),
                                                      tags$hr(),
 
+
                                                      shinyDirButton("IS_VA_Dir_Folder", IS_Name_Dir, IS_Name_Dir),
+
 
                                                      verbatimTextOutput("IS_VA_Dir_Folder", placeholder = TRUE),
                                                      actionButton("IS_VA_Action_Analysis", label = IS_Name_Action),
@@ -1007,6 +1011,7 @@ shinyUI(
                                                        includeScript("gomap.js")
                                                      ),
                                                      tags$hr(),
+
 
                                                      column(6, leafletOutput("IS_AO_SD_Map", width = "800", height = "650")),
                                                      tags$hr(),
@@ -1086,6 +1091,7 @@ shinyUI(
                                                      ),
                                             tabPanel(IS_Name_Out_SI,
 
+
                                                      tabsetPanel(
                                                        tabPanel(IS_Name_Out_Map,
                                                                 tags$head(
@@ -1094,8 +1100,10 @@ shinyUI(
                                                                   includeScript("gomap.js")
                                                                 ),
 
+
                                                                 leafletOutput("IS_AO_SI_Map", width = "800", height = "600")),
                                                        tabPanel(IS_Name_Out_SIDO,
+
 
                                                                 tabsetPanel(
                                                                   tabPanel(IS_Name_Out_Map, 
@@ -1105,11 +1113,13 @@ shinyUI(
                                                                              includeScript("gomap.js")
                                                                            ),
 
+
                                                                            leafletOutput("IS_AO_Si_SIDO_Map", width = "800", height = "600")
                                                                   ),
                                                                   tabPanel(IS_Name_Out_Stat, 
                                                                            plotOutput("IS_AO_SI_SIDO_Stat")
                                                                   )
+
 
                                                                 )
                                                        ),
@@ -1122,14 +1132,18 @@ shinyUI(
                                                                              includeScript("gomap.js")
                                                                            ),
 
+
                                                                            leafletOutput("IS_AO_Si_SGG_Map", width = "800", height = "600")),
                                                                   tabPanel(IS_Name_Out_Stat, 
                                                                            plotOutput("IS_AO_SI_SGG_Stat")
                                                                   )
 
+
                                                                 )
                                                        )
                                                      )
+
+
 
                                             )
                                           )

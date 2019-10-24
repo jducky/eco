@@ -1,4 +1,4 @@
-### HS Edition 19.10.24 -> hs03
+### hs03 191024
 #####=========================================================
 ##### installing and Loading packages ========================
 # Setting packages and library
