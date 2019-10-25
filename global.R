@@ -51,6 +51,10 @@ if (length(CHK_libraries) > 0) {
 setwd("C:/MOTIVE_Ecosystem/R/Programs/ecosystem")
 rm(list = ls())
 
+
+color_Picker <- c("black","lightgray","gray","white","cadetblue","pink","darkpurple","purple","lightblue","darkblue","blue","lightgreen","darkgreen","green","beige","orange","lightred","darkred","red")
+
+
 ##### Path
 G <- reactiveValues()
 G$SE_Dir_Project <- "C:/MOTIVE_projects/proj1"

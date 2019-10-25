@@ -2662,16 +2662,241 @@ shinyServer(function(input, output, session) {
   output$SP_Map <- renderLeaflet({
     rs <- input$SP_Info_rows_selected  # G_FILE_specieslocation   # st_read("species.shp")
     
+    x <- NULL
+    
     if (length(rs)) {
+      
+      # getColor <- function(species_data) {
+      #   sapply(species_data$ID, function(ID) {
+      #     if(mag <= 4) {
+      #       "green"
+      #     } else if(mag <= 5) {
+      #       "orange"
+      #     } else {
+      #       "red"
+      #     } })
+      # }
+      
+      
+      
+      # species_all_data <- inner_join(G_FILE_specieslocation, G_FILE_speciesinfo, by = "ID")
+      
+      # ID_Table <- table(species_all_data$ID)
+      # DT_ID_Table <- data.frame(ID_Table)
+      # 
+      # icons <- awesomeIcons(
+      #   icon = 'ios-close',
+      #   iconColor = 'black',
+      #   library = 'ion',
+      #   markerColor = getColor(DT_ID_Table)
+      # )
+      
+      # getColor <- function(DT_ID_Table) {
+      #   sapply(DT_ID_Table[, 1], function(ID) {
+      #     
+      #     sample(candy_colors, 1)
+      #     
+      #   })
+      # }
+      
+      
+      # getColor <- function(species_data) {
+      #   
+      #   
+      #   TempColor <- NULL
+      #   
+      #   cat("#############################")
+      #   cat("#############################")
+      #   cat("#############################")
+      #   print(species_data$ID)
+      #   
+      #   cat('unique: \n')
+      #   unique_IDs <- unique(species_data$ID)
+      #   print(unique_IDs)
+      #   i <- 1
+      #   
+      #   x <- sapply(species_data$ID, function(ID) {
+      #     
+      #     
+      #     while(i <= length(unique_IDs)) {
+      #       
+      #       if(unique_IDs[i] == ID) {
+      #         TempColor <- sample(candy_colors, 1 )
+      #         return (TempColor)
+      #       }
+      #       i <- i+1
+      #       
+      #     }
+      #     
+      #     
+      #   })
+      #  
+      #  
+      #  # cat('x')
+      #  # print('')
+      #  # print(x)
+      #  # 
+      #  # cat('names(x)')
+      #  # print('')
+      #  # print(names(x))
+      #  # 
+      #  #  dt <- data.frame(x)
+      #  #  cat('dt \n')
+      #  #  print(dt)
+      #  
+      #  
+      #  # t <- table(x)
+      #  # cat('t')
+      #  # print(t)
+      #  # 
+      #  # dt <- data.frame(t)
+      #  # cat('dt')
+      #  # print(dt)
+      #   
+      #   # return ( as.vector( data.frame(x)$x ) )
+      #   cat('x \n')
+      #   print(x)
+      #   return(x)
+      # }
+      
+      
+      # pop <- function(vector, i = length(vector)) {
+      #   stopifnot(is.vector(vector))
+      #   print(i)
+      #   if(identical(i, character(0))) {
+      #     assign(deparse(substitute(vector)), c("black","lightgray","gray","white","cadetblue","pink","darkpurple","purple","lightblue","darkblue","blue","lightgreen","darkgreen","green","beige","orange","lightred","darkred","red"), envir = .GlobalEnv)
+      #   }
+      #   res <- vector[i]
+      #   assign(deparse(substitute(vector)), vector[-i], envir = .GlobalEnv)
+      #   # color_picker <<- vector[-i]
+      #   print(res)
+      #   return (res)
+      # }
+      
+      pop <- function(vector, size) {
+        stopifnot(is.vector(vector))
+        
+        cat('size \n')
+        print(size)
+        
+        res <- color_Picker[size]
+        if(size > length(color_Picker)) {
+          color_Picker <<- append(color_Picker, "black","lightgray","gray","white","cadetblue","pink","darkpurple","purple","lightblue","darkblue","blue","lightgreen","darkgreen","green","beige","orange","lightred","darkred","red")
+        }
+        
+        species_all_data <- inner_join(G_FILE_specieslocation, G_FILE_speciesinfo, by = "ID")
+        
+        # Ids <- unique(species_all_data)
+        # Ids()
+        
+        cat('species_all_data \n')
+        print(species_all_data)
+        
+        cat('species_all_data$ID \n')
+        print(species_all_data$ID)
+        
+        
+        return ( color_Picker[size] )
+        
+      }
+
+      
+      customGetColor <- function(species_data) {
+        
+        
+        
+        tapp <- tapply(species_data$ID, species_data$ID, function(val){
+          val
+        })
+        
+        temp_Vector <- c()
+        i <- 1
+        while( i <= length(tapp) ) {
+          
+          j <- 1
+          
+          while( j <= length(tapp[[i]]) ) {
+            if( tapp[[i]][j] == names(tapp[i])  ) {
+              # temp_Vector <- append(temp_Vector, pop(color_Picker, names(tapp[i])) )
+              temp_Vector <- append(temp_Vector, pop(color_Picker, i) )
+              j <- j+1
+            }
+          }
+          i <- i+1
+        }
+        
+
+        return (temp_Vector)
+        
+      }
+      
+      
+      
        species_data <- inner_join(G_FILE_specieslocation, G_FILE_speciesinfo[rs, , drop = FALSE], by = "ID")
-       leaflet(data = species_data) %>%
+       
+       icons <- awesomeIcons(
+         icon = 'ios-close',
+         iconColor = 'black',
+         library = 'ion',
+         # markerColor = getColor(species_data)
+         markerColor = customGetColor(species_data)
+       )
+       
+       
+       x <- leaflet(data = species_data) %>%
          addTiles(
                            urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
                         attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
          ) %>%
 
-        addMarkers(~Longitude, ~Latitude, popup = ~as.character(ID), label = ~as.character(ID)) %>%
+        # addMarkers(~Longitude, ~Latitude, popup = ~as.character(ID), label = ~as.character(ID)) %>%
+        addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID)) %>%
+        # addAwesomeMarkers(~Longitude, ~Latitude, label=~as.character(ID)) %>%
         setView(lng = 127.00, lat = 37.00, zoom = 6)
+       
+       # cat('species_data: ')
+       # print(species_data)
+       # 
+       # cat('species_data$ID: ')
+       # print(species_data$ID)
+       # cat('length(species_data$ID): ')
+       # print(length(species_data$ID))
+       # 
+       # cat('species_all_data: ')
+       # print(species_all_data)
+       # cat('length(species_all_data$ID): ')
+       # print(length(species_all_data$ID))
+       # 
+       # yyy <- table(species_all_data$ID)
+       # cat('table(species_all_data$ID): ')
+       # print(yyy)
+       # 
+       # cat('table(species_all_data$ID): ')
+       # print(yyy)
+       # 
+       # 
+       # ddd <- data.frame(yyy)
+       # cat('data.frame(yyy): ')
+       # print(ddd)
+       # 
+       # 
+       # cat('ddd[1,1]: ')
+       # print(ddd[,1])
+       
+       
+       
+       # xxxx <- sapply(ddd[,1], function(ID){
+       #   
+       #   sample(candy_colors, 1)
+       # })
+       
+       # cat('xxxx: ')
+       # print(xxxx)
+       
+
+       
+       
+       return (x)
     }
   })
 
