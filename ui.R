@@ -102,6 +102,10 @@ shinyUI(
                   display: inline-block;
                 }
                 
+                .title_ul li {
+                  display: inline-block;
+                }
+                
              '))),
       
       
@@ -118,15 +122,29 @@ shinyUI(
       
       fluidPage( div(
           h4(System_Name, style = "display: inline-block; color: white; font-size: 200%; margin-left: 20px; position: absolute; line-height: 8vh;"), 
-          div( style = "display: inline-block; margin-left: 80%; margin-top: 10px; font-size: 110%; color: white;",
+          div( style = "display: inline-block; font-size: 110%; color: white; margin-top: 10px; margin-right: 10px; float: right;",
+
+               
+                      tags$ul( style = "list-style: none;" , class = "title_ul",
+                               
+                               tags$li(
+                                 uiOutput("kor_link_top")
+                               ),
+                               
+                               tags$li(
+                                 uiOutput("eng_link_top")
+                               ),
+                        
+                              tags$li(
+                                a("CONTACT US", style = "cursor:pointer; color: white; " )
+                              ),
+                              tags$li(
+                                a("LOGOUT", style = "cursor:pointer; color: white;" )
+                              )
+                        
+                      )
                      
                      
-                     uiOutput("kor_link_top"),
-               
-                     uiOutput("eng_link_top"),
-               
-                     a("CONTACT US", style = "cursor:pointer; margin-right: 5px; color: white; " ),
-                     a("LOGOUT", style = "cursor:pointer; margin-right: 5px; color: white;" )
                 )
             , style = "background-image: url(eco_title.png); height: 10vh; position: relative;"),
                 
