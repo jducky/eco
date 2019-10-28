@@ -2,8 +2,7 @@
 
 shinyServer(function(input, output, session) {
   
-  
-  
+
   observeEvent(input$Reset_IS_AO_SR_Map, {
     
     leafletProxy("IS_AO_SR_Map") %>%
@@ -39,1091 +38,32 @@ shinyServer(function(input, output, session) {
   })
   
   
-  output$all_Tabs <- renderUI({
-    
-  tabsetPanel(
-    tabPanel(TR$OV_Name,
-               
-               hr(),
-               mainPanel(
-                 img(src="eco01.png"),
-                 hr(),
-                 img(src="eco02.png"),
-                 br(),br()
-               )
-      ),    
-      
-      
-    tabPanel(TR$SP_Name, icon = icon("folder-open"),
-             tabsetPanel(
-               tabPanel(TR$SP_Name_Info,
-                        tags$head(
-                          # Include our custom CSS
-                          includeCSS("styles.css"),
-                          includeScript("gomap.js")
-                        ),
-                        tags$hr(),
-                        bsCollapse(
-                          bsCollapsePanel("Summary & Histogram",
-                                          style = ST_Name,
-                                          fluidRow(
-                                            column(3,verbatimTextOutput("SP_Summary")),
-                                            column(4,plotOutput("SP_Histogram"))
-                                          ) 
-                          )
-                        ),
-                        
-                        fluidRow(
-                          
-                          column(4, 
-                                 actionButton('reset_SP_Info',label = "Reset", style = "float: right; margin-bottom: 15px;"), br(),
-                                 DT::dataTableOutput("SP_Info")
-                          ),
-                          column(1, uiOutput("Species_Link")),
-                          column(6, leafletOutput("SP_Map", width = "600", height = "600") %>% withSpinner(), 
-                                 uiOutput('SP_Map_Reset_UI')
-                                 
-                          )
-                        )
-
-               ),
-               tabPanel("Species Location",
-                        tags$head(
-                          # Include our custom CSS
-                          includeCSS("styles.css"),
-                          includeScript("gomap.js")
-                        ),
-                        tags$hr(),
-                        column(6, 
-                               actionButton('reset_SP_Loc',label = "Reset", style = "float: right; margin-bottom: 15px;"),
-                               DT::dataTableOutput("SP_LOC_Info")
-                        ),
-                        column(6, leafletOutput("SP_LOC_Map", width = "600", height = "600")  %>% withSpinner(),
-                               uiOutput('SP_LOC_Map_Reset_UI')
-                        )
-               )
-             )
-    ),  
-    
-    
-    
-    tabPanel(TR$LD_Name, fluid = TRUE, icon = icon("folder-open"),
-             tags$hr(),
-             sidebarLayout(
-               sidebarPanel(width = 3, Fluid = TRUE,
-                            
-                            
-                            
-                            selectInput("LD_Type", TR$LD_Name_Variables,
-                                        choices = TR$LD_Name_Variables_list,
-                                        selected = TR$LD_Name_Variables_selected
-                            ),
-                            
-                            fluidRow(
-                              
-                              # actionButton('LD_Value_TY',label = "Type", style = ST_Name)
-                              
-                              # box(status = "primary", solidHeader = T,
-                              #     title = "LD Type", width = 50, height = 45, collapsible = F, collapsed = T
-                              # )
-                              
-                              # valueBoxOutput("LD_Value_TY")
-                            ),
-                            
-                            # Input: Checkbox if file has header ----
-                            radioButtons("LD_Climate_model", TR$LD_Name_Models,
-                                         choices = TR$LD_Name_Models_list,
-                                         selected = TR$LD_Name_Models_selected
-                            ),
-                            
-                            # Input: Checkbox if file has header ----
-                            radioButtons("LD_Climate_scenario", TR$LD_Name_Scenarios,
-                                         choices = TR$LD_Name_Scenarios_list,
-                                         selected = TR$LD_Name_Scenarios_selected
-                            ),
-
-                            
-                            sliderInput("LD_Project_year", label = TR$LD_Name_Year, min = 2000,
-                                        max = 2080, value = 2000, step = 10, sep = "",
-                                        animate = animationOptions(interval = 3000))
-                            
-                            
-               ),
-               
-               # Main panel for displaying outputs ----
-               mainPanel(
-                 bsCollapsePanel("Summary & Histogram",
-                                 style = ST_Name,
-                                 fluidRow(
-                                   column(4,verbatimTextOutput("LD_Summary")),
-                                   column(6,plotOutput("LD_Histogram"))
-                                 ) 
-                 ),
-                 
-                 tags$head(
-                   # Include our custom CSS
-                   includeCSS("styles.css"),
-                   includeScript("gomap.js")
-                 ),
-                 
-                 fluidRow(
-                   valueBoxOutput("LD_Value_CM"),
-                   valueBoxOutput("LD_Value_CS"),
-                   valueBoxOutput("LD_Value_YR")
-                 ),
-                 leafletOutput("LD_Map", width = "800", height = "650")  %>% withSpinner(),
-                 actionButton("Reset_LD_Map", label = "Reset")
-               )
-             )
-    ),  
-    
-    tabPanel(TR$CD_Name, fluid = TRUE, icon = icon("folder-open"),
-             tags$hr(),
-             sidebarLayout(
-               sidebarPanel(width = 3, Fluid = TRUE,
-                            selectInput("CD_Variables", TR$CD_Name_Variables,
-                                        choices = TR$CD_Name_Variables_list,
-                                        selected = TR$CD_Name_Variables_selected
-                            ),
-                            
-                            # Input: Checkbox if file has header ----
-                            radioButtons("CD_Climate_model", TR$CD_Name_Models,
-                                         choices = TR$CD_Name_Models_list,
-                                         selected = TR$CD_Name_Models_selected
-                            ),
-                            
-                            # Input: Checkbox if file has header ----
-                            radioButtons("CD_Climate_scenario", TR$CD_Name_Scenarios,
-                                         choices = TR$CD_Name_Scenarios_list,
-                                         selected = TR$CD_Name_Scenarios_selected
-                            ),
-                            
-
-                            sliderInput("CD_Project_year", label = TR$CD_Name_Year, min = 2000,
-                                        max = 2080, value = 2000, step = 10, sep = "",
-                                        animate = animationOptions(interval = 3000))
-               ),
-               
-               # Main panel for displaying outputs ----
-               mainPanel(
-                 
-                 bsCollapse(
-                   bsCollapsePanel("Summary & Histogram",
-                                   style = ST_Name,
-                                   fluidRow(
-                                     column(4,verbatimTextOutput("CD_Summary")),
-                                     column(6,plotOutput("LD_Histogram2"))
-                                   ) 
-                   )
-                 ),
-                 fluidRow(
-                   valueBoxOutput("CD_Value_CM"),
-                   valueBoxOutput("CD_Value_CS"),
-                   valueBoxOutput("CD_Value_YR")
-                 ),
-                 # tags$head(
-                 #   # Include our custom CSS
-                 #   includeCSS("styles.css"),
-                 #   includeScript("gomap.js")
-                 # ),
-                 leafletOutput("CD_Map", width = "800", height = "650") %>% withSpinner(),
-                 actionButton("Reset_CD_Map", label = "Reset")
-                 
-               )
-             )
-             
-    ),  
-    
-    
-    
-    tabPanel(TR$SDM_Name, icon = icon("pie-chart"),
-             tabsetPanel(
-               tabPanel(TR$SDM_Name_Model,
-                        
-                        fluidRow(
-                          tags$hr(),
-                          uiOutput("SDM_Sel_Box"),
-                          column(4, 
-                                 actionButton('resetSpeciesInfo',label = "Reset", style = ST_Name),
-                                 tags$style(type='text/css', "button#resetSpeciesInfo {margin-left: 90%;}"),
-                                 br(),br(),
-                                 DT::dataTableOutput("SDM_SP_Info")
-                          ),
-                          column(4,
-
-                                 
-                                 uiOutput('SDM_MO_Condition_CheckBoxGroup')
-                          ),
-                          column(4,
-                                 useShinyalert(),  # Set up shinyalert
-                                 actionButton("SDM_MO_SDM_run", label = TR$SDM_Name_models_run)
-                          )
-                          
-                        )
-               ),
-               
-               
-               tabPanel(TR$SDM_Name_Model_Out, fluid = TRUE,
-                        tags$hr(),
-                        sidebarLayout(
-                          sidebarPanel(width = 3, Fluid = TRUE,
-                                       
-                                       uiOutput("SDM_OU_Species"),
-                                       # tags$hr(),
-                                       
-                                       uiOutput("SDM_OU_Projection_model"),
-                                       # tags$hr(),
-                                       
-                                       uiOutput("SDM_OU_Prediction_model"),
-                                       # tags$hr(),
-                                       
-                                       # Input: Checkbox if file has header ----
-                                       radioButtons("SDM_OU_Climate_model", TR$SDM_Name_CD_Models_out,
-                                                    choices = c(TR$SDM_Name_CD_Models_out_list),
-                                                    selected = TR$SDM_Name_CD_Models_out_selected
-                                       ),
-                                       
-                                       # Input: Checkbox if file has header ----
-                                       radioButtons("SDM_OU_Climate_scenario", TR$SDM_Name_CD_Scenarios_out,
-                                                    choices = c(TR$SDM_Name_CD_Scenarios_out_list),
-                                                    selected = TR$SDM_Name_CD_Scenarios_out_selected
-                                       ),
-
-                                       
-                                       sliderInput("SDM_OU_Project_year", label = TR$SDM_Name_CD_Year_out, min = 2000,
-                                                   max = 2080, value = 2000, step = 10, sep = "",
-                                                   animate = animationOptions(interval = 10000))
-                          ),
-                          
-                          
-                          
-                          # Main panel for displaying outputs ----
-                          mainPanel(
-                            tabsetPanel(
-                              
-                              
-                              tabPanel("Validation & Contribution",
-                                       
-                                       # hr(),
-                                       
-                                       fluidRow(
-                                         hr(),
-                                         column(6, DT::dataTableOutput("SDM_OU_Validation")
-
-                                         ),
-                                         column(6, DT::dataTableOutput("SDM_OU_Contribution"),
-                                                plotOutput("SDM_OU_Contribution_Radarchart")
-                                         )
-                                       )
-                                       
-                                       
-                              ),
-                              
-                              tabPanel("Map", 
-                                       tags$head(
-                                         # Include our custom CSS
-                                         includeCSS("styles.css"),
-                                         includeScript("gomap.js")
-                                       ),
-                                       tags$hr(),
-                                       fluidRow(
-                                         valueBoxOutput("Value_CM"),
-                                         valueBoxOutput("Value_CS"),
-                                         valueBoxOutput("Value_YR")
-                                         
-                                       ),
-                                       fluidRow(class = "text-center",
-                                                column(6, 
-                                                       # tags$h3("<Probability Map>", style = "text-align: center;"),
-                                                       box(status = "success",
-                                                           title = "PROBABILITY MAP", width = 20, height = 45, collapsible = T, collapsed = T
-                                                       ),
-
-                                                       leafletOutput("SDM_OU_Probability_map") %>% withSpinner(),
-                                                       br(),
-                                                       actionButton("Reset_Probability_View", label = "Reset"),
-                                                       tags$hr(),
-                                                       column(12, verbatimTextOutput("SDM_OU_PROJ_Summary")),
-                                                       column(12, plotOutput("SDM_OU_PROJ_Histogram"))
-                                                ),
-                                                
-                                                column(6, 
-                                                       # tags$h3("<Predicted Map>", style = "text-align: center;"),
-                                                       box(status = "success",
-                                                           title = "PREDICTED MAP", width = 20, height = 45, collapsible = T, collapsed = T
-                                                       ),
-                                                       # tags$h3("<Predicted Map>"),
-                                                       
-                                                       # leafletOutput("SDM_OU_Predicted_map", width = "800", height = "600"),
-                                                       leafletOutput("SDM_OU_Predicted_map") %>% withSpinner(),
-                                                       br(),
-                                                       actionButton("Reset_Predicted_View", label = "Reset"),
-                                                       tags$hr(),
-                                                       column(12, verbatimTextOutput("SDM_OU_PRED_Summary")),
-                                                       column(12, plotOutput("SDM_OU_PRED_Histogram"))
-                                                )
-                                       )
-                                       
-                              )
-
-                            )
-                          )
-                        )
-               )
-             )
-    ),  
-    
-    
-    tabPanel(TR$DM_Name, icon = icon("pie-chart"),
-             tabsetPanel(
-               tabPanel(TR$DM_Name_Model, fluid = TRUE,
-                        tags$hr(),
-                        fluidRow(
-                          column(2,
-
-                                 valueBox("구상나무", "선택종명",
-                                          icon = icon("tree"), color = "green", width = 12
-                                 )
-                          ),
-                          
-                          column(10,
-                                 uiOutput("DM_Sel_Box")
-                          )
-                        ),
-                        tags$hr(),
-                        fluidRow(
-                          
-                          
-                          # Sidebar panel for inputs ----
-                          sidebarPanel(width = 2,
-                                       
-                                       uiOutput("DM_MO_Col_Box_01")
-                                       
-                                       
-                          ),
-                          
-                          sidebarPanel(width = 2,
-                                       
-                                       uiOutput("DM_MO_Col_Box_02")
-                                       
-                                       
-                          ),
-                          
-                          column( 3,
-                                  fluidRow( sidebarPanel(width = 12, Fluid = TRUE, 
-                                                         uiOutput("DM_MO_Col_Box_03") 
-                                  )
-                                  ),
-                                  
-                                  fluidRow( 
-                                    sidebarPanel(width = 12, Fluid = TRUE, 
-                                                 div( actionButton('reset_DM_MO',label = "Reset"), style = "margin: 0 60% 0 40%;" ) 
-                                    )
-                                  )
-                                  
-                                  
-                          ),
-                          
-                          
-                          
-                          sidebarPanel(width = 3, Fluid = TRUE,
-                                       tags$hr(),  
-                                       # infoBox("Model Run", "RUN", icon = icon("angle-double-right"), width = 2),
-                                       actionButton("DM_MO_Action", label = "Run"),
-                                       tags$hr()
-                          )
-                          
-                        )
-                        
-               ),
-               
-               
-               tabPanel(TR$DM_Name_Model_Out, fluid = TRUE,
-                        tags$hr(),
-                        sidebarLayout(
-                          sidebarPanel(width = 3, Fluid = TRUE,
-                                       
-                                       selectInput("DM-OU_Species", "Select a species",
-                                                   choices = c("구상나무" = "option1",
-                                                               "가문비나무 " = "option2"),
-                                                   selected = "option1"
-                                       ),
-                                       tags$hr(),
-                                       
-                                       
-                                       selectInput("DM-OU_Dispersal_type", "Dispersal Types",
-                                                   choices = c("No Dispersal" = "ND",
-                                                               "SDD" = "SDD",
-                                                               "MDD" = "MDD",
-                                                               "LDD" = "LDD",
-                                                               "Unlimited Dispersal" = "UD"),
-                                                   selected = "LDD"
-                                       ),
-                                       
-                                       selectInput("DM-OU_SDM_model", "Model Types",
-                                                   choices = c("GLM" = "GLM",
-                                                               "GAM" = "GAM",
-                                                               "GBM" = "GBM",
-                                                               "CTA" = "CTA",
-                                                               "ANN" = "ANN",
-                                                               "SRE" = "SRE",
-                                                               "FDA" = "FDA",
-                                                               "MARS" = "MARS",
-                                                               "RF" = "RF",
-                                                               "MAXENT.Phillips" = "MAXENT.Phillips",
-                                                               "MAXENT" = "MAXENT",
-                                                               "Ensemble" = "Ensemble"),
-                                                   selected = "MAXENT.Phillips"
-                                       ),
-                                       
-                                       # Input: Checkbox if file has header ----
-                                       radioButtons("DM_OU_Climate_model", "Climate Models",
-                                                    choices = c("KMA" = "KMA",
-                                                                "KEI" = "KEI"),
-                                                    selected = "KMA"
-                                       ),
-                                       
-                                       # Input: Checkbox if file has header ----
-                                       radioButtons("DM_OU_Climate_scenario", "Climate Scenarios",
-                                                    choices = c("RCP 4.5" = "rcp4.5",
-                                                                "RCP 8.5" = "rcp8.5"),
-                                                    selected = "rcp4.5"
-                                       ),
-                                       
-                                     
-                                       
-                                       
-                                       sliderInput("DM_OU_Project_year", label = "Projection Year", min = 2000,
-                                                   max = 2080, value = 2000, step = 10, sep = "",
-                                                   animate = animationOptions(interval = 3000))
-                          ),
-                          
-                          # Main panel for displaying outputs ----
-                          mainPanel(
-                            bsCollapse(
-                              bsCollapsePanel("Summary",
-                                              verbatimTextOutput("DM_OU_Summary"), style = ST_Name)
-                            ),
-                            fluidRow(
-                              valueBoxOutput("DM_Value_CM"),
-                              valueBoxOutput("DM_Value_CS"),
-                              valueBoxOutput("DM_Value_YR")
-                            ),
-                            leafletOutput("DM_OU_DIspersal_map", width = "800", height = "650") %>% withSpinner(),
-                            actionButton("Reset_DM_OU_DIspersal_map", label = "Reset")
-                            
-            
-                          )
-                        )
-               )
-             )
-    ), 
-    
-    
-    tabPanel(TR$SS_Name, icon = icon("table"),
-             tabsetPanel(
-               tabPanel(TR$SS_Name_Analysis, fluid = TRUE,
-                        
-                        uiOutput("SS_Analy_Box"),
-                        
-                        tags$hr(),
-                        fluidRow(
-                          sidebarPanel(width = 2, Fluid = TRUE,
-                                       uiOutput("SS_CA_Species"),
-                                       
-                                       uiOutput("SS_CA_Types")
-                                       
-                                       
-                          ),
-                          sidebarPanel(width = 2, Fluid = TRUE,             
-                                       
-                                       
-                                       uiOutput("SS_CA_Col_Box_02")
-                                       
-                                       
-                          ),
-                          sidebarPanel(width = 2,
-                                       uiOutput("SS_CA_SDM_model"),
-                                       br(),
-                                       actionButton('reset_SS_CA', label = "Reset")
-                          ),
-                          sidebarPanel(width = 1,
-                                       cat("Hello"),
-                                       # print("=====>"),
-                                       tags$br(),
-                                       tags$br()
-                          ),
-                          sidebarPanel(width = 3,
-                                       actionButton("SS_CA_Action_change", label = "Analayzing the change of Species Distribution"),
-                                       tags$br(),
-                                       tags$br(),
-                                       actionButton("SS_CA_Action_Vindex", label = "Calculating the Climate Vulnerability Index of Species")
-                          )
-                        )
-               ),
-               
-               
-               tabPanel(TR$SS_Name_Out, fluid = TRUE,
-                        tags$hr(),
-                        sidebarLayout(
-                          sidebarPanel(width = 3, Fluid = TRUE,
-                                       
-                                       uiOutput("SS_AO_Species"),
-                                       tags$hr(),
-                                       
-                                       uiOutput("SS_AO_SDM_model"),
-                                       
-                                       uiOutput("SS_AO_DT_CM_CS_PY"),
-                                       hr(),
-                                       actionButton('reset_SS_AO', label = "Reset")
-                          ),
-                          
-                          # Main panel for displaying outputs ----
-                          mainPanel(
-                            tabsetPanel(
-                              tabPanel("Species Distribution Change Plot",
-                                       tags$hr(),
-                                       uiOutput("SS_AO_UI_plot")
-                              ),
-                              tabPanel("Vulnerability Pattern", 
-                                       tags$hr(),
-                                       fluidRow(
-                                         column(6, 
-                                                DT::dataTableOutput("SS_AO_IV_Table")
-                                         )
-                                       ),
-                                       fluidRow(
-                                         tags$hr(),
-                                         uiOutput("SS_AO_IV_UI_plot1"),
-                                         tags$hr(),
-                                         column(6, plotOutput("SS_AO_IV_Plot1")),
-                                         column(6, plotOutput("SS_AO_IV_Plot2"))
-                                       ),
-                                       fluidRow(
-                                         tags$hr(),
-                                         uiOutput("SS_AO_IV_UI_plot2"),
-                                         tags$hr(),
-                                         column(6, plotOutput("SS_AO_IV_Plot11")),
-                                         column(6, plotOutput("SS_AO_IV_Plot21"))
-                                       )
-                              ),
-                              tabPanel("Vulnerable Priority", 
-                                       tags$hr(),
-                                       fluidRow(
-                                         column(6, 
-                                                DT::dataTableOutput("SS_AO_VP_Table")
-                                         )
-                                       ),
-                                       fluidRow(
-                                         tags$hr(),
-                                         plotOutput("SS_AO_VP_Priority",width = "100%", height = "600px"))
-                              )
-                            )
-                          )
-                        )
-               )
-             )
-    ),      
-    
-    tabPanel(TR$IS_Name, icon = icon("table"),
-             tabsetPanel(
-               tabPanel(TR$IS_Name_Anlayis, fluid = TRUE,
-                        tags$hr(),
-                        fluidRow(
-                          sidebarPanel(width = 3, Fluid = TRUE,
-                                       uiOutput("IS_CA_Species")
-                          ),
-                          
-                          sidebarPanel(width = 3, Fluid = TRUE,                                                      	
-                                       checkboxGroupInput("IS_CA_Dispersal_type", TR$IS_Name_DM_Models,	
-                                                          choices = c(TR$IS_Name_DM_Models_list),	
-                                                          selected = TR$IS_Name_DM_Models_selected	
-                                       ),
-                                       
-                                       
-                                       uiOutput("IS_CA_Col_Box_02")
-                                       
-                                       
-                                       
-                          ),
-                          sidebarPanel(width = 4,
-                                       uiOutput("IS_CA_SDM_model"),
-                                       tags$hr(),
-                                       
-                                       shinyDirButton("IS_VA_Dir_Folder", "Invasive Assessment Output Folder", "Invasive Assessment Output Folder"),
-                                       verbatimTextOutput("IS_VA_Dir_Folder", placeholder = TRUE),
-                                       actionButton("IS_VA_Action_Analysis", label = TR$IS_Name_Action),
-                                  
-                                    
-                                       tags$hr(),
-                                       br(),
-                                       checkboxGroupInput("IS_VA_Admin", TR$IS_Name_Admin,
-                                                          choices = c(TR$IS_Name_Admin_list),
-                                                          selected = TR$IS_Name_Admin_selected
-                                       ),
-                                       actionButton("IS_VA_Action_Admin", label = TR$IS_Name_Action_Admin)
-                                       
-                                       
-                                       # uiOutput("IS_CA_Admin"),
-                                       # 
-                                       # 
-                                       # actionButton('reset_IS_CA', label = "Reset"),
-                                       # tags$hr(),
-                                       
-                                       
-                                       
-                                       
-                          )
-                        )
-               ),
-               
-               tabPanel(TR$IS_Name_Out, fluid = TRUE,
-                        tags$hr(),
-                        sidebarLayout(
-                          sidebarPanel(width = 3, Fluid = TRUE,
-                                       shinyDirButton("IS_AO_Dir_Folder", "Invasive Assessment Output Folder", "Invasive Assessment Output Folder"),
-                                       verbatimTextOutput("IS_AO_Dir_Folder", placeholder = TRUE),
-                                       tags$hr(),
-                                       #uiOutput("IS_AO_Species"),
-                                       uiOutput("IS_AO_Species"),
-                                       tags$hr(),
-                                       
-
-                                       
-                                       uiOutput("IS_AO_SDM_model"),
-                                       
-                                       radioButtons("IS_AO_Dispersal_type", TR$IS_Name_DM_Models,
-                                                    choices = c(TR$IS_Name_DM_Models_list),
-                                                    selected = TR$IS_Name_DM_Models_selected
-                                       ),
-                                       
-                                       # Input: Checkbox if file has header ----
-                                       radioButtons("IS_AO_Climate_model", TR$IS_Name_CD_Models,
-                                                    choices = c(TR$IS_Name_CD_Models_list),
-                                                    selected = TR$IS_Name_CD_Models_selected
-                                       ),
-                                       
-                                       # Input: Checkbox if file has header ----
-                                       radioButtons("IS_AO_Climate_scenario", TR$IS_Name_CD_Scenarios,
-                                                    choices = c(TR$IS_Name_CD_Scenarios_list),
-                                                    selected = TR$IS_Name_CD_Scenarios_selected
-                                       ),
-                                       
-                                       # Input: Checkbox if file has header ----
-                                       radioButtons("IS_AO_Project_year", TR$IS_Name_CD_Year,
-                                                    choices = c(TR$IS_Name_CD_Year_list),
-                                                    selected = TR$IS_Name_CD_Year_selected
-                                       )
-                          ),
-                          
-                          # Main panel for displaying outputs ----
-                          mainPanel(
-                            tabsetPanel(
-                              tabPanel(TR$IS_Name_Out_Species, 
-                                       tags$head(
-                                         # Include our custom CSS
-                                         includeCSS("styles.css"),
-                                         includeScript("gomap.js")
-                                       ),
-                                       tags$hr(),
-                                       
-                                       
-                                       
-                                       
-                                       
-                                       column(6, leafletOutput("IS_AO_SD_Map", width = "800", height = "650")),
-                                       tags$hr(),
-                                       column(10, verbatimTextOutput("IS_AO_SD_Summary")),
-                                       column(10, plotOutput("IS_AO_SD_Histogram"))
-                              ),
-                              
-                              
-                              # 추가됨 시작
-                              
-                              tabPanel(TR$IS_Name_Out_SR,	
-                                       tags$br(), tags$br(),	
-                                       # fluidRow(	
-                                       #   valueBoxOutput("IS_Value_CM"),	
-                                       #   valueBoxOutput("IS_Value_CS"),	
-                                       #   valueBoxOutput("IS_Value_YR")	
-                                       # ),	
-                                       fluidRow(	
-                                         valueBoxOutput("IS_Value_CM"),	
-                                         valueBoxOutput("IS_Value_CS"),	
-                                         valueBoxOutput("IS_Value_YR")
-                                       ),
-                                       fluidRow(
-                                         column(4, class = "text-center",
-                                                print("< 외래종 풍부도 >"),
-                                                leafletOutput("IS_AO_SR_Map", width = "360", height = "600") %>% withSpinner()    ),
-                                         column(4, class = "text-center",
-                                                print("< 시도 통계 >"),
-                                                leafletOutput("IS_AO_SR_SIDO_Map", width = "360", height = "600") %>% withSpinner()  ,
-                                                tags$br(), tags$br(),
-                                                actionButton('Reset_IS_AO_SR_Map', label = 'Reset'),
-                                                tags$br(), tags$br(),
-                                                plotOutput("IS_AO_SR_SIDO_Stat")
-                                         ),
-                                         column(4, class = "text-center",
-                                                print("< 시군구 통계 >"),
-                                                leafletOutput("IS_AO_SR_SGG_Map", width = "360", height = "600") %>% withSpinner()
-                                         )
-                                       )
-                              ),
-                              
-                              tabPanel(TR$IS_Name_Out_SI,
-                                       tabsetPanel(
-                                         tabPanel(TR$IS_Name_Out_Map,
-                                                
-                                                
-                              # 추가됨 끝         
-                                       
-                                       
-                              #          column(6, leafletOutput("IS_AO_Map1", width = "800", height = "650") %>% withSpinner(),
-                              #                 actionButton("Reset_IS_AO_Map1", label = "Reset") )),
-                              # tabPanel("Vulnerability Map", 
-                              #          tags$head(
-                              #            # Include our custom CSS
-                              #            includeCSS("styles.css"),
-                              #            includeScript("gomap.js")
-                              #          ),
-                                       # tags$hr(),
-                                       # column(6, leafletOutput("IS_AO_Map2", width = "800", height = "650") %>% withSpinner(),
-                                              # actionButton("Reset_IS_AO_Map2", label = "Reset") )),
-                              #                               tabPanel("Assessment Plot",
-                              #                                        tags$hr(),
-                              #                                        uiOutput("IS_AO_UI_plot1")
-                              #                              ),
-                              #                               tabPanel("Vulnerability Plot",
-                              #                                        tags$hr(),
-                              #                                        uiOutput("IS_AO_UI_plot2")
-                              #                               ),
-                              # tabPanel("Invasive species Expansion",
-                                       
-                                       # tabsetPanel(
-                                         # tabPanel(TR$IS_Name_Out_Map,
-                                                  tags$head(
-                                                    # Include our custom CSS
-                                                    includeCSS("styles.css"),
-                                                    includeScript("gomap.js")
-                                                  ),
-                              
-                                                  # leafletOutput("IS_OU_EX_Map", width = "800", height = "600") %>% withSpinner(),
-                                                  # actionButton("Reset_IS_OU_EX_Map", label = "Reset") ),
-                              
-                                                  leafletOutput("IS_AO_SI_Map", width = "800", height = "600")
-                              ),
-                              
-                                         tabPanel(TR$IS_Name_Out_SIDO,
-                                                  
-                                                  tabsetPanel(
-                                                    tabPanel(TR$IS_Name_Out_Map, 
-                                                             tags$head(
-                                                               # Include our custom CSS
-                                                               includeCSS("styles.css"),
-                                                               includeScript("gomap.js")
-                                                             ),
-                                                             
-                                                             # leafletOutput("IS_OU_EX_SIDO_Map", width = "800", height = "600") %>% withSpinner(),
-                                                             # actionButton("Reset_IS_OU_EX_SIDO_Map", label = "Reset") ),
-                                                             leafletOutput("IS_AO_Si_SIDO_Map", width = "800", height = "600")
-                                                    ),
-                                                    
-                                                    tabPanel(TR$IS_Name_Out_Stat, 	
-                                                             plotOutput("IS_AO_SI_SIDO_Stat")	
-                                                    )
-                                                  )
-                                         ),
-                                                    
-                                         #            tabPanel("Statistics", plotOutput("IS_OU_EX_SIDO_Stat"))
-                                         #            
-                                         #          )
-                                         # ),
-                              
-                                         tabPanel(TR$IS_Name_Out_SGG,
-                                                  tabsetPanel(
-                                                    tabPanel(TR$IS_Name_Out_Map, 
-                                                             tags$head(
-                                                               # Include our custom CSS
-                                                               includeCSS("styles.css"),
-                                                               includeScript("gomap.js")
-                                                             ),
-                                                             
-                                                             # leafletOutput("IS_OU_EX_SIGUNGU_Map", width = "800", height = "600") %>% withSpinner(),
-                                                             # actionButton("Reset_IS_OU_EX_SIGUNGU_Map", label = "Reset") ),
-                                                    
-                                                    leafletOutput("IS_AO_Si_SGG_Map", width = "800", height = "600")),
-                                                    
-                                                    tabPanel(TR$IS_Name_Out_Stat, plotOutput("IS_AO_SI_SGG_Stat") 
-                                                    )
-                                                  )
-                                         )
-                                       )
-                              )
-                            )
-                          )
-                        )
-               )
-             )
-    ),
-                                                    
-                            
-    
-    tabPanel(TR$VH_Name, icon = icon("table"),
-             tabsetPanel(
-               tabPanel(TR$VH_Name_Analysis, fluid = TRUE,
-                        tags$hr(),
-                        fluidRow(
-                          sidebarPanel(width = 3, Fluid = TRUE,
-                                       uiOutput("VH_CA_Species")
-                          ),
-                          sidebarPanel(width = 3, Fluid = TRUE,             
-                                       uiOutput("VH_CA_Col_Box_02")
-                                       
-                          ),
-                          sidebarPanel(width = 3,
-                                       uiOutput("VH_CA_SDM_model"),
-                                       tags$hr(),
-                                       
-                                       uiOutput("VH_CA_Habitat_Weighting"),
-                                       tags$hr(),  
-                                       
-                                       actionButton('reset_VH_CA', label = "Reset"),
-                                       tags$hr(),             
-                                       
-                                       actionButton("VH_VA_Action_SR", label = "Species Richness"),
-                                       br(),
-                                       actionButton("VH_VA_Action_SRL", label = "Species Richness Loss"),
-                                       tags$hr(),
-                                       actionButton("VH_VA_Action_SSA", label = "Species Stay Area"),
-                                       br(),
-                                       actionButton("VH_VA_Action_SLA", label = "Species Loss Area"),
-                                       br(),
-                                       actionButton("VH_VA_Action_SIA", label = "Species Introduction Area")
-                                       
-                          )
-                        )
-                        
-               ), 
-               
-               tabPanel(TR$VH_Name_Out, fluid = TRUE,
-                        tags$hr(),
-                        sidebarLayout(
-                          sidebarPanel(width = 3, Fluid = TRUE,
-                                       
-                                       uiOutput("VH_AO_Species"),
-                                       tags$hr(),
-                                       
-                                       uiOutput("VH_AO_SDM_model"),
-                                       
-                                       uiOutput("VH_AO_DT_CM_CS_PY"),
-                                       hr(),
-                                       actionButton('reset_VH_AO', label = "Reset")
-                                       
-                          ),
-                          
-                          # Main panel for displaying outputs ----
-                          mainPanel(
-                            tabsetPanel(
-                              tabPanel("Species Richness",
-                                       tabsetPanel(
-                                         tabPanel("Map", 
-                                                  tags$head(
-                                                    # Include our custom CSS
-                                                    includeCSS("styles.css"),
-                                                    includeScript("gomap.js")
-                                                  ),
-                                                  leafletOutput("VH_OU_SR_Map", width = "800", height = "600") %>% withSpinner(),
-                                                  actionButton("Reset_VH_OU_SR_Map", label = "Reset") ),
-                                         tabPanel("Habitat Type",
-                                                  tabsetPanel(
-                                                    tabPanel("Map", 
-                                                             tags$head(
-                                                               # Include our custom CSS
-                                                               includeCSS("styles.css"),
-                                                               includeScript("gomap.js")
-                                                             ),
-                                                             leafletOutput("VH_OU_SR_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
-                                                             actionButton("Reset_VH_OU_SR_Habitat_Map", label = "Reset") ),
-                                                    tabPanel("Statistics", plotOutput("VH_OU_SR_Habitat_Stat"))
-                                                  )
-                                         )
-                                       )
-                              ),
-                              tabPanel("Species Richness Loss",
-                                       tabsetPanel(
-                                         tabPanel("Map", 
-                                                  tags$head(
-                                                    # Include our custom CSS
-                                                    includeCSS("styles.css"),
-                                                    includeScript("gomap.js")
-                                                  ),
-                                                  leafletOutput("VH_OU_SRL_Map", width = "800", height = "600") %>% withSpinner(),
-                                                  actionButton("Reset_VH_OU_SRL_Map", label = "Reset") ),
-                                         tabPanel("Habitat Type",
-                                                  tabsetPanel(
-                                                    tabPanel("Map", 
-                                                             tags$head(
-                                                               # Include our custom CSS
-                                                               includeCSS("styles.css"),
-                                                               includeScript("gomap.js")
-                                                             ),
-                                                             leafletOutput("VH_OU_SRL_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
-                                                             actionButton("Reset_VH_OU_SRL_Habitat_Map", label = "Reset") ),
-                                                    tabPanel("Statistics", verbatimTextOutput("VH_OU_SRL_Habitat_Stat"))
-                                                  )
-                                         )
-                                       )
-                              ),
-                              tabPanel("Species Loss",
-                                       tabsetPanel(
-                                         tabPanel("Map", 
-                                                  tags$head(
-                                                    # Include our custom CSS
-                                                    includeCSS("styles.css"),
-                                                    includeScript("gomap.js")
-                                                  ),
-                                                  leafletOutput("VH_OU_SL_Map", width = "800", height = "600") %>% withSpinner(),
-                                                  actionButton("Reset_VH_OU_SL_Map", label = "Reset") ),
-                                         tabPanel("Habitat Type",
-                                                  tabsetPanel(
-                                                    tabPanel("Map", 
-                                                             tags$head(
-                                                               # Include our custom CSS
-                                                               includeCSS("styles.css"),
-                                                               includeScript("gomap.js")
-                                                             ),
-                                                             leafletOutput("VH_OU_SL_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
-                                                             actionButton("Reset_VH_OU_SL_Habitat_Map", label = "Reset") ),
-                                                    tabPanel("Statistics", verbatimTextOutput("VH_OU_SL_Habitat_Stat"))
-                                                  )
-                                         )
-                                       )
-                              ),
-                              tabPanel("Species Stay",
-                                       tabsetPanel(
-                                         tabPanel("Map", 
-                                                  tags$head(
-                                                    # Include our custom CSS
-                                                    includeCSS("styles.css"),
-                                                    includeScript("gomap.js")
-                                                  ),
-                                                  leafletOutput("VH_OU_SS_Map", width = "800", height = "600") %>% withSpinner(),
-                                                  actionButton("Reset_VH_OU_SS_Map", label = "Reset") ),
-                                         tabPanel("Habitat Type",
-                                                  tabsetPanel(
-                                                    tabPanel("Map", 
-                                                             tags$head(
-                                                               # Include our custom CSS
-                                                               includeCSS("styles.css"),
-                                                               includeScript("gomap.js")
-                                                             ),
-                                                             leafletOutput("VH_OU_SS_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
-                                                             actionButton("Reset_VH_OU_SS_Habitat_Map", label = "Reset") ),
-                                                    tabPanel("Statistics", verbatimTextOutput("VH_OU_SS_Habitat_Stat"))
-                                                  )
-                                         )
-                                       )
-                              ),
-                              tabPanel("Species Introduction",
-                                       tabsetPanel(
-                                         tabPanel("Map", 
-                                                  tags$head(
-                                                    # Include our custom CSS
-                                                    includeCSS("styles.css"),
-                                                    includeScript("gomap.js")
-                                                  ),
-                                                  leafletOutput("VH_OU_SI_Map", width = "800", height = "600") %>% withSpinner(),
-                                                  actionButton("Reset_VH_OU_SI_Map", label = "Reset") ),
-                                         tabPanel("Habitat Type",
-                                                  tabsetPanel(
-                                                    tabPanel("Map", 
-                                                             tags$head(
-                                                               # Include our custom CSS
-                                                               includeCSS("styles.css"),
-                                                               includeScript("gomap.js")
-                                                             ),
-                                                             leafletOutput("VH_OU_SI_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
-                                                             actionButton("Reset_VH_OU_SI_Habitat_Map", label = "Reset") ),
-                                                    tabPanel("Statistics", verbatimTextOutput("VH_OU_SI_Habitat_Stat"))
-                                                  )
-                                         )
-                                       )
-                              )
-                            )
-                          )
-                        )
-               )
-             )
-             
-    ),          
-    
-    
-    tabPanel(TR$HELP_Name, fluid = TRUE,
-             tags$hr(),
-             sidebarPanel(width = 5,
-                          helpText("MOTIVE ECOSYSTEM(생태계 기후변화 영향 및 취약성평가모형)은 환경부 기후변화 R&D 과제의 결과물입니다.")
-                          ,
-                          
-                          fluidRow(
-                            infoBox("New Orders", 10 * 2, icon = icon("credit-card"), width = 12)  
-                          ),
-                          
-                          fluidRow(
-                            infoBox("New Orders", 10 * 2, icon = icon("credit-card"), fill = TRUE, width = 12)
-                          ),
-                          
-                          fluidRow(
-                            infoBox("Progress", "25%", icon = icon("list"), width = 12, color = "purple")
-                          ),
-                          
-                          fluidRow(
-                            infoBox("Approval", paste0(80, "%"), icon = icon("thumbs-up", lib = "glyphicon") ,width = 12, color = "yellow")
-                          )
-                          
-                          
-                          
-                          
-                          
-                          
-                          
-                          
-             )
-    )
-    
-  )
-    
-  })
   
   
   
-  ###### end all_Tabs ##############################
-  
-  
-
   
   onclick("kor_link_top", {
     
-    TR$SE_Language <<- "Korean" 
-    print(TR$SE_Language)
+    SE_Language <<- "Korean" 
+    print(SE_Language)
     
   })
   
   
   onclick("eng_link_top", {
     
-    TR$SE_Language <<- "English" 
-    print(TR$SE_Language)
+    SE_Language <<- "English" 
+    print(SE_Language)
     
   })
   
   
   output$kor_link_top <- renderUI({
-      a("한국어", style = "cursor:pointer; margin-right: 5px; color: white;")
+    a("한국어", style = "cursor:pointer; margin-right: 5px; color: white;")
   })
   
   output$eng_link_top <- renderUI({
-      a("English", style = "cursor:pointer; margin-right: 5px; color: white;")
+    a("English", style = "cursor:pointer; margin-right: 5px; color: white;")
   })
   
   
@@ -1335,28 +275,28 @@ shinyServer(function(input, output, session) {
     input$reset_VH_AO
     x <- div(
       
-                checkboxGroupInput("VH_AO_Dispersal_type", TR$VH_Name_DM_Models,
-                                   choices = c(TR$VH_Name_DM_Models_list),
-                                   selected = TR$VH_Name_DM_Models_selected
-                ),
-          
-                # Input: Checkbox if file has header ----
-                checkboxGroupInput("VH_AO_Climate_model", TR$VH_Name_CD_Models,
-                                   choices = c(TR$VH_Name_CD_Models_list),
-                                   selected = TR$VH_Name_CD_Models_selected
-                ),
-          
-                # Input: Checkbox if file has header ----
-                checkboxGroupInput("VH_AO_Climate_scenario", TR$VH_Name_CD_Scenarios,
-                                   choices = c(TR$VH_Name_CD_Scenarios_list),
-                                   selected = TR$VH_Name_CD_Scenarios_selected
-                ),
-          
-                # Input: Checkbox if file has header ----
-                checkboxGroupInput("VH_AO_Project_year", TR$VH_Name_CD_Year,
-                                   choices = c(TR$VH_Name_CD_Year_list),
-                                   selected = TR$VH_Name_CD_Year_selected
-                )
+      checkboxGroupInput("VH_AO_Dispersal_type", VH_Name_DM_Models,
+                         choices = c(VH_Name_DM_Models_list),
+                         selected = VH_Name_DM_Models_selected
+      ),
+      
+      # Input: Checkbox if file has header ----
+      checkboxGroupInput("VH_AO_Climate_model", VH_Name_CD_Models,
+                         choices = c(VH_Name_CD_Models_list),
+                         selected = VH_Name_CD_Models_selected
+      ),
+      
+      # Input: Checkbox if file has header ----
+      checkboxGroupInput("VH_AO_Climate_scenario", VH_Name_CD_Scenarios,
+                         choices = c(VH_Name_CD_Scenarios_list),
+                         selected = VH_Name_CD_Scenarios_selected
+      ),
+      
+      # Input: Checkbox if file has header ----
+      checkboxGroupInput("VH_AO_Project_year", VH_Name_CD_Year,
+                         choices = c(VH_Name_CD_Year_list),
+                         selected = VH_Name_CD_Year_selected
+      )
       
     )
     
@@ -1370,29 +310,29 @@ shinyServer(function(input, output, session) {
     x <- NULL
     input$reset_VH_CA
     x <- div(
-                checkboxGroupInput("VH_CA_Dispersal_type", TR$VH_Name_DM_Models,
-                                   choices = c(TR$VH_Name_DM_Models_list),
-                                   selected = TR$VH_Name_DM_Models_selected
-                ),
-                
-                # Input: Checkbox if file has header ----
-                checkboxGroupInput("VH_CA_Climate_model", TR$VH_Name_CD_Models,
-                                   choices = c(TR$VH_Name_CD_Models_list),
-                                   selected = TR$VH_Name_CD_Models_selected
-                ),
-                
-                # Input: Checkbox if file has header ----
-                checkboxGroupInput("VH_CA_Climate_scenario", TR$VH_Name_CD_Scenarios,
-                                   choices = c(TR$VH_Name_CD_Scenarios_list),
-                                   selected = TR$VH_Name_CD_Scenarios_selected
-                ),
-                
-                # Input: Checkbox if file has header ----
-                checkboxGroupInput("VH_CA_Project_year", TR$VH_Name_CD_Year,
-                                   choices = c(TR$VH_Name_CD_Year_list),
-                                   selected = TR$VH_Name_CD_Year_selected
-                )
-          )
+      checkboxGroupInput("VH_CA_Dispersal_type", VH_Name_DM_Models,
+                         choices = c(VH_Name_DM_Models_list),
+                         selected = VH_Name_DM_Models_selected
+      ),
+      
+      # Input: Checkbox if file has header ----
+      checkboxGroupInput("VH_CA_Climate_model", VH_Name_CD_Models,
+                         choices = c(VH_Name_CD_Models_list),
+                         selected = VH_Name_CD_Models_selected
+      ),
+      
+      # Input: Checkbox if file has header ----
+      checkboxGroupInput("VH_CA_Climate_scenario", VH_Name_CD_Scenarios,
+                         choices = c(VH_Name_CD_Scenarios_list),
+                         selected = VH_Name_CD_Scenarios_selected
+      ),
+      
+      # Input: Checkbox if file has header ----
+      checkboxGroupInput("VH_CA_Project_year", VH_Name_CD_Year,
+                         choices = c(VH_Name_CD_Year_list),
+                         selected = VH_Name_CD_Year_selected
+      )
+    )
     
     return (x)
   })
@@ -1427,28 +367,28 @@ shinyServer(function(input, output, session) {
     x <- NULL
     input$reset_IS_CA
     x <- div(
-              checkboxGroupInput("IS_CA_Dispersal_type", TR$IS_Name_DM_Models,
-                                 choices = c(TR$IS_Name_DM_Models_list),
-                                 selected = TR$IS_Name_DM_Models_selected
-              ),
-        
-              # Input: Checkbox if file has header ----
-              checkboxGroupInput("IS_CA_Climate_model", TR$IS_Name_CD_Models,
-                                 choices = c(TR$IS_Name_CD_Models_list),
-                                 selected = TR$IS_Name_CD_Models_selected
-              ),
-        
-              # Input: Checkbox if file has header ----
-              checkboxGroupInput("IS_CA_Climate_scenario", TR$IS_Name_CD_Scenarios,
-                                 choices = c(TR$IS_Name_CD_Scenarios_list),
-                                 selected = TR$IS_Name_CD_Scenarios_selected
-              ),
-        
-              # Input: Checkbox if file has header ----
-              checkboxGroupInput("IS_CA_Project_year", TR$IS_Name_CD_Year,
-                                 choices = c(TR$IS_Name_CD_Year_list),
-                                 selected = TR$IS_Name_CD_Year_selected
-              )
+      checkboxGroupInput("IS_CA_Dispersal_type", IS_Name_DM_Models,
+                         choices = c(IS_Name_DM_Models_list),
+                         selected = IS_Name_DM_Models_selected
+      ),
+      
+      # Input: Checkbox if file has header ----
+      checkboxGroupInput("IS_CA_Climate_model", IS_Name_CD_Models,
+                         choices = c(IS_Name_CD_Models_list),
+                         selected = IS_Name_CD_Models_selected
+      ),
+      
+      # Input: Checkbox if file has header ----
+      checkboxGroupInput("IS_CA_Climate_scenario", IS_Name_CD_Scenarios,
+                         choices = c(IS_Name_CD_Scenarios_list),
+                         selected = IS_Name_CD_Scenarios_selected
+      ),
+      
+      # Input: Checkbox if file has header ----
+      checkboxGroupInput("IS_CA_Project_year", IS_Name_CD_Year,
+                         choices = c(IS_Name_CD_Year_list),
+                         selected = IS_Name_CD_Year_selected
+      )
     )
     
     return (x)
@@ -1467,17 +407,17 @@ shinyServer(function(input, output, session) {
   })
   
   
-
+  
   
   
   output$SS_CA_Types = renderUI({
     x <- NULL
     input$reset_SS_CA
     x <- div(
-              checkboxGroupInput("SS_CA_Dispersal_type", TR$SS_Name_DM_Models,
-                                 choices = c(TR$SS_Name_DM_Models_list),
-                                 selected = TR$SS_Name_DM_Models_selected
-              )
+      checkboxGroupInput("SS_CA_Dispersal_type", SS_Name_DM_Models,
+                         choices = c(SS_Name_DM_Models_list),
+                         selected = SS_Name_DM_Models_selected
+      )
     )
     return (x)
   })
@@ -1487,24 +427,24 @@ shinyServer(function(input, output, session) {
     x <- NULL
     input$reset_SS_CA
     x <- div(
-                # Input: Checkbox if file has header ----
-                checkboxGroupInput("SS_CA_Climate_model", TR$SS_Name_CD_Models,
-                                   choices = c(TR$SS_Name_CD_Models_list),
-                                   selected = TR$SS_Name_CD_Models_selected
-                ),
-                
-                # Input: Checkbox if file has header ----
-                checkboxGroupInput("SS_CA_Climate_scenario", TR$SS_Name_CD_Scenarios,
-                                   choices = c(TR$SS_Name_CD_Scenarios_list),
-                                   selected = TR$SS_Name_CD_Scenarios_selected
-                ),
-                
-                # Input: Checkbox if file has header ----
-                checkboxGroupInput("SS_CA_Project_year", TR$SS_Name_CD_Year,
-                                   choices = c(TR$SS_Name_CD_Year_list),
-                                   selected = TR$SS_Name_CD_Year_selected
-                )
+      # Input: Checkbox if file has header ----
+      checkboxGroupInput("SS_CA_Climate_model", SS_Name_CD_Models,
+                         choices = c(SS_Name_CD_Models_list),
+                         selected = SS_Name_CD_Models_selected
+      ),
+      
+      # Input: Checkbox if file has header ----
+      checkboxGroupInput("SS_CA_Climate_scenario", SS_Name_CD_Scenarios,
+                         choices = c(SS_Name_CD_Scenarios_list),
+                         selected = SS_Name_CD_Scenarios_selected
+      ),
+      
+      # Input: Checkbox if file has header ----
+      checkboxGroupInput("SS_CA_Project_year", SS_Name_CD_Year,
+                         choices = c(SS_Name_CD_Year_list),
+                         selected = SS_Name_CD_Year_selected
       )
+    )
     
     return (x)
   })
@@ -1516,27 +456,27 @@ shinyServer(function(input, output, session) {
     x <- NULL
     input$reset_SS_AO
     x <- div(
-      checkboxGroupInput("SS_AO_Dispersal_type", TR$SS_Name_DM_Models,
-                         choices = c(TR$SS_Name_DM_Models_list),
-                         selected = TR$SS_Name_DM_Models_selected
+      checkboxGroupInput("SS_AO_Dispersal_type", SS_Name_DM_Models,
+                         choices = c(SS_Name_DM_Models_list),
+                         selected = SS_Name_DM_Models_selected
       ),
       
       # Input: Checkbox if file has header ----
-      checkboxGroupInput("SS_AO_Climate_model", TR$SS_Name_CD_Models,
-                         choices = c(TR$SS_Name_CD_Models_list),
-                         selected = TR$SS_Name_CD_Models_selected
+      checkboxGroupInput("SS_AO_Climate_model", SS_Name_CD_Models,
+                         choices = c(SS_Name_CD_Models_list),
+                         selected = SS_Name_CD_Models_selected
       ),
       
       # Input: Checkbox if file has header ----
-      checkboxGroupInput("SS_AO_Climate_scenario", TR$SS_Name_CD_Scenarios,
-                         choices = c(TR$SS_Name_CD_Scenarios_list),
-                         selected = TR$SS_Name_CD_Scenarios_selected
+      checkboxGroupInput("SS_AO_Climate_scenario", SS_Name_CD_Scenarios,
+                         choices = c(SS_Name_CD_Scenarios_list),
+                         selected = SS_Name_CD_Scenarios_selected
       ),
       
       # Input: Checkbox if file has header ----
-      checkboxGroupInput("SS_AO_Project_year", TR$SS_Name_CD_Year,
-                         choices = c(TR$SS_Name_CD_Year_list),
-                         selected = TR$SS_Name_CD_Year_selected
+      checkboxGroupInput("SS_AO_Project_year", SS_Name_CD_Year,
+                         choices = c(SS_Name_CD_Year_list),
+                         selected = SS_Name_CD_Year_selected
       )
     )
     return (x)
@@ -1544,7 +484,7 @@ shinyServer(function(input, output, session) {
   
   
   
-
+  
   
   
   
@@ -1593,7 +533,7 @@ shinyServer(function(input, output, session) {
                          selected = "RCP4.5"
       )
     )
-      
+    
     
     
     return (x)
@@ -1606,26 +546,26 @@ shinyServer(function(input, output, session) {
     x <- NULL
     input$reset_DM_MO
     x <- div(
-                checkboxGroupInput("DM-MO_Protect_year", "Projection Year",
-                                   choices = c("2010" = "10",
-                                               "2020" = "20",
-                                               "2030" = "30",
-                                               "2040" = "40",
-                                               "2050" = "50",
-                                               "2060" = "60",
-                                               "2070" = "70",
-                                               "2080" = "80"),
-                                   selected = c("10", "20", "30","40", "50", "60","70", "80")
-                ),
-                
-                
-                checkboxGroupInput("DM-MO_Barrier", "Select Barrier Data",
-                                   choices = c("토지이용" = "토지이용",
-                                               "산불" = "FORESTFIRE",
-                                               "산사태" = "산사태"),
-                                   selected = c("토지이용", "FORESTFIRE", "산사태")
-                )
-          )
+      checkboxGroupInput("DM-MO_Protect_year", "Projection Year",
+                         choices = c("2010" = "10",
+                                     "2020" = "20",
+                                     "2030" = "30",
+                                     "2040" = "40",
+                                     "2050" = "50",
+                                     "2060" = "60",
+                                     "2070" = "70",
+                                     "2080" = "80"),
+                         selected = c("10", "20", "30","40", "50", "60","70", "80")
+      ),
+      
+      
+      checkboxGroupInput("DM-MO_Barrier", "Select Barrier Data",
+                         choices = c("토지이용" = "토지이용",
+                                     "산불" = "FORESTFIRE",
+                                     "산사태" = "산사태"),
+                         selected = c("토지이용", "FORESTFIRE", "산사태")
+      )
+    )
     return (x)
     
   })
@@ -1636,23 +576,23 @@ shinyServer(function(input, output, session) {
     input$reset_DM_MO
     x <- div(
       
-                checkboxGroupInput("DM-MO_Dispersal_type", "Dispersal Types",
-                                   choices = c("ND (No Dispersal)" = "ND",
-                                               "SDD (Short Distance Dispersal)" = "SDD",
-                                               "MDD (Middle Distance Dispersal)" = "MDD",
-                                               "LDD (Long Distance Dispersal)" = "LDD",
-                                               "UD (Unlimited Dispersal)" = "UD"),
-                                   selected = "LDD"),
-                
-                sliderInput("DM-MO_Slider", label = h5("Select a dispersal distance"), min = 0, 
-                            max = 10000, value = 1000, step = 50)
-        
+      checkboxGroupInput("DM-MO_Dispersal_type", "Dispersal Types",
+                         choices = c("ND (No Dispersal)" = "ND",
+                                     "SDD (Short Distance Dispersal)" = "SDD",
+                                     "MDD (Middle Distance Dispersal)" = "MDD",
+                                     "LDD (Long Distance Dispersal)" = "LDD",
+                                     "UD (Unlimited Dispersal)" = "UD"),
+                         selected = "LDD"),
+      
+      sliderInput("DM-MO_Slider", label = h5("Select a dispersal distance"), min = 0, 
+                  max = 10000, value = 1000, step = 50)
+      
     )
     return (x)
     
   })
   
-
+  
   output$SDM_MO_Condition_CheckBoxGroup = renderUI({
     
     input$resetSpeciesInfo
@@ -1660,24 +600,24 @@ shinyServer(function(input, output, session) {
     x <- NULL
     
     x <- sidebarPanel(  width = 9,
-                                  div( style = "display: inline-block;",
-                                       checkboxGroupInput("SDM_MO_Climate_model", TR$SDM_Name_CD_Models,
-                                                          choices = c(TR$SDM_Name_CD_Models_list),
-                                                          selected = TR$SDM_Name_CD_Models_selected
-                                       ),
-                                       # Input: Checkbox if file has header ----
-                                       checkboxGroupInput("SDM_MO_Climate_scenario", TR$SDM_Name_CD_Scenarios,
-                                                          choices = c(TR$SDM_Name_CD_Scenarios_list),
-                                                          selected = TR$SDM_Name_CD_Scenarios_selected
-                                       ),
-                                       
-                                       #            # Input: Checkbox if file has header ----
-                                       checkboxGroupInput("SDM_MO_Protect_year", TR$SDM_Name_CD_Year,
-                                                          choices = c(TR$SDM_Name_CD_Year_list),
-                                                          selected = TR$SDM_Name_CD_Year_selected
-                                       )
-                                  )
-                      )
+                        div( style = "display: inline-block;",
+                             checkboxGroupInput("SDM_MO_Climate_model", SDM_Name_CD_Models,
+                                                choices = c(SDM_Name_CD_Models_list),
+                                                selected = SDM_Name_CD_Models_selected
+                             ),
+                             # Input: Checkbox if file has header ----
+                             checkboxGroupInput("SDM_MO_Climate_scenario", SDM_Name_CD_Scenarios,
+                                                choices = c(SDM_Name_CD_Scenarios_list),
+                                                selected = SDM_Name_CD_Scenarios_selected
+                             ),
+                             
+                             #            # Input: Checkbox if file has header ----
+                             checkboxGroupInput("SDM_MO_Protect_year", SDM_Name_CD_Year,
+                                                choices = c(SDM_Name_CD_Year_list),
+                                                selected = SDM_Name_CD_Year_selected
+                             )
+                        )
+    )
     
     return (x)
     
@@ -1731,7 +671,7 @@ shinyServer(function(input, output, session) {
   
   
   output$Species_Link <- renderUI({
-
+    
     rs <- input$SP_Info_rows_selected
     rowsLen <- length(rs)
     
@@ -1844,7 +784,7 @@ shinyServer(function(input, output, session) {
       setView(lng = 127.00, lat = 36.00, zoom = 6)
     
   })
-
+  
   ## LD Value
   output$LD_Value_TY <- reactive(
     input$LD_Value_TY
@@ -1936,10 +876,10 @@ shinyServer(function(input, output, session) {
              icon = icon("thumbs-up"), color = "yellow", width = 3
     )
   })  
-
+  
   ## IS Value
   output$IS_Value_CM <- renderValueBox({
-    valueBox(input$IS_AO_Dispersal_type, TR$IS_Name_DM_Models,
+    valueBox(input$IS_AO_Dispersal_type, IS_Name_DM_Models,
              icon = icon("credit-card"), color = "blue", width = 3
     )
   })
@@ -2000,7 +940,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-
+  
   # output$SE_Dir_Project <- renderText({G$SE_Dir_Project})
   output$SE_Dir_Climate <- renderText({G$SE_Dir_Climate})
   output$SE_Dir_Link <- renderText({G$SE_Dir_Link})
@@ -2008,8 +948,8 @@ shinyServer(function(input, output, session) {
   output$SE_speciesindex <- renderText({G$SE_speciesindex})
   output$SE_specieslocation <- renderText({G$SE_specieslocation})
   
-
-
+  
+  
   observeEvent(input$login, {
     showModal(modalDialog(
       title = "You have logged in.",
@@ -2018,7 +958,7 @@ shinyServer(function(input, output, session) {
       footer = NULL
     ))
   })
-    
+  
   observeEvent(input$SE_Dir_Project, {
     volumes <- getVolumes()
     shinyDirChoose(input, 'SE_Dir_Project', roots = volumes)
@@ -2067,7 +1007,7 @@ shinyServer(function(input, output, session) {
     clist <- input$SDM_MO_Climate_scenario  # c("RCP4.5") # c("RCP4.5", "RCP8.5")
     ylist <- input$SDM_MO_Protect_year  # c("2000", "2050") # c("2000", "2050", "2070")
     slist <- as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID) #c("S251") # input$SDM_MO_Species  # c("S251") # c("S015", "S134", "S145")
-
+    
     n <- 0
     ld <- length(dlist)
     lc <- length(clist)
@@ -2094,244 +1034,244 @@ shinyServer(function(input, output, session) {
       print(isolate(as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$K_NAME)))
       
       
-      cat('TR$SDM_Name_CD_Models_selected: ')
-      print(TR$SDM_Name_CD_Models_selected)
+      cat('SDM_Name_CD_Models_selected: ')
+      print(SDM_Name_CD_Models_selected)
       
-      cat('TR$SDM_Name_CD_Scenarios_selected: ')
-      print(TR$SDM_Name_CD_Scenarios_selected)
+      cat('SDM_Name_CD_Scenarios_selected: ')
+      print(SDM_Name_CD_Scenarios_selected)
       
-      cat('TR$SDM_Name_CD_Year_selected: ')
-      print(TR$SDM_Name_CD_Year_selected)
+      cat('SDM_Name_CD_Year_selected: ')
+      print(SDM_Name_CD_Year_selected)
       
-      cat('TR$SDM_Name_CD_Variables_selected: ')
-      print(TR$SDM_Name_CD_Variables_selected)
+      cat('SDM_Name_CD_Variables_selected: ')
+      print(SDM_Name_CD_Variables_selected)
       
       
-
-        ##############################################################
-        ### Species Distribution Modeling
-        ### Biomod2
-        ###
-        ### by Changwan Seo
-        ##############################################################
+      
+      ##############################################################
+      ### Species Distribution Modeling
+      ### Biomod2
+      ###
+      ### by Changwan Seo
+      ##############################################################
+      
+      #####=========================================================
+      ##### Setting variables ======================================
+      
+      # setting Paths
+      PATH_SPECIES   <- G$SE_Dir_Species
+      PATH_ENV       <- G$SE_Dir_Climate
+      PATH_ENV_INPUT <- file.path(PATH_ENV, "2000", sep = "")
+      PATH_PROJECT   <- G$SE_Dir_Project
+      #        PATH_MODEL_OUTPUT  <- PATH_PROJECT
+      #        setwd(PATH_PROJECT)
+      
+      # creating Species_Distribution output path
+      if (dir.exists(file.path(PATH_PROJECT, "Species_Distribution"))) {
+        cat(paste("Species_Distribution exists in", PATH_PROJECT, "and is a directory"))
+      } else if (file.exists(file.path(PATH_PROJECT, "Species_Distribution"))) {
+        cat(paste("Species_Distribution exists exists in", PATH_PROJECT, "but is a file"))
+      } else {
+        cat(paste("Species_Distribution does not exist in", PATH_PROJECT, "- creating"))
+        dir.create(file.path(PATH_PROJECT, "Species_Distribution"))
+      }
+      
+      # creating Sensitive_Species output path
+      if (dir.exists(file.path(PATH_PROJECT, "Sensitive_Species"))) {
+        cat(paste("Sensitive_Species exists in", PATH_PROJECT, "and is a directory"))
+      } else if (file.exists(file.path(PATH_PROJECT, "Sensitive_Species"))) {
+        cat(paste("Sensitive_Species exists exists in", PATH_PROJECT, "but is a file"))
+      } else {
+        cat(paste("Sensitive_Species does not exist in", PATH_PROJECT, "- creating"))
+        dir.create(file.path(PATH_PROJECT, "Sensitive_Species"))
+      }
+      
+      # creating Invasive_Species output path
+      if (dir.exists(file.path(PATH_PROJECT, "Invasive_Species"))) {
+        cat(paste("Invasive_Species exists in", PATH_PROJECT, "and is a directory"))
+      } else if (file.exists(file.path(PATH_PROJECT, "Invasive_Species"))) {
+        cat(paste("Invasive_Species exists exists in", PATH_PROJECT, "but is a file"))
+      } else {
+        cat(paste("Invasive_Species does not exist in", PATH_PROJECT, "- creating"))
+        dir.create(file.path(PATH_PROJECT, "Invasive_Species"))
+      }
+      
+      # creating Vulnerable_Species output path
+      if (dir.exists(file.path(PATH_PROJECT, "Vulnerable_Species"))) {
+        cat(paste("Vulnerable_Species exists in", PATH_PROJECT, "and is a directory"))
+      } else if (file.exists(file.path(PATH_PROJECT, "Vulnerable_Species"))) {
+        cat(paste("Vulnerable_Species exists exists in", PATH_PROJECT, "but is a file"))
+      } else {
+        cat(paste("Vulnerable_Species does not exist in", PATH_PROJECT, "- creating"))
+        dir.create(file.path(PATH_PROJECT, "Vulnerable_Species"))
+      }
+      
+      print("####111")
+      PATH_MODEL_OUTPUT  <- file.path(PATH_PROJECT, "Species_Distribution")
+      print("####222")
+      print(file.path(getwd()))
+      file.copy(file.path(getwd(), "maxent.jar"), PATH_MODEL_OUTPUT)
+      print("####333")
+      setwd(PATH_MODEL_OUTPUT)
+      # Setting Column Name of species data
+      print("####444")
+      NAME_ID <- "ID"
+      NAME_SPECIES <- "K_NAME"
+      NAME_LONG <- "Longitude"
+      NAME_LAT <- "Latitude"
+      
+      # setting speices and environmental data
+      FILE_SPECIES_NAME <- G$SE_speciesindex
+      FILE_SPECIES_LOCATION <- G$SE_specieslocation
+      # ENV_VARIABLES <<- input$SDM_MO_Variables   # c("bio01.asc", "bio02.asc", "bio03.asc", "bio12.asc", "bio13.asc", "bio14.asc")
+      ENV_VARIABLES <<- SDM_Name_CD_Variables_selected
+      
+      # Defining Models Data Options using default options.
+      BIOMOD_eval.resp.var <- NULL
+      BIOMOD_eval.expl.var <- NULL
+      BIOMOD_eval.resp.xy <- NULL
+      BIOMOD_PA.nb.rep <- 1
+      BIOMOD_PA.nb.absences <- 1000
+      BIOMOD_PA.strategy <- 'random'
+      BIOMOD_PA.dist.min <- 0
+      BIOMOD_PA.dist.max <- NULL
+      BIOMOD_PA.sre.quant <- 0.025
+      BIOMOD_PA.table <- NULL
+      BIOMOD_na.rm <- TRUE
+      
+      # Defining Models Options using default options.
+      # BIOMOD_models <- input$SDM_MO_SDM_model # c('GAM', 'GLM')  # c('MAXENT.Phillips') 
+      BIOMOD_models <- c(SDM_Name_models_selected)
+      BIOMOD_models.options <- BIOMOD_ModelingOptions()
+      BIOMOD_NbRunEval <- 1
+      BIOMOD_DataSplit <- 100
+      BIOMOD_Yweights <- NULL
+      BIOMOD_VarImport <- 5
+      BIOMOD_models.eval.meth <- c('ROC', 'TSS') # c('KAPPA', 'ROC', 'TSS')
+      BIOMOD_SaveObj <- TRUE
+      BIOMOD_rescal.all.models <- TRUE
+      BIOMOD_do.full.models <- TRUE
+      
+      # Defining projection Options using default options.
+      BIOMOD_selected.models = 'all'
+      BIOMOD_binary.meth = c('ROC', 'TSS') # c('KAPPA', 'ROC', 'TSS')
+      BIOMOD_compress = FALSE
+      BIOMOD_build.clamping.mask = FALSE
+      BIOMOD_output.format = '.img'
+      BIOMOD_do.stack = TRUE
+      
+      # Defining ensemble modelling Options using default options.
+      EM_chosen.models <- 'all'
+      EM_em.by <- 'PA_dataset+repet'
+      EM_eval.metric <- 'all'
+      EM_eval.metric.quality.threshold <- NULL
+      EM_models.eval.meth = c('ROC', 'TSS') # c('KAPPA', 'ROC', 'TSS')
+      EM_prob.mean <- T
+      EM_prob.cv <- F
+      EM_prob.ci <- F
+      EM_prob.ci.alpha <- 0.05
+      EM_prob.median <- F
+      EM_committee.averaging <- F
+      EM_prob.mean.weight <- T
+      EM_prob.mean.weight.decay <- 'proportional'
+      ##### End Setting variables ==================================
+      #####=========================================================
+      
+      
+      #####=========================================================
+      ##### Setting path and data ==================================
+      # creating working a project
+      
+      print("####555")
+      
+      # Loading speices data
+      DATA_SPECIES_NAME <- read.table(file.path(PATH_SPECIES, FILE_SPECIES_NAME), header = T, sep = ",")
+      DATA_SPECIES_LOCATION <- read.table(file.path(PATH_SPECIES, FILE_SPECIES_LOCATION), header = T, sep = ",")
+      ##### End Path and Data setting =============================
+      #####=========================================================
+      
+      
+      #####========================================================
+      #####============ Rinning models ============================
+      #####========================================================
+      
+      #####========================================================
+      ##### Modeling loop =========================================
+      
+      for (s in slist) {
+        n <- n + 1
+        ##### Setting Environmental variables ======================= 
+        SPECIES_ID <- s
+        SPECIES_NAME <- subset(DATA_SPECIES_NAME, get(NAME_ID) == SPECIES_ID, select = c(get(NAME_SPECIES)))
+        SPECIES_NAME <- as.character(SPECIES_NAME$K_NAME)
+        SPECIES_DATA <- subset(DATA_SPECIES_LOCATION, get(NAME_ID) == SPECIES_ID, select = c(NAME_ID, NAME_LONG, NAME_LAT))
         
-        #####=========================================================
-        ##### Setting variables ======================================
-
-        # setting Paths
-        PATH_SPECIES   <- G$SE_Dir_Species
-        PATH_ENV       <- G$SE_Dir_Climate
-        PATH_ENV_INPUT <- file.path(PATH_ENV, "2000", sep = "")
-        PATH_PROJECT   <- G$SE_Dir_Project
-#        PATH_MODEL_OUTPUT  <- PATH_PROJECT
-#        setwd(PATH_PROJECT)
+        myResp <- as.numeric(SPECIES_DATA[,NAME_ID] <- 1)
+        myResp <- as.numeric(SPECIES_DATA[,NAME_ID])
         
-        # creating Species_Distribution output path
-        if (dir.exists(file.path(PATH_PROJECT, "Species_Distribution"))) {
-          cat(paste("Species_Distribution exists in", PATH_PROJECT, "and is a directory"))
-        } else if (file.exists(file.path(PATH_PROJECT, "Species_Distribution"))) {
-          cat(paste("Species_Distribution exists exists in", PATH_PROJECT, "but is a file"))
+        CUR_PATH <- getwd()
+        setwd(PATH_ENV_INPUT)
+        myExpl <- stack(ENV_VARIABLES)
+        setwd(CUR_PATH)
+        
+        myRespXY <- SPECIES_DATA[,c(NAME_LONG, NAME_LAT)]
+        myRespName <- SPECIES_NAME
+        ##### End Setting Environmental variables ===================
+        
+        
+        ##### BIOMOD ================================================
+        ### Formatting Data
+        myBiomodData <- BIOMOD_FormatingData(resp.var = myResp,
+                                             expl.var = myExpl,
+                                             resp.xy = myRespXY,
+                                             resp.name = myRespName,
+                                             eval.resp.var = BIOMOD_eval.resp.var,
+                                             eval.expl.var = BIOMOD_eval.expl.var,
+                                             eval.resp.xy = BIOMOD_eval.resp.xy,
+                                             PA.nb.rep = BIOMOD_PA.nb.rep,
+                                             PA.nb.absences = BIOMOD_PA.nb.absences,
+                                             PA.strategy = BIOMOD_PA.strategy,
+                                             PA.dist.min = BIOMOD_PA.dist.min,
+                                             PA.dist.max = BIOMOD_PA.dist.max,
+                                             PA.sre.quant = BIOMOD_PA.sre.quant,
+                                             PA.table = BIOMOD_PA.table,
+                                             na.rm = BIOMOD_na.rm)
+        ### End Formatting Data
+        
+        ### Modeling BIOMOD
+        # Running BIOMOD
+        myBiomodModelOut <- BIOMOD_Modeling( myBiomodData,
+                                             models = BIOMOD_models,
+                                             models.options = BIOMOD_models.options,
+                                             NbRunEval = BIOMOD_NbRunEval,
+                                             DataSplit = BIOMOD_DataSplit, 
+                                             Yweights = BIOMOD_Yweights, 
+                                             VarImport = BIOMOD_VarImport, 
+                                             models.eval.meth = BIOMOD_models.eval.meth, 
+                                             SaveObj = BIOMOD_SaveObj, 
+                                             rescal.all.models = BIOMOD_rescal.all.models, 
+                                             do.full.models = BIOMOD_do.full.models)
+        
+        # creating Biomod2 output path
+        if (dir.exists(file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2"))) {
+          cat(paste("BIOMOD2 exists in", PATH_MODEL_OUTPUT, "/", SPECIES_NAME, "and is a directory"))
+        } else if (file.exists(file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2"))) {
+          cat(paste("BIOMOD2 exists in", PATH_MODEL_OUTPUT, "/", SPECIES_NAME, "but is a file"))
         } else {
-          cat(paste("Species_Distribution does not exist in", PATH_PROJECT, "- creating"))
-          dir.create(file.path(PATH_PROJECT, "Species_Distribution"))
+          cat(paste("BIOMOD2 does not exist in", PATH_MODEL_OUTPUT, "/", SPECIES_NAME, "- creating"))
+          dir.create(file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2"))
         }
         
-        # creating Sensitive_Species output path
-        if (dir.exists(file.path(PATH_PROJECT, "Sensitive_Species"))) {
-          cat(paste("Sensitive_Species exists in", PATH_PROJECT, "and is a directory"))
-        } else if (file.exists(file.path(PATH_PROJECT, "Sensitive_Species"))) {
-          cat(paste("Sensitive_Species exists exists in", PATH_PROJECT, "but is a file"))
-        } else {
-          cat(paste("Sensitive_Species does not exist in", PATH_PROJECT, "- creating"))
-          dir.create(file.path(PATH_PROJECT, "Sensitive_Species"))
-        }
+        # Evaluating the model
+        myBiomodModelEval <- get_evaluations(myBiomodModelOut)
+        write.csv(myBiomodModelEval, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(SPECIES_NAME, "_eval.csv", sep = "", collapse = "--")))
+        myBiomodModelImport <- get_variables_importance(myBiomodModelOut)
+        write.csv(myBiomodModelImport, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(SPECIES_NAME, "_impot.csv",  sep = "", collapse = "--")))
+        ### End Modeling BIOMOD
         
-        # creating Invasive_Species output path
-        if (dir.exists(file.path(PATH_PROJECT, "Invasive_Species"))) {
-          cat(paste("Invasive_Species exists in", PATH_PROJECT, "and is a directory"))
-        } else if (file.exists(file.path(PATH_PROJECT, "Invasive_Species"))) {
-          cat(paste("Invasive_Species exists exists in", PATH_PROJECT, "but is a file"))
-        } else {
-          cat(paste("Invasive_Species does not exist in", PATH_PROJECT, "- creating"))
-          dir.create(file.path(PATH_PROJECT, "Invasive_Species"))
-        }
-        
-        # creating Vulnerable_Species output path
-        if (dir.exists(file.path(PATH_PROJECT, "Vulnerable_Species"))) {
-          cat(paste("Vulnerable_Species exists in", PATH_PROJECT, "and is a directory"))
-        } else if (file.exists(file.path(PATH_PROJECT, "Vulnerable_Species"))) {
-          cat(paste("Vulnerable_Species exists exists in", PATH_PROJECT, "but is a file"))
-        } else {
-          cat(paste("Vulnerable_Species does not exist in", PATH_PROJECT, "- creating"))
-          dir.create(file.path(PATH_PROJECT, "Vulnerable_Species"))
-        }
-        
-        print("####111")
-        PATH_MODEL_OUTPUT  <- file.path(PATH_PROJECT, "Species_Distribution")
-        print("####222")
-        print(file.path(getwd()))
-        file.copy(file.path(getwd(), "maxent.jar"), PATH_MODEL_OUTPUT)
-        print("####333")
-        setwd(PATH_MODEL_OUTPUT)
-        # Setting Column Name of species data
-        print("####444")
-        NAME_ID <- "ID"
-        NAME_SPECIES <- "K_NAME"
-        NAME_LONG <- "Longitude"
-        NAME_LAT <- "Latitude"
-        
-        # setting speices and environmental data
-        FILE_SPECIES_NAME <- G$SE_speciesindex
-        FILE_SPECIES_LOCATION <- G$SE_specieslocation
-        # ENV_VARIABLES <<- input$SDM_MO_Variables   # c("bio01.asc", "bio02.asc", "bio03.asc", "bio12.asc", "bio13.asc", "bio14.asc")
-        ENV_VARIABLES <<- TR$SDM_Name_CD_Variables_selected
-        
-        # Defining Models Data Options using default options.
-        BIOMOD_eval.resp.var <- NULL
-        BIOMOD_eval.expl.var <- NULL
-        BIOMOD_eval.resp.xy <- NULL
-        BIOMOD_PA.nb.rep <- 1
-        BIOMOD_PA.nb.absences <- 1000
-        BIOMOD_PA.strategy <- 'random'
-        BIOMOD_PA.dist.min <- 0
-        BIOMOD_PA.dist.max <- NULL
-        BIOMOD_PA.sre.quant <- 0.025
-        BIOMOD_PA.table <- NULL
-        BIOMOD_na.rm <- TRUE
-        
-        # Defining Models Options using default options.
-        # BIOMOD_models <- input$SDM_MO_SDM_model # c('GAM', 'GLM')  # c('MAXENT.Phillips') 
-        BIOMOD_models <- c(TR$SDM_Name_models_selected)
-        BIOMOD_models.options <- BIOMOD_ModelingOptions()
-        BIOMOD_NbRunEval <- 1
-        BIOMOD_DataSplit <- 100
-        BIOMOD_Yweights <- NULL
-        BIOMOD_VarImport <- 5
-        BIOMOD_models.eval.meth <- c('ROC', 'TSS') # c('KAPPA', 'ROC', 'TSS')
-        BIOMOD_SaveObj <- TRUE
-        BIOMOD_rescal.all.models <- TRUE
-        BIOMOD_do.full.models <- TRUE
-        
-        # Defining projection Options using default options.
-        BIOMOD_selected.models = 'all'
-        BIOMOD_binary.meth = c('ROC', 'TSS') # c('KAPPA', 'ROC', 'TSS')
-        BIOMOD_compress = FALSE
-        BIOMOD_build.clamping.mask = FALSE
-        BIOMOD_output.format = '.img'
-        BIOMOD_do.stack = TRUE
-        
-        # Defining ensemble modelling Options using default options.
-        EM_chosen.models <- 'all'
-        EM_em.by <- 'PA_dataset+repet'
-        EM_eval.metric <- 'all'
-        EM_eval.metric.quality.threshold <- NULL
-        EM_models.eval.meth = c('ROC', 'TSS') # c('KAPPA', 'ROC', 'TSS')
-        EM_prob.mean <- T
-        EM_prob.cv <- F
-        EM_prob.ci <- F
-        EM_prob.ci.alpha <- 0.05
-        EM_prob.median <- F
-        EM_committee.averaging <- F
-        EM_prob.mean.weight <- T
-        EM_prob.mean.weight.decay <- 'proportional'
-        ##### End Setting variables ==================================
-        #####=========================================================
-
-        
-        #####=========================================================
-        ##### Setting path and data ==================================
-        # creating working a project
-        
-        print("####555")
-
-        # Loading speices data
-        DATA_SPECIES_NAME <- read.table(file.path(PATH_SPECIES, FILE_SPECIES_NAME), header = T, sep = ",")
-        DATA_SPECIES_LOCATION <- read.table(file.path(PATH_SPECIES, FILE_SPECIES_LOCATION), header = T, sep = ",")
-        ##### End Path and Data setting =============================
-        #####=========================================================
-        
-        
-        #####========================================================
-        #####============ Rinning models ============================
-        #####========================================================
-        
-        #####========================================================
-        ##### Modeling loop =========================================
-        
-        for (s in slist) {
-          n <- n + 1
-          ##### Setting Environmental variables ======================= 
-          SPECIES_ID <- s
-          SPECIES_NAME <- subset(DATA_SPECIES_NAME, get(NAME_ID) == SPECIES_ID, select = c(get(NAME_SPECIES)))
-          SPECIES_NAME <- as.character(SPECIES_NAME$K_NAME)
-          SPECIES_DATA <- subset(DATA_SPECIES_LOCATION, get(NAME_ID) == SPECIES_ID, select = c(NAME_ID, NAME_LONG, NAME_LAT))
-          
-          myResp <- as.numeric(SPECIES_DATA[,NAME_ID] <- 1)
-          myResp <- as.numeric(SPECIES_DATA[,NAME_ID])
-           
-          CUR_PATH <- getwd()
-          setwd(PATH_ENV_INPUT)
-          myExpl <- stack(ENV_VARIABLES)
-          setwd(CUR_PATH)
-          
-          myRespXY <- SPECIES_DATA[,c(NAME_LONG, NAME_LAT)]
-          myRespName <- SPECIES_NAME
-          ##### End Setting Environmental variables ===================
-          
-          
-          ##### BIOMOD ================================================
-          ### Formatting Data
-          myBiomodData <- BIOMOD_FormatingData(resp.var = myResp,
-                                               expl.var = myExpl,
-                                               resp.xy = myRespXY,
-                                               resp.name = myRespName,
-                                               eval.resp.var = BIOMOD_eval.resp.var,
-                                               eval.expl.var = BIOMOD_eval.expl.var,
-                                               eval.resp.xy = BIOMOD_eval.resp.xy,
-                                               PA.nb.rep = BIOMOD_PA.nb.rep,
-                                               PA.nb.absences = BIOMOD_PA.nb.absences,
-                                               PA.strategy = BIOMOD_PA.strategy,
-                                               PA.dist.min = BIOMOD_PA.dist.min,
-                                               PA.dist.max = BIOMOD_PA.dist.max,
-                                               PA.sre.quant = BIOMOD_PA.sre.quant,
-                                               PA.table = BIOMOD_PA.table,
-                                               na.rm = BIOMOD_na.rm)
-          ### End Formatting Data
-          
-          ### Modeling BIOMOD
-          # Running BIOMOD
-          myBiomodModelOut <- BIOMOD_Modeling( myBiomodData,
-                                               models = BIOMOD_models,
-                                               models.options = BIOMOD_models.options,
-                                               NbRunEval = BIOMOD_NbRunEval,
-                                               DataSplit = BIOMOD_DataSplit, 
-                                               Yweights = BIOMOD_Yweights, 
-                                               VarImport = BIOMOD_VarImport, 
-                                               models.eval.meth = BIOMOD_models.eval.meth, 
-                                               SaveObj = BIOMOD_SaveObj, 
-                                               rescal.all.models = BIOMOD_rescal.all.models, 
-                                               do.full.models = BIOMOD_do.full.models)
-          
-          # creating Biomod2 output path
-          if (dir.exists(file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2"))) {
-            cat(paste("BIOMOD2 exists in", PATH_MODEL_OUTPUT, "/", SPECIES_NAME, "and is a directory"))
-          } else if (file.exists(file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2"))) {
-            cat(paste("BIOMOD2 exists in", PATH_MODEL_OUTPUT, "/", SPECIES_NAME, "but is a file"))
-          } else {
-            cat(paste("BIOMOD2 does not exist in", PATH_MODEL_OUTPUT, "/", SPECIES_NAME, "- creating"))
-            dir.create(file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2"))
-          }
-          
-          # Evaluating the model
-          myBiomodModelEval <- get_evaluations(myBiomodModelOut)
-          write.csv(myBiomodModelEval, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(SPECIES_NAME, "_eval.csv", sep = "", collapse = "--")))
-          myBiomodModelImport <- get_variables_importance(myBiomodModelOut)
-          write.csv(myBiomodModelImport, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(SPECIES_NAME, "_impot.csv",  sep = "", collapse = "--")))
-          ### End Modeling BIOMOD
-          
-          ### Projection on current and future environemental conditions
-          # Projecting loop
-          for (d in dlist) {
+        ### Projection on current and future environemental conditions
+        # Projecting loop
+        for (d in dlist) {
           for (c in clist) {
             for (y in ylist) {
               incProgress(1/tl, detail = paste("Doing part", n, "/", ls, "(", SPECIES_NAME, ")", "_", d, "_", c, "_", y))
@@ -2384,88 +1324,88 @@ shinyServer(function(input, output, session) {
               
               # if(input$SDM_MO_SDM_EMmodel) {
               if(F) {
-              myBiomodEM <- BIOMOD_EnsembleModeling(modeling.output = myBiomodModelOut,
-                                                    chosen.models = EM_chosen.models,
-                                                    em.by = EM_em.by,
-                                                    eval.metric = EM_eval.metric,
-                                                    eval.metric.quality.threshold = EM_eval.metric.quality.threshold,
-                                                    models.eval.meth = EM_models.eval.meth,
-                                                    prob.mean = EM_prob.mean,
-                                                    prob.cv = EM_prob.cv,
-                                                    prob.ci = EM_prob.ci,
-                                                    prob.ci.alpha = EM_prob.ci.alpha,
-                                                    prob.median = EM_prob.median,
-                                                    committee.averaging = EM_committee.averaging,
-                                                    prob.mean.weight = EM_prob.mean.weight,
-                                                    prob.mean.weight.decay = EM_prob.mean.weight.decay)
-              
-              # get evaluation scores
-              myBiomodEMEval <- get_evaluations(myBiomodEM)
-              write.csv(myBiomodEMEval, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(SPECIES_NAME, "_EM_eval.csv", sep = "", collapse = "--")))
-              
-              
-              # Ensemble Models Projections
-              myBiomodEnsembleForecasting <- BIOMOD_EnsembleForecasting(projection.output = myBiomodProjection,
-                                                                        EM.output = myBiomodEM)
-              
-              # save projections and prodictions projections and prodictions
-              EM_all_proj <- get_predictions(myBiomodEnsembleForecasting)
-              EM_mod_proj <- get_projected_models(myBiomodEnsembleForecasting)
-              EM_sel_proj <- grep(SPECIES_NAME, EM_mod_proj, value = TRUE)
-              emlist <- c(EM_sel_proj)
-              for (i in emlist) {
-                proj <- EM_all_proj[[i]]
-                proj[proj > 1000] <- 1000
-                writeRaster(proj, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(as.name(paste("PROJ_", BIOMOD_proj.name, "_", i, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                myBiomodEM <- BIOMOD_EnsembleModeling(modeling.output = myBiomodModelOut,
+                                                      chosen.models = EM_chosen.models,
+                                                      em.by = EM_em.by,
+                                                      eval.metric = EM_eval.metric,
+                                                      eval.metric.quality.threshold = EM_eval.metric.quality.threshold,
+                                                      models.eval.meth = EM_models.eval.meth,
+                                                      prob.mean = EM_prob.mean,
+                                                      prob.cv = EM_prob.cv,
+                                                      prob.ci = EM_prob.ci,
+                                                      prob.ci.alpha = EM_prob.ci.alpha,
+                                                      prob.median = EM_prob.median,
+                                                      committee.averaging = EM_committee.averaging,
+                                                      prob.mean.weight = EM_prob.mean.weight,
+                                                      prob.mean.weight.decay = EM_prob.mean.weight.decay)
                 
-                for (j in EM_models.eval.meth) {
-                  if (!is.na(eval(parse(text = as.name(paste("myBiomodEMEval$", i))))[j, "Cutoff"])) {
-                    cutoffvalue <- as.integer(eval(parse(text = as.name(paste("myBiomodEMEval$", i))))[j, "Cutoff"])
-                    pred <- BinaryTransformation(proj, cutoffvalue)
-                    writeRaster(pred, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(as.name(paste("PRED_", BIOMOD_proj.name, "_", i, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                # get evaluation scores
+                myBiomodEMEval <- get_evaluations(myBiomodEM)
+                write.csv(myBiomodEMEval, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(SPECIES_NAME, "_EM_eval.csv", sep = "", collapse = "--")))
+                
+                
+                # Ensemble Models Projections
+                myBiomodEnsembleForecasting <- BIOMOD_EnsembleForecasting(projection.output = myBiomodProjection,
+                                                                          EM.output = myBiomodEM)
+                
+                # save projections and prodictions projections and prodictions
+                EM_all_proj <- get_predictions(myBiomodEnsembleForecasting)
+                EM_mod_proj <- get_projected_models(myBiomodEnsembleForecasting)
+                EM_sel_proj <- grep(SPECIES_NAME, EM_mod_proj, value = TRUE)
+                emlist <- c(EM_sel_proj)
+                for (i in emlist) {
+                  proj <- EM_all_proj[[i]]
+                  proj[proj > 1000] <- 1000
+                  writeRaster(proj, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(as.name(paste("PROJ_", BIOMOD_proj.name, "_", i, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                  
+                  for (j in EM_models.eval.meth) {
+                    if (!is.na(eval(parse(text = as.name(paste("myBiomodEMEval$", i))))[j, "Cutoff"])) {
+                      cutoffvalue <- as.integer(eval(parse(text = as.name(paste("myBiomodEMEval$", i))))[j, "Cutoff"])
+                      pred <- BinaryTransformation(proj, cutoffvalue)
+                      writeRaster(pred, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(as.name(paste("PRED_", BIOMOD_proj.name, "_", i, ".tif", sep = "")), sep = "", collapse = "--")), format = "GTiff", overwrite = TRUE)
+                    }
                   }
                 }
-              }
               }
               ##### End ensemble modelling =================================
               
             } # End Year loop y
           } # End climate change Scenarios loop c
-          } # End climate data loop d
+        } # End climate data loop d
+        
+        
+        ### Creating species evaluation information 
+        destfile <- file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(as.name(paste(SPECIES_NAME, "_eval.csv", sep = "")), sep = "", collapse = "--"))
+        if (!file.exists(destfile))
+          return
+        
+        old_eval <- read.csv(destfile)
+        lc <- length(colnames(old_eval))
+        lr <- length(row.names(old_eval))
+        nc <- (lc - 1) / 4
+        nr <- nc * lr
+        
+        new_eval <- setNames(data.frame(matrix(ncol = 6, nrow = nr)), c("Model", "Type", "Accuracy", "Cutoff", "Sensitivity", "specificity")) 
+        
+        for (i in 1:nc) {
+          k <- (2 + (i * 4)) - 4  
+          ek <- i*lr
+          sk <- ek - (lr - 1)  
+          new_eval$Model[sk:ek] <- sub(".*(Testing.data.)", "", colnames(old_eval[k]))
           
-          
-          ### Creating species evaluation information 
-          destfile <- file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(as.name(paste(SPECIES_NAME, "_eval.csv", sep = "")), sep = "", collapse = "--"))
-          if (!file.exists(destfile))
-            return
-          
-          old_eval <- read.csv(destfile)
-          lc <- length(colnames(old_eval))
-          lr <- length(row.names(old_eval))
-          nc <- (lc - 1) / 4
-          nr <- nc * lr
-          
-          new_eval <- setNames(data.frame(matrix(ncol = 6, nrow = nr)), c("Model", "Type", "Accuracy", "Cutoff", "Sensitivity", "specificity")) 
-          
-          for (i in 1:nc) {
-            k <- (2 + (i * 4)) - 4  
-            ek <- i*lr
-            sk <- ek - (lr - 1)  
-            new_eval$Model[sk:ek] <- sub(".*(Testing.data.)", "", colnames(old_eval[k]))
-            
-            n <- 0
-            for (j in sk:ek) {
-              n <- n + 1
-              new_eval$Type[j] <- as.character(old_eval[n,1])
-              new_eval$Accuracy[j] <- old_eval[n,k]
-              new_eval$Cutoff[j] <- old_eval[n,k+1]
-              new_eval$Sensitivity[j] <- old_eval[n,k+2]
-              new_eval$specificity[j] <- old_eval[n,k+3]
-            }
+          n <- 0
+          for (j in sk:ek) {
+            n <- n + 1
+            new_eval$Type[j] <- as.character(old_eval[n,1])
+            new_eval$Accuracy[j] <- old_eval[n,k]
+            new_eval$Cutoff[j] <- old_eval[n,k+1]
+            new_eval$Sensitivity[j] <- old_eval[n,k+2]
+            new_eval$specificity[j] <- old_eval[n,k+3]
           }
-          
-          # if(input$SDM_MO_SDM_EMmodel) {
-          if(F) {
+        }
+        
+        # if(input$SDM_MO_SDM_EMmodel) {
+        if(F) {
           destfile <- file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(as.name(paste(SPECIES_NAME, "_EM_eval.csv", sep = "")), sep = "", collapse = "--"))
           if (!file.exists(destfile))
             return
@@ -2495,58 +1435,58 @@ shinyServer(function(input, output, session) {
               new_EM_eval$specificity[j] <- old_EM_eval[n,k+3]
             }
           }
-          }
-          
-          if(exists("new_eval") && exists("new_EM_eval")) {
-            all_eval <- rbind(new_eval, new_EM_eval)
-          } else {
-            all_eval <- new_eval
-          }
-          
-          Eval_data <- all_eval
-          for (i in 1:length(all_eval[,1])) {
-            if (grepl("EM", Eval_data$Model[i])) {
-              Eval_data$Projection[i] <- Eval_data$Model[i]
-              Eval_data$Prediction[i] <- Eval_data$Model[i]
-            } else if (grepl("MAXENT", Eval_data$Model[i])) {
-              a1 <- sub("\\..*", "", Eval_data$Model[i])
-              a234 <- sub(".*?\\.", "", Eval_data$Model[i])
-              a2 <- sub("\\..*", "", a234)
-              a34 <- sub(".*?\\.", "", a234)
-              a3 <- sub("\\..*", "", a34)
-              a4 <- sub(".*\\.", "", a34)
-              Projection <- paste(a4, "_", a3, "_", a1, ".", a2, sep="")
-              Prediction <- paste(a4, "_", a3, "_", a1, ".", a2, "_by", Eval_data$Type[i], sep="")
-              Eval_data$Projection[i] <- Projection
-              Eval_data$Prediction[i] <- Prediction
-            } else{
-              a1 <- sub("\\..*", "", Eval_data$Model[i])
-              a23 <- sub(".*?\\.", "", Eval_data$Model[i])
-              a2 <- sub("\\..*", "", a23)
-              a3 <- sub(".*\\.", "", a23)
-              Projection <- paste(a3, "_", a2, "_", a1, sep="")
-              Prediction <- paste(a3, "_", a2, "_", a1, "_by", Eval_data$Type[i], sep="")
-              Eval_data$Projection[i] <- Projection
-              Eval_data$Prediction[i] <- Prediction
-            }	  
-          }
-          
-          write.csv(Eval_data, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(SPECIES_NAME, "_ALL_eval.csv", sep = "", collapse = "--")))
-          
-          ### End Creating species evaluation information
-          
-          
-        } # End Speices loop s
+        }
         
-        ##### End Modeling loop =====================================
-        #####========================================================
+        if(exists("new_eval") && exists("new_EM_eval")) {
+          all_eval <- rbind(new_eval, new_EM_eval)
+        } else {
+          all_eval <- new_eval
+        }
         
-        #####========================================================
-        #####============ End Models Rinning ========================
-        #####========================================================        
+        Eval_data <- all_eval
+        for (i in 1:length(all_eval[,1])) {
+          if (grepl("EM", Eval_data$Model[i])) {
+            Eval_data$Projection[i] <- Eval_data$Model[i]
+            Eval_data$Prediction[i] <- Eval_data$Model[i]
+          } else if (grepl("MAXENT", Eval_data$Model[i])) {
+            a1 <- sub("\\..*", "", Eval_data$Model[i])
+            a234 <- sub(".*?\\.", "", Eval_data$Model[i])
+            a2 <- sub("\\..*", "", a234)
+            a34 <- sub(".*?\\.", "", a234)
+            a3 <- sub("\\..*", "", a34)
+            a4 <- sub(".*\\.", "", a34)
+            Projection <- paste(a4, "_", a3, "_", a1, ".", a2, sep="")
+            Prediction <- paste(a4, "_", a3, "_", a1, ".", a2, "_by", Eval_data$Type[i], sep="")
+            Eval_data$Projection[i] <- Projection
+            Eval_data$Prediction[i] <- Prediction
+          } else{
+            a1 <- sub("\\..*", "", Eval_data$Model[i])
+            a23 <- sub(".*?\\.", "", Eval_data$Model[i])
+            a2 <- sub("\\..*", "", a23)
+            a3 <- sub(".*\\.", "", a23)
+            Projection <- paste(a3, "_", a2, "_", a1, sep="")
+            Prediction <- paste(a3, "_", a2, "_", a1, "_by", Eval_data$Type[i], sep="")
+            Eval_data$Projection[i] <- Projection
+            Eval_data$Prediction[i] <- Prediction
+          }	  
+        }
+        
+        write.csv(Eval_data, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(SPECIES_NAME, "_ALL_eval.csv", sep = "", collapse = "--")))
+        
+        ### End Creating species evaluation information
         
         
-      })
+      } # End Speices loop s
+      
+      ##### End Modeling loop =====================================
+      #####========================================================
+      
+      #####========================================================
+      #####============ End Models Rinning ========================
+      #####========================================================        
+      
+      
+    })
     
     #런 생성 성공 시 알람창
     shinyalert(
@@ -2574,9 +1514,9 @@ shinyServer(function(input, output, session) {
     })
   })
   
-
   
-
+  
+  
   observeEvent(input$SS_IV_Action_vindex, {
     withProgress(message = 'Runing Invasive species expansion.........', value = 2, {
       Sys.sleep(10.0)
@@ -2625,15 +1565,15 @@ shinyServer(function(input, output, session) {
     })
   })
   
-    
+  
   output$SP_Info <- DT::renderDataTable({
     input$reset_SP_Info
     G_FILE_speciesinfo[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
   }, server = TRUE)
-    
-
+  
+  
   output$SP_Summary <- renderPrint({
-
+    
     rs <- input$SP_Info_rows_selected  # G_FILE_specieslocation   # st_read("species.shp")
     
     if (length(rs) > 0) {
@@ -2648,57 +1588,57 @@ shinyServer(function(input, output, session) {
     rs <- input$SP_Info_rows_selected  # G_FILE_specieslocation   # st_read("species.shp")
     if (length(rs) > 0) {
       species_info <- G_FILE_speciesinfo[rs, , drop = FALSE]
-    hist(species_info$n, # breaks = bins, 
-         col="orange",
-         border="brown",
-         xlab = "Species Number",
-         height = "50px",
-         main = "Histogram")
+      hist(species_info$n, # breaks = bins, 
+           col="orange",
+           border="brown",
+           xlab = "Species Number",
+           height = "50px",
+           main = "Histogram")
     }
     
   })
   
-    
+  
   output$SP_Map <- renderLeaflet({
     rs <- input$SP_Info_rows_selected  # G_FILE_specieslocation   # st_read("species.shp")
     x <- NULL
     if (length(rs)) {
       
-       species_data <- inner_join(G_FILE_specieslocation, G_FILE_speciesinfo[rs, , drop = FALSE], by = "ID")
-       
-       species_all_data <- inner_join(G_FILE_specieslocation, G_FILE_speciesinfo, by = "ID")
-       
-       if(is_init_colors == F){
-         init_colors(unique(species_all_data$ID))
-       }
-       
-       icons <- awesomeIcons(
-         icon = 'ios-close',
-         iconColor = 'black',
-         library = 'ion',
-         markerColor = customGetColor(species_data)
-       )
-       
-       
-       x <- leaflet(data = species_data) %>%
-         addTiles(
-                           urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
-                        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
-         ) %>%
-
+      species_data <- inner_join(G_FILE_specieslocation, G_FILE_speciesinfo[rs, , drop = FALSE], by = "ID")
+      
+      species_all_data <- inner_join(G_FILE_specieslocation, G_FILE_speciesinfo, by = "ID")
+      
+      if(is_init_colors == F){
+        init_colors(unique(species_all_data$ID))
+      }
+      
+      icons <- awesomeIcons(
+        icon = 'ios-close',
+        iconColor = 'black',
+        library = 'ion',
+        markerColor = customGetColor(species_data)
+      )
+      
+      
+      x <- leaflet(data = species_data) %>%
+        addTiles(
+          urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+          attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+        ) %>%
+        
         addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID)) %>%
         setView(lng = 127.00, lat = 37.00, zoom = 6)
-
-       
-       return (x)
+      
+      
+      return (x)
     }
   })
-
+  
   
   output$SP_LOC_Info <- DT::renderDataTable({
     input$reset_SP_Loc
     inner_join(G_FILE_specieslocation, G_FILE_speciesinfo[input$SP_Info_rows_selected, , drop = FALSE], by = "ID")
-    }, server = TRUE)
+  }, server = TRUE)
   
   
   output$SP_LOC_Map <- renderLeaflet({
@@ -2715,17 +1655,17 @@ shinyServer(function(input, output, session) {
         setView(lng = 127.00, lat = 37.00, zoom = 6)
     }
   })  
-
+  
   output$LD_Summary <- renderPrint({
     
     r <- raster(file.path("C:/Projects/2019_DATA/4. forest fire, landslide/forest fire/S251", "barrier11.tif"))
     
     summary(r)
   })
-
+  
   output$LD_Histogram <- renderPlot({
     
-#    r_asc <- read.asc(file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = "")))
+    #    r_asc <- read.asc(file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = "")))
     x <- raster(file.path("C:/Projects/2019_DATA/4. forest fire, landslide/forest fire/S251", "barrier11.tif"))
     #    bins <- seq(which.min(x), which.max(x), length.out = input$bins + 1)
     
@@ -2770,21 +1710,21 @@ shinyServer(function(input, output, session) {
       
       setView(lng = 128.00, lat = 36.00, zoom = 7)
   })   
-
-    
-
+  
+  
+  
   output$CD_Summary <- renderPrint({
     
-#    file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = ""))
-#    r_asc <- read.asc(file)
-#    r <- raster(r_asc)
+    #    file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = ""))
+    #    r_asc <- read.asc(file)
+    #    r <- raster(r_asc)
     file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".tif", sep = ""))
     r <- raster(file)
     crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
-
+    
     summary(r)
   })
-
+  
   output$CD_Histogram <- renderPlot({
     
     #    file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = ""))
@@ -2793,7 +1733,7 @@ shinyServer(function(input, output, session) {
     file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".tif", sep = ""))
     x <- raster(file)
     crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
-#    bins <- seq(which.min(x), which.max(x), length.out = input$bins + 1)
+    #    bins <- seq(which.min(x), which.max(x), length.out = input$bins + 1)
     
     hist(x, # breaks = bins, 
          col="orange",
@@ -2802,7 +1742,7 @@ shinyServer(function(input, output, session) {
          main = "Histogram")
     
   })
-
+  
   output$CD_Map <- renderLeaflet({
     
     #    file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = ""))
@@ -2813,14 +1753,14 @@ shinyServer(function(input, output, session) {
     crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
     
     pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r),
-                      na.color = "transparent")
+                        na.color = "transparent")
     
     leaflet() %>%
       addTiles(
-                        urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
-                        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+        urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
       ) %>%        
-       
+      
       addRasterImage(r, colors = pal, opacity = 0.8) %>%
       addLegend(pal = pal, values = values(r), title = "Legend")  %>%
       
@@ -2867,14 +1807,14 @@ shinyServer(function(input, output, session) {
   #   }
   # })
   
-
+  
   output$SDM_OU_Species <- renderUI({
     SDM_Name_Species_list <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution"), full.names = FALSE, recursive = FALSE)
-      SDM_Name_Species_selected <- SDM_Name_Species_list[1]
-      selectInput("SDM_OU_Species", "Select a species",
-             choices = c(SDM_Name_Species_list),
-             selected = SDM_Name_Species_selected
-      )
+    SDM_Name_Species_selected <- SDM_Name_Species_list[1]
+    selectInput("SDM_OU_Species", "Select a species",
+                choices = c(SDM_Name_Species_list),
+                selected = SDM_Name_Species_selected
+    )
   })
   
   output$SDM_OU_Projection_model <- renderUI({
@@ -2884,9 +1824,9 @@ shinyServer(function(input, output, session) {
     SDM_Name_Projection_Models_list <- as.character(G_FILE_species_evaluation$Projection)
     SDM_Name_Projection_Models_selected <- SDM_Name_Projection_Models_list[1]
     selectInput("SDM_OU_Projection_model", "Select Projection models",
-                       choices = "PA1_Full_GAM"
-                       
-                      
+                choices = "PA1_Full_GAM"
+                
+                
     )
   })
   
@@ -2901,10 +1841,10 @@ shinyServer(function(input, output, session) {
                 selected = SDM_Name_Prediction_Models_selected
     )
   })
-
-
+  
+  
   output$SDM_OU_Validation <- DT::renderDataTable({
-
+    
     destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2", paste(as.name(paste(input$SDM_OU_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
@@ -2915,19 +1855,19 @@ shinyServer(function(input, output, session) {
   
   
   output$SDM_OU_Validation_BoxPlot <- renderPlot({
-
+    
     rs <- input$SDM_OU_Validation_rows_selected  # G_FILE_specieslocation   # st_read("species.shp")
     if (length(rs)) {
       Eval_data <- G_FILE_species_evaluation[rs, , drop = FALSE]
       
       boxplot(Accuracy~Type,
-            data=Eval_data,
-            main="Boxplots by Type",
-            xlab="Type",
-            ylab="Value",
-            varwidth = TRUE,
-            col="orange",
-            border="brown"
+              data=Eval_data,
+              main="Boxplots by Type",
+              xlab="Type",
+              ylab="Value",
+              varwidth = TRUE,
+              col="orange",
+              border="brown"
       )
     }
     
@@ -2942,13 +1882,13 @@ shinyServer(function(input, output, session) {
     }
     
     new_import <- read.csv(destfile)
-
+    
     data <- data.frame(t(new_import[-1]))
     colnames(data) <- new_import[, 1]
     # To use the fmsb package, I have to add 2 lines to the dataframe: the max and min of each variable to show on the plot!
     data <- rbind(rep(1,length(colnames(data))) , rep(0,length(colnames(data))) , data)
     data[-c(1,2),]
- 
+    
   })
   
   output$SDM_OU_Contribution_Radarchart <- renderPlot({
@@ -2970,7 +1910,7 @@ shinyServer(function(input, output, session) {
     if (length(rs) > 0) {
       data <- data[rs, , drop = FALSE]
       data <- rbind(rep(1,length(colnames(data))) , rep(0,length(colnames(data))) , data)
-    radarchart(data)
+      radarchart(data)
     }
   })
   
@@ -2989,7 +1929,7 @@ shinyServer(function(input, output, session) {
     # To use the fmsb package, I have to add 2 lines to the dataframe: the max and min of each variable to show on the plot!
     data <- rbind(rep(1,length(colnames(data))) , rep(0,length(colnames(data))) , data)
     
-#    radarchart(data)
+    #    radarchart(data)
     
     # Set graphic colors
     library(RColorBrewer)
@@ -3014,25 +1954,25 @@ shinyServer(function(input, output, session) {
   
   output$SDM_OU_Probability_map <- renderLeaflet({
     
-      dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2")
-      Map <- paste("PROJ", "_", input$SDM_OU_Climate_model, "_", input$SDM_OU_Climate_scenario, "_", input$SDM_OU_Project_year, "_", input$SDM_OU_Species, "_", input$SDM_OU_Projection_model, ".tif", sep = "")
-      r <- raster(file.path(dir_path, Map))
-      
-      crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
-      pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r),
+    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2")
+    Map <- paste("PROJ", "_", input$SDM_OU_Climate_model, "_", input$SDM_OU_Climate_scenario, "_", input$SDM_OU_Project_year, "_", input$SDM_OU_Species, "_", input$SDM_OU_Projection_model, ".tif", sep = "")
+    r <- raster(file.path(dir_path, Map))
+    
+    crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+    pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r),
                         na.color = "transparent")
     
-      leaflet() %>%
-        addTiles(
-          urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
-          attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
-        ) %>%        
+    leaflet() %>%
+      addTiles(
+        urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+      ) %>%        
       
-        addRasterImage(r, colors = pal, opacity = 0.8,) %>%
-        addLegend(pal = pal, values = values(r), title = "Legend")  %>%
+      addRasterImage(r, colors = pal, opacity = 0.8,) %>%
+      addLegend(pal = pal, values = values(r), title = "Legend")  %>%
       
-        setView(lng = 127.00, lat = 36.00, zoom = 6)
-      
+      setView(lng = 127.00, lat = 36.00, zoom = 6)
+    
   })
   
   output$SDM_OU_PROJ_Summary <- renderPrint({
@@ -3040,8 +1980,8 @@ shinyServer(function(input, output, session) {
     dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2")
     Map <- paste("PROJ", "_", input$SDM_OU_Climate_model, "_", input$SDM_OU_Climate_scenario, "_", input$SDM_OU_Project_year, "_", input$SDM_OU_Species, "_", input$SDM_OU_Projection_model, ".tif", sep = "")
     r <- raster(file.path(dir_path, Map))
-      summary(r)
-
+    summary(r)
+    
   })
   
   output$SDM_OU_PROJ_Histogram <- renderPlot({
@@ -3049,13 +1989,13 @@ shinyServer(function(input, output, session) {
     dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2")
     Map <- paste("PROJ", "_", input$SDM_OU_Climate_model, "_", input$SDM_OU_Climate_scenario, "_", input$SDM_OU_Project_year, "_", input$SDM_OU_Species, "_", input$SDM_OU_Projection_model, ".tif", sep = "")
     x <- raster(file.path(dir_path, Map))
-
+    
     hist(x, # breaks = bins, 
          col="orange",
          border="brown",
          xlab = "Projected Value",
          main = "Histogram")
-
+    
     
   })
   
@@ -3065,22 +2005,22 @@ shinyServer(function(input, output, session) {
     dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2")
     Map <- paste("PRED", "_", input$SDM_OU_Climate_model, "_", input$SDM_OU_Climate_scenario, "_", input$SDM_OU_Project_year, "_", input$SDM_OU_Species, "_", input$SDM_OU_Prediction_model, ".tif", sep = "")
     r <- raster(file.path(dir_path, Map))
-      crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+    crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+    
+    pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r),
+                        na.color = "transparent")
+    
+    leaflet() %>%
+      addTiles(
+        urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+      ) %>%        
       
-      pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r),
-                          na.color = "transparent")
+      addRasterImage(r, colors = pal, opacity = 0.8,) %>%
+      addLegend(pal = pal, values = values(r), title = "Legend")  %>%
       
-      leaflet() %>%
-        addTiles(
-          urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
-          attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
-        ) %>%        
-        
-        addRasterImage(r, colors = pal, opacity = 0.8,) %>%
-        addLegend(pal = pal, values = values(r), title = "Legend")  %>%
-        
-        setView(lng = 127.00, lat = 38.00, zoom = 6)
-      
+      setView(lng = 127.00, lat = 38.00, zoom = 6)
+    
   })  
   
   output$SDM_OU_PRED_Summary <- renderPrint({
@@ -3106,7 +2046,7 @@ shinyServer(function(input, output, session) {
     
   })
   
-
+  
   output$DM_OU_Summary <- renderPrint({
     
     r <- raster(file.path("C:/Projects/2019_DATA/1. unlimited dispersal/1. 민감종 57종", "S002b_HR8580.tif"))
@@ -4413,7 +3353,7 @@ shinyServer(function(input, output, session) {
     #							연도 = rep(c("Current", "2030", "2050"),2),
     #							외래종 = c(6.8, 15, 33, 4.2, 10, 29.5))
     #		head(df2)
-
+    
     ggplot(data=df, aes(x=df[[X_NAME]], y=df[[V_NAME]])) + #, fill=df[[X_NAME]])) +
       geom_bar(stat="identity", position=position_dodge()) +
       geom_text(aes(label=df[[V_NAME]]), vjust=1.6, color="white",
@@ -5203,4 +4143,3 @@ shinyServer(function(input, output, session) {
   
 })
 
-  
