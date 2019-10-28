@@ -54,6 +54,43 @@ rm(list = ls())
 
 color_Picker <- c("black","lightgray","gray","white","cadetblue","pink","darkpurple","purple","lightblue","darkblue","blue","lightgreen","darkgreen","green","beige","orange","lightred","darkred","red")
 
+temp_colors <- c()
+is_init_colors <- F
+
+init_colors <- function(species_id) {
+  
+  dv <- length(species_id) / length(color_Picker)
+  i <- 1
+  while(i <= dv + 1) {
+    temp_colors <<- append(temp_colors, color_Picker)
+    i <- i + 1
+  }
+  
+  names(temp_colors) <<- species_id
+  
+  is_init_colors <<- T
+  
+}
+
+customGetColor <- function(species_data) {
+  tapp <- tapply(species_data$ID, species_data$ID, function(val){
+    val
+  })
+  temp_Vector <- c()
+  i <- 1
+  while( i <= length(tapp) ) {
+    j <- 1
+    while( j <= length(tapp[[i]]) ) {
+      if( tapp[[i]][j] == names(tapp[i]) ) {
+        temp_Vector <- append(temp_Vector, temp_colors[[names(tapp[i])]] )
+        j <- j+1
+      }
+    }
+    i <- i+1
+  }
+  return (temp_Vector)
+}
+
 
 ##### Path
 G <- reactiveValues()
