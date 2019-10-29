@@ -866,9 +866,3 @@ SE_Language = "Korean"
      VH_Name_CD_Year_out_selected <- "2000"
      HELP_Name <- "도움말"
    }
-
-
-
-
-System_Name <- ""
-
