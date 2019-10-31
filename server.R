@@ -3,10 +3,10 @@
 shinyServer(function(input, output, session) {
   
   observeEvent(input$reset_SP_Info, {
-    resInfo <- Temp_G_FILE_speciesinfo[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
-    G_FILE_speciesinfo <<- resInfo
+    resInfo <- Temp_G_FILE_speciesinfo_02[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
+    G_FILE_speciesinfo_02 <<- resInfo
     output[["SP_Info"]] <- DT::renderDataTable({
-      G_FILE_speciesinfo
+      G_FILE_speciesinfo_02
     })
   })
   
@@ -14,7 +14,7 @@ shinyServer(function(input, output, session) {
     
     print('clicked apply')
     
-    resInfo <- Temp_G_FILE_speciesinfo[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
+    resInfo <- Temp_G_FILE_speciesinfo_02[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
     SP_Info_inst <- isolate(input$SP_Info_inst)
     SP_Info_type <- isolate(input$SP_Info_type)
     
@@ -26,7 +26,7 @@ shinyServer(function(input, output, session) {
     
     
     if(!is.null(SP_Info_inst) & is.null(SP_Info_type)) {
-      G_FILE_speciesinfo <<- subset(resInfo, INSTITUTE %in% SP_Info_inst)
+      G_FILE_speciesinfo_02 <<- subset(resInfo, INSTITUTE %in% SP_Info_inst)
       
     } else {
       
@@ -38,12 +38,12 @@ shinyServer(function(input, output, session) {
         SP_Info_type <- ""
       }
       
-      G_FILE_speciesinfo <<- subset(resInfo, INSTITUTE %in% SP_Info_inst & TYPE %in% SP_Info_type)
+      G_FILE_speciesinfo_02 <<- subset(resInfo, INSTITUTE %in% SP_Info_inst & TYPE %in% SP_Info_type)
       
     }
     
     output[["SP_Info"]] <- DT::renderDataTable({
-      G_FILE_speciesinfo
+      G_FILE_speciesinfo_02
     })
     
   })
@@ -1609,7 +1609,7 @@ shinyServer(function(input, output, session) {
   
   
   output$SP_Info <- DT::renderDataTable({
-    Temp_G_FILE_speciesinfo[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
+    Temp_G_FILE_speciesinfo_02[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
   }, server = TRUE)
   
   
@@ -1659,16 +1659,16 @@ shinyServer(function(input, output, session) {
     x <- NULL
     if (length(rs)) {
       
-      species_data <- inner_join(G_FILE_specieslocation, G_FILE_speciesinfo[rs, , drop = FALSE], by = "ID")
+      species_data <- inner_join(G_FILE_specieslocation_02, G_FILE_speciesinfo_02[rs, , drop = FALSE], by = "ID")
       
-      species_all_data <- inner_join(G_FILE_specieslocation, G_FILE_speciesinfo, by = "ID")
+      species_all_data <- inner_join(G_FILE_specieslocation_02, G_FILE_speciesinfo_02, by = "ID")
       
       if(is_init_colors == F){
         init_colors(unique(species_all_data$ID))
       }
       
       if(is_init_colors_type == F){
-        init_colors_type(species_all_data)
+        init_colors_type_02(species_all_data)
       }
       
       # print('temp_colors_type')
@@ -1692,8 +1692,6 @@ shinyServer(function(input, output, session) {
         iconColor = 'black',
         library = 'glyphicon',
         
-        
-        
         # 종별 색상
         # markerColor = customGetColor(species_data)
         
@@ -1716,7 +1714,7 @@ shinyServer(function(input, output, session) {
       print(species_data$K_NAME)
       
       print('species_data$K_NAME')
-      print(droplevels(species_data$K_NAME))
+      # print(droplevels(species_data$K_NAME))
       
       x1 <- read.csv(file.path("C:/MOTIVE_Ecosystem/DATA/Species", "shin_specieslocation.csv"), header = T, sep = ",",stringsAsFactors = F)
       x2 <- read.csv(file.path("C:/MOTIVE_Ecosystem/DATA/Species", "speciesname_final.csv"), header = T, sep = "," ,stringsAsFactors = F)
@@ -1767,11 +1765,11 @@ shinyServer(function(input, output, session) {
         # 범례 없이 출력
         # addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID)) %>%
         
-        addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID), group=~groups[droplevels(K_NAME)]) %>%
+        addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID), group=~K_NAME) %>%
         
         
         addLayersControl(                                                                                                           
-          overlayGroups = groups,
+          overlayGroups = ~K_NAME,
           options = layersControlOptions(collapsed = F)
         )  %>%
         

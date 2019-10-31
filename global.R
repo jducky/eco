@@ -68,24 +68,16 @@ is_init_colors_type <- F
 ####################################################################################################
 # 테이블 선택 시 종별 맵 마커 색상
 ####################################################################################################
-
 init_colors <- function(species_id) {
-  
   dv <- length(species_id) / length(color_Picker)
   i <- 1
-  
   while(i <= dv + 1) {
-    
     temp_colors <<- append(temp_colors, color_Picker)
     i <- i + 1
   }
-  
   names(temp_colors) <<- species_id
-  
   is_init_colors <<- T
-  
 }
-
 
 customGetColor <- function(species_data) {
   tapp <- tapply(species_data$ID, species_data$ID, function(val){
@@ -141,6 +133,34 @@ customGetColor_Type <- function(species_data) {
 }
 ####################################################################################################
 
+init_colors_type_02 <- function(species_all_data) {
+  type_names <- unique(species_all_data$TYPE)
+  if(length(type_names) < length(color_Picker_Type)) {
+    i <- 1  
+    while( i <= length(type_names) ) {
+      temp_colors_type[i] <<- color_Picker_Type[i]
+      i <- i+1
+    }
+  } else {
+    dv <- length(type_names) / length(color_Picker_Type)
+    i <- 1
+    while(i <= dv + 1) {
+      temp_colors_type <<- append(temp_colors_type, color_Picker_Type)
+      i <- i + 1
+    }
+  }
+  names(temp_colors_type) <<- type_names
+  is_init_colors_type <<- T
+}
+
+customGetColor_Type_02 <- function(species_data) {
+  tapp <- tapply(species_data$TYPE, species_data$ID, function(val){val})
+  tapp <- unlist(tapp, use.names=FALSE)
+  temp <- c()
+  for(val in tapp){temp <- append(temp, temp_colors_type[[val]])}
+  temp
+}
+####################################################################################################
 
 #Select language
 lang_selection <- F
@@ -173,7 +193,7 @@ G_FILE_speciesindex_02 <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(
 G_FILE_specieslocation_02 <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_specieslocation)), header = T, sep = ",", stringsAsFactors = F)
 G_FILE_speciesfreq_02 <- count(G_FILE_specieslocation_02, ID)
 G_FILE_speciesinfo_02 <- inner_join(G_FILE_speciesfreq_02, G_FILE_speciesindex_02, by = "ID")
-
+Temp_G_FILE_speciesinfo_02 <- G_FILE_speciesinfo_02
 
 
 CD_Scenarios_list <- c("RCP 4.5" = "RCP4.5",
