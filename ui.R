@@ -1,8 +1,9 @@
 
 library(shinythemes)
-
 ###
 shinyUI(
+  
+  
   
   
   
@@ -106,6 +107,14 @@ shinyUI(
                   display: inline-block;
                 }
                 
+                .icon01 {
+                  color: red;
+                }
+                
+                .icon02 {
+                  color: blue;
+                }
+                
              '))),
       
       
@@ -119,44 +128,45 @@ shinyUI(
         
       )),
       
-      
-      fluidPage( div(
+
+        
+        fluidPage(div(
           h4(System_Name, style = "display: inline-block; color: white; font-size: 200%; margin-left: 20px; position: absolute; line-height: 8vh;"), 
           div( style = "display: inline-block; font-size: 110%; color: white; margin-top: 10px; margin-right: 10px; float: right;",
-
                
-                      tags$ul( style = "list-style: none;" , class = "title_ul",
-                               
-                               tags$li(
-                                 uiOutput("kor_link_top")
-                               ),
-                               
-                               tags$li(
-                                 uiOutput("eng_link_top")
-                               ),
+               
+               tags$ul( style = "list-style: none;" , class = "title_ul",
                         
-                              tags$li(
-                                a("CONTACT US", style = "cursor:pointer; color: white; " )
-                              ),
-                              tags$li(
-                                a("LOGOUT", style = "cursor:pointer; color: white;" )
-                              )
+                        tags$li(
+                          uiOutput("kor_link_top")
+                        ),
                         
-                      )
-                     
-                     
-                )
-            , style = "background-image: url(eco_title.png); height: 10vh; position: relative;"),
-                
-                
-                theme = shinytheme("yeti"),
-                # shinythemes::themeSelector(),
-                
-                
-                
-
-                br(),
-
+                        tags$li(
+                          uiOutput("eng_link_top")
+                        ),
+                        
+                        tags$li(
+                          a("CONTACT US", style = "cursor:pointer; color: white; " )
+                        ),
+                        tags$li(
+                          a("LOGOUT", style = "cursor:pointer; color: white;" )
+                        )
+                        
+               )
+               
+               
+          )
+          , style = "background-image: url(eco_title.png); height: 10vh; position: relative;"),
+          
+          
+          theme = shinytheme("yeti"),
+          # shinythemes::themeSelector(),
+          
+          
+          
+          
+          br(),
+          
           tabsetPanel(
             tabPanel(OV_Name,
                      
@@ -1197,19 +1207,16 @@ shinyUI(
                                     infoBox("Approval", paste0(80, "%"), icon = icon("thumbs-up", lib = "glyphicon") ,width = 12, color = "yellow")
                                   )
                                   
-                                  
-                                  
-                                  
-                                  
-                                  
-                                  
-                                  
                      )
             )
             
           )    
-                
-      ),
+          
+        )
+
+      
+      
+      ,
       tags$hr(), # theme에 따라서 선이 보이지 않을 수 있음!!
       tags$footer("MOTIVE ECOSYSTEM(생태계 기후변화 영향 및 취약성평가모형)")
       

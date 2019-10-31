@@ -57,11 +57,22 @@ color_Picker <- c("black","lightgray","gray","white","cadetblue","pink","darkpur
 temp_colors <- c()
 is_init_colors <- F
 
+temp_colors_type <- c()
+is_init_colors_type <- F
+
+
+
+####################################################################################################
+# 테이블 선택 시 종별 맵 마커 색상
+####################################################################################################
+
 init_colors <- function(species_id) {
   
   dv <- length(species_id) / length(color_Picker)
   i <- 1
+  
   while(i <= dv + 1) {
+    
     temp_colors <<- append(temp_colors, color_Picker)
     i <- i + 1
   }
@@ -71,6 +82,7 @@ init_colors <- function(species_id) {
   is_init_colors <<- T
   
 }
+
 
 customGetColor <- function(species_data) {
   tapp <- tapply(species_data$ID, species_data$ID, function(val){
@@ -90,6 +102,45 @@ customGetColor <- function(species_data) {
   }
   return (temp_Vector)
 }
+####################################################################################################
+
+
+####################################################################################################
+# 테이블 선택 시 타입별 맵 마커 색상
+####################################################################################################
+init_colors_type <- function(species_all_data) {
+  type_names <- unique(species_all_data$TYPE)
+  type_names <- levels(droplevels(type_names))
+  if(length(type_names) < length(color_Picker)) {
+    i <- 1  
+    while( i <= length(type_names) ) {
+      temp_colors_type[i] <<- color_Picker[i]
+      i <- i+1
+    }
+  } else {
+    dv <- length(type_names) / length(color_Picker)
+    i <- 1
+    while(i <= dv + 1) {
+      temp_colors_type <<- append(temp_colors_type, color_Picker)
+      i <- i + 1
+    }
+  }
+  names(temp_colors_type) <<- type_names
+  is_init_colors_type <<- T
+}
+
+customGetColor_Type <- function(species_data) {
+  tapp <- tapply(drop.levels(species_data$TYPE), species_data$ID, function(val){val})
+  tapp <- unlist(tapp, use.names=FALSE)
+  temp <- c()
+  for(val in tapp){temp <- append(temp, temp_colors_type[[val]])}
+  temp
+}
+####################################################################################################
+
+
+#Select language
+lang_selection <- F
 
 
 ##### Path

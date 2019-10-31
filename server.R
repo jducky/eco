@@ -2,6 +2,26 @@
 
 shinyServer(function(input, output, session) {
   
+  
+  # observeEvent(input$checkLang, {
+  #   
+  #   print(lang_selection)
+  # })
+  # 
+  # 
+  # observeEvent(input$korBtn, {
+  #   
+  #   lang_selection <<- T
+  #   session$reload()
+  # })
+  # 
+  # 
+  # observeEvent(input$engBtn, {
+  #   
+  #   lang_selection <<- T
+  #   session$reload()
+  # })
+  
 
   observeEvent(input$Reset_IS_AO_SR_Map, {
     
@@ -1612,11 +1632,43 @@ shinyServer(function(input, output, session) {
         init_colors(unique(species_all_data$ID))
       }
       
+      if(is_init_colors_type == F){
+        init_colors_type(species_all_data)
+      }
+      
+      # print('temp_colors_type')
+      # print(temp_colors_type)
+      
+      
+      
+      # customGetColor_Type(species_data)
+      
+      # 개별 색상 설정
       icons <- awesomeIcons(
         icon = 'ios-close',
         iconColor = 'black',
         library = 'ion',
-        markerColor = customGetColor(species_data)
+        
+        # 종별 색상
+        # markerColor = customGetColor(species_data)
+        
+        # 타입별 색상
+        markerColor = customGetColor_Type(species_data)
+      )
+      
+      
+      # 폰트 어썸 아이콘 설정
+      icons_fa <- awesomeIcons(
+        icon = 'amazon',
+        iconColor = 'green',
+        library = 'fa',
+        markerColor = 'red'
+      )
+      
+      # 이미지 설정
+      icon_list <- iconList(
+        makeIcon("ferry-18.png", NULL, 18, 18, className = 'icon01'),
+        makeIcon("danger-24.png", NULL, 24, 24, className = 'icon02')
       )
       
       
@@ -1626,7 +1678,12 @@ shinyServer(function(input, output, session) {
           attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
         ) %>%
         
+        # # png list marker 출력할 때
+        # addMarkers(~Longitude, ~Latitude, icon = icon_list)  %>%
+        
+        # addAwesomeMarkers(~Longitude, ~Latitude, icon=icons_fa, label=~as.character(ID)) %>%
         addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID)) %>%
+        
         setView(lng = 127.00, lat = 37.00, zoom = 6)
       
       
