@@ -54,6 +54,9 @@ rm(list = ls())
 
 color_Picker <- c("black","lightgray","gray","white","cadetblue","pink","darkpurple","purple","lightblue","darkblue","blue","lightgreen","darkgreen","green","beige","orange","lightred","darkred","red")
 
+color_Picker_Type <- c("lightgray","cadetblue","lightblue","darkblue","blue","green","beige","orange","lightred","darkred","red")
+icon_List_Type <- c('cog', 'heart', 'star', 'flag', 'home', 'plus-sign', 'leaf', 'grain', 'remove-circle')
+
 temp_colors <- c()
 is_init_colors <- F
 
@@ -111,17 +114,17 @@ customGetColor <- function(species_data) {
 init_colors_type <- function(species_all_data) {
   type_names <- unique(species_all_data$TYPE)
   type_names <- levels(droplevels(type_names))
-  if(length(type_names) < length(color_Picker)) {
+  if(length(type_names) < length(color_Picker_Type)) {
     i <- 1  
     while( i <= length(type_names) ) {
-      temp_colors_type[i] <<- color_Picker[i]
+      temp_colors_type[i] <<- color_Picker_Type[i]
       i <- i+1
     }
   } else {
-    dv <- length(type_names) / length(color_Picker)
+    dv <- length(type_names) / length(color_Picker_Type)
     i <- 1
     while(i <= dv + 1) {
-      temp_colors_type <<- append(temp_colors_type, color_Picker)
+      temp_colors_type <<- append(temp_colors_type, color_Picker_Type)
       i <- i + 1
     }
   }
