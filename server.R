@@ -58,10 +58,6 @@ shinyServer(function(input, output, session) {
   })
   
   
-  
-  
-  
-  
   onclick("kor_link_top", {
     
     SE_Language <<- "Korean" 
@@ -1639,15 +1635,25 @@ shinyServer(function(input, output, session) {
       # print('temp_colors_type')
       # print(temp_colors_type)
       
+      print('is.factor(species_data$K_NAME)')
+      print(is.factor(species_data$K_NAME))
       
       
       # customGetColor_Type(species_data)
       
+      s_color <- sample(icon_List_Type, 1)
+      
       # 개별 색상 설정
       icons <- awesomeIcons(
-        icon = 'ios-close',
+        # icon = 'ios-close',
+        # iconColor = 'black',
+        # library = 'ion',
+        
+        icon = s_color,
         iconColor = 'black',
-        library = 'ion',
+        library = 'glyphicon',
+        
+        
         
         # 종별 색상
         # markerColor = customGetColor(species_data)
@@ -1655,6 +1661,34 @@ shinyServer(function(input, output, session) {
         # 타입별 색상
         markerColor = customGetColor_Type(species_data)
       )
+      
+      # print('species_data$TYPE')
+      # print(species_data$TYPE)
+      # 
+      # dropType <- drop.levels(species_data$TYPE)
+      # print('dropType')
+      # print(dropType)
+      # 
+      # dropType <- unlist(dropType, use.names=T)
+      # print('dropType')
+      # print(dropType)
+      
+      print('species_data$K_NAME')
+      print(species_data$K_NAME)
+      
+      print('species_data$K_NAME')
+      print(droplevels(species_data$K_NAME))
+      
+     
+      
+      groups <-  c("구상나무" <- "<div style='position: relative; display: inline-block' class='awesome-marker-icon-blue awesome-marker'><i class='glyphicon glyphicon-glass icon-black '></i></div>특산식물",
+                   "삼도하수오" <- "<div style='position: relative; display: inline-block' class='awesome-marker-icon-blue awesome-marker'><i class='glyphicon glyphicon-glass icon-black '></i></div>곤충")
+      # groups <-c("S002")
+      
+      
+      # print('groups[dropType]')
+      # print(groups[dropType])
+        
       
       
       # 폰트 어썸 아이콘 설정
@@ -1682,7 +1716,17 @@ shinyServer(function(input, output, session) {
         # addMarkers(~Longitude, ~Latitude, icon = icon_list)  %>%
         
         # addAwesomeMarkers(~Longitude, ~Latitude, icon=icons_fa, label=~as.character(ID)) %>%
-        addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID)) %>%
+        
+        # 범례 없이 출력
+        # addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID)) %>%
+        
+        addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID), group=~groups[droplevels(K_NAME)]) %>%
+        
+        
+        addLayersControl(                                                                                                           
+          overlayGroups = groups,
+          options = layersControlOptions(collapsed = F)
+        )  %>%
         
         setView(lng = 127.00, lat = 37.00, zoom = 6)
       
