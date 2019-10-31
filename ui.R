@@ -213,7 +213,7 @@ shinyUI(
                                 )
                                 
                        ),
-                       tabPanel("Species Location",
+                       tabPanel(SP_Name_Location,
                                 tags$head(
                                   # Include our custom CSS
                                   includeCSS("styles.css"),
