@@ -1616,6 +1616,20 @@ shinyServer(function(input, output, session) {
   
   
   output$SP_Map <- renderLeaflet({
+    x <- leaflet() %>%
+      addTiles(
+        urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+      ) %>%
+      # addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID), group=~groups[droplevels(K_NAME)]) %>%
+      # addLayersControl(                                                                                                           
+      #   overlayGroups = groups,
+      #   options = layersControlOptions(collapsed = F)
+      # )  %>%
+      setView(lng = 127.00, lat = 37.00, zoom = 6)
+    
+    
+    
     rs <- input$SP_Info_rows_selected  # G_FILE_specieslocation   # st_read("species.shp")
     x <- NULL
     if (length(rs)) {
