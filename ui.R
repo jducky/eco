@@ -189,6 +189,32 @@ shinyUI(
                                   includeScript("gomap.js")
                                 ),
                                 tags$hr(),
+                                
+                                sidebarLayout(
+                                sidebarPanel(width = 2,
+                                          checkboxGroupInput("SP_Info_inst", "INSTITUTE",	
+                                                             choices = unique(G_FILE_speciesinfo_02$INSTITUTE),	
+                                                             selected = NULL),
+                                          
+                                          checkboxGroupInput("SP_Info_type", "TYPE",	
+                                                             choices = unique(G_FILE_speciesinfo_02$TYPE),	
+                                                             selected = NULL),  
+                                          
+                                          
+                                          # selectInput("SP_Info_inst", "INSTITUTE",
+                                          #             choices = unique(G_FILE_speciesinfo_02$INSTITUTE),
+                                          #             selected = NULL),
+                                          # 
+                                          # selectInput("SP_Info_type", "TYPE",
+                                          #             choices = unique(G_FILE_speciesinfo_02$TYPE),
+                                          #             selected = NULL),
+                                          
+                                          actionButton('SP_Info_Apply',label = "Apply"), br()
+                                          
+                                          
+                                          ),
+                                
+                                mainPanel(
                                 bsCollapse(
                                   bsCollapsePanel("Summary & Histogram",
                                                   style = ST_Name,
@@ -202,6 +228,7 @@ shinyUI(
                                 fluidRow(
                                   
                                   column(4, 
+                                         
                                          actionButton('reset_SP_Info',label = "Reset", style = "float: right; margin-bottom: 15px;"), br(),
                                          DT::dataTableOutput("SP_Info")
                                   ),
@@ -211,7 +238,8 @@ shinyUI(
                                          
                                   )
                                 )
-                                
+                                )
+                                )
                        ),
                        tabPanel("Species Location",
                                 tags$head(
@@ -333,15 +361,21 @@ shinyUI(
                        # Main panel for displaying outputs ----
                        mainPanel(
                          
-                         bsCollapse(
-                           bsCollapsePanel("Summary & Histogram",
-                                           style = ST_Name,
-                                           fluidRow(
-                                             column(4,verbatimTextOutput("CD_Summary")),
-                                             column(6,plotOutput("LD_Histogram2"))
-                                           ) 
-                           )
-                         ),
+                         fluidRow(
+                             column(3,
+                               bsCollapse(
+                                 bsCollapsePanel("Summary & Histogram",
+                                                 
+                                                 fluidRow(
+                                                   column(4,verbatimTextOutput("CD_Summary")),
+                                                   column(6,plotOutput("LD_Histogram2"))
+                                                 ) 
+                                 )
+                               )
+                             )
+                           
+                         )
+                         ,
                          fluidRow(
                            valueBoxOutput("CD_Value_CM"),
                            valueBoxOutput("CD_Value_CS"),

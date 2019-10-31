@@ -159,12 +159,20 @@ G_FILE_speciesindex <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$S
 G_FILE_specieslocation <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_specieslocation)), header = T, sep = ",")
 G_FILE_speciesfreq <- count(G_FILE_specieslocation, ID)
 G_FILE_speciesinfo <- inner_join(G_FILE_speciesfreq, G_FILE_speciesindex, by = "ID")
+Temp_G_FILE_speciesinfo <- G_FILE_speciesinfo
 
 G$IS_VA_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
 G$IS_AO_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
 
 Input_img <- "tif"  #asc",
 Output_img <- "tif"
+
+
+## HS
+G_FILE_speciesindex_02 <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_speciesindex)), header = T, sep = ",", stringsAsFactors = F)
+G_FILE_specieslocation_02 <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_specieslocation)), header = T, sep = ",", stringsAsFactors = F)
+G_FILE_speciesfreq_02 <- count(G_FILE_specieslocation_02, ID)
+G_FILE_speciesinfo_02 <- inner_join(G_FILE_speciesfreq_02, G_FILE_speciesindex_02, by = "ID")
 
 
 
