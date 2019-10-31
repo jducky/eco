@@ -2,26 +2,51 @@
 
 shinyServer(function(input, output, session) {
   
+  observeEvent(input$reset_SP_Info, {
+    resInfo <- Temp_G_FILE_speciesinfo[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
+    G_FILE_speciesinfo <<- resInfo
+    output[["SP_Info"]] <- DT::renderDataTable({
+      G_FILE_speciesinfo
+    })
+  })
   
-  # observeEvent(input$checkLang, {
-  #   
-  #   print(lang_selection)
-  # })
-  # 
-  # 
-  # observeEvent(input$korBtn, {
-  #   
-  #   lang_selection <<- T
-  #   session$reload()
-  # })
-  # 
-  # 
-  # observeEvent(input$engBtn, {
-  #   
-  #   lang_selection <<- T
-  #   session$reload()
-  # })
-  
+  observeEvent(input$SP_Info_Apply, {
+    
+    print('clicked apply')
+    
+    resInfo <- Temp_G_FILE_speciesinfo[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
+    SP_Info_inst <- isolate(input$SP_Info_inst)
+    SP_Info_type <- isolate(input$SP_Info_type)
+    
+    print('SP_Info_inst')
+    print(SP_Info_inst)
+    
+    print('SP_Info_type')
+    print(SP_Info_type)
+    
+    
+    if(!is.null(SP_Info_inst) & is.null(SP_Info_type)) {
+      G_FILE_speciesinfo <<- subset(resInfo, INSTITUTE %in% SP_Info_inst)
+      
+    } else {
+      
+      if(is.null(SP_Info_inst)) {
+        SP_Info_inst <- ""
+      }
+      
+      if(is.null(SP_Info_type)) {
+        SP_Info_type <- ""
+      }
+      
+      G_FILE_speciesinfo <<- subset(resInfo, INSTITUTE %in% SP_Info_inst & TYPE %in% SP_Info_type)
+      
+    }
+    
+    output[["SP_Info"]] <- DT::renderDataTable({
+      G_FILE_speciesinfo
+    })
+    
+  })
 
   observeEvent(input$Reset_IS_AO_SR_Map, {
     
@@ -1582,9 +1607,9 @@ shinyServer(function(input, output, session) {
   })
   
   
+  
   output$SP_Info <- DT::renderDataTable({
-    input$reset_SP_Info
-    G_FILE_speciesinfo[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
+    Temp_G_FILE_speciesinfo[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
   }, server = TRUE)
   
   
@@ -1693,10 +1718,18 @@ shinyServer(function(input, output, session) {
       print('species_data$K_NAME')
       print(droplevels(species_data$K_NAME))
       
+      x1 <- read.csv(file.path("C:/MOTIVE_Ecosystem/DATA/Species", "shin_specieslocation.csv"), header = T, sep = ",",stringsAsFactors = F)
+      x2 <- read.csv(file.path("C:/MOTIVE_Ecosystem/DATA/Species", "speciesname_final.csv"), header = T, sep = "," ,stringsAsFactors = F)
+      c <- count(x1, ID)
+      
+      x3 <- inner_join(c, x2, by = "ID")
+      x4 <- inner_join(x1, x3, by = "ID")
+      
      
       
       groups <-  c("구상나무" <- "<div style='position: relative; display: inline-block' class='awesome-marker-icon-blue awesome-marker'><i class='glyphicon glyphicon-glass icon-black '></i></div>특산식물",
                    "삼도하수오" <- "<div style='position: relative; display: inline-block' class='awesome-marker-icon-blue awesome-marker'><i class='glyphicon glyphicon-glass icon-black '></i></div>곤충")
+      
       # groups <-c("S002")
       
       
