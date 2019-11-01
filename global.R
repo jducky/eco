@@ -63,7 +63,22 @@ is_init_colors <- F
 temp_colors_type <- c()
 is_init_colors_type <- F
 
+test_groups <- c()
 
+
+####################################################################################################
+makeGroupLayer <- function(species_data, s_icon, g_color){
+  K_NAME <- species_data$K_NAME
+  u_g_color <- unique(g_color)
+  lv_k_name <- levels(factor(K_NAME))
+  for(name in lv_k_name) {
+    rows <- subset(species_data, K_NAME == name)
+    result <- temp_colors_type[[unique(rows$TYPE)]]
+    x <- paste0("<div style='position: relative; display: inline-block' class='awesome-marker-icon-",result," awesome-marker'><i class='glyphicon glyphicon-",s_icon," icon-black '></i></div>",name)
+    test_groups <<- append(test_groups, x)
+  }
+}
+####################################################################################################
 
 ####################################################################################################
 # 테이블 선택 시 종별 맵 마커 색상
@@ -154,10 +169,8 @@ init_colors_type_02 <- function(species_all_data) {
 }
 
 customGetColor_Type_02 <- function(species_data) {
-  tapp <- tapply(species_data$TYPE, species_data$ID, function(val){val})
-  tapp <- unlist(tapp, use.names=FALSE)
   temp <- c()
-  for(val in tapp){temp <- append(temp, temp_colors_type[[val]])}
+  for(val in species_data$TYPE){temp <- append(temp, temp_colors_type[[val]])}
   temp
 }
 ####################################################################################################

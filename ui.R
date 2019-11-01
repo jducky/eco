@@ -198,7 +198,7 @@ shinyUI(
                                           
                                           checkboxGroupInput("SP_Info_type", "TYPE",	
                                                              choices = unique(G_FILE_speciesinfo_02$TYPE),	
-                                                             selected = NULL),  
+                                                             selected = NULL)
                                           
                                           
                                           # selectInput("SP_Info_inst", "INSTITUTE",
@@ -209,7 +209,7 @@ shinyUI(
                                           #             choices = unique(G_FILE_speciesinfo_02$TYPE),
                                           #             selected = NULL),
                                           
-                                          actionButton('SP_Info_Apply',label = "Apply"), br()
+                                          # actionButton('SP_Info_Apply',label = "Apply"), br()
                                           
                                           
                                           ),
