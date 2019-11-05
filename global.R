@@ -55,7 +55,7 @@ rm(list = ls())
 color_Picker <- c("black","lightgray","gray","white","cadetblue","pink","darkpurple","purple","lightblue","darkblue","blue","lightgreen","darkgreen","green","beige","orange","lightred","darkred","red")
 
 color_Picker_Type <- c("lightgray","cadetblue","lightblue","darkblue","blue","green","beige","orange","lightred","darkred","red")
-icon_List_Type <- c('cog', 'heart', 'star', 'flag', 'home', 'plus-sign', 'leaf', 'grain', 'remove-circle')
+icon_List_Type <- c('cog', 'heart', 'star', 'flag', 'home', 'plus-sign', 'leaf', 'grain', 'remove-circle', 'asterisk', 'plus', 'remove')
 
 temp_colors <- c()
 is_init_colors <- F
@@ -65,18 +65,74 @@ is_init_colors_type <- F
 
 test_groups <- c()
 
+temp_icons <- c()
+is_init_icons <- F
 
 ####################################################################################################
-makeGroupLayer <- function(species_data, s_icon, g_color){
-  K_NAME <- species_data$K_NAME
-  u_g_color <- unique(g_color)
-  lv_k_name <- levels(factor(K_NAME))
-  for(name in lv_k_name) {
+# 랜덤 레이어
+####################################################################################################
+# makeGroupLayer <- function(species_data, s_icon, g_color){
+#   K_NAME <- species_data$K_NAME
+#   u_g_color <- unique(g_color)
+#   lv_k_name <- levels(factor(K_NAME))
+#   for(name in lv_k_name) {
+#     rows <- subset(species_data, K_NAME == name)
+#     result <- temp_colors_type[[unique(rows$TYPE)]]
+#     x <- paste0("<div style='position: relative; display: inline-block' class='awesome-marker-icon-",result," awesome-marker'><i class='glyphicon glyphicon-",s_icon," icon-black '></i></div>",name)
+#     test_groups <<- append(test_groups, x)
+#   }
+# }
+####################################################################################################
+
+
+####################################################################################################
+makeGroupLayer_Species <- function(species_data, k_name){
+  
+  print('makeGroupLayer_Species')
+  
+  print('k_name')
+  print(k_name)
+  
+  k_name <- unique(factor(k_name))
+  
+  print('k_name')
+  print(k_name)
+  
+  i <- 1
+  
+  # while(i <= length(lv_k_name)){
+  #     
+  #     rows <- subset(species_data, K_NAME == lv_k_name[i])
+  #     result <- temp_colors_type[[unique(rows$TYPE)]]
+  #     name <- lv_k_name[i]
+  #     x <- paste0("<div style='position: relative; display: inline-block' class='awesome-marker-icon-",result," awesome-marker'><i class='glyphicon glyphicon-",temp_icons[[name]]," icon-black '></i></div>",name)  
+  #     test_groups <<- append(test_groups, x)
+  #     
+  #     print('result')
+  #     print(result)
+  #     print('temp_icons[[name]]')
+  #     print(temp_icons[[name]])
+  #     print('lv_k_name[i]')
+  #     print(name)
+  #     
+  #     i <- i+1
+  #     
+  # }
+  
+  
+  print('start for')
+  for(name in k_name) {
+
     rows <- subset(species_data, K_NAME == name)
     result <- temp_colors_type[[unique(rows$TYPE)]]
-    x <- paste0("<div style='position: relative; display: inline-block' class='awesome-marker-icon-",result," awesome-marker'><i class='glyphicon glyphicon-",s_icon," icon-black '></i></div>",name)
+    x <- paste0("<div style='position: relative; display: inline-block' class='awesome-marker-icon-",result," awesome-marker'><i class='glyphicon glyphicon-",temp_icons[[name]]," icon-black '></i></div>",name)
     test_groups <<- append(test_groups, x)
+
   }
+  print('end for')
+  
+  print('test_groups')
+  print(test_groups)
 }
 ####################################################################################################
 
@@ -110,6 +166,63 @@ customGetColor <- function(species_data) {
     }
     i <- i+1
   }
+  return (temp_Vector)
+}
+
+####################################################################################################
+# 종별 아이콘 초기화
+####################################################################################################
+init_icons <- function(k_name) {
+  
+  print('k_name')
+  print(k_name)
+  
+
+  if(length(k_name) < length(icon_List_Type)) {
+    i <- 1  
+    while( i <= length(k_name) ) {
+      temp_icons[i] <<- icon_List_Type[i]
+      i <- i+1
+    }
+  } else {
+    dv <- length(k_name) / length(icon_List_Type)
+    i <- 1
+    while(i <= dv + 1) {
+      temp_icons <<- append(temp_icons, icon_List_Type)
+      i <- i + 1
+    }
+  }
+  names(temp_icons) <<- k_name
+  is_init_icons <<- T
+  
+  # print('temp_icons')
+  # print(temp_icons)
+  
+}
+
+customGetIcon <- function(k_name) {
+  print('k_name')
+  print(k_name)
+  
+  tapp <- tapply(k_name, k_name, function(val){
+    val
+  })
+  print('tapp')
+  print(tapp)
+  temp_Vector <- c()
+  i <- 1
+  while( i <= length(tapp) ) {
+    j <- 1
+    while( j <= length(tapp[[i]]) ) {
+      if( tapp[[i]][j] == names(tapp[i]) ) {
+        temp_Vector <- append(temp_Vector, temp_icons[[names(tapp[i])]] )
+        j <- j+1
+      }
+    }
+    i <- i+1
+  }
+  print('temp_Vector')
+  print(temp_Vector)
   return (temp_Vector)
 }
 ####################################################################################################
