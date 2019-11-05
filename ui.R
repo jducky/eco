@@ -196,9 +196,17 @@ shinyUI(
                                                              choices = unique(G_FILE_speciesinfo_02$INSTITUTE),	
                                                              selected = NULL),
                                           
+                                          actionButton('all_SP_Info_inst',label = "selectAll"),
+                                          actionButton('reset_SP_Info_inst',label = "reset"), br(),
+                                          
+                                          
+                                          
                                           checkboxGroupInput("SP_Info_type", "TYPE",	
                                                              choices = unique(G_FILE_speciesinfo_02$TYPE),	
-                                                             selected = NULL)
+                                                             selected = NULL),
+                                          
+                                          actionButton('all_SP_Info_type',label = "selectAll"), 
+                                          actionButton('reset_SP_Info_type',label = "reset"), br()
                                           
                                           
                                           # selectInput("SP_Info_inst", "INSTITUTE",

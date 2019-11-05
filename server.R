@@ -2,6 +2,45 @@
 
 shinyServer(function(input, output, session) {
   
+  # selectAll
+  observeEvent(input$all_SP_Info_inst, {
+    print('isolate(input$SP_Info_inst)')
+    print(isolate(input$SP_Info_inst))
+    
+    updateCheckboxGroupInput(session, inputId = 'SP_Info_inst', choices = unique(Temp_G_FILE_speciesinfo$INSTITUTE),
+                             selected = unique(Temp_G_FILE_speciesinfo$INSTITUTE), inline = FALSE)
+  })
+  
+  
+  observeEvent(input$all_SP_Info_type, {
+    print('isolate(input$all_SP_Info_type)')
+    print(isolate(input$all_SP_Info_type))
+    
+    updateCheckboxGroupInput(session, inputId = 'SP_Info_type', choices = unique(Temp_G_FILE_speciesinfo$TYPE),
+                             selected = unique(Temp_G_FILE_speciesinfo$TYPE), inline = FALSE)
+  })
+  
+  # Reset
+  observeEvent(input$reset_SP_Info_inst, {
+    print('isolate(input$SP_Info_inst)')
+    print(isolate(input$SP_Info_inst))
+    
+    updateCheckboxGroupInput(session, inputId = 'SP_Info_inst', choices = unique(Temp_G_FILE_speciesinfo$INSTITUTE),
+                             selected = NULL, inline = FALSE)
+  })
+  
+  
+  observeEvent(input$reset_SP_Info_type, {
+    print('isolate(input$all_SP_Info_type)')
+    print(isolate(input$all_SP_Info_type))
+    
+    updateCheckboxGroupInput(session, inputId = 'SP_Info_type', choices = unique(Temp_G_FILE_speciesinfo$TYPE),
+                             selected = NULL, inline = FALSE)
+  })
+
+
+  
+  
   printTable <- function(){
     print('institute or type')
     resInfo <- Temp_G_FILE_speciesinfo_02[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
@@ -17,30 +56,25 @@ shinyServer(function(input, output, session) {
       if(is.null(SP_Info_type)) {SP_Info_type <- ""}
       G_FILE_speciesinfo_02 <<- subset(resInfo, INSTITUTE %in% SP_Info_inst & TYPE %in% SP_Info_type)
     }
-    output[["SP_Info"]] <- DT::renderDataTable({
-      G_FILE_speciesinfo_02
+    renderTable("SP_Info", G_FILE_speciesinfo_02)
+  }
+  
+  renderTable <- function(name, table) {
+    output[[name]] <- DT::renderDataTable({
+      table
     })
   }
   
   observeEvent(input$SP_Info_inst,{printTable()}, ignoreNULL = F, ignoreInit = T)
   observeEvent(input$SP_Info_type,{printTable()}, ignoreNULL = F, ignoreInit = T)
   
+  
   observeEvent(input$reset_SP_Info, {
-    
     if(is.null(isolate(input$SP_Info_inst)) & is.null(isolate(input$SP_Info_type))) {
-      G_FILE_speciesinfo_02 <<- Temp_G_FILE_speciesinfo_02[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
-      return (G_FILE_speciesinfo_02)
+      renderTable("SP_Info", Temp_G_FILE_speciesinfo_02[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F])
+    } else {
+      printTable()
     }
-    printTable()
-    
-    
-
-
-    # resInfo <- Temp_G_FILE_speciesinfo_02[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
-    # G_FILE_speciesinfo_02 <<- resInfo
-    # output[["SP_Info"]] <- DT::renderDataTable({
-    #   G_FILE_speciesinfo_02
-    # })
   })
   
   
@@ -754,38 +788,33 @@ shinyServer(function(input, output, session) {
     rowsLen <- length(rs)
     
     if (rowsLen > 0) {
+  
       
-      species_info <- G_FILE_speciesinfo[rs, , drop = FALSE]
+      species_info <- Temp_G_FILE_speciesinfo_02[rs, , drop = FALSE]
       
-      cat('species_info$K_NAME: ')
-      print(species_info$K_NAME[1])
+      links_x <- c()
+      x <- NULL
       
+      for(name in species_info$K_NAME) {
+    
+        url <- paste0('https://species.nibr.go.kr/home/mainHome.do?searchType=total&cont_link=009&subMenu=009001&contCd=009001&searchField=', URLencode( iconv(name , to = 'UTF-8')) )
+        # x <- paste0("<a href='https://species.nibr.go.kr/home/mainHome.do?searchType=total&cont_link=009&subMenu=009001&contCd=009001&searchField='",URLencode( iconv(name , to = 'UTF-8'))," target='_blank' class = 'btn btn-default'>","</a>"  )
+        x <- a(href=url,
+               name, target = '_blank', class = "btn btn-default")
+        
+        # x <- a(href='#',
+        #   "123", class = "btn btn-default")
+        
+        links_x <- paste0(links_x, ',',x)
+      }
       
-      # print('for...')
-      # rowsLen <- length(species_info$K_NAME)
-      # i <- 1
-      # aList <- NULL
-      # 
-      # while(rowsLen >= i) {
-      # 
-      #   url <- URLencode(paste0('https://species.nibr.go.kr/home/mainHome.do?searchType=total&cont_link=009&subMenu=009001&contCd=009001&searchField=', species_info$K_NAME[i] ))
-      #   aList <- aList + a(href=url, species_info$K_NAME[i], target = '_blank', class = "btn btn-default"),
-      #   i <- i + 1
-      # }
-      # 
-      # div(
-      #   
-      # )
+      print('links_x')
+      print(links_x)
+      links_x <- gsub("^,", "", links_x)
+      print('gsub links_x')
+      print(links_x)
+      return ( HTML(links_x) )
       
-      # cat('len:')
-      # print(length(species_info$K_NAME))
-      
-      
-      url <- paste0('https://species.nibr.go.kr/home/mainHome.do?searchType=total&cont_link=009&subMenu=009001&contCd=009001&searchField=', URLencode( iconv(species_info$K_NAME[1] , to = 'UTF-8')) )
-      
-      x <- a(href=url,
-             species_info$K_NAME[1], target = '_blank', class = "btn btn-default")
-      return (x)
       
     } else {
       return (NULL)
@@ -1700,26 +1729,39 @@ shinyServer(function(input, output, session) {
       print('rs')
       print(rs)
       
-      species_data <- inner_join(G_FILE_specieslocation_02, G_FILE_speciesinfo_02[rs, , drop = FALSE], by = "ID")
       
-      species_all_data <- inner_join(G_FILE_specieslocation_02, G_FILE_speciesinfo_02, by = "ID")
+      species_data <- inner_join(G_FILE_specieslocation_02, Temp_G_FILE_speciesinfo_02[rs, , drop = FALSE], by = "ID")
       
-      if(is_init_colors == F){
-        init_colors(unique(species_all_data$ID))
-      }
+      species_all_data <- inner_join(G_FILE_specieslocation_02, Temp_G_FILE_speciesinfo_02, by = "ID")
+      
+      # 종별 색상 초기화
+      # if(is_init_colors == F){
+      #   init_colors(unique(species_all_data$ID))
+      # }
       
       # 타입별 색상 초기화
       if(is_init_colors_type == F){
         init_colors_type_02(species_all_data)
       }
       
-
-            
-      s_icon <- sample(icon_List_Type, 1)
-      g_color <- customGetColor_Type_02(species_data)
-
+      # 종별 아이콘 초기화
+      if(is_init_icons == F){
+        init_icons(unique(species_all_data$K_NAME))
+      }
       
-      makeGroupLayer(species_data, s_icon, g_color)
+
+      # 타입별 색상
+      g_color <- customGetColor_Type_02(species_data)
+      
+      # 선택 시 랜덤 아이콘
+      # s_icon <- sample(icon_List_Type, 1)
+      # makeGroupLayer(species_data, s_icon, g_color)
+      
+      # 종별 아이콘
+      k_name <- species_data$K_NAME
+      s_icon <- customGetIcon(k_name)
+      makeGroupLayer_Species(species_data, k_name)
+      
       
       # 개별 색상 설정
       icons <- awesomeIcons(
@@ -1727,7 +1769,10 @@ shinyServer(function(input, output, session) {
         # iconColor = 'black',
         # library = 'ion',
         
+
         icon = s_icon,
+        
+        
         iconColor = 'black',
         library = 'glyphicon',
         
@@ -1737,7 +1782,6 @@ shinyServer(function(input, output, session) {
         # 타입별 색상
         markerColor = g_color
       )
-      
 
       
       # print('species_data$K_NAME')
@@ -1758,10 +1802,6 @@ shinyServer(function(input, output, session) {
                   "삼도하수오" <- "<div style='position: relative; display: inline-block' class='awesome-marker-icon-black awesome-marker'><i class='glyphicon glyphicon-fire icon-white '></i></div>Pirate Ship")
       
       
-
-
-      
-      
       # 폰트 어썸 아이콘 설정
       icons_fa <- awesomeIcons(
         icon = 'amazon',
@@ -1775,6 +1815,12 @@ shinyServer(function(input, output, session) {
         makeIcon("ferry-18.png", NULL, 18, 18, className = 'icon01'),
         makeIcon("danger-24.png", NULL, 24, 24, className = 'icon02')
       )
+      
+      testF <- function(val) {
+        print('testF')
+        print('val')
+        print(val)
+      }
       
       
       x <- leaflet(data = species_data) %>%
@@ -1790,11 +1836,17 @@ shinyServer(function(input, output, session) {
         
         # 범례 없이 출력
         # addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID)) %>%
-        addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID), group=~test_groups[factor(K_NAME)]) %>%
         
         
-        addLayersControl(                                                                                                           
-          overlayGroups = ~test_groups[factor(K_NAME)],
+        addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID), group= test_groups[factor(k_name)]) %>%
+        # addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID), group= ~K_NAME) %>%
+        
+        
+        addLayersControl(
+          # overlayGroups = test_groups[factor(species_data$K_NAME)],
+          overlayGroups = test_groups[factor(k_name)],
+          
+          # overlayGroups = ~K_NAME,
           options = layersControlOptions(collapsed = F)
         )  %>%
         
