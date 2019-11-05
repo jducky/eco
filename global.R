@@ -93,12 +93,15 @@ makeGroupLayer_Species <- function(species_data, k_name){
   print('k_name')
   print(k_name)
   
-  k_name <- unique(factor(k_name))
+  k_name <- unique(k_name)
+  f_k_name <- factor(k_name)
+  print('f_k_name')
+  print(f_k_name)
   
   print('k_name')
   print(k_name)
   
-  i <- 1
+  # i <- 1
   
   # while(i <= length(lv_k_name)){
   #     
@@ -126,7 +129,7 @@ makeGroupLayer_Species <- function(species_data, k_name){
     rows <- subset(species_data, K_NAME == name)
     result <- temp_colors_type[[unique(rows$TYPE)]]
     x <- paste0("<div style='position: relative; display: inline-block' class='awesome-marker-icon-",result," awesome-marker'><i class='glyphicon glyphicon-",temp_icons[[name]]," icon-black '></i></div>",name)
-    test_groups <<- append(test_groups, x)
+    test_groups <<- c(test_groups, x)
 
   }
   print('end for')
@@ -195,32 +198,47 @@ init_icons <- function(k_name) {
   names(temp_icons) <<- k_name
   is_init_icons <<- T
   
-  # print('temp_icons')
-  # print(temp_icons)
+  print('temp_icons')
+  print(temp_icons)
   
 }
 
 customGetIcon <- function(k_name) {
   print('k_name')
   print(k_name)
-  
-  tapp <- tapply(k_name, k_name, function(val){
-    val
-  })
-  print('tapp')
-  print(tapp)
   temp_Vector <- c()
-  i <- 1
-  while( i <= length(tapp) ) {
-    j <- 1
-    while( j <= length(tapp[[i]]) ) {
-      if( tapp[[i]][j] == names(tapp[i]) ) {
-        temp_Vector <- append(temp_Vector, temp_icons[[names(tapp[i])]] )
-        j <- j+1
+  u_k_name <- unique(k_name)
+  print('u_k_name')
+  print(u_k_name)
+  # l_k_name <- levels(factor(k_name))
+  # l_k_name_2 <- levels(factor(k_name, ordered = T))
+  
+  
+  for(uname in u_k_name) {
+    for(name in k_name) {
+      if(uname == name){
+        temp_Vector <- append(temp_Vector, temp_icons[[name]] )
       }
     }
-    i <- i+1
   }
+  
+  # tapp <- tapply(k_name, k_name, function(val){
+  #   val
+  # })
+  # print('tapp')
+  # print(tapp)
+  # temp_Vector <- c()
+  # i <- 1
+  # while( i <= length(tapp) ) {
+  #   j <- 1
+  #   while( j <= length(tapp[[i]]) ) {
+  #     if( tapp[[i]][j] == names(tapp[i]) ) {
+  #       temp_Vector <- append(temp_Vector, temp_icons[[names(tapp[i])]] )
+  #       j <- j+1
+  #     }
+  #   }
+  #   i <- i+1
+  # }
   print('temp_Vector')
   print(temp_Vector)
   return (temp_Vector)
