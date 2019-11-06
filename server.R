@@ -49,12 +49,15 @@ shinyServer(function(input, output, session) {
     
     if(!is.null(SP_Info_inst) & is.null(SP_Info_type)) {
       G_FILE_speciesinfo_02 <<- subset(resInfo, INSTITUTE %in% SP_Info_inst)
+      # x <- subset(resInfo, INSTITUTE %in% SP_Info_inst)
     } else if(is.null(SP_Info_inst) & !is.null(SP_Info_type)){
       G_FILE_speciesinfo_02 <<- subset(resInfo, TYPE %in% SP_Info_type)
+      # x <- subset(resInfo, TYPE %in% SP_Info_type)
     } else {
       if(is.null(SP_Info_inst)) {SP_Info_inst <- ""}
       if(is.null(SP_Info_type)) {SP_Info_type <- ""}
       G_FILE_speciesinfo_02 <<- subset(resInfo, INSTITUTE %in% SP_Info_inst & TYPE %in% SP_Info_type)
+      # x <- subset(resInfo, INSTITUTE %in% SP_Info_inst & TYPE %in% SP_Info_type)
     }
     renderTable("SP_Info", G_FILE_speciesinfo_02)
   }
@@ -71,6 +74,7 @@ shinyServer(function(input, output, session) {
   
   observeEvent(input$reset_SP_Info, {
     if(is.null(isolate(input$SP_Info_inst)) & is.null(isolate(input$SP_Info_type))) {
+      G_FILE_speciesinfo_02 <<- Temp_G_FILE_speciesinfo_02
       renderTable("SP_Info", Temp_G_FILE_speciesinfo_02[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F])
     } else {
       printTable()
@@ -760,10 +764,7 @@ shinyServer(function(input, output, session) {
     
     return (x)
     
-    
-    
   })
-  
   
   
   
@@ -1730,9 +1731,11 @@ shinyServer(function(input, output, session) {
       print(rs)
       
       
-      species_data <- inner_join(G_FILE_specieslocation_02, Temp_G_FILE_speciesinfo_02[rs, , drop = FALSE], by = "ID")
+      species_data <- inner_join(G_FILE_specieslocation_02, G_FILE_speciesinfo_02[rs, , drop = FALSE], by = "ID")
+      print('species_data')
+      print(species_data)
       
-      species_all_data <- inner_join(G_FILE_specieslocation_02, Temp_G_FILE_speciesinfo_02, by = "ID")
+      species_all_data <- inner_join(G_FILE_specieslocation_02, G_FILE_speciesinfo_02, by = "ID")
       
       # 종별 색상 초기화
       # if(is_init_colors == F){
@@ -1797,9 +1800,6 @@ shinyServer(function(input, output, session) {
       # x3 <- inner_join(c, x2, by = "ID")
       # x4 <- inner_join(x1, x3, by = "ID")
       
-  
-      groups <- c("구상나무" <- "<div style='position: relative; display: inline-block' class='awesome-marker-icon-blue awesome-marker'><i class='glyphicon glyphicon-glass icon-black '></i></div>Cruise Ship",
-                  "삼도하수오" <- "<div style='position: relative; display: inline-block' class='awesome-marker-icon-black awesome-marker'><i class='glyphicon glyphicon-fire icon-white '></i></div>Pirate Ship")
       
       
       # 폰트 어썸 아이콘 설정
@@ -1815,12 +1815,6 @@ shinyServer(function(input, output, session) {
         makeIcon("ferry-18.png", NULL, 18, 18, className = 'icon01'),
         makeIcon("danger-24.png", NULL, 24, 24, className = 'icon02')
       )
-      
-      testF <- function(val) {
-        print('testF')
-        print('val')
-        print(val)
-      }
       
       
       x <- leaflet(data = species_data) %>%
@@ -1838,15 +1832,15 @@ shinyServer(function(input, output, session) {
         # addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID)) %>%
         
         
-        addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID), group= test_groups[factor(k_name)]) %>%
-        # addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID), group= ~K_NAME) %>%
+        addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID), group= ~test_groups[factor(K_NAME)]) %>%
+        # addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID), group= test_groups[species_data$K_NAME] ) %>%
         
         
         addLayersControl(
-          # overlayGroups = test_groups[factor(species_data$K_NAME)],
-          overlayGroups = test_groups[factor(k_name)],
+          overlayGroups = test_groups[factor(species_data$K_NAME)],
+          # overlayGroups = ~test_groups[factor(K_NAME)],
           
-          # overlayGroups = ~K_NAME,
+          # overlayGroups = test_groups[species_data$K_NAME],
           options = layersControlOptions(collapsed = F)
         )  %>%
         
