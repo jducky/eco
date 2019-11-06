@@ -1731,12 +1731,7 @@ shinyServer(function(input, output, session) {
       print('rs')
       print(rs)
       
-<<<<<<< HEAD
-      x_index <- read.csv(file.path("/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Species", "speciesname_final.csv"), header = T, sep = "," ,stringsAsFactors = F, fileEncoding = "CP949", encoding = "UTF-8")
-      x_location <- read.csv(file.path("/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Species", "shin_specieslocation.csv"), header = T, sep = ",",stringsAsFactors = F, fileEncoding = "CP949", encoding = "UTF-8")
-      x_freq <- count(x_location, ID)
-      x_info <- inner_join(x_freq, x_index, by = "ID")
-=======
+
       if( is.null(isolate(input$SP_Info_inst)) & is.null(isolate(input$SP_Info_type)) ) {
         print('if( is.null(isolate(input$SP_Info_inst)) & is.null(isolate(input$SP_Info_type)) )')
         
@@ -1750,7 +1745,7 @@ shinyServer(function(input, output, session) {
         G_FILE_speciesfreq_02 <<- x_freq
         G_FILE_speciesinfo_02 <<- x_info
       }
->>>>>>> hs05
+
       
       print('else --- if( is.null(isolate(input$SP_Info_inst)) & is.null(isolate(input$SP_Info_type)) )')
       

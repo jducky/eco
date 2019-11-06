@@ -1247,7 +1247,11 @@ shinyUI(
                                   
                                   fluidRow(
                                     infoBox("Approval", paste0(80, "%"), icon = icon("thumbs-up", lib = "glyphicon") ,width = 12, color = "yellow")
+                                  ),
+                                  fluidRow(
+                                    h1(HELP_TEST_desc01)
                                   )
+                                  
                                   
                      )
             )
