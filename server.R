@@ -789,8 +789,8 @@ shinyServer(function(input, output, session) {
     
     if (rowsLen > 0) {
       
-      # x1 <- read.csv(file.path("C:/MOTIVE_Ecosystem/DATA/Species", "shin_specieslocation.csv"), header = T, sep = ",",stringsAsFactors = F)
-      # x2 <- read.csv(file.path("C:/MOTIVE_Ecosystem/DATA/Species", "speciesname_final.csv"), header = T, sep = "," ,stringsAsFactors = F)
+      # x1 <- read.csv(file.path("/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Species", "shin_specieslocation.csv"), header = T, sep = ",",stringsAsFactors = F)
+      # x2 <- read.csv(file.path("/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Species", "speciesname_final.csv"), header = T, sep = "," ,stringsAsFactors = F)
       # c <- count(x1, ID)
       # x3 <- inner_join(c, x2, by = "ID")
       # x4 <- inner_join(x1, x3, by = "ID")
@@ -1106,13 +1106,13 @@ shinyServer(function(input, output, session) {
   
   observeEvent(input$SE_speciesindex, {
     G$SE_speciesindex <<- input$SE_speciesindex$name
-    G_FILE_speciesindex <<- read.csv(file.path(G$SE_Dir_Species, G$SE_speciesindex), header = T, sep = ",")
+    G_FILE_speciesindex <<- read.csv(file.path(G$SE_Dir_Species, G$SE_speciesindex), header = T, sep = ",", fileEncoding = "CP949", encoding = "UTF-8")
     output$SE_speciesindex <- renderText({G$SE_speciesindex})
   })
   
   observeEvent(input$SE_specieslocation, {
     G$SE_specieslocation <<- input$SE_specieslocation$name
-    G_FILE_specieslocation <<- read.csv(file.path(G$SE_Dir_Species, G$SE_specieslocation), header = T, sep = ",")
+    G_FILE_specieslocation <<- read.csv(file.path(G$SE_Dir_Species, G$SE_specieslocation), header = T, sep = ",", fileEncoding = "CP949", encoding = "UTF-8")
     output$SE_specieslocation <- renderText({G$SE_specieslocation})
   })
   
@@ -1380,9 +1380,9 @@ shinyServer(function(input, output, session) {
         
         # Evaluating the model
         myBiomodModelEval <- get_evaluations(myBiomodModelOut)
-        write.csv(myBiomodModelEval, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(SPECIES_NAME, "_eval.csv", sep = "", collapse = "--")))
+        write.csv(myBiomodModelEval, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(SPECIES_NAME, "_eval.csv", sep = "", collapse = "--")), fileEncoding = "CP949", encoding = "UTF-8")
         myBiomodModelImport <- get_variables_importance(myBiomodModelOut)
-        write.csv(myBiomodModelImport, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(SPECIES_NAME, "_impot.csv",  sep = "", collapse = "--")))
+        write.csv(myBiomodModelImport, file = file.path(PATH_MODEL_OUTPUT, SPECIES_NAME, "BIOMOD2", paste(SPECIES_NAME, "_impot.csv",  sep = "", collapse = "--")), fileEncoding = "CP949", encoding = "UTF-8")
         ### End Modeling BIOMOD
         
         ### Projection on current and future environemental conditions
@@ -1526,7 +1526,7 @@ shinyServer(function(input, output, session) {
           if (!file.exists(destfile))
             return
           
-          old_EM_eval <- read.csv(destfile)
+          old_EM_eval <- read.csv(destfile, fileEncoding = "CP949", encoding = "UTF-8")
           lc <- length(colnames(old_EM_eval))
           lr <- length(row.names(old_EM_eval))
           nc <- (lc - 1) / 4
@@ -1724,8 +1724,8 @@ shinyServer(function(input, output, session) {
       print('rs')
       print(rs)
       
-      x_index <- read.csv(file.path("C:/MOTIVE_Ecosystem/DATA/Species", "speciesname_final.csv"), header = T, sep = "," ,stringsAsFactors = F)
-      x_location <- read.csv(file.path("C:/MOTIVE_Ecosystem/DATA/Species", "shin_specieslocation.csv"), header = T, sep = ",",stringsAsFactors = F)
+      x_index <- read.csv(file.path("/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Species", "speciesname_final.csv"), header = T, sep = "," ,stringsAsFactors = F, fileEncoding = "CP949", encoding = "UTF-8")
+      x_location <- read.csv(file.path("/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Species", "shin_specieslocation.csv"), header = T, sep = ",",stringsAsFactors = F, fileEncoding = "CP949", encoding = "UTF-8")
       x_freq <- count(x_location, ID)
       x_info <- inner_join(x_freq, x_index, by = "ID")
       
@@ -1799,8 +1799,8 @@ shinyServer(function(input, output, session) {
       # print('species_data$K_NAME')
       # print(droplevels(species_data$K_NAME))
       
-      # x1 <- read.csv(file.path("C:/MOTIVE_Ecosystem/DATA/Species", "shin_specieslocation.csv"), header = T, sep = ",",stringsAsFactors = F)
-      # x2 <- read.csv(file.path("C:/MOTIVE_Ecosystem/DATA/Species", "speciesname_final.csv"), header = T, sep = "," ,stringsAsFactors = F)
+      # x1 <- read.csv(file.path("/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Species", "shin_specieslocation.csv"), header = T, sep = ",",stringsAsFactors = F)
+      # x2 <- read.csv(file.path("/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Species", "speciesname_final.csv"), header = T, sep = "," ,stringsAsFactors = F)
       # c <- count(x1, ID)
       # 
       # x3 <- inner_join(c, x2, by = "ID")
@@ -1880,7 +1880,7 @@ shinyServer(function(input, output, session) {
   
   output$LD_Summary <- renderPrint({
     
-    r <- raster(file.path("C:/Projects/2019_DATA/4. forest fire, landslide/forest fire/S251", "barrier11.tif"))
+    r <- raster(file.path("/home/admin/R/Ecosystem_Data_191106/Projects/2019_DATA/4. forest fire, landslide/forest fire/S251", "barrier11.tif"))
     
     summary(r)
   })
@@ -1888,7 +1888,7 @@ shinyServer(function(input, output, session) {
   output$LD_Histogram <- renderPlot({
     
     #    r_asc <- read.asc(file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = "")))
-    x <- raster(file.path("C:/Projects/2019_DATA/4. forest fire, landslide/forest fire/S251", "barrier11.tif"))
+    x <- raster(file.path("/home/admin/R/Ecosystem_Data_191106/Projects/2019_DATA/4. forest fire, landslide/forest fire/S251", "barrier11.tif"))
     #    bins <- seq(which.min(x), which.max(x), length.out = input$bins + 1)
     
     hist(x, # breaks = bins, 
@@ -1902,7 +1902,7 @@ shinyServer(function(input, output, session) {
   output$LD_Histogram2 <- renderPlot({
     
     #    r_asc <- read.asc(file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = "")))
-    x <- raster(file.path("C:/Projects/2019_DATA/4. forest fire, landslide/forest fire/S251", "barrier11.tif"))
+    x <- raster(file.path("/home/admin/R/Ecosystem_Data_191106/Projects/2019_DATA/4. forest fire, landslide/forest fire/S251", "barrier11.tif"))
     #    bins <- seq(which.min(x), which.max(x), length.out = input$bins + 1)
     
     hist(x, # breaks = bins, 
@@ -1915,7 +1915,7 @@ shinyServer(function(input, output, session) {
   
   output$LD_Map <- renderLeaflet({
     
-    r <- raster(file.path("C:/Projects/2019_DATA/4. forest fire, landslide/forest fire/S251", "barrier11.tif"))
+    r <- raster(file.path("/home/admin/R/Ecosystem_Data_191106/Projects/2019_DATA/4. forest fire, landslide/forest fire/S251", "barrier11.tif"))
     crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
     
     pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r),
@@ -2271,7 +2271,7 @@ shinyServer(function(input, output, session) {
   
   output$DM_OU_Summary <- renderPrint({
     
-    r <- raster(file.path("C:/Projects/2019_DATA/1. unlimited dispersal/1. 민감종 57종", "S002b_HR8580.tif"))
+    r <- raster(file.path("/home/admin/R/Ecosystem_Data_191106/Projects/2019_DATA/1. unlimited dispersal/1. 민감종 57종", "S002b_HR8580.tif"))
     
     summary(r)
   })
@@ -2279,7 +2279,7 @@ shinyServer(function(input, output, session) {
   
   output$DM_OU_DIspersal_map <- renderLeaflet({
     
-    r <- raster(file.path("C:/Projects/2019_DATA/1. unlimited dispersal/1. 민감종 57종", "S002b_HR8580.tif"))
+    r <- raster(file.path("/home/admin/R/Ecosystem_Data_191106/Projects/2019_DATA/1. unlimited dispersal/1. 민감종 57종", "S002b_HR8580.tif"))
     crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
     
     pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r),
@@ -3027,7 +3027,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$SS_SP_Change <- renderPlot({
-    dataset <- read.csv("C:/Projects/2019_DATA/3. graph/VI_2.csv")
+    dataset <- read.csv("/home/admin/R/Ecosystem_Data_191106/Projects/2019_DATA/3. graph/VI_2.csv")
     a=c(2000, 2030, 2050, 2080)
     b=c(dataset$X4530_0[1],dataset$X4530_L[1],dataset$X4550_L[1],dataset$X4580_L[1])
     c=c(dataset$X4530_0[68],dataset$X4530_L[68],dataset$X4550_L[68],dataset$X4580_L[68])

@@ -48,7 +48,7 @@ if (length(CHK_libraries) > 0) {
 #####=========================================================
 
 
-setwd("C:/MOTIVE_Ecosystem/R/Programs/ecosystem")
+setwd("/srv/shiny-server/ecosystem")
 rm(list = ls())
 
 
@@ -302,15 +302,15 @@ lang_selection <- F
 
 ##### Path
 G <- reactiveValues()
-G$SE_Dir_Project <- "C:/MOTIVE_projects/proj1"
-G$SE_Dir_Climate <- "C:/MOTIVE_Ecosystem/DATA/Climate2"
-G$SE_Dir_Link <- "C:/MOTIVE_Ecosystem/DATA/Link" 
-G$SE_Dir_Species <- "C:/MOTIVE_Ecosystem/DATA/Species"
-G$SE_Dir_Admin <- "C:/MOTIVE_Ecosystem/DATA/Admin"
+G$SE_Dir_Project <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_projects/proj1"
+G$SE_Dir_Climate <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Climate2"
+G$SE_Dir_Link <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Link" 
+G$SE_Dir_Species <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Species"
+G$SE_Dir_Admin <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Admin"
 G$SE_speciesindex <- "speciesname_final.csv"
 G$SE_specieslocation <- "shin_specieslocation.csv"
-G_FILE_speciesindex <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_speciesindex)), header = T, sep = ",")
-G_FILE_specieslocation <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_specieslocation)), header = T, sep = ",")
+G_FILE_speciesindex <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_speciesindex)), header = T, sep = "," , fileEncoding = "CP949", encoding = "UTF-8")
+G_FILE_specieslocation <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_specieslocation)), header = T, sep = "," , fileEncoding = "CP949", encoding = "UTF-8")
 G_FILE_speciesfreq <- count(G_FILE_specieslocation, ID)
 G_FILE_speciesinfo <- inner_join(G_FILE_speciesfreq, G_FILE_speciesindex, by = "ID")
 Temp_G_FILE_speciesinfo <- G_FILE_speciesinfo
@@ -323,8 +323,8 @@ Output_img <- "tif"
 
 
 ## HS
-G_FILE_speciesindex_02 <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_speciesindex)), header = T, sep = ",", stringsAsFactors = F)
-G_FILE_specieslocation_02 <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_specieslocation)), header = T, sep = ",", stringsAsFactors = F)
+G_FILE_speciesindex_02 <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_speciesindex)), header = T, sep = ",", stringsAsFactors = F, fileEncoding = "CP949", encoding = "UTF-8")
+G_FILE_specieslocation_02 <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_specieslocation)), header = T, sep = ",", stringsAsFactors = F, fileEncoding = "CP949", encoding = "UTF-8")
 G_FILE_speciesfreq_02 <- count(G_FILE_specieslocation_02, ID)
 G_FILE_speciesinfo_02 <- inner_join(G_FILE_speciesfreq_02, G_FILE_speciesindex_02, by = "ID")
 Temp_G_FILE_speciesinfo_02 <- G_FILE_speciesinfo_02
