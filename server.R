@@ -7,8 +7,8 @@ shinyServer(function(input, output, session) {
     print('isolate(input$SP_Info_inst)')
     print(isolate(input$SP_Info_inst))
     
-    updateCheckboxGroupInput(session, inputId = 'SP_Info_inst', choices = unique(Temp_G_FILE_speciesinfo$INSTITUTE),
-                             selected = unique(Temp_G_FILE_speciesinfo$INSTITUTE), inline = FALSE)
+    updateCheckboxGroupInput(session, inputId = 'SP_Info_inst', choices = unique(Temp_G_FILE_speciesinfo_02$INSTITUTE),
+                             selected = unique(Temp_G_FILE_speciesinfo_02$INSTITUTE), inline = FALSE)
   })
   
   
@@ -16,8 +16,8 @@ shinyServer(function(input, output, session) {
     print('isolate(input$all_SP_Info_type)')
     print(isolate(input$all_SP_Info_type))
     
-    updateCheckboxGroupInput(session, inputId = 'SP_Info_type', choices = unique(Temp_G_FILE_speciesinfo$TYPE),
-                             selected = unique(Temp_G_FILE_speciesinfo$TYPE), inline = FALSE)
+    updateCheckboxGroupInput(session, inputId = 'SP_Info_type', choices = unique(Temp_G_FILE_speciesinfo_02$TYPE),
+                             selected = unique(Temp_G_FILE_speciesinfo_02$TYPE), inline = FALSE)
   })
   
   # Reset
@@ -25,7 +25,7 @@ shinyServer(function(input, output, session) {
     print('isolate(input$SP_Info_inst)')
     print(isolate(input$SP_Info_inst))
     
-    updateCheckboxGroupInput(session, inputId = 'SP_Info_inst', choices = unique(Temp_G_FILE_speciesinfo$INSTITUTE),
+    updateCheckboxGroupInput(session, inputId = 'SP_Info_inst', choices = unique(Temp_G_FILE_speciesinfo_02$INSTITUTE),
                              selected = NULL, inline = FALSE)
   })
   
@@ -34,7 +34,7 @@ shinyServer(function(input, output, session) {
     print('isolate(input$all_SP_Info_type)')
     print(isolate(input$all_SP_Info_type))
     
-    updateCheckboxGroupInput(session, inputId = 'SP_Info_type', choices = unique(Temp_G_FILE_speciesinfo$TYPE),
+    updateCheckboxGroupInput(session, inputId = 'SP_Info_type', choices = unique(Temp_G_FILE_speciesinfo_02$TYPE),
                              selected = NULL, inline = FALSE)
   })
 
@@ -45,11 +45,18 @@ shinyServer(function(input, output, session) {
     resInfo <- Temp_G_FILE_speciesinfo_02[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
     SP_Info_inst <- isolate(input$SP_Info_inst)
     SP_Info_type <- isolate(input$SP_Info_type)
+    print('resInfo <- Temp_G_FILE_speciesinfo_02[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]')
+    print(resInfo)
+    print('SP_Info_inst')
+    print(SP_Info_inst)
+    print('SP_Info_type')
+    print(SP_Info_type)
     
     if(!is.null(SP_Info_inst) & is.null(SP_Info_type)) {
       G_FILE_speciesinfo_02 <<- subset(resInfo, INSTITUTE %in% SP_Info_inst)
       # x <- subset(resInfo, INSTITUTE %in% SP_Info_inst)
     } else if(is.null(SP_Info_inst) & !is.null(SP_Info_type)){
+      print('else if(is.null(SP_Info_inst) & !is.null(SP_Info_type))')
       G_FILE_speciesinfo_02 <<- subset(resInfo, TYPE %in% SP_Info_type)
       # x <- subset(resInfo, TYPE %in% SP_Info_type)
     } else {
@@ -1738,24 +1745,35 @@ shinyServer(function(input, output, session) {
       print('rs')
       print(rs)
       
-      x_index <- read.csv(file.path("C:/MOTIVE_Ecosystem/DATA/Species", "speciesname_final.csv"), header = T, sep = "," ,stringsAsFactors = F)
-      x_location <- read.csv(file.path("C:/MOTIVE_Ecosystem/DATA/Species", "shin_specieslocation.csv"), header = T, sep = ",",stringsAsFactors = F)
-      x_freq <- count(x_location, ID)
-      x_info <- inner_join(x_freq, x_index, by = "ID")
+      if( is.null(isolate(input$SP_Info_inst)) & is.null(isolate(input$SP_Info_type)) ) {
+        print('if( is.null(isolate(input$SP_Info_inst)) & is.null(isolate(input$SP_Info_type)) )')
+        
+        x_index <- read.csv(file.path("C:/MOTIVE_Ecosystem/DATA/Species", "speciesname_final.csv"), header = T, sep = "," ,stringsAsFactors = F)
+        x_location <- read.csv(file.path("C:/MOTIVE_Ecosystem/DATA/Species", "shin_specieslocation.csv"), header = T, sep = ",",stringsAsFactors = F)
+        x_freq <- count(x_location, ID)
+        x_info <- inner_join(x_freq, x_index, by = "ID")
+        
+        G_FILE_speciesindex_02 <<- x_index
+        G_FILE_specieslocation_02 <<- x_location
+        G_FILE_speciesfreq_02 <<- x_freq
+        G_FILE_speciesinfo_02 <<- x_info
+      }
       
-      G_FILE_speciesindex_02 <<- x_index
-      G_FILE_specieslocation_02 <<- x_location
-      G_FILE_speciesfreq_02 <<- x_freq
-      G_FILE_speciesinfo_02 <<- x_info
+      print('else --- if( is.null(isolate(input$SP_Info_inst)) & is.null(isolate(input$SP_Info_type)) )')
       
       # x4 <- inner_join(x1, x3, by = "ID")
       
       
       species_data <- inner_join(G_FILE_specieslocation_02, G_FILE_speciesinfo_02[rs, , drop = FALSE], by = "ID")
+      
+      
+      species_all_data <- inner_join(G_FILE_specieslocation_02, G_FILE_speciesinfo_02, by = "ID")
+      
       print('species_data')
       print(species_data)
       
-      species_all_data <- inner_join(G_FILE_specieslocation_02, G_FILE_speciesinfo_02, by = "ID")
+      print('species_all_data')
+      print(species_all_data)
       
       # 종별 색상 초기화
       # if(is_init_colors == F){
@@ -1766,6 +1784,9 @@ shinyServer(function(input, output, session) {
       if(is_init_colors_type == F){
         init_colors_type_02(species_all_data)
       }
+      
+      print('temp_colors_type')
+      print(temp_colors_type)
       
       # 종별 아이콘 초기화
       if(is_init_icons == F){

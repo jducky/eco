@@ -14,8 +14,8 @@
 ##### installing and Loading packages ========================
 # Setting packages and library
 
-packages <- c("shiny", "shinyWidgets", "shinyFiles", "shinyalert", "tiff", "sf", "SDMTools", "proj4", "gdata", "colorspace", "plyr", "leaflet", "RColorBrewer", "scales", "lattice", "dplyr", "maps", "sp", "biomod2", "raster", "rgdal", "ggplot2", "hrbrthemes", "plotly", "grid", "reshape", "stringr", "rgdal", "MigClim", "mgcv", "gsubfn", "DT", "fmsb", "data.table", "scales", "leaflet.minicharts", "manipulateWidget", "shinydashboard", "shinyBS", "shinycssloaders", "shinyjs")
-libraries <- c("shiny", "shinyWidgets", "shinyFiles", "shinyalert", "tiff", "sf", "SDMTools", "proj4", "gdata", "colorspace", "plyr", "leaflet", "RColorBrewer", "scales", "lattice", "dplyr", "maps", "sp", "biomod2", "raster", "rgdal", "ggplot2", "hrbrthemes", "plotly", "grid", "reshape", "stringr", "rgdal", "MigClim", "mgcv", "gsubfn", "DT", "fmsb", "data.table", "scales", "leaflet.minicharts", "manipulateWidget", "shinydashboard", "shinyBS","shinycssloaders", "shinyjs")
+packages <- c("shiny", "shinyWidgets", "shinyFiles", "shinyalert", "tiff", "sf", "SDMTools", "proj4", "gdata", "colorspace", "plyr", "leaflet", "RColorBrewer", "scales", "lattice", "dplyr", "maps", "sp", "biomod2", "raster", "rgdal", "ggplot2", "hrbrthemes", "plotly", "grid", "reshape", "stringr", "rgdal", "MigClim", "mgcv", "gsubfn", "DT", "fmsb", "data.table", "scales", "leaflet.minicharts", "manipulateWidget", "shinydashboard", "shinyBS", "shinycssloaders", "shinyjs", "RPostgreSQL")
+libraries <- c("shiny", "shinyWidgets", "shinyFiles", "shinyalert", "tiff", "sf", "SDMTools", "proj4", "gdata", "colorspace", "plyr", "leaflet", "RColorBrewer", "scales", "lattice", "dplyr", "maps", "sp", "biomod2", "raster", "rgdal", "ggplot2", "hrbrthemes", "plotly", "grid", "reshape", "stringr", "rgdal", "MigClim", "mgcv", "gsubfn", "DT", "fmsb", "data.table", "scales", "leaflet.minicharts", "manipulateWidget", "shinydashboard", "shinyBS","shinycssloaders", "shinyjs", "RPostgreSQL")
 
 
 
@@ -295,6 +295,30 @@ customGetColor_Type_02 <- function(species_data) {
   temp
 }
 ####################################################################################################
+
+# PostgreSQL 연결
+psql <- dbDriver("PostgreSQL")
+pgConn <- function(query) {
+  pcon <- dbConnect(psql, dbname = "ecosystem", host = "192.168.0.199", port = "5432", user= "postgres", password = "postgres")
+  dbUser <- query(pcon)
+  dbDisconnect(pcon)
+  return (dbUser)
+}
+
+HELP_TEST_desc01 <- pgConn(function(con){
+  return ( dbGetQuery(con, paste0("select * from help_test")) )
+})
+
+
+print('HELP_TEST_desc01')
+print(HELP_TEST_desc01)
+
+
+
+
+
+
+#
 
 #Select language
 lang_selection <- F
