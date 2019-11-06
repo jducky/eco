@@ -95,36 +95,20 @@ makeGroupLayer_Species <- function(species_data, k_name){
   
   k_name <- unique(k_name)
   f_k_name <- factor(k_name)
+  l_f_k_name <- levels(factor(k_name))
+  
   print('f_k_name')
   print(f_k_name)
   
   print('k_name')
   print(k_name)
   
-  # i <- 1
-  
-  # while(i <= length(lv_k_name)){
-  #     
-  #     rows <- subset(species_data, K_NAME == lv_k_name[i])
-  #     result <- temp_colors_type[[unique(rows$TYPE)]]
-  #     name <- lv_k_name[i]
-  #     x <- paste0("<div style='position: relative; display: inline-block' class='awesome-marker-icon-",result," awesome-marker'><i class='glyphicon glyphicon-",temp_icons[[name]]," icon-black '></i></div>",name)  
-  #     test_groups <<- append(test_groups, x)
-  #     
-  #     print('result')
-  #     print(result)
-  #     print('temp_icons[[name]]')
-  #     print(temp_icons[[name]])
-  #     print('lv_k_name[i]')
-  #     print(name)
-  #     
-  #     i <- i+1
-  #     
-  # }
-  
+  print('l_f_k_name')
+  print(l_f_k_name)
   
   print('start for')
-  for(name in k_name) {
+  
+  for(name in l_f_k_name) {
 
     rows <- subset(species_data, K_NAME == name)
     result <- temp_colors_type[[unique(rows$TYPE)]]
@@ -132,6 +116,7 @@ makeGroupLayer_Species <- function(species_data, k_name){
     test_groups <<- c(test_groups, x)
 
   }
+  
   print('end for')
   
   print('test_groups')
@@ -144,13 +129,18 @@ makeGroupLayer_Species <- function(species_data, k_name){
 ####################################################################################################
 init_colors <- function(species_id) {
   dv <- length(species_id) / length(color_Picker)
+  
+  # for(i in 1:length(dv))
   i <- 1
   while(i <= dv + 1) {
     temp_colors <<- append(temp_colors, color_Picker)
     i <- i + 1
   }
+  
   names(temp_colors) <<- species_id
   is_init_colors <<- T
+  
+  
 }
 
 customGetColor <- function(species_data) {
@@ -239,8 +229,8 @@ customGetIcon <- function(k_name) {
   #   }
   #   i <- i+1
   # }
-  print('temp_Vector')
-  print(temp_Vector)
+  # print('temp_Vector')
+  # print(temp_Vector)
   return (temp_Vector)
 }
 ####################################################################################################
