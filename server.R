@@ -40,7 +40,6 @@ shinyServer(function(input, output, session) {
 
 
   
-  
   printTable <- function(){
     print('institute or type')
     resInfo <- Temp_G_FILE_speciesinfo_02[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
@@ -789,14 +788,23 @@ shinyServer(function(input, output, session) {
     rowsLen <- length(rs)
     
     if (rowsLen > 0) {
-  
       
-      species_info <- Temp_G_FILE_speciesinfo_02[rs, , drop = FALSE]
+      # x1 <- read.csv(file.path("C:/MOTIVE_Ecosystem/DATA/Species", "shin_specieslocation.csv"), header = T, sep = ",",stringsAsFactors = F)
+      # x2 <- read.csv(file.path("C:/MOTIVE_Ecosystem/DATA/Species", "speciesname_final.csv"), header = T, sep = "," ,stringsAsFactors = F)
+      # c <- count(x1, ID)
+      # x3 <- inner_join(c, x2, by = "ID")
+      # x4 <- inner_join(x1, x3, by = "ID")
+  
+      # 초기 테이블 상태가 아니라면 테이블 선택 시 다른 종이 선택됨
+      species_info <- G_FILE_speciesinfo_02[rs, , drop = FALSE]
+      # species_info <- x4[rs, , drop = FALSE]
+      
+      l_f_species_info_K_NAME <- levels(factor(species_info$K_NAME))
       
       links_x <- c()
       x <- NULL
       
-      for(name in species_info$K_NAME) {
+      for(name in l_f_species_info_K_NAME) {
     
         url <- paste0('https://species.nibr.go.kr/home/mainHome.do?searchType=total&cont_link=009&subMenu=009001&contCd=009001&searchField=', URLencode( iconv(name , to = 'UTF-8')) )
         # x <- paste0("<a href='https://species.nibr.go.kr/home/mainHome.do?searchType=total&cont_link=009&subMenu=009001&contCd=009001&searchField='",URLencode( iconv(name , to = 'UTF-8'))," target='_blank' class = 'btn btn-default'>","</a>"  )
@@ -1730,6 +1738,18 @@ shinyServer(function(input, output, session) {
       print('rs')
       print(rs)
       
+      x_index <- read.csv(file.path("C:/MOTIVE_Ecosystem/DATA/Species", "speciesname_final.csv"), header = T, sep = "," ,stringsAsFactors = F)
+      x_location <- read.csv(file.path("C:/MOTIVE_Ecosystem/DATA/Species", "shin_specieslocation.csv"), header = T, sep = ",",stringsAsFactors = F)
+      x_freq <- count(x_location, ID)
+      x_info <- inner_join(x_freq, x_index, by = "ID")
+      
+      G_FILE_speciesindex_02 <<- x_index
+      G_FILE_specieslocation_02 <<- x_location
+      G_FILE_speciesfreq_02 <<- x_freq
+      G_FILE_speciesinfo_02 <<- x_info
+      
+      # x4 <- inner_join(x1, x3, by = "ID")
+      
       
       species_data <- inner_join(G_FILE_specieslocation_02, G_FILE_speciesinfo_02[rs, , drop = FALSE], by = "ID")
       print('species_data')
@@ -1831,13 +1851,12 @@ shinyServer(function(input, output, session) {
         # 범례 없이 출력
         # addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID)) %>%
         
-        
         addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID), group= ~test_groups[factor(K_NAME)]) %>%
         # addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID), group= test_groups[species_data$K_NAME] ) %>%
         
         
         addLayersControl(
-          overlayGroups = test_groups[factor(species_data$K_NAME)],
+          overlayGroups = test_groups,
           # overlayGroups = ~test_groups[factor(K_NAME)],
           
           # overlayGroups = test_groups[species_data$K_NAME],
