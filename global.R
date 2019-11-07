@@ -459,6 +459,34 @@ Temp_G_FILE_speciesinfo_02 <- G_FILE_speciesinfo_02
 ### 끝 윈도우, 리눅스 경로 ###
 
 
+# G_Institute_Choice <- c()
+# for(inst in unique(G_FILE_speciesinfo_02$INSTITUTE)) {
+#   G_Institute_Choice[[inst]] <- HTML("<div style=\"width:10px; height: 10px; background-color:red;\"></div>")
+# }
+# 
+# print('unique(G_FILE_speciesinfo_02$TYPE)')
+# print(unique(G_FILE_speciesinfo_02$TYPE))
+# 
+# print('color_Picker_Type')
+# print(color_Picker_Type)
+# 
+# 
+# 
+# el <- div(HTML("I like <u>turtles</u>"))
+# 
+# G_Institute_Choice <- div(style = "width: 10px; height: 10px; background-color:red;")
+# G_Institute_Choice <- div(tags$span('1'), div(style="display: inline-block; width: 10px; height: 10px; background-color:red;"))
+# 
+# 
+# 
+# G_Institute_Choice <- list()
+# for (o in unique(G_FILE_speciesinfo_02$TYPE)) {
+#   G_Institute_Choice[[length(G_Institute_Choice)+1]] <- div(tags$span(o), div(style="display: inline-block; width: 10px; height: 10px; background-color:red;"))
+# }
+
+
+
+
 
 
 G$IS_VA_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
