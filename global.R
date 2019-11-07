@@ -47,8 +47,14 @@ if (length(CHK_libraries) > 0) {
 ##### End installing and loading packages ====================
 #####=========================================================
 
+if(Sys.info()['sysname'] == "Windows"){
+  setwd("C:/MOTIVE_Ecosystem/R/Programs/ecosystem")
+  
+}else if(Sys.info()['sysname'] == "Linux"){
+  setwd("/srv/shiny-server/ecosystem")
+}
+  
 
-setwd("/srv/shiny-server/ecosystem")
 rm(list = ls())
 
 
