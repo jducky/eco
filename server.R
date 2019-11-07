@@ -815,20 +815,18 @@ shinyServer(function(input, output, session) {
     
         url <- paste0('https://species.nibr.go.kr/home/mainHome.do?searchType=total&cont_link=009&subMenu=009001&contCd=009001&searchField=', URLencode( iconv(name , to = 'UTF-8')) )
         # x <- paste0("<a href='https://species.nibr.go.kr/home/mainHome.do?searchType=total&cont_link=009&subMenu=009001&contCd=009001&searchField='",URLencode( iconv(name , to = 'UTF-8'))," target='_blank' class = 'btn btn-default'>","</a>"  )
-        x <- a(href=url,
-               name, target = '_blank', class = "btn btn-default")
-        
+        x <- a(href=url,name, target = '_blank', class = "btn btn-default", style = "margin-bottom: 8px; display: table;")
         # x <- a(href='#',
         #   "123", class = "btn btn-default")
         
-        links_x <- paste0(links_x, ',',x)
+        links_x <- paste0(links_x, x)
       }
       
       print('links_x')
       print(links_x)
-      links_x <- gsub("^,", "", links_x)
+      # links_x <- gsub("^,", "", links_x)
       print('gsub links_x')
-      print(links_x)
+      # print(links_x)
       return ( HTML(links_x) )
       
       
@@ -1735,15 +1733,17 @@ shinyServer(function(input, output, session) {
       if( is.null(isolate(input$SP_Info_inst)) & is.null(isolate(input$SP_Info_type)) ) {
         print('if( is.null(isolate(input$SP_Info_inst)) & is.null(isolate(input$SP_Info_type)) )')
         
-        x_index <- read.csv(file.path("/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Species", "speciesname_final.csv"), header = T, sep = "," ,stringsAsFactors = F, fileEncoding = "CP949", encoding = "UTF-8")
-        x_location <- read.csv(file.path("/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Species", "shin_specieslocation.csv"), header = T, sep = ",",stringsAsFactors = F, fileEncoding = "CP949", encoding = "UTF-8")
-        x_freq <- count(x_location, ID)
-        x_info <- inner_join(x_freq, x_index, by = "ID")
+        # x_index <- read.csv(file.path("/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Species", "speciesname_final.csv"), header = T, sep = "," ,stringsAsFactors = F, fileEncoding = "CP949", encoding = "UTF-8")
+        # x_location <- read.csv(file.path("/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Species", "shin_specieslocation.csv"), header = T, sep = ",",stringsAsFactors = F, fileEncoding = "CP949", encoding = "UTF-8")
+        # x_freq <- count(x_location, ID)
+        # x_info <- inner_join(x_freq, x_index, by = "ID")
+        # 
+        # G_FILE_speciesindex_02 <<- x_index
+        # G_FILE_specieslocation_02 <<- x_location
+        # G_FILE_speciesfreq_02 <<- x_freq
+        # G_FILE_speciesinfo_02 <<- x_info
         
-        G_FILE_speciesindex_02 <<- x_index
-        G_FILE_specieslocation_02 <<- x_location
-        G_FILE_speciesfreq_02 <<- x_freq
-        G_FILE_speciesinfo_02 <<- x_info
+        G_FILE_speciesinfo_02 <<- Temp_G_FILE_speciesinfo_02
       }
 
       
@@ -1755,7 +1755,7 @@ shinyServer(function(input, output, session) {
       species_data <- inner_join(G_FILE_specieslocation_02, G_FILE_speciesinfo_02[rs, , drop = FALSE], by = "ID")
       
       
-      species_all_data <- inner_join(G_FILE_specieslocation_02, G_FILE_speciesinfo_02, by = "ID")
+      species_all_data <- inner_join(G_FILE_specieslocation_02, Temp_G_FILE_speciesinfo_02, by = "ID")
       
       print('species_data')
       print(species_data)
@@ -1797,10 +1797,6 @@ shinyServer(function(input, output, session) {
       
       # 개별 색상 설정
       icons <- awesomeIcons(
-        # icon = 'ios-close',
-        # iconColor = 'black',
-        # library = 'ion',
-        
 
         icon = s_icon,
         
@@ -1903,7 +1899,7 @@ shinyServer(function(input, output, session) {
   
   output$LD_Summary <- renderPrint({
     
-    r <- raster(file.path("/home/admin/R/Ecosystem_Data_191106/Projects/2019_DATA/4. forest fire, landslide/forest fire/S251", "barrier11.tif"))
+    r <- raster(file.path(S251_path, "barrier11.tif"))
     
     summary(r)
   })
@@ -1911,7 +1907,7 @@ shinyServer(function(input, output, session) {
   output$LD_Histogram <- renderPlot({
     
     #    r_asc <- read.asc(file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = "")))
-    x <- raster(file.path("/home/admin/R/Ecosystem_Data_191106/Projects/2019_DATA/4. forest fire, landslide/forest fire/S251", "barrier11.tif"))
+    x <- raster(file.path(S251_path, "barrier11.tif"))
     #    bins <- seq(which.min(x), which.max(x), length.out = input$bins + 1)
     
     hist(x, # breaks = bins, 
@@ -1925,7 +1921,7 @@ shinyServer(function(input, output, session) {
   output$LD_Histogram2 <- renderPlot({
     
     #    r_asc <- read.asc(file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = "")))
-    x <- raster(file.path("/home/admin/R/Ecosystem_Data_191106/Projects/2019_DATA/4. forest fire, landslide/forest fire/S251", "barrier11.tif"))
+    x <- raster(file.path(S251_path, "barrier11.tif"))
     #    bins <- seq(which.min(x), which.max(x), length.out = input$bins + 1)
     
     hist(x, # breaks = bins, 
@@ -1938,7 +1934,7 @@ shinyServer(function(input, output, session) {
   
   output$LD_Map <- renderLeaflet({
     
-    r <- raster(file.path("/home/admin/R/Ecosystem_Data_191106/Projects/2019_DATA/4. forest fire, landslide/forest fire/S251", "barrier11.tif"))
+    r <- raster(file.path(S251_path, "barrier11.tif"))
     crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
     
     pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r),
@@ -2294,7 +2290,7 @@ shinyServer(function(input, output, session) {
   
   output$DM_OU_Summary <- renderPrint({
     
-    r <- raster(file.path("/home/admin/R/Ecosystem_Data_191106/Projects/2019_DATA/1. unlimited dispersal/1. 민감종 57종", "S002b_HR8580.tif"))
+    r <- raster(file.path(sensitive_species_57, "S002b_HR8580.tif"))
     
     summary(r)
   })
@@ -2302,7 +2298,7 @@ shinyServer(function(input, output, session) {
   
   output$DM_OU_DIspersal_map <- renderLeaflet({
     
-    r <- raster(file.path("/home/admin/R/Ecosystem_Data_191106/Projects/2019_DATA/1. unlimited dispersal/1. 민감종 57종", "S002b_HR8580.tif"))
+    r <- raster(file.path(sensitive_species_57, "S002b_HR8580.tif"))
     crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
     
     pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r),
@@ -3050,7 +3046,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$SS_SP_Change <- renderPlot({
-    dataset <- read.csv("/home/admin/R/Ecosystem_Data_191106/Projects/2019_DATA/3. graph/VI_2.csv")
+    dataset <- read.csv(file.path(G_2019_DATA_graph, "VI_2.csv"))
     a=c(2000, 2030, 2050, 2080)
     b=c(dataset$X4530_0[1],dataset$X4530_L[1],dataset$X4550_L[1],dataset$X4580_L[1])
     c=c(dataset$X4530_0[68],dataset$X4530_L[68],dataset$X4550_L[68],dataset$X4580_L[68])
@@ -3413,7 +3409,8 @@ shinyServer(function(input, output, session) {
     
     par(mfrow = c(nr,nc), cex.main = 1.2)
     dir_path <- file.path(isolate(G$IS_AO_Dir_Folder))
-    dir_path <- "C:/MOTIVE_projects/proj1/Invasive_Species/test3"
+    # dir_path <- "C:/MOTIVE_projects/proj1/Invasive_Species/test3"
+    dir_path <- G_dir_path
     #		dir_path <- file.path(G$IS_AO_Dir_Folder)
     for (o in olist) {
       for (d in dlist) {

@@ -52,10 +52,17 @@ setwd("/srv/shiny-server/ecosystem")
 rm(list = ls())
 
 
+
+
 color_Picker <- c("black","lightgray","gray","white","cadetblue","pink","darkpurple","purple","lightblue","darkblue","blue","lightgreen","darkgreen","green","beige","orange","lightred","darkred","red")
 
-color_Picker_Type <- c("lightgray","cadetblue","lightblue","darkblue","blue","green","beige","orange","lightred","darkred","red")
+# 타입별 마커 색상
+# color_Picker_Type <- c("lightgray","cadetblue","lightblue","darkblue","blue","green","beige","orange","lightred","darkred","red")
+color_Picker_Type <- c("green", "darkgreen", "lightgreen", "beige", "purple", "blue", "red", "lightgray", "orange")
+
+# 종별 아이콘 
 icon_List_Type <- c('cog', 'heart', 'star', 'flag', 'home', 'plus-sign', 'leaf', 'grain', 'remove-circle', 'asterisk', 'plus', 'remove')
+
 
 temp_colors <- c()
 is_init_colors <- F
@@ -112,10 +119,21 @@ makeGroupLayer_Species <- function(species_data, k_name){
 
     rows <- subset(species_data, K_NAME == name)
     result <- temp_colors_type[[unique(rows$TYPE)]]
+    # result <- temp_colors_type[unique(rows$TYPE)]
+    
+    # print('unique(rows$TYPE)')
+    # print(unique(rows$TYPE))
+    
+    # print('result')
+    # print(result)
+    
     x <- paste0("<div style='position: relative; display: inline-block' class='awesome-marker-icon-",result," awesome-marker'><i class='glyphicon glyphicon-",temp_icons[[name]]," icon-black '></i></div>",name)
     test_groups <<- c(test_groups, x)
 
   }
+  
+  print('temp_colors_type')
+  print(temp_colors_type)
   
   print('end for')
   
@@ -271,6 +289,8 @@ customGetColor_Type <- function(species_data) {
 
 init_colors_type_02 <- function(species_all_data) {
   type_names <- unique(species_all_data$TYPE)
+  print('type_names')
+  print(type_names)
   if(length(type_names) < length(color_Picker_Type)) {
     i <- 1  
     while( i <= length(type_names) ) {
@@ -280,7 +300,7 @@ init_colors_type_02 <- function(species_all_data) {
   } else {
     dv <- length(type_names) / length(color_Picker_Type)
     i <- 1
-    while(i <= dv + 1) {
+    while(i <= dv) {
       temp_colors_type <<- append(temp_colors_type, color_Picker_Type)
       i <- i + 1
     }
@@ -291,7 +311,17 @@ init_colors_type_02 <- function(species_all_data) {
 
 customGetColor_Type_02 <- function(species_data) {
   temp <- c()
-  for(val in species_data$TYPE){temp <- append(temp, temp_colors_type[[val]])}
+  print('customGetColor_Type_02')
+  
+  for(val in species_data$TYPE){
+    print('species_data$TYPE val')
+    print(val)
+    print('temp_colors_type[[val]]')
+    print(temp_colors_type[[val]])
+    temp <- append(temp, temp_colors_type[[val]])
+  }
+  print('temp')
+  print(temp)
   temp
 }
 ####################################################################################################
@@ -310,34 +340,120 @@ HELP_TEST_desc01 <- pgConn(function(con){
 })
 
 
-print('HELP_TEST_desc01')
-print(HELP_TEST_desc01)
 
-
-
-
-
-
-#
 
 #Select language
 lang_selection <- F
 
 
+
+
 ##### Path
+# G <- reactiveValues()
+# G$SE_Dir_Project <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_projects/proj1"
+# G$SE_Dir_Climate <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Climate2"
+# G$SE_Dir_Link <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Link" 
+# G$SE_Dir_Species <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Species"
+# G$SE_Dir_Admin <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Admin"
+# G$SE_speciesindex <- "speciesname_final.csv"
+# G$SE_specieslocation <- "shin_specieslocation.csv"
+# G_FILE_speciesindex <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_speciesindex)), header = T, sep = "," , fileEncoding = "CP949", encoding = "UTF-8")
+# G_FILE_specieslocation <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_specieslocation)), header = T, sep = "," , fileEncoding = "CP949", encoding = "UTF-8")
+# G_FILE_speciesfreq <- count(G_FILE_specieslocation, ID)
+# G_FILE_speciesinfo <- inner_join(G_FILE_speciesfreq, G_FILE_speciesindex, by = "ID")
+# Temp_G_FILE_speciesinfo <- G_FILE_speciesinfo
+
+
+### 시작 윈도우, 리눅스 경로 ###
+
 G <- reactiveValues()
-G$SE_Dir_Project <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_projects/proj1"
-G$SE_Dir_Climate <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Climate2"
-G$SE_Dir_Link <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Link" 
-G$SE_Dir_Species <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Species"
-G$SE_Dir_Admin <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Admin"
+
+G$SE_Dir_Project <- NULL
+G$SE_Dir_Climate <- NULL
+G$SE_Dir_Link <- NULL
+G$SE_Dir_Species <- NULL
+G$SE_Dir_Admin <- NULL
 G$SE_speciesindex <- "speciesname_final.csv"
 G$SE_specieslocation <- "shin_specieslocation.csv"
-G_FILE_speciesindex <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_speciesindex)), header = T, sep = "," , fileEncoding = "CP949", encoding = "UTF-8")
-G_FILE_specieslocation <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_specieslocation)), header = T, sep = "," , fileEncoding = "CP949", encoding = "UTF-8")
+
+G_FILE_speciesindex <- NULL
+G_FILE_specieslocation <- NULL
+G_FILE_speciesindex_02 <- NULL
+G_FILE_specieslocation_02 <- NULL
+
+G_dir_path <- NULL
+S251_path <- NULL
+sensitive_species_57 <- NULL
+G_2019_DATA_graph <- NULL
+
+
+if( Sys.info()['sysname'] == "Windows" ) {
+  print(Sys.info()['sysname'])
+  ##### Path
+  G[['SE_Dir_Project']] <- "C:/MOTIVE_projects/proj1"
+  G[['SE_Dir_Climate']] <- "C:/MOTIVE_Ecosystem/DATA/Climate2"
+  G[['SE_Dir_Link']] <- "C:/MOTIVE_Ecosystem/DATA/Link" 
+  G[['SE_Dir_Species']] <- "C:/MOTIVE_Ecosystem/DATA/Species"
+  G[['SE_Dir_Admin']] <- "C:/MOTIVE_Ecosystem/DATA/Admin"
+  
+  G_FILE_speciesindex <- read.csv(file.path(isolate(G[['SE_Dir_Species']]), isolate(G[['SE_speciesindex']])), header = T, sep = ",", stringsAsFactors = F)
+  G_FILE_specieslocation <- read.csv(file.path(isolate(G[['SE_Dir_Species']]), isolate(G[['SE_specieslocation']])), header = T, sep = ",", stringsAsFactors = F)
+  
+  G_FILE_speciesindex_02 <- read.csv(file.path(isolate(G[['SE_Dir_Species']]), isolate(G[['SE_speciesindex']])), header = T, sep = ",", stringsAsFactors = F)
+  G_FILE_specieslocation_02 <- read.csv(file.path(isolate(G[['SE_Dir_Species']]), isolate(G[['SE_specieslocation']])), header = T, sep = ",", stringsAsFactors = F)
+  
+  G_dir_path <- "C:/MOTIVE_projects/proj1/Invasive_Species/test3"
+  S251_path <- "C:/Projects/2019_DATA/4. forest fire, landslide/forest fire/S251"
+  sensitive_species_57 <- "C:/Projects/2019_DATA/1. unlimited dispersal/1. 민감종 57종"
+  G_2019_DATA_graph <- "C:/Projects/2019_DATA/3. graph"
+ 
+} else if ( Sys.info()['sysname'] == "Linux" ) {
+  print(Sys.info()['sysname'])
+  ##### Path
+  G[['SE_Dir_Project']] <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_projects/proj1"
+  G[['SE_Dir_Climate']] <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Climate2"
+  G[['SE_Dir_Link']] <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Link" 
+  G[['SE_Dir_Species']] <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Species"
+  G[['SE_Dir_Admin']] <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Admin"
+  
+  G_FILE_speciesindex <- read.csv(file.path(isolate(G[['SE_Dir_Species']]), isolate(G[['SE_speciesindex']])), header = T, sep = ",", stringsAsFactors = F , fileEncoding = "CP949", encoding = "UTF-8")
+  G_FILE_specieslocation <- read.csv(file.path(isolate(G[['SE_Dir_Species']]), isolate(G[['SE_specieslocation']])), header = T, sep = ",", stringsAsFactors = F , fileEncoding = "CP949", encoding = "UTF-8")
+  
+  G_FILE_speciesindex_02 <- read.csv(file.path(isolate(G[['SE_Dir_Species']]), isolate(G[['SE_speciesindex']])), header = T, sep = ",", stringsAsFactors = F , fileEncoding = "CP949", encoding = "UTF-8")
+  G_FILE_specieslocation_02 <- read.csv(file.path(isolate(G[['SE_Dir_Species']]), isolate(G[['SE_specieslocation']])), header = T, sep = ",", stringsAsFactors = F , fileEncoding = "CP949", encoding = "UTF-8")
+  
+  G_dir_path <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_projects/proj1/Invasive_Species/test3"
+  S251_path <-"/home/admin/R/Ecosystem_Data_191106/Projects/2019_DATA/4. forest fire, landslide/forest fire/S251"
+  sensitive_species_57 <- "/home/admin/R/Ecosystem_Data_191106/Projects/2019_DATA/1. unlimited dispersal/1. 민감종 57종"
+  G_2019_DATA_graph <- "/home/admin/R/Ecosystem_Data_191106/Projects/2019_DATA/3. graph"
+  
+}
+
+
 G_FILE_speciesfreq <- count(G_FILE_specieslocation, ID)
 G_FILE_speciesinfo <- inner_join(G_FILE_speciesfreq, G_FILE_speciesindex, by = "ID")
 Temp_G_FILE_speciesinfo <- G_FILE_speciesinfo
+
+
+
+## HS
+G_FILE_speciesfreq_02 <- count(G_FILE_specieslocation_02, ID)
+G_FILE_speciesinfo_02 <- inner_join(G_FILE_speciesfreq_02, G_FILE_speciesindex_02, by = "ID")
+Temp_G_FILE_speciesinfo_02 <- G_FILE_speciesinfo_02
+
+
+## HS
+# G_FILE_speciesindex_02 <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_speciesindex)), header = T, sep = ",", stringsAsFactors = F, fileEncoding = "CP949", encoding = "UTF-8")
+# G_FILE_specieslocation_02 <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_specieslocation)), header = T, sep = ",", stringsAsFactors = F, fileEncoding = "CP949", encoding = "UTF-8")
+# G_FILE_speciesfreq_02 <- count(G_FILE_specieslocation_02, ID)
+# G_FILE_speciesinfo_02 <- inner_join(G_FILE_speciesfreq_02, G_FILE_speciesindex_02, by = "ID")
+# Temp_G_FILE_speciesinfo_02 <- G_FILE_speciesinfo_02
+
+
+### 끝 윈도우, 리눅스 경로 ###
+
+
+
 
 G$IS_VA_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
 G$IS_AO_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
@@ -345,13 +461,6 @@ G$IS_AO_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep 
 Input_img <- "tif"  #asc",
 Output_img <- "tif"
 
-
-## HS
-G_FILE_speciesindex_02 <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_speciesindex)), header = T, sep = ",", stringsAsFactors = F, fileEncoding = "CP949", encoding = "UTF-8")
-G_FILE_specieslocation_02 <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_specieslocation)), header = T, sep = ",", stringsAsFactors = F, fileEncoding = "CP949", encoding = "UTF-8")
-G_FILE_speciesfreq_02 <- count(G_FILE_specieslocation_02, ID)
-G_FILE_speciesinfo_02 <- inner_join(G_FILE_speciesfreq_02, G_FILE_speciesindex_02, by = "ID")
-Temp_G_FILE_speciesinfo_02 <- G_FILE_speciesinfo_02
 
 
 CD_Scenarios_list <- c("RCP 4.5" = "RCP4.5",

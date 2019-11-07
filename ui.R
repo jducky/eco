@@ -115,6 +115,7 @@ shinyUI(
                   color: blue;
                 }
                 
+                
              '))),
       
       
@@ -197,7 +198,7 @@ shinyUI(
                                                              selected = NULL),
                                           
                                           actionButton('all_SP_Info_inst',label = "selectAll"),
-                                          actionButton('reset_SP_Info_inst',label = "reset"), br(),
+                                          actionButton('reset_SP_Info_inst',label = "reset"), br(), hr(),
                                           
                                           
                                           
@@ -240,7 +241,7 @@ shinyUI(
                                          actionButton('reset_SP_Info',label = "Reset", style = "float: right; margin-bottom: 15px;"), br(),
                                          DT::dataTableOutput("SP_Info")
                                   ),
-                                  column(1, uiOutput("Species_Link")),
+                                  column(2, uiOutput("Species_Link")),
                                   column(6, leafletOutput("SP_Map", width = "600", height = "600") %>% withSpinner(), 
                                          uiOutput('SP_Map_Reset_UI')
                                          
