@@ -815,7 +815,7 @@ shinyServer(function(input, output, session) {
     
         url <- paste0('https://species.nibr.go.kr/home/mainHome.do?searchType=total&cont_link=009&subMenu=009001&contCd=009001&searchField=', URLencode( iconv(name , to = 'UTF-8')) )
         # x <- paste0("<a href='https://species.nibr.go.kr/home/mainHome.do?searchType=total&cont_link=009&subMenu=009001&contCd=009001&searchField='",URLencode( iconv(name , to = 'UTF-8'))," target='_blank' class = 'btn btn-default'>","</a>"  )
-        x <- a(href=url,name, target = '_blank', class = "btn btn-default", style = "margin-bottom: 8px; display: table;")
+        x <- a(href=url,name, target = '_blank', class = "btn btn-default", style = "margin-bottom: 8px; margin-left: 30px; display: table; ")
         # x <- a(href='#',
         #   "123", class = "btn btn-default")
         
