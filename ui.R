@@ -300,20 +300,38 @@ shinyUI(
                                 )
                               )
                      ),
-                     tabPanel("Species Location",
+                     tabPanel(SP_Name_Location,
                               tags$head(
                                 # Include our custom CSS
                                 includeCSS("styles.css"),
                                 includeScript("gomap.js")
                               ),
                               tags$hr(),
-                              column(6, 
-                                     actionButton('reset_SP_Loc',label = "Reset", style = "float: right; margin-bottom: 15px;"),
-                                     DT::dataTableOutput("SP_LOC_Info")
-                              ),
-                              column(6, leafletOutput("SP_LOC_Map", width = "600", height = "600")  %>% withSpinner(),
-                                     uiOutput('SP_LOC_Map_Reset_UI')
+                              sidebarLayout(
+                                sidebarPanel(width = 2,
+                                             
+                                  checkboxGroupInput("SP_Loc_K_Name", "K_NAME",	
+                                                     choices = NULL,
+                                                     selected = NULL
+                                  ),
+                                  
+                                  actionButton('all_SP_Loc_K_Name',label = "selectAll"),
+                                  actionButton('reset_SP_Loc_K_Name',label = "reset"), br()
+                                  
+                                  
+                                ),
+                                mainPanel(
+                                  column(6, 
+                                         actionButton('reset_SP_Loc', label = "Reset", style = "float: right; margin-bottom: 15px;"),
+                                         DT::dataTableOutput("SP_LOC_Info")
+                                  ),
+                                  column(6, leafletOutput("SP_LOC_Map", width = "600", height = "600")  %>% withSpinner(),
+                                         uiOutput('SP_LOC_Map_Reset_UI')
+                                  )
+                                )
+                                
                               )
+                              
                      )
                    )
           ),  

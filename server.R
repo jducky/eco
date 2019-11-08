@@ -42,7 +42,14 @@ shinyServer(function(input, output, session) {
   
   printTable <- function(){
     # print('institute or type')
+    
+    print('Temp_G_FILE_speciesinfo_02')
+    print(Temp_G_FILE_speciesinfo_02)
+    
     resInfo <- Temp_G_FILE_speciesinfo_02[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
+    # resLoc <- Temp_G_FILE_specieslocation_02
+    
+    
     SP_Info_inst <- isolate(input$SP_Info_inst)
     SP_Info_type <- isolate(input$SP_Info_type)
     # print('resInfo <- Temp_G_FILE_speciesinfo_02[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]')
@@ -53,7 +60,9 @@ shinyServer(function(input, output, session) {
     # print(SP_Info_type)
     
     if(!is.null(SP_Info_inst) & is.null(SP_Info_type)) {
+      
       G_FILE_speciesinfo_02 <<- subset(resInfo, INSTITUTE %in% SP_Info_inst)
+      
       # x <- subset(resInfo, INSTITUTE %in% SP_Info_inst)
     } else if(is.null(SP_Info_inst) & !is.null(SP_Info_type)){
       # print('else if(is.null(SP_Info_inst) & !is.null(SP_Info_type))')
@@ -65,6 +74,7 @@ shinyServer(function(input, output, session) {
       G_FILE_speciesinfo_02 <<- subset(resInfo, INSTITUTE %in% SP_Info_inst & TYPE %in% SP_Info_type)
       # x <- subset(resInfo, INSTITUTE %in% SP_Info_inst & TYPE %in% SP_Info_type)
     }
+    
     renderTable("SP_Info", G_FILE_speciesinfo_02)
   }
   
@@ -74,8 +84,21 @@ shinyServer(function(input, output, session) {
     })
   }
   
+  printTable_Loc <- function(){
+    resInfo_Loc <- G_FILE_speciesinfo_02
+    
+    SP_Loc_K_Name <- isolate(input$SP_Loc_K_Name)
+    
+    if(is.null(SP_Loc_K_Name)) {SP_Loc_K_Name <- ""} 
+    G_FILE_speciesinfo_02 <<- subset(resInfo_Loc, K_NAME %in% SP_Loc_K_Name)
+    
+    renderTable("SP_LOC_Info", G_FILE_speciesinfo_02)
+  }
+  
   observeEvent(input$SP_Info_inst,{printTable()}, ignoreNULL = F, ignoreInit = T)
   observeEvent(input$SP_Info_type,{printTable()}, ignoreNULL = F, ignoreInit = T)
+  
+  observeEvent(input$SP_Loc_K_Name,{printTable_Loc()}, ignoreNULL = F, ignoreInit = T)
   
   
   observeEvent(input$reset_SP_Info, {
@@ -1856,7 +1879,7 @@ shinyServer(function(input, output, session) {
         # 범례 없이 출력
         # addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID)) %>%
         
-        addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(k_name), group= ~test_groups[factor(K_NAME)]) %>%
+        addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID), group= ~test_groups[factor(K_NAME)]) %>%
         # addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID), group= test_groups[species_data$K_NAME] ) %>%
         
         
@@ -1878,24 +1901,105 @@ shinyServer(function(input, output, session) {
   
   output$SP_LOC_Info <- DT::renderDataTable({
     input$reset_SP_Loc
-    inner_join(G_FILE_specieslocation, G_FILE_speciesinfo[input$SP_Info_rows_selected, , drop = FALSE], by = "ID")
+    # inner_join(G_FILE_specieslocation, G_FILE_speciesinfo[input$SP_Info_rows_selected, , drop = FALSE], by = "ID")
+    SP_LOC_Info_Table <<- inner_join(G_FILE_specieslocation_02, G_FILE_speciesinfo_02[input$SP_Info_rows_selected, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = FALSE], by = "ID")
+    SP_LOC_Info_Table
   }, server = TRUE)
+  
+  
+
   
   
   output$SP_LOC_Map <- renderLeaflet({
     rs <- input$SP_LOC_Info_rows_selected  # G_FILE_specieslocation   # st_read("species.shp")
+    
     if (length(rs)) {
-      species_data <- G_FILE_specieslocation[rs, , drop = FALSE]
+      
+      # 조건 선택 확인
+      # if( is.null(isolate(input$SP_Info_inst)) & is.null(isolate(input$SP_Info_type)) ) {
+      #   G_FILE_speciesinfo_02 <<- Temp_G_FILE_speciesinfo_02
+      # }
+      
+      # print('G_FILE_specieslocation_02')
+      # print(G_FILE_specieslocation_02)
+      
+      # print('G_FILE_speciesinfo_02')
+      # print(G_FILE_speciesinfo_02)
+
+      # print('G_FILE_specieslocation_02[rs, , drop = FALSE]')
+      # print(G_FILE_specieslocation_02[rs, , drop = FALSE])
+      
+      # print('G_FILE_speciesinfo_02[rs, , drop = FALSE]')
+      # print(G_FILE_speciesinfo_02[rs, , drop = FALSE])
+  
+      
+      # species_data <- inner_join(G_FILE_specieslocation_02[rs, drop = FALSE], G_FILE_speciesinfo_02[rs, , drop = FALSE], by = "ID")
+      species_all_data <- inner_join(G_FILE_specieslocation_02, Temp_G_FILE_speciesinfo_02, by = "ID")
+      
+      species_data <- SP_LOC_Info_Table[rs, ,drop = FALSE]
+      
+      print('species_data')
+      print(species_data)
+      
+      if(is_init_colors_type == F & is_init_icons == F){
+        
+        # 타입별 색상 초기화
+        init_icons(unique(species_all_data$K_NAME))
+        
+        # 종별 아이콘 초기화
+        init_colors_type_02(species_all_data)
+      }
+      
+      
+      # 타입별 색상
+      g_color <- customGetColor_Type_02(species_data)
+      
+      
+      # 종별 아이콘
+      k_name <- species_data$K_NAME
+      s_icon <- customGetIcon(k_name)
+      GroupLayer_Species_Individual <<- makeGroupLayer_Species_Individual(species_data, k_name)
+      
+      print('GroupLayer_Species_Individual')
+      print(GroupLayer_Species_Individual)
+      
+      # 개별 색상 설정
+      icons <- awesomeIcons(
+        
+        # 종별 아이콘
+        icon = s_icon,
+        
+        iconColor = 'black',
+        library = 'glyphicon',
+        
+        # 타입별 색상
+        markerColor = g_color
+      )
+      
+      
+      
       leaflet(data = species_data) %>%
+        
         addTiles(
           urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
           attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
         ) %>%
         
-        addMarkers(~Longitude, ~Latitude, popup = ~as.character(ID), label = ~as.character(ID)) %>%
+        # addMarkers(~Longitude, ~Latitude, popup = ~as.character(ID), label = ~as.character(ID)) %>%
+        addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID), group= ~GroupLayer_Species_Individual[factor(K_NAME)]) %>%
+        
+        addLayersControl(
+          overlayGroups = GroupLayer_Species_Individual,
+          options = layersControlOptions(collapsed = F)
+        )  %>%
+        
         setView(lng = 127.00, lat = 37.00, zoom = 6)
+      
     }
   })  
+  
+  
+  
   
   output$LD_Summary <- renderPrint({
     

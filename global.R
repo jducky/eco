@@ -77,6 +77,7 @@ temp_colors_type <- c()
 is_init_colors_type <- F
 
 test_groups <- c()
+GroupLayer_Species_Individual <- c()
 
 temp_icons <- c()
 is_init_icons <- F
@@ -146,6 +147,42 @@ makeGroupLayer_Species <- function(species_data, k_name){
   # print('test_groups')
   # print(test_groups)
 }
+
+
+makeGroupLayer_Species_Individual <- function(species_data, k_name){
+  
+  print('species_data')
+  print(species_data)
+  
+  
+  k_name <- unique(k_name)
+  f_k_name <- factor(k_name)
+  l_f_k_name <- levels(factor(k_name))
+  temp_groups <- c()
+  
+  print('k_name')
+  print(k_name)
+  
+  print('f_k_name')
+  print(f_k_name)
+  
+  print('l_f_k_name')
+  print(l_f_k_name)
+  
+  for(name in l_f_k_name) {
+    
+    rows <- subset(species_data, K_NAME == name)
+    result <- temp_colors_type[[unique(rows$TYPE)]]
+    
+    x <- paste0("<div style='position: relative; display: inline-block' class='awesome-marker-icon-",result," awesome-marker'><i class='glyphicon glyphicon-",temp_icons[[name]]," icon-black '></i></div>",name)
+    temp_groups <- c(temp_groups, x)
+    
+  }
+  return (temp_groups)
+}
+
+
+
 ####################################################################################################
 
 ####################################################################################################
@@ -315,7 +352,24 @@ init_colors_type_02 <- function(species_all_data) {
   is_init_colors_type <<- T
 }
 
+
 customGetColor_Type_02 <- function(species_data) {
+  temp <- c()
+  # print('customGetColor_Type_02')
+  
+  for(val in species_data$TYPE){
+    # print('species_data$TYPE val')
+    # print(val)
+    # print('temp_colors_type[[val]]')
+    # print(temp_colors_type[[val]])
+    temp <- append(temp, temp_colors_type[[val]])
+  }
+  # print('temp')
+  # print(temp)
+  temp
+}
+
+customGetColor_Type_Individual_02 <- function(species_data) {
   temp <- c()
   # print('customGetColor_Type_02')
   
@@ -446,6 +500,8 @@ Temp_G_FILE_speciesinfo <- G_FILE_speciesinfo
 G_FILE_speciesfreq_02 <- count(G_FILE_specieslocation_02, ID)
 G_FILE_speciesinfo_02 <- inner_join(G_FILE_speciesfreq_02, G_FILE_speciesindex_02, by = "ID")
 Temp_G_FILE_speciesinfo_02 <- G_FILE_speciesinfo_02
+Temp_G_FILE_specieslocation_02 <- G_FILE_specieslocation_02
+SP_LOC_Info_Table <- NULL
 
 ut <- unique(G_FILE_speciesinfo_02$TYPE)
 ut <- c(ut[1],ut[2],ut[3],ut[8],ut[7],ut[1],ut[6],ut[5],ut[4],ut[9]) 
