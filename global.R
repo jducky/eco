@@ -447,6 +447,9 @@ G_FILE_speciesfreq_02 <- count(G_FILE_specieslocation_02, ID)
 G_FILE_speciesinfo_02 <- inner_join(G_FILE_speciesfreq_02, G_FILE_speciesindex_02, by = "ID")
 Temp_G_FILE_speciesinfo_02 <- G_FILE_speciesinfo_02
 
+ut <- unique(G_FILE_speciesinfo_02$TYPE)
+ut <- c(ut[1],ut[2],ut[3],ut[8],ut[7],ut[1],ut[6],ut[5],ut[4],ut[9]) 
+
 
 ## HS
 # G_FILE_speciesindex_02 <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_speciesindex)), header = T, sep = ",", stringsAsFactors = F, fileEncoding = "CP949", encoding = "UTF-8")

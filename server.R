@@ -16,8 +16,8 @@ shinyServer(function(input, output, session) {
     # print('isolate(input$all_SP_Info_type)')
     # print(isolate(input$all_SP_Info_type))
     
-    updateCheckboxGroupInput(session, inputId = 'SP_Info_type', choices = unique(Temp_G_FILE_speciesinfo_02$TYPE),
-                             selected = unique(Temp_G_FILE_speciesinfo_02$TYPE), inline = FALSE)
+    updateCheckboxGroupInput(session, inputId = 'SP_Info_type', choices = ut,
+                             selected = ut, inline = FALSE)
   })
   
   # Reset
@@ -34,7 +34,7 @@ shinyServer(function(input, output, session) {
     # print('isolate(input$all_SP_Info_type)')
     # print(isolate(input$all_SP_Info_type))
     
-    updateCheckboxGroupInput(session, inputId = 'SP_Info_type', choices = unique(Temp_G_FILE_speciesinfo_02$TYPE),
+    updateCheckboxGroupInput(session, inputId = 'SP_Info_type', choices = ut,
                              selected = NULL, inline = FALSE)
   })
 

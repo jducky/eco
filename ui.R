@@ -205,7 +205,7 @@ shinyUI(
                                              
                                              
                                              checkboxGroupInput("SP_Info_type", "TYPE",	
-                                                                choices = unique(G_FILE_speciesinfo_02$TYPE),	
+                                                                choices = ut,	
                                                                 selected = NULL),
                                              
                                              actionButton('all_SP_Info_type',label = "selectAll"), 
@@ -260,18 +260,8 @@ shinyUI(
                                                                          
                                                                 ),
                                                                 tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
-                                                                         tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[4])),
-                                                                         tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #FFC68A;")
-                                                                         
-                                                                ),
-                                                                tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
-                                                                         tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[5])),
-                                                                         tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #D154B9;")
-                                                                         
-                                                                ),
-                                                                tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
-                                                                         tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[6])),
-                                                                         tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #36A6D8;")
+                                                                         tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[8])),
+                                                                         tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #A3A3A3;")
                                                                          
                                                                 ),
                                                                 tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
@@ -280,8 +270,18 @@ shinyUI(
                                                                          
                                                                 ),
                                                                 tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
-                                                                         tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[8])),
-                                                                         tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #A3A3A3;")
+                                                                           tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[6])),
+                                                                           tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #36A6D8;")
+                                                                           
+                                                                ),
+                                                                tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
+                                                                         tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[5])),
+                                                                         tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #D154B9;")
+                                                                         
+                                                                ),
+                                                                tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
+                                                                         tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[4])),
+                                                                         tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #FFC68A;")
                                                                          
                                                                 ),
                                                                 tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
