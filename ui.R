@@ -197,7 +197,7 @@ shinyUI(
                                                                 selected = NULL
                                                                 # choiceNames = G_Institute_Choice,
                                                                 # choiceValues = G_Institute_Choice
-                                                                ),
+                                             ),
                                              
                                              actionButton('all_SP_Info_inst',label = "selectAll"),
                                              actionButton('reset_SP_Info_inst',label = "reset"), br(), hr(),
@@ -234,80 +234,64 @@ shinyUI(
                                                       column(4,plotOutput("SP_Histogram"))
                                                     ) 
                                     )
-                                    
-                                    
-                                  ),
-                                  
-                                  bsCollapse(
-                                    bsCollapsePanel("Species Color",
-                                                    style = ST_Name,
-                                                    
-                                                    tags$table( style = "border: 1px solid black; padding: 1%; width: 150px; border-spacing: 10px;",
-                                                                
-                                                                tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
-                                                                  tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[1])),
-                                                                  tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #6AA323;")
-                                                                   
-                                                                  ),
-                                                                tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
-                                                                         tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[2])),
-                                                                         tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #83913E;")
-                                                                         
-                                                                ),
-                                                                tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
-                                                                         tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[3])),
-                                                                         tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #B5EF71;")
-                                                                         
-                                                                ),
-                                                                tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
-                                                                         tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[8])),
-                                                                         tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #A3A3A3;")
-                                                                         
-                                                                ),
-                                                                tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
-                                                                         tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[7])),
-                                                                         tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #D9513F;")
-                                                                         
-                                                                ),
-                                                                tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
-                                                                           tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[6])),
-                                                                           tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #36A6D8;")
-                                                                           
-                                                                ),
-                                                                tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
-                                                                         tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[5])),
-                                                                         tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #D154B9;")
-                                                                         
-                                                                ),
-                                                                tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
-                                                                         tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[4])),
-                                                                         tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #FFC68A;")
-                                                                         
-                                                                ),
-                                                                tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
-                                                                         tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[9])),
-                                                                         tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #F1942F;")
-                                                                         
-                                                                )
-                                                              
-                                               
-                                                    )
-                                                    
-                                                    
-                                             
-                                    )
-                                    
-                                    
                                   ),
                                   
                                   fluidRow(
                                     
                                     column(4, 
-                                           
                                            actionButton('reset_SP_Info',label = "Reset", style = "float: right; margin-bottom: 15px;"), br(),
                                            DT::dataTableOutput("SP_Info")
                                     ),
-                                    column(2, uiOutput("Species_Link")),
+                                    column(2,
+                                           tags$table( style = "border: 1px solid black; padding: 1%; width: 150px; border-spacing: 10px;",
+                                                       
+                                                       tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
+                                                                tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[1])),
+                                                                tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #6AA323;")
+                                                                
+                                                       ),
+                                                       tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
+                                                                tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[2])),
+                                                                tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #83913E;")
+                                                                
+                                                       ),
+                                                       tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
+                                                                tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[3])),
+                                                                tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #B5EF71;")
+                                                                
+                                                       ),
+                                                       tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
+                                                                tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[8])),
+                                                                tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #A3A3A3;")
+                                                                
+                                                       ),
+                                                       tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
+                                                                tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[7])),
+                                                                tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #D9513F;")
+                                                                
+                                                       ),
+                                                       tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
+                                                                tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[6])),
+                                                                tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #36A6D8;")
+                                                                
+                                                       ),
+                                                       tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
+                                                                tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[5])),
+                                                                tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #D154B9;")
+                                                                
+                                                       ),
+                                                       tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
+                                                                tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[4])),
+                                                                tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #FFC68A;")
+                                                                
+                                                       ),
+                                                       tags$tr( style = "border: 1px solid black; padding: 1%; font-size: 120%;",
+                                                                tags$td(style = "padding: 3px;border: 1px solid black;", div(unique(G_FILE_speciesinfo_02$TYPE)[9])),
+                                                                tags$td(style = "padding: 3px;border: 1px solid black;width: 30%; background-color: #F1942F;")
+                                                                
+                                                       )
+                                           ), hr(),
+                                           uiOutput("Species_Link")),
                                     column(6, leafletOutput("SP_Map", width = "600", height = "600") %>% withSpinner(), 
                                            uiOutput('SP_Map_Reset_UI')
                                            

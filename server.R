@@ -1856,7 +1856,7 @@ shinyServer(function(input, output, session) {
         # 범례 없이 출력
         # addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID)) %>%
         
-        addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID), group= ~test_groups[factor(K_NAME)]) %>%
+        addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(k_name), group= ~test_groups[factor(K_NAME)]) %>%
         # addAwesomeMarkers(~Longitude, ~Latitude, icon=icons, label=~as.character(ID), group= test_groups[species_data$K_NAME] ) %>%
         
         
