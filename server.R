@@ -4,8 +4,8 @@ shinyServer(function(input, output, session) {
   
   # selectAll
   observeEvent(input$all_SP_Info_inst, {
-    print('isolate(input$SP_Info_inst)')
-    print(isolate(input$SP_Info_inst))
+    # print('isolate(input$SP_Info_inst)')
+    # print(isolate(input$SP_Info_inst))
     
     updateCheckboxGroupInput(session, inputId = 'SP_Info_inst', choices = unique(Temp_G_FILE_speciesinfo_02$INSTITUTE),
                              selected = unique(Temp_G_FILE_speciesinfo_02$INSTITUTE), inline = FALSE)
@@ -13,8 +13,8 @@ shinyServer(function(input, output, session) {
   
   
   observeEvent(input$all_SP_Info_type, {
-    print('isolate(input$all_SP_Info_type)')
-    print(isolate(input$all_SP_Info_type))
+    # print('isolate(input$all_SP_Info_type)')
+    # print(isolate(input$all_SP_Info_type))
     
     updateCheckboxGroupInput(session, inputId = 'SP_Info_type', choices = unique(Temp_G_FILE_speciesinfo_02$TYPE),
                              selected = unique(Temp_G_FILE_speciesinfo_02$TYPE), inline = FALSE)
@@ -22,8 +22,8 @@ shinyServer(function(input, output, session) {
   
   # Reset
   observeEvent(input$reset_SP_Info_inst, {
-    print('isolate(input$SP_Info_inst)')
-    print(isolate(input$SP_Info_inst))
+    # print('isolate(input$SP_Info_inst)')
+    # print(isolate(input$SP_Info_inst))
     
     updateCheckboxGroupInput(session, inputId = 'SP_Info_inst', choices = unique(Temp_G_FILE_speciesinfo_02$INSTITUTE),
                              selected = NULL, inline = FALSE)
@@ -31,8 +31,8 @@ shinyServer(function(input, output, session) {
   
   
   observeEvent(input$reset_SP_Info_type, {
-    print('isolate(input$all_SP_Info_type)')
-    print(isolate(input$all_SP_Info_type))
+    # print('isolate(input$all_SP_Info_type)')
+    # print(isolate(input$all_SP_Info_type))
     
     updateCheckboxGroupInput(session, inputId = 'SP_Info_type', choices = unique(Temp_G_FILE_speciesinfo_02$TYPE),
                              selected = NULL, inline = FALSE)
@@ -41,22 +41,22 @@ shinyServer(function(input, output, session) {
 
   
   printTable <- function(){
-    print('institute or type')
+    # print('institute or type')
     resInfo <- Temp_G_FILE_speciesinfo_02[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
     SP_Info_inst <- isolate(input$SP_Info_inst)
     SP_Info_type <- isolate(input$SP_Info_type)
-    print('resInfo <- Temp_G_FILE_speciesinfo_02[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]')
-    print(resInfo)
-    print('SP_Info_inst')
-    print(SP_Info_inst)
-    print('SP_Info_type')
-    print(SP_Info_type)
+    # print('resInfo <- Temp_G_FILE_speciesinfo_02[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]')
+    # print(resInfo)
+    # print('SP_Info_inst')
+    # print(SP_Info_inst)
+    # print('SP_Info_type')
+    # print(SP_Info_type)
     
     if(!is.null(SP_Info_inst) & is.null(SP_Info_type)) {
       G_FILE_speciesinfo_02 <<- subset(resInfo, INSTITUTE %in% SP_Info_inst)
       # x <- subset(resInfo, INSTITUTE %in% SP_Info_inst)
     } else if(is.null(SP_Info_inst) & !is.null(SP_Info_type)){
-      print('else if(is.null(SP_Info_inst) & !is.null(SP_Info_type))')
+      # print('else if(is.null(SP_Info_inst) & !is.null(SP_Info_type))')
       G_FILE_speciesinfo_02 <<- subset(resInfo, TYPE %in% SP_Info_type)
       # x <- subset(resInfo, TYPE %in% SP_Info_type)
     } else {
@@ -165,7 +165,7 @@ shinyServer(function(input, output, session) {
   onclick("kor_link_top", {
     
     SE_Language <<- "Korean" 
-    print(SE_Language)
+    # print(SE_Language)
     
   })
   
@@ -173,7 +173,7 @@ shinyServer(function(input, output, session) {
   onclick("eng_link_top", {
     
     SE_Language <<- "English" 
-    print(SE_Language)
+    # print(SE_Language)
     
   })
   
@@ -354,7 +354,7 @@ shinyServer(function(input, output, session) {
     if (length(input$SP_Info_rows_selected)) {
       
       
-      print(isolate(input$SP_Info_rows_selected))
+      # print(isolate(input$SP_Info_rows_selected))
       x <- actionButton("Reset_SP_Map", label = "Reset")
     } 
     
@@ -822,10 +822,10 @@ shinyServer(function(input, output, session) {
         links_x <- paste0(links_x, x)
       }
       
-      print('links_x')
-      print(links_x)
+      # print('links_x')
+      # print(links_x)
       # links_x <- gsub("^,", "", links_x)
-      print('gsub links_x')
+      # print('gsub links_x')
       # print(links_x)
       return ( HTML(links_x) )
       
@@ -1142,30 +1142,30 @@ shinyServer(function(input, output, session) {
       # 191017
       
       cat('input$SDM_MO_Climate_model: ')
-      print(isolate(input$SDM_MO_Climate_model))
+      # print(isolate(input$SDM_MO_Climate_model))
       
       cat('input$SDM_MO_Climate_scenario: ')
-      print(isolate(input$SDM_MO_Climate_scenario))
+      # print(isolate(input$SDM_MO_Climate_scenario))
       
       cat('input$SDM_MO_Protect_year: ')
-      print(isolate(input$SDM_MO_Protect_year))
+      # print(isolate(input$SDM_MO_Protect_year))
       
       cat('as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID): ')
-      print(isolate(as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID)))
-      print(isolate(as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$K_NAME)))
+      # print(isolate(as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$ID)))
+      # print(isolate(as.character(G_FILE_speciesinfo[input$SDM_SP_Info_rows_selected, , drop = FALSE]$K_NAME)))
       
       
       cat('SDM_Name_CD_Models_selected: ')
-      print(SDM_Name_CD_Models_selected)
+      # print(SDM_Name_CD_Models_selected)
       
       cat('SDM_Name_CD_Scenarios_selected: ')
-      print(SDM_Name_CD_Scenarios_selected)
+      # print(SDM_Name_CD_Scenarios_selected)
       
       cat('SDM_Name_CD_Year_selected: ')
-      print(SDM_Name_CD_Year_selected)
+      # print(SDM_Name_CD_Year_selected)
       
       cat('SDM_Name_CD_Variables_selected: ')
-      print(SDM_Name_CD_Variables_selected)
+      # print(SDM_Name_CD_Variables_selected)
       
       
       
@@ -1227,15 +1227,15 @@ shinyServer(function(input, output, session) {
         dir.create(file.path(PATH_PROJECT, "Vulnerable_Species"))
       }
       
-      print("####111")
+      # print("####111")
       PATH_MODEL_OUTPUT  <- file.path(PATH_PROJECT, "Species_Distribution")
-      print("####222")
-      print(file.path(getwd()))
+      # print("####222")
+      # print(file.path(getwd()))
       file.copy(file.path(getwd(), "maxent.jar"), PATH_MODEL_OUTPUT)
-      print("####333")
+      # print("####333")
       setwd(PATH_MODEL_OUTPUT)
       # Setting Column Name of species data
-      print("####444")
+      # print("####444")
       NAME_ID <- "ID"
       NAME_SPECIES <- "K_NAME"
       NAME_LONG <- "Longitude"
@@ -1303,7 +1303,7 @@ shinyServer(function(input, output, session) {
       ##### Setting path and data ==================================
       # creating working a project
       
-      print("####555")
+      # print("####555")
       
       # Loading speices data
       DATA_SPECIES_NAME <- read.table(file.path(PATH_SPECIES, FILE_SPECIES_NAME), header = T, sep = ",")
@@ -1726,12 +1726,12 @@ shinyServer(function(input, output, session) {
     x <- NULL
     if (length(rs)) {
       
-      print('rs')
-      print(rs)
+      # print('rs')
+      # print(rs)
       
 
       if( is.null(isolate(input$SP_Info_inst)) & is.null(isolate(input$SP_Info_type)) ) {
-        print('if( is.null(isolate(input$SP_Info_inst)) & is.null(isolate(input$SP_Info_type)) )')
+        # print('if( is.null(isolate(input$SP_Info_inst)) & is.null(isolate(input$SP_Info_type)) )')
         
         # x_index <- read.csv(file.path("/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Species", "speciesname_final.csv"), header = T, sep = "," ,stringsAsFactors = F, fileEncoding = "CP949", encoding = "UTF-8")
         # x_location <- read.csv(file.path("/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Species", "shin_specieslocation.csv"), header = T, sep = ",",stringsAsFactors = F, fileEncoding = "CP949", encoding = "UTF-8")
@@ -1747,7 +1747,7 @@ shinyServer(function(input, output, session) {
       }
 
       
-      print('else --- if( is.null(isolate(input$SP_Info_inst)) & is.null(isolate(input$SP_Info_type)) )')
+      # print('else --- if( is.null(isolate(input$SP_Info_inst)) & is.null(isolate(input$SP_Info_type)) )')
       
       # x4 <- inner_join(x1, x3, by = "ID")
       
@@ -1757,11 +1757,11 @@ shinyServer(function(input, output, session) {
       
       species_all_data <- inner_join(G_FILE_specieslocation_02, Temp_G_FILE_speciesinfo_02, by = "ID")
       
-      print('species_data')
-      print(species_data)
+      # print('species_data')
+      # print(species_data)
       
-      print('species_all_data')
-      print(species_all_data)
+      # print('species_all_data')
+      # print(species_all_data)
       
       # 종별 색상 초기화
       # if(is_init_colors == F){
@@ -1773,8 +1773,8 @@ shinyServer(function(input, output, session) {
         init_colors_type_02(species_all_data)
       }
       
-      print('temp_colors_type')
-      print(temp_colors_type)
+      # print('temp_colors_type')
+      # print(temp_colors_type)
       
       # 종별 아이콘 초기화
       if(is_init_icons == F){

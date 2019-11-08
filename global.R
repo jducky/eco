@@ -101,25 +101,25 @@ is_init_icons <- F
 ####################################################################################################
 makeGroupLayer_Species <- function(species_data, k_name){
   
-  print('makeGroupLayer_Species')
+  # print('makeGroupLayer_Species')
   
-  print('k_name')
-  print(k_name)
+  # print('k_name')
+  # print(k_name)
   
   k_name <- unique(k_name)
   f_k_name <- factor(k_name)
   l_f_k_name <- levels(factor(k_name))
   
-  print('f_k_name')
-  print(f_k_name)
+  # print('f_k_name')
+  # print(f_k_name)
   
-  print('k_name')
-  print(k_name)
+  # print('k_name')
+  # print(k_name)
   
-  print('l_f_k_name')
-  print(l_f_k_name)
+  # print('l_f_k_name')
+  # print(l_f_k_name)
   
-  print('start for')
+  # print('start for')
   
   for(name in l_f_k_name) {
 
@@ -138,13 +138,13 @@ makeGroupLayer_Species <- function(species_data, k_name){
 
   }
   
-  print('temp_colors_type')
-  print(temp_colors_type)
+  # print('temp_colors_type')
+  # print(temp_colors_type)
   
-  print('end for')
+  # print('end for')
   
-  print('test_groups')
-  print(test_groups)
+  # print('test_groups')
+  # print(test_groups)
 }
 ####################################################################################################
 
@@ -191,8 +191,8 @@ customGetColor <- function(species_data) {
 ####################################################################################################
 init_icons <- function(k_name) {
   
-  print('k_name')
-  print(k_name)
+  # print('k_name')
+  # print(k_name)
   
 
   if(length(k_name) < length(icon_List_Type)) {
@@ -212,18 +212,18 @@ init_icons <- function(k_name) {
   names(temp_icons) <<- k_name
   is_init_icons <<- T
   
-  print('temp_icons')
-  print(temp_icons)
+  # print('temp_icons')
+  # print(temp_icons)
   
 }
 
 customGetIcon <- function(k_name) {
-  print('k_name')
-  print(k_name)
+  # print('k_name')
+  # print(k_name)
   temp_Vector <- c()
   u_k_name <- unique(k_name)
-  print('u_k_name')
-  print(u_k_name)
+  # print('u_k_name')
+  # print(u_k_name)
   # l_k_name <- levels(factor(k_name))
   # l_k_name_2 <- levels(factor(k_name, ordered = T))
   
@@ -295,8 +295,8 @@ customGetColor_Type <- function(species_data) {
 
 init_colors_type_02 <- function(species_all_data) {
   type_names <- unique(species_all_data$TYPE)
-  print('type_names')
-  print(type_names)
+  # print('type_names')
+  # print(type_names)
   if(length(type_names) < length(color_Picker_Type)) {
     i <- 1  
     while( i <= length(type_names) ) {
@@ -317,17 +317,17 @@ init_colors_type_02 <- function(species_all_data) {
 
 customGetColor_Type_02 <- function(species_data) {
   temp <- c()
-  print('customGetColor_Type_02')
+  # print('customGetColor_Type_02')
   
   for(val in species_data$TYPE){
-    print('species_data$TYPE val')
-    print(val)
-    print('temp_colors_type[[val]]')
-    print(temp_colors_type[[val]])
+    # print('species_data$TYPE val')
+    # print(val)
+    # print('temp_colors_type[[val]]')
+    # print(temp_colors_type[[val]])
     temp <- append(temp, temp_colors_type[[val]])
   }
-  print('temp')
-  print(temp)
+  # print('temp')
+  # print(temp)
   temp
 }
 ####################################################################################################
@@ -394,7 +394,7 @@ G_2019_DATA_graph <- NULL
 
 
 if( Sys.info()['sysname'] == "Windows" ) {
-  print(Sys.info()['sysname'])
+  # print(Sys.info()['sysname'])
   ##### Path
   G[['SE_Dir_Project']] <- "C:/MOTIVE_projects/proj1"
   G[['SE_Dir_Climate']] <- "C:/MOTIVE_Ecosystem/DATA/Climate2"
@@ -414,7 +414,7 @@ if( Sys.info()['sysname'] == "Windows" ) {
   G_2019_DATA_graph <- "C:/Projects/2019_DATA/3. graph"
  
 } else if ( Sys.info()['sysname'] == "Linux" ) {
-  print(Sys.info()['sysname'])
+  # print(Sys.info()['sysname'])
   ##### Path
   G[['SE_Dir_Project']] <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_projects/proj1"
   G[['SE_Dir_Climate']] <- "/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/Climate2"
