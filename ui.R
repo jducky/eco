@@ -1,6 +1,8 @@
-### SEO2
+### SEO3
+
 library(shinythemes)
 ST_Name <- "success"
+
 
 shinyUI(
   
@@ -204,14 +206,14 @@ shinyUI(
                               fluidRow(
                                 column(6, DT::dataTableOutput("SP_Info")),
                                 column(6, leafletOutput("SP_Map", width = "500", height = "600"))
-                              ),
-                              fluidRow(
-                                tags$hr(),
-                                column(6, 
-                                       verbatimTextOutput("SP_Summary"),
-                                       plotOutput("SP_Histogram")
-                                )
                               )
+                              #					fluidRow(
+                              #						tags$hr(),
+                              #						column(6, 
+                              #							verbatimTextOutput("SP_Summary"),
+                              #							plotOutput("SP_Histogram")
+                              #						)
+                              #					)
                      ),
                      tabPanel(SP_Name_Location,
                               tags$head(
@@ -230,28 +232,24 @@ shinyUI(
                    tags$hr(),
                    sidebarLayout(
                      sidebarPanel(width = 3, Fluid = TRUE,
-                                  selectInput("LD_Type", LD_Name_Variables,
+                                  selectInput("LD_Variables", LD_Name_Variables,
                                               choices = LD_Name_Variables_list,
-                                              selected = LD_Name_Variables_selected
-                                  ),
+                                              selected = LD_Name_Variables_selected),
                                   
                                   # Input: Checkbox if file has header ----
                                   radioButtons("LD_Climate_model", LD_Name_Models,
                                                choices = LD_Name_Models_list,
-                                               selected = LD_Name_Models_selected
-                                  ),
+                                               selected = LD_Name_Models_selected),
                                   
                                   # Input: Checkbox if file has header ----
                                   radioButtons("LD_Climate_scenario", LD_Name_Scenarios,
                                                choices = LD_Name_Scenarios_list,
-                                               selected = LD_Name_Scenarios_selected
-                                  ),
+                                               selected = LD_Name_Scenarios_selected),
                                   
                                   # Input: Checkbox if file has header ----
                                   radioButtons("LD_Project_year", LD_Name_Year,
                                                choices = LD_Name_Year_list,
-                                               selected = LD_Name_Year_selected
-                                  )
+                                               selected = LD_Name_Year_selected)
                      ),
                      
                      # Main panel for displaying outputs ----
@@ -282,26 +280,22 @@ shinyUI(
                      sidebarPanel(width = 3, Fluid = TRUE,
                                   selectInput("CD_Variables", CD_Name_Variables,
                                               choices = CD_Name_Variables_list,
-                                              selected = CD_Name_Variables_selected
-                                  ),
+                                              selected = CD_Name_Variables_selected),
                                   
                                   # Input: Checkbox if file has header ----
                                   radioButtons("CD_Climate_model", CD_Name_Models,
                                                choices = CD_Name_Models_list,
-                                               selected = CD_Name_Models_selected
-                                  ),
+                                               selected = CD_Name_Models_selected),
                                   
                                   # Input: Checkbox if file has header ----
                                   radioButtons("CD_Climate_scenario", CD_Name_Scenarios,
                                                choices = CD_Name_Scenarios_list,
-                                               selected = CD_Name_Scenarios_selected
-                                  ),
+                                               selected = CD_Name_Scenarios_selected),
                                   
                                   # Input: Checkbox if file has header ----
                                   radioButtons("CD_Project_year", CD_Name_Year,
                                                choices = CD_Name_Year_list,
-                                               selected = CD_Name_Year_selected
-                                  )
+                                               selected = CD_Name_Year_selected)
                      ),
                      
                      # Main panel for displaying outputs ----
@@ -345,20 +339,17 @@ shinyUI(
                                                         # Input: Checkbox if file has header ----
                                                         checkboxGroupInput("SDM_MO_Climate_model", SDM_Name_CD_Models,
                                                                            choices = c(SDM_Name_CD_Models_list),
-                                                                           selected = SDM_Name_CD_Models_selected
-                                                        ),
+                                                                           selected = SDM_Name_CD_Models_selected),
                                                         
                                                         # Input: Checkbox if file has header ----
                                                         checkboxGroupInput("SDM_MO_Climate_scenario", SDM_Name_CD_Scenarios,
                                                                            choices = c(SDM_Name_CD_Scenarios_list),
-                                                                           selected = SDM_Name_CD_Scenarios_selected
-                                                        ),
+                                                                           selected = SDM_Name_CD_Scenarios_selected),
                                                         
                                                         # Input: Checkbox if file has header ----
                                                         checkboxGroupInput("SDM_MO_Protect_year", SDM_Name_CD_Year,
                                                                            choices = c(SDM_Name_CD_Year_list),
-                                                                           selected = SDM_Name_CD_Year_selected
-                                                        )
+                                                                           selected = SDM_Name_CD_Year_selected)
                                            )	
                                          )
                                 ),
@@ -369,8 +360,7 @@ shinyUI(
                                            sidebarPanel(width = 5,
                                                         checkboxGroupInput("SDM_MO_Variables", SDM_Name_CD_Variables,
                                                                            choices = c(SDM_Name_CD_Variables_list),
-                                                                           selected = SDM_Name_CD_Variables_selected
-                                                        )
+                                                                           selected = SDM_Name_CD_Variables_selected)
                                            )
                                          )
                                 ),
@@ -378,14 +368,116 @@ shinyUI(
                                          tags$hr(),
                                          fluidRow(
                                            # Sidebar panel for inputs ----
-                                           sidebarPanel(width = 4,
+                                           sidebarPanel(width = 3,
+                                                        tags$p("Data Options:"),
+                                                        #                  uiOutput("DM_MO_DM_envChgSteps"),
+                                                        #                  uiOutput("DM_MO_DM_envChgSteps"),
+                                                        #                  uiOutput("DM_MO_DM_envChgSteps"),
+                                                        #                  uiOutput("DM_MO_DM_envChgSteps"),
+                                                        selectInput("BIOMOD_eval.resp.var", "BIOMOD_eval.resp.var",
+                                                                    choices = NULL,
+                                                                    selected = NULL),
+                                                        selectInput("BIOMOD_eval.expl.var", "BIOMOD_eval.expl.var",
+                                                                    choices = NULL,
+                                                                    selected = NULL),
+                                                        selectInput("BIOMOD_eval.resp.xy", "BIOMOD_eval.resp.xy",
+                                                                    choices = NULL,
+                                                                    selected = NULL),
+                                                        sliderInput("BIOMOD_PA.nb.rep", label = "BIOMOD_PA.nb.rep", min = 0, 
+                                                                    max = 10, step = 1, value = 1),
+                                                        sliderInput("BIOMOD_PA.nb.absences", label = "BIOMOD_PA.nb.absences", min = 0, 
+                                                                    max = 10000, step = 1000, value = 1000),
+                                                        selectInput("BIOMOD_PA.strategy", "BIOMOD_PA.strategy",
+                                                                    choices = c("random", "sre", "disk", "user.defined"),
+                                                                    selected = "random"),
+                                                        sliderInput("BIOMOD_PA.dist", label = "BIOMOD_PA.dist Range (m) for PA disk option", min = 10000, 
+                                                                    max = 200000, step = 10000, value = c(10000, 100000)),
+                                                        sliderInput("BIOMOD_PA.sre.quant", label = "BIOMOD_PA.sre.quant", min = 0, 
+                                                                    max = 1, step = 0.025, value = 0.025),
+                                                        selectInput("BIOMOD_PA.table", "BIOMOD_PA.table for PA sre option",
+                                                                    choices = NULL,
+                                                                    selected = NULL),
+                                                        checkboxInput("BIOMOD_na.rm", "BIOMOD_na.rm", TRUE)
+                                           ),
+                                           
+                                           sidebarPanel(width = 3,
+                                                        tags$p("SDM Modeling Optios:"),
+                                                        sliderInput("BIOMOD_NbRunEval", label = "BIOMOD_NbRunEval", min = 0, 
+                                                                    max = 10, step = 1, value = 1),
+                                                        sliderInput("BIOMOD_DataSplit", label = "BIOMOD_DataSplit", min = 0, 
+                                                                    max = 100, step = 10, value = 100),
+                                                        selectInput("BIOMOD_Yweights", "BIOMOD_Yweights",
+                                                                    choices = NULL,
+                                                                    selected = NULL),
+                                                        sliderInput("BIOMOD_VarImport", label = "BIOMOD_VarImport", min = 0, 
+                                                                    max = 10, step = 1, value = 5),
+                                                        checkboxGroupInput("BIOMOD_models.eval.meth", "BIOMOD_models.eval.meth",
+                                                                           choices = c("ROC", "TSS", "KAPPA"),  #, "FAR", "SR", "ACCURANCY", "BIAS", "POD", "CSI", "ETS"),
+                                                                           selected = "ROC"),
+                                                        br(),
+                                                        checkboxInput("BIOMOD_SaveObj", "BIOMOD_SaveObj", TRUE),
+                                                        checkboxInput("BIOMOD_rescal.all.models", "BIOMOD_rescal.all.models", TRUE),
+                                                        checkboxInput("BIOMOD_do.full.models", "BIOMOD_do.full.models", TRUE),
+                                                        tags$hr(),
+                                                        tags$p("Model Projection Options:"),
+                                                        selectInput("BIOMOD_selected.models", "BIOMOD_selected.models",
+                                                                    choices = "all",
+                                                                    selected = "all"),
+                                                        checkboxGroupInput("BIOMOD_binary.meth", "BIOMOD_binary.meth",
+                                                                           choices = c("ROC", "TSS", "KAPPA"),  #, "FAR", "SR", "ACCURANCY", "BIAS", "POD", "CSI", "ETS"),
+                                                                           selected = "ROC"),
+                                                        br(),
+                                                        checkboxInput("BIOMOD_compress", "BIOMOD_compress", FALSE),
+                                                        checkboxInput("BIOMOD_build.clamping.mask", "BIOMOD_build.clamping.mask", FALSE),
+                                                        selectInput("BIOMOD_output.format", "BIOMOD_output.format",
+                                                                    choices = ".img",
+                                                                    selected = ".img"),
+                                                        checkboxInput("BIOMOD_do.stack", "BIOMOD_do.stack", TRUE)
+                                                        
+                                           ),
+                                           sidebarPanel(width = 3,
+                                                        tags$p("Ensemble Modeling Options:"),
+                                                        selectInput("EM_chosen.models", "EM_chosen.models",
+                                                                    choices = "all",
+                                                                    selected = "all"),
+                                                        selectInput("EM_em.by", "EM_em.by",
+                                                                    choices = c("PA_dataset+repet", "PA_dataset+algo", "PA_dataset", "algo", "all"),
+                                                                    selected = "PA_dataset+repet"),
+                                                        selectInput("EM_eval.metric", "EM_eval.metric",
+                                                                    choices = "all",
+                                                                    selected = "all"),
+                                                        selectInput("EM_eval.metric.quality.threshold", "EM_eval.metric.quality.threshold",
+                                                                    choices = NULL,
+                                                                    selected = NULL),
+                                                        checkboxGroupInput("EM_models.eval.meth", "EM_models.eval.meth",
+                                                                           choices = c("ROC", "TSS", "KAPPA"),  #, "FAR", "SR", "ACCURANCY", "BIAS", "POD", "CSI", "ETS"),
+                                                                           selected = "ROC"),
+                                                        br(),
+                                                        checkboxInput("EM_prob.mean", "EM_prob.mean", TRUE),
+                                                        checkboxInput("EM_prob.cv", "EM_prob.cv", FALSE),
+                                                        checkboxInput("EM_prob.ci", "EM_prob.ci", FALSE),
+                                                        sliderInput("EM_prob.ci.alpha", label = "EM_prob.ci.alpha", min = 0, 
+                                                                    max = 1, step = 0.05, value = 0.05),
+                                                        checkboxInput("EM_prob.median", "EM_prob.median", FALSE),
+                                                        checkboxInput("EM_committee.averaging", "EM_committee.averaging", FALSE),
+                                                        checkboxInput("EM_prob.mean.weight", "EM_prob.mean.weight", TRUE),
+                                                        selectInput("EM_prob.mean.weight.decay", "EM_prob.mean.weight.decay",
+                                                                    choices = "proportional",
+                                                                    selected = "proportional"),
+                                                        sliderInput("EM_VarImport", label = "EM_VarImport", min = 0, 
+                                                                    max = 10, step = 1, value = 0)
+                                           ),
+                                           sidebarPanel(width = 3,
                                                         checkboxGroupInput("SDM_MO_SDM_model", SDM_Name_models,
                                                                            choices = c(SDM_Name_models_list),
                                                                            selected = c(SDM_Name_models_selected)
                                                         ),
                                                         tags$hr(), 
                                                         checkboxInput("SDM_MO_SDM_EMmodel", label = SDM_Name_EMmodels, value = FALSE),
-                                                        tags$hr(), 
+                                                        tags$hr(),
+                                                        shinyDirButton("SDM_MO_Dir_Folder", SDM_Name_Dir, SDM_Name_Dir),
+                                                        verbatimTextOutput("SDM_MO_Dir_Folder", placeholder = TRUE),
+                                                        tags$hr(),
                                                         useShinyalert(),  # Set up shinyalert
                                                         actionButton("SDM_MO_SDM_run", label = SDM_Name_models_run)            
                                            )
@@ -398,6 +490,9 @@ shinyUI(
                               tags$hr(),
                               sidebarLayout(
                                 sidebarPanel(width = 3, Fluid = TRUE,
+                                             shinyDirButton("SDM_AO_Dir_Folder", SDM_Name_Dir, SDM_Name_Dir),
+                                             verbatimTextOutput("SDM_AO_Dir_Folder", placeholder = TRUE),
+                                             tags$hr(),
                                              uiOutput("SDM_OU_Species"),
                                              tags$hr(),
                                              
@@ -410,20 +505,17 @@ shinyUI(
                                              # Input: Checkbox if file has header ----
                                              radioButtons("SDM_OU_Climate_model", SDM_Name_CD_Models_out,
                                                           choices = c(SDM_Name_CD_Models_out_list),
-                                                          selected = SDM_Name_CD_Models_out_selected
-                                             ),
+                                                          selected = SDM_Name_CD_Models_out_selected),
                                              
                                              # Input: Checkbox if file has header ----
                                              radioButtons("SDM_OU_Climate_scenario", SDM_Name_CD_Scenarios_out,
                                                           choices = c(SDM_Name_CD_Scenarios_out_list),
-                                                          selected = SDM_Name_CD_Scenarios_out_selected
-                                             ),
+                                                          selected = SDM_Name_CD_Scenarios_out_selected),
                                              
                                              # Input: Checkbox if file has header ----
                                              radioButtons("SDM_OU_Project_year", SDM_Name_CD_Year_out,
                                                           choices = c(SDM_Name_CD_Year_out_list),
-                                                          selected = SDM_Name_CD_Year_out_selected
-                                             )
+                                                          selected = SDM_Name_CD_Year_out_selected)
                                 ),
                                 
                                 # Main panel for displaying outputs ----
@@ -483,48 +575,99 @@ shinyUI(
           tabPanel(DM_Name,
                    tabsetPanel(
                      tabPanel(DM_Name_Model, fluid = TRUE,
-                              tags$hr(),
-                              fluidRow(
-                                sidebarPanel(width = 2, Fluid = TRUE,
-                                             uiOutput("DM_MO_Species")
+                              tabsetPanel(
+                                tabPanel(DM_Name_Model_SDM,
+                                         fluidRow(
+                                           sidebarPanel(width = 2, Fluid = TRUE,
+                                                        shinyDirButton("DM_SDM_Dir_Folder", DM_Name_Dir, DM_Name_Dir),
+                                                        verbatimTextOutput("DM_SDM_Dir_Folder", placeholder = TRUE),
+                                                        tags$hr(),
+                                                        uiOutput("DM_MO_Species")
+                                           ),
+                                           sidebarPanel(width = 2, Fluid = TRUE,             
+                                                        # Input: Checkbox if file has header ----
+                                                        checkboxGroupInput("DM_MO_Climate_model", DM_Name_CD_Models,
+                                                                           choices = c(DM_Name_CD_Models_list),
+                                                                           selected = DM_Name_CD_Models_selected),
+                                                        # Input: Checkbox if file has header ----
+                                                        checkboxGroupInput("DM_MO_Climate_scenario", DM_Name_CD_Scenarios,
+                                                                           choices = c(DM_Name_CD_Scenarios_list),
+                                                                           selected = DM_Name_CD_Scenarios_selected),
+                                                        # Input: Checkbox if file has header ----
+                                                        checkboxGroupInput("DM_MO_Project_year", DM_Name_CD_Year,
+                                                                           choices = c(DM_Name_CD_Year_list),
+                                                                           selected = DM_Name_CD_Year_selected)
+                                           ),
+                                           sidebarPanel(width = 3,
+                                                        uiOutput("DM_MO_SDM_model")
+                                           )
+                                         )
                                 ),
-                                sidebarPanel(width = 2, Fluid = TRUE,             
-                                             # Input: Checkbox if file has header ----
-                                             checkboxGroupInput("DM_MO_Climate_model", DM_Name_CD_Models,
-                                                                choices = c(DM_Name_CD_Models_list),
-                                                                selected = DM_Name_CD_Models_selected
-                                             ),
-                                             
-                                             # Input: Checkbox if file has header ----
-                                             checkboxGroupInput("DM_MO_Climate_scenario", DM_Name_CD_Scenarios,
-                                                                choices = c(DM_Name_CD_Scenarios_list),
-                                                                selected = DM_Name_CD_Scenarios_selected
-                                             ),
-                                             
-                                             # Input: Checkbox if file has header ----
-                                             checkboxGroupInput("DM_MO_Project_year", DM_Name_CD_Year,
-                                                                choices = c(DM_Name_CD_Year_list),
-                                                                selected = DM_Name_CD_Year_selected
-                                             )
-                                ),
-                                sidebarPanel(width = 3,
-                                             uiOutput("DM_MO_SDM_model")
-                                ),
-                                sidebarPanel(width = 3,
-                                             checkboxGroupInput("DM_MO_Barrier", DM_Name_DM_MO_Barriers,
-                                                                choices = c(DM_Name_DM_MO_Barriers_list),
-                                                                selected = DM_Name_DM_MO_Barriers_selected
-                                             ),
-                                             checkboxGroupInput("DM_MO_Dispersal_type", DM_Name_DM_Models,
-                                                                choices = c(DM_Name_DM_Models_list),
-                                                                selected = DM_Name_DM_Models_selected
-                                             ),
-                                             tags$hr(),
-                                             sliderInput("DM_MO_Slider", label = DM_Name_DM_MO_Slider, min = 0, 
-                                                         max = 10000, value = 1000),
-                                             
-                                             tags$hr(),             
-                                             actionButton("DM_MO_Action", label = DM_Name_DM_MO_Action)
+                                tabPanel(DM_Name_Model_DM,
+                                         fluidRow(
+                                           sidebarPanel(width = 3,
+                                                        #                       uiOutput("DM_MO_DM_envChgSteps"),
+                                                        sliderInput("DM_MO_DM_dispSteps", label = "DM_dispSteps", min = 0, 
+                                                                    max = 10, value = 10),
+                                                        checkboxGroupInput("DM_MO_Barrier", DM_Name_DM_MO_Barriers,
+                                                                           choices = c(DM_Name_DM_MO_Barriers_list),
+                                                                           selected = DM_Name_DM_MO_Barriers_selected
+                                                        ),
+                                                        radioButtons("DM_MO_DM_barrierType", "DM_barrierType",
+                                                                     choices = c("strong" = "strong","weak" = "weak"),
+                                                                     selected = "weak")
+                                           ),
+                                           sidebarPanel(width = 3,
+                                                        tags$p("DM_dispKernel:"),
+                                                        verbatimTextOutput("DM_MO_DM_dispKernel"),
+                                                        sliderInput("DM_MO_DM_dispKernel1", label = "Dispersal Proportion of 1st Pixel", min = 0.01, 
+                                                                    max = 1.0, step = 0.01, value = 1.0),
+                                                        sliderInput("DM_MO_DM_dispKernel2", label = "Dispersal Proportion of 2nd Pixel", min = 0.01, 
+                                                                    max = 1.0, step = 0.01, value = 0.4),
+                                                        sliderInput("DM_MO_DM_dispKernel3", label = "Dispersal Proportion of 3rd Pixel", min = 0.01, 
+                                                                    max = 1.0, step = 0.01, value = 0.16),
+                                                        sliderInput("DM_MO_DM_dispKernel4", label = "Dispersal Proportion of 4th Pixel", min = 0.01, 
+                                                                    max = 1.0, step = 0.01, value = 0.06),
+                                                        sliderInput("DM_MO_DM_dispKernel5", label = "Dispersal Proportion of 5th Pixel", min = 0.01, 
+                                                                    max = 1.0, step = 0.01, value = 0.03)
+                                           ),
+                                           sidebarPanel(width = 3,
+                                                        tags$p("DM_Succession:"),
+                                                        sliderInput("DM_MO_DM_iniMatAge", label = "DM_iniMatAge (the initial maturity age)", min = 0, 
+                                                                    max = 10, value = 5),
+                                                        tags$hr(),
+                                                        tags$p("DM_propaguleProd:"),
+                                                        verbatimTextOutput("DM_MO_DM_propaguleProd"),
+                                                        sliderInput("DM_MO_DM_propaguleProd1", label = "Propagule Production Proportion 1st year after iniMatAge", min = 0.01, 
+                                                                    max = 1.0, step = 0.01, value = 0.01),
+                                                        sliderInput("DM_MO_DM_propaguleProd2", label = "Propagule Production Proportion 2nd year after iniMatAge", min = 0.01, 
+                                                                    max = 1.0, step = 0.01, value = 0.08),
+                                                        sliderInput("DM_MO_DM_propaguleProd3", label = "Propagule Production Proportion 3rd year after iniMatAge", min = 0.01, 
+                                                                    max = 1.0, step = 0.01, value = 0.5),
+                                                        sliderInput("DM_MO_DM_propaguleProd4", label = "Propagule Production Proportion 4th year after iniMatAge", min = 0.01, 
+                                                                    max = 1.0, step = 0.01, value = 0.92)
+                                           ),
+                                           sidebarPanel(width = 3,
+                                                        tags$p("DM_Dispersal Distance:"),
+                                                        sliderInput("DM_MO_DM_lddFreq", label = "DM_lddFreq", min = 0.001, 
+                                                                    max = 1.0, step = 0.001, value = 0.001),
+                                                        sliderInput("DM_MO_SDM_lddDist", label = "LDD Distance Range (pixel)", min = 0, 
+                                                                    max = 10, value = c(6, 10)),
+                                                        sliderInput("DM_MO_DM_replicateNb", label = "DM_replicateNb", min = 0, 
+                                                                    max = 10, value = 1),
+                                                        checkboxInput("DM_MO_DM_overWrite", "DM_overWrite", TRUE),
+                                                        checkboxInput("DM_MO_DM_testMode", "DM_testMode", FALSE),
+                                                        checkboxInput("DM_MO_DM_fullOutput", "DM_fullOutput", FALSE),
+                                                        checkboxInput("DM_MO_DM_keepTempFiles", "DM_keepTempFiles", FALSE),
+                                                        br(),
+                                                        tags$hr(),
+                                                        #		                                   shinyDirButton("DM_MO_Dir_Folder", DM_Name_Dir, DM_Name_Dir),
+                                                        #		                                   verbatimTextOutput("DM_MO_Dir_Folder", placeholder = TRUE),
+                                                        #		                                   tags$hr(),
+                                                        useShinyalert(),  # Set up shinyalert
+                                                        actionButton("DM_MO_Action_run", label = DM_Name_DM_MO_Action)
+                                           )
+                                         )
                                 )
                               )
                      ),
@@ -533,6 +676,9 @@ shinyUI(
                               tags$hr(),
                               sidebarLayout(
                                 sidebarPanel(width = 3, Fluid = TRUE,
+                                             shinyDirButton("DM_AO_Dir_Folder", DM_Name_Dir, DM_Name_Dir),
+                                             verbatimTextOutput("DM_AO_Dir_Folder", placeholder = TRUE),
+                                             tags$hr(),
                                              
                                              uiOutput("DM_OU_Species"),
                                              tags$hr(),
@@ -575,6 +721,7 @@ shinyUI(
                               )
                      )
                    )
+                   
           ), 
           
           tabPanel(SS_Name,
@@ -583,31 +730,30 @@ shinyUI(
                               tags$hr(),
                               fluidRow(
                                 sidebarPanel(width = 2, Fluid = TRUE,
+                                             shinyDirButton("SS_MO_Dir_Folder", SS_Name_MO_Dir, SS_Name_MO_Dir),
+                                             verbatimTextOutput("SS_MO_Dir_Folder", placeholder = TRUE),
+                                             tags$hr(),
                                              uiOutput("SS_CA_Species")
                                 ),
                                 sidebarPanel(width = 3, Fluid = TRUE,             
-                                             checkboxGroupInput("SS_CA_Dispersal_type", SS_Name_DM_Models,
-                                                                choices = c(SS_Name_DM_Models_list),
-                                                                selected = SS_Name_DM_Models_selected
-                                             ),
+                                             radioButtons("SS_CA_Dispersal_type", SS_Name_DM_Models,
+                                                          choices = c(SS_Name_DM_Models_list),
+                                                          selected = SS_Name_DM_Models_selected),
                                              
                                              # Input: Checkbox if file has header ----
                                              checkboxGroupInput("SS_CA_Climate_model", SS_Name_CD_Models,
                                                                 choices = c(SS_Name_CD_Models_list),
-                                                                selected = SS_Name_CD_Models_selected
-                                             ),
+                                                                selected = SS_Name_CD_Models_selected),
                                              
                                              # Input: Checkbox if file has header ----
                                              checkboxGroupInput("SS_CA_Climate_scenario", SS_Name_CD_Scenarios,
                                                                 choices = c(SS_Name_CD_Scenarios_list),
-                                                                selected = SS_Name_CD_Scenarios_selected
-                                             ),
+                                                                selected = SS_Name_CD_Scenarios_selected),
                                              
                                              # Input: Checkbox if file has header ----
                                              checkboxGroupInput("SS_CA_Project_year", SS_Name_CD_Year,
                                                                 choices = c(SS_Name_CD_Year_list),
-                                                                selected = SS_Name_CD_Year_selected
-                                             )
+                                                                selected = SS_Name_CD_Year_selected)
                                 ),
                                 sidebarPanel(width = 4,
                                              uiOutput("SS_CA_SDM_model"),
@@ -623,34 +769,33 @@ shinyUI(
                               tags$hr(),
                               sidebarLayout(
                                 sidebarPanel(width = 3, Fluid = TRUE,
+                                             shinyDirButton("SS_AO_Dir_Folder", SS_Name_AO_Dir, SS_Name_AO_Dir),
+                                             verbatimTextOutput("SS_AO_Dir_Folder", placeholder = TRUE),
+                                             tags$hr(),
                                              
                                              uiOutput("SS_AO_Species"),
                                              tags$hr(),
                                              
                                              uiOutput("SS_AO_SDM_model"),
                                              
-                                             checkboxGroupInput("SS_AO_Dispersal_type", SS_Name_DM_Models,
-                                                                choices = c(SS_Name_DM_Models_list),
-                                                                selected = SS_Name_DM_Models_selected
-                                             ),
+                                             radioButtons("SS_AO_Dispersal_type", SS_Name_DM_Models,
+                                                          choices = c(SS_Name_DM_Models_list),
+                                                          selected = SS_Name_DM_Models_selected),
                                              
                                              # Input: Checkbox if file has header ----
                                              checkboxGroupInput("SS_AO_Climate_model", SS_Name_CD_Models,
                                                                 choices = c(SS_Name_CD_Models_list),
-                                                                selected = SS_Name_CD_Models_selected
-                                             ),
+                                                                selected = SS_Name_CD_Models_selected),
                                              
                                              # Input: Checkbox if file has header ----
                                              checkboxGroupInput("SS_AO_Climate_scenario", SS_Name_CD_Scenarios,
                                                                 choices = c(SS_Name_CD_Scenarios_list),
-                                                                selected = SS_Name_CD_Scenarios_selected
-                                             ),
+                                                                selected = SS_Name_CD_Scenarios_selected),
                                              
                                              # Input: Checkbox if file has header ----
                                              checkboxGroupInput("SS_AO_Project_year", SS_Name_CD_Year,
                                                                 choices = c(SS_Name_CD_Year_list),
-                                                                selected = SS_Name_CD_Year_selected
-                                             )
+                                                                selected = SS_Name_CD_Year_selected)
                                 ),
                                 
                                 # Main panel for displaying outputs ----
@@ -720,44 +865,42 @@ shinyUI(
                               tags$hr(),
                               fluidRow(
                                 sidebarPanel(width = 3, Fluid = TRUE,
+                                             shinyDirButton("IS_MO_Dir_Folder", IS_Name_MO_Dir, IS_Name_MO_Dir),
+                                             verbatimTextOutput("IS_MO_Dir_Folder", placeholder = TRUE),
+                                             tags$hr(),
                                              uiOutput("IS_CA_Species")
                                 ),
                                 sidebarPanel(width = 3, Fluid = TRUE,                                                      
-                                             checkboxGroupInput("IS_CA_Dispersal_type", IS_Name_DM_Models,
-                                                                choices = c(IS_Name_DM_Models_list),
-                                                                selected = IS_Name_DM_Models_selected
-                                             ),
+                                             radioButtons("IS_CA_Dispersal_type", IS_Name_DM_Models,
+                                                          choices = c(IS_Name_DM_Models_list),
+                                                          selected = IS_Name_DM_Models_selected),
                                              
                                              # Input: Checkbox if file has header ----
                                              checkboxGroupInput("IS_CA_Climate_model", IS_Name_CD_Models,
                                                                 choices = c(IS_Name_CD_Models_list),
-                                                                selected = IS_Name_CD_Models_selected
-                                             ),
+                                                                selected = IS_Name_CD_Models_selected),
                                              
                                              # Input: Checkbox if file has header ----
                                              checkboxGroupInput("IS_CA_Climate_scenario", IS_Name_CD_Scenarios,
                                                                 choices = c(IS_Name_CD_Scenarios_list),
-                                                                selected = IS_Name_CD_Scenarios_selected
-                                             ),
+                                                                selected = IS_Name_CD_Scenarios_selected),
                                              
                                              # Input: Checkbox if file has header ----
                                              checkboxGroupInput("IS_CA_Project_year", IS_Name_CD_Year,
                                                                 choices = c(IS_Name_CD_Year_list),
-                                                                selected = IS_Name_CD_Year_selected
-                                             )
+                                                                selected = IS_Name_CD_Year_selected)
                                 ),
                                 sidebarPanel(width = 4,
                                              uiOutput("IS_CA_SDM_model"),
                                              tags$hr(),
-                                             shinyDirButton("IS_VA_Dir_Folder", IS_Name_Dir, IS_Name_Dir),
+                                             shinyDirButton("IS_VA_Dir_Folder", IS_Name_AO_Dir, IS_Name_AO_Dir),
                                              verbatimTextOutput("IS_VA_Dir_Folder", placeholder = TRUE),
                                              actionButton("IS_VA_Action_Analysis", label = IS_Name_Action),
                                              tags$hr(),
                                              br(),
                                              checkboxGroupInput("IS_VA_Admin", IS_Name_Admin,
                                                                 choices = c(IS_Name_Admin_list),
-                                                                selected = IS_Name_Admin_selected
-                                             ),
+                                                                selected = IS_Name_Admin_selected),
                                              actionButton("IS_VA_Action_Admin", label = IS_Name_Action_Admin)
                                 )
                               )
@@ -767,47 +910,35 @@ shinyUI(
                               tags$hr(),
                               sidebarLayout(
                                 sidebarPanel(width = 3, Fluid = TRUE,
-                                             shinyDirButton("IS_AO_Dir_Folder", "Invasive Assessment Output Folder", "Invasive Assessment Output Folder"),
+                                             shinyDirButton("IS_MI_Dir_Folder", IS_Name_MO_Dir, IS_Name_MO_Dir),
+                                             verbatimTextOutput("IS_MI_Dir_Folder", placeholder = TRUE),
+                                             tags$hr(),
+                                             shinyDirButton("IS_AO_Dir_Folder", IS_Name_AO_Dir, IS_Name_AO_Dir),
                                              verbatimTextOutput("IS_AO_Dir_Folder", placeholder = TRUE),
                                              tags$hr(),
                                              #uiOutput("IS_AO_Species"),
                                              uiOutput("IS_AO_Species"),
                                              tags$hr(),
-                                             
-                                             #							checkboxGroupInput("IS_AO_Output_option1", IS_Name_OU_Option1,
-                                             #								choices = c(IS_Name_OU_Option1_list),
-                                             #								selected = IS_Name_OU_Option1_selected
-                                             #							),
-                                             
-                                             #							checkboxGroupInput("IS_AO_Output_option2", IS_Name_OU_Option2,
-                                             #								choices = c(IS_Name_OU_Option2_list),
-                                             #								selected = IS_Name_OU_Option2_selected
-                                             #							),
-                                             
                                              uiOutput("IS_AO_SDM_model"),
                                              
                                              radioButtons("IS_AO_Dispersal_type", IS_Name_DM_Models,
                                                           choices = c(IS_Name_DM_Models_list),
-                                                          selected = IS_Name_DM_Models_selected
-                                             ),
+                                                          selected = IS_Name_DM_Models_selected),
                                              
                                              # Input: Checkbox if file has header ----
                                              radioButtons("IS_AO_Climate_model", IS_Name_CD_Models,
                                                           choices = c(IS_Name_CD_Models_list),
-                                                          selected = IS_Name_CD_Models_selected
-                                             ),
+                                                          selected = IS_Name_CD_Models_selected),
                                              
                                              # Input: Checkbox if file has header ----
                                              radioButtons("IS_AO_Climate_scenario", IS_Name_CD_Scenarios,
                                                           choices = c(IS_Name_CD_Scenarios_list),
-                                                          selected = IS_Name_CD_Scenarios_selected
-                                             ),
+                                                          selected = IS_Name_CD_Scenarios_selected),
                                              
                                              # Input: Checkbox if file has header ----
                                              radioButtons("IS_AO_Project_year", IS_Name_CD_Year,
                                                           choices = c(IS_Name_CD_Year_list),
-                                                          selected = IS_Name_CD_Year_selected
-                                             )
+                                                          selected = IS_Name_CD_Year_selected)
                                 ),
                                 
                                 # Main panel for displaying outputs ----
@@ -923,26 +1054,22 @@ shinyUI(
                                 sidebarPanel(width = 3, Fluid = TRUE,                                                
                                              checkboxGroupInput("VH_CA_Dispersal_type", VH_Name_DM_Models,
                                                                 choices = c(VH_Name_DM_Models_list),
-                                                                selected = VH_Name_DM_Models_selected
-                                             ),
+                                                                selected = VH_Name_DM_Models_selected),
                                              
                                              # Input: Checkbox if file has header ----
                                              checkboxGroupInput("VH_CA_Climate_model", VH_Name_CD_Models,
                                                                 choices = c(VH_Name_CD_Models_list),
-                                                                selected = VH_Name_CD_Models_selected
-                                             ),
+                                                                selected = VH_Name_CD_Models_selected),
                                              
                                              # Input: Checkbox if file has header ----
                                              checkboxGroupInput("VH_CA_Climate_scenario", VH_Name_CD_Scenarios,
                                                                 choices = c(VH_Name_CD_Scenarios_list),
-                                                                selected = VH_Name_CD_Scenarios_selected
-                                             ),
+                                                                selected = VH_Name_CD_Scenarios_selected),
                                              
                                              # Input: Checkbox if file has header ----
                                              checkboxGroupInput("VH_CA_Project_year", VH_Name_CD_Year,
                                                                 choices = c(VH_Name_CD_Year_list),
-                                                                selected = VH_Name_CD_Year_selected
-                                             )
+                                                                selected = VH_Name_CD_Year_selected)
                                 ),
                                 sidebarPanel(width = 4,
                                              uiOutput("VH_CA_SDM_model"),
@@ -977,26 +1104,22 @@ shinyUI(
                                              
                                              radioButtons("VH_AO_Dispersal_type", VH_Name_DM_Models,
                                                           choices = c(VH_Name_DM_Models_list),
-                                                          selected = VH_Name_DM_Models_selected
-                                             ),
+                                                          selected = VH_Name_DM_Models_selected),
                                              
                                              # Input: Checkbox if file has header ----
                                              radioButtons("VH_AO_Climate_model", VH_Name_CD_Models,
                                                           choices = c(VH_Name_CD_Models_list),
-                                                          selected = VH_Name_CD_Models_selected
-                                             ),
+                                                          selected = VH_Name_CD_Models_selected),
                                              
                                              # Input: Checkbox if file has header ----
                                              radioButtons("VH_AO_Climate_scenario", VH_Name_CD_Scenarios,
                                                           choices = c(VH_Name_CD_Scenarios_list),
-                                                          selected = VH_Name_CD_Scenarios_selected
-                                             ),
+                                                          selected = VH_Name_CD_Scenarios_selected),
                                              
                                              # Input: Checkbox if file has header ----
                                              radioButtons("VH_AO_Project_year", VH_Name_CD_Year,
                                                           choices = c(VH_Name_CD_Year_list),
-                                                          selected = VH_Name_CD_Year_selected
-                                             )
+                                                          selected = VH_Name_CD_Year_selected)
                                 ),
                                 
                                 # Main panel for displaying outputs ----

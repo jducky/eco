@@ -1,4 +1,5 @@
-### SEO2
+### SEO3
+
 #####=========================================================
 ##### installing and Loading packages ========================
 # Setting packages and library
@@ -39,7 +40,7 @@ rm(list = ls())
 
 ##### Path
 G <- reactiveValues()
-G$SE_Dir_Project <- "C:/MOTIVE_projects/proj1"
+G$SE_Dir_Project <- "C:/MOTIVE_projects/proj1_2"
 G$SE_Dir_Climate <- "C:/MOTIVE_Ecosystem/DATA/Climate2"
 G$SE_Dir_Link <- "C:/MOTIVE_Ecosystem/DATA/Link" 
 G$SE_Dir_Species <- "C:/MOTIVE_Ecosystem/DATA/Species"
@@ -51,7 +52,11 @@ G_FILE_specieslocation <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(
 G_FILE_speciesfreq <- count(G_FILE_specieslocation, ID)
 G_FILE_speciesinfo <- inner_join(G_FILE_speciesfreq, G_FILE_speciesindex, by = "ID")
 
+G$SDM_MO_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Species_Distribution", sep = "")
+G$SDM_AO_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Species_Distribution", sep = "")
+G$IS_MO_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
 G$IS_VA_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
+G$IS_MI_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
 G$IS_AO_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
 
 Input_img <- "tif"  #asc",
@@ -94,11 +99,13 @@ SDM_models_out_list <- c("GLM (Generalized Linear Model)" = "GLM",
                          "MAXENT.Phillips" = "MAXENT.Phillips",
                          #                  	     "MAXENT (low-memory multinomial logistic regression)" = "MAXENT",
                          "Ensemble" = "EM")
-DM_Models_list <- c("No Dispersal" = "ND",
-                    "SDD (Short Dispersal Distance)" = "SDD",
-                    "MDD (Middle Dispersal Distance)" = "MDD",
-                    "LDD (Long Dispersal Distance)" = "LDD",
-                    "Unlimited Dispersal" = "UD")
+#DM_Models_list <- c("No Dispersal" = "ND",
+#                    "SDD (Short Dispersal Distance)" = "SDD",
+#                    "MDD (Middle Dispersal Distance)" = "MDD",
+#                    "LDD (Long Dispersal Distance)" = "LDD",
+#                    "Unlimited Dispersal" = "UD")
+DM_Models_list <- c("Species Distribution Model (SDM)" = "BIOMOD2",
+                    "Dispersal Model (DM)" = "MIGCLIM")
 
 observe({
   if (SE$Language == "English") {
@@ -113,7 +120,9 @@ observe({
 SE_Language <- "Korean" 
 
 if (SE_Language == "English") {
-  LD_Variables_list  <- c("Landuse" = "landuse",
+  LD_Variables_list  <- c("Landuse_ssp1" = "landuse_ssp1",
+                          "Landuse_ssp2" = "landuse_ssp2",
+                          "Landuse_ssp3" = "landuse_ssp3",
                           "Forest fire" = "forestfire",
                           "Landslide" = "landslide")  
   CD_Variables_list <- c("BIOCLIM 01 (Annual Mean Temperature)" = "bio01",
@@ -156,7 +165,7 @@ if (SE_Language == "English") {
                           "BIOCLIM 19 (Precipitation of Coldest Quarter)" = paste("bio19.", Input_img, sep = ""))
   CD_Models_list <- c("KMA (Korea Meteorological Administration)" = "KMA",
                       "KEI (Korea Environment Institute)" = "KEI")  
-  SE_Name_System <- "MOTIVE ECOSYSTEM (Climate Change Impact and Vulnerability Assessment Model for Ecosystem)" 
+  SE_Name_System <- "MOTIVE ECOSYSTEM (Climate Change Impact and Vulnerability Assessment Model)" 
   SE_Name <- "Setting"
   SE_Name_Language <- "Language"
   SE_Name_WE <- "Working Environment"
@@ -239,9 +248,11 @@ if (SE_Language == "English") {
   SDM_Name_CD_Scenarios_out_selected <- "RCP4.5"    
   SDM_Name_CD_Year_out <- "Projecting Years"
   SDM_Name_CD_Year_out_list <- CD_Year_list
-  SDM_Name_CD_Year_out_selected <- "2000"
+  SDM_Name_CD_Year_out_selected <- CD_Year_list
   DM_Name <- "Dispesal Model"
   DM_Name_Model <- "Modeling"
+  DM_Name_Model_SDM <- "SDM Option"
+  DM_Name_Model_DM <- "Dispersal Model Option"
   DM_Name_Model_Out <- "Model Outputs"
   DM_Name_Out_Plot <- "Species Distribution Change Plot"
   DM_Name_DM_MO_Barriers <- "Barriers"
@@ -251,7 +262,7 @@ if (SE_Language == "English") {
   DM_Name_DM_MO_Action <- "Run"
   DM_Name_DM_Models <- "DIspersal Models"
   DM_Name_DM_Models_list <- DM_Models_list
-  DM_Name_DM_Models_selected <- "UD" 
+  DM_Name_DM_Models_selected <- "MIGCLIM"
   DM_Name_CD_Models <- "Climate Models"
   DM_Name_CD_Models_list <- CD_Models_list
   DM_Name_CD_Models_selected <- "KMA"    
@@ -278,6 +289,11 @@ if (SE_Language == "English") {
   DM_Name_CD_Year_out <- "Projecting Years"
   DM_Name_CD_Year_out_list <- CD_Year_list
   DM_Name_CD_Year_out_selected <- "2000"
+  DM_Name_Display_types <- "Model Outputs for Display"
+  DM_Name_Display_types_list <- c("SDM" = "SDM",
+                                  "Dispersal Model" = "DM")
+  DM_Name_Display_types_selected <- "SDM"
+  DM_Name_Dir <- "Dispersal Model Folder"
   SS_Name <- "Climate Sensitive Species"
   SS_Name_Analysis <- "Change Analysis"
   SS_Name_Out <- "Analysis Outputs"
@@ -286,7 +302,7 @@ if (SE_Language == "English") {
   SS_Name_Out_Vulnerabiity <- "Vulnerable Priority"
   SS_Name_DM_Models <- "DIspersal Types"
   SS_Name_DM_Models_list <- DM_Models_list
-  SS_Name_DM_Models_selected <- "UD"    
+  SS_Name_DM_Models_selected <- "BIOMOD2"    
   SS_Name_CD_Models <- "Climate Models"
   SS_Name_CD_Models_list <- CD_Models_list
   SS_Name_CD_Models_selected <- "KMA"    
@@ -329,6 +345,8 @@ if (SE_Language == "English") {
                            "by Climate Scenario" = "Climate_Scenario",
                            "by Model" = "Model")
   SS_Name_Group3_selected <- "Model"
+  SS_Name_MO_Dir <- "Sensitive Speices Assessment Input Folder"
+  SS_Name_AO_Dir <- "Sensitive Speices Assessment Output Folder"
   IS_Name <- "Invasive Species"
   IS_Name_Anlayis <- "Change Analysis"
   IS_Name_Out <- "Model Outputs"
@@ -341,7 +359,7 @@ if (SE_Language == "English") {
   IS_Name_Out_Stat <- "Statistics"
   IS_Name_DM_Models <- "DIspersal Types"
   IS_Name_DM_Models_list <- DM_Models_list
-  IS_Name_DM_Models_selected <- "UD"    
+  IS_Name_DM_Models_selected <- "BIOMOD2"    
   IS_Name_CD_Models <- "Climate Models"
   IS_Name_CD_Models_list <- CD_Models_list
   IS_Name_CD_Models_selected <- "KMA"    
@@ -397,6 +415,8 @@ if (SE_Language == "English") {
                                "Vulnerability2 (Species Loss Ratio)" = "IS_VI2",
                                "Vulnerability3 (Species Inside Loss Outside Gain)" = "IS_VI3")
   IS_Name_OU_Option2_selected <- "IS_VI1"
+  IS_Name_MO_Dir <- "Invasive Species Asessment Input Folder"
+  IS_Name_AO_Dir <- "Invasive Species Asessment Output Folder"
   VH_Name <- "Climate Vulnerable Habitat"
   VH_Name_Analysis <- "Change Analysis"
   VH_Name_Out <- "Model Outputs"
@@ -417,7 +437,7 @@ if (SE_Language == "English") {
   VH_Name_Out_Stat <- "Statistics"
   VH_Name_DM_Models <- "DIspersal Types"
   VH_Name_DM_Models_list <- DM_Models_list
-  VH_Name_DM_Models_selected <- "UD"    
+  VH_Name_DM_Models_selected <- "BIOMOD2"    
   VH_Name_CD_Models <- "Climate Models"
   VH_Name_CD_Models_list <- CD_Models_list
   VH_Name_CD_Models_selected <- "KMA"    
@@ -465,12 +485,16 @@ if (SE_Language == "English") {
                            "by Climate Scenario" = "Climate_Scenario",
                            "by Model" = "Model")
   VH_Name_Group2_selected <- "Model"
+  VH_Name_MO_Dir <- "Vulnerable Habitat Asessment Input Folder"
+  VH_Name_AO_Dir <- "Vulnerable Habitat Asessment Output Folder"
   HELP_Name <- "Help"
   
   
   
 } else {
-  LD_Variables_list  <- c("토지이용" = "landuse",
+  LD_Variables_list  <- c("토지이용_ssp1" = "landuse_ssp1",
+                          "토지이용_ssp2" = "landuse_ssp2",
+                          "토지이용_ssp3" = "landuse_ssp3",
                           "산불" = "forestfire",
                           "산사태" = "landslide")
   CD_Variables_list <- c("BIOCLIM 01 (연평균 기온)" = "bio01",
@@ -601,8 +625,11 @@ if (SE_Language == "English") {
   SDM_Name_CD_Year_out <- "예측년도"
   SDM_Name_CD_Year_out_list <- CD_Year_list
   SDM_Name_CD_Year_out_selected <- "2000"
+  SDM_Name_Dir <- "SDM 평가결과 폴더"
   DM_Name <- "종확산모형"
   DM_Name_Model <- "모형구동"
+  DM_Name_Model_SDM <- "SDM모형 옵션"
+  DM_Name_Model_DM <- "확산모형 옵션"
   DM_Name_Model_Out <- "모형결과"
   DM_Name_Out_Plot <- "생물종 분포변화"
   DM_Name_DM_MO_Barriers <- "장애물"
@@ -612,7 +639,7 @@ if (SE_Language == "English") {
   DM_Name_DM_MO_Action <- "실행"
   DM_Name_DM_Models <- "확산모델"
   DM_Name_DM_Models_list <- DM_Models_list
-  DM_Name_DM_Models_selected <- "UD" 
+  DM_Name_DM_Models_selected <- "MIGCLIM" 
   DM_Name_CD_Models <- "기후모델"
   DM_Name_CD_Models_list <- CD_Models_list
   DM_Name_CD_Models_selected <- "KMA"    
@@ -621,7 +648,7 @@ if (SE_Language == "English") {
   DM_Name_CD_Scenarios_selected <- "RCP4.5"    
   DM_Name_CD_Year <- "예측년도"
   DM_Name_CD_Year_list <- CD_Year_list
-  DM_Name_CD_Year_selected <- "2000"
+  DM_Name_CD_Year_selected <- CD_Year_list
   DM_Name_models <- "모델유형"
   DM_Name_models_list <- SDM_models_list
   DM_Name_models_selected <- "GLM"
@@ -639,6 +666,11 @@ if (SE_Language == "English") {
   DM_Name_CD_Year_out <- "예측년도"
   DM_Name_CD_Year_out_list <- CD_Year_list
   DM_Name_CD_Year_out_selected <- "2000"
+  DM_Name_Display_types <- "출력결과 모델"
+  DM_Name_Display_types_list <- c("종분포모형" = "SDM",
+                                  "종확산모형" = "DM")
+  DM_Name_Display_types_selected <- "SDM"
+  DM_Name_Dir <- "DM 평가결과 폴더"
   SS_Name <- "기후변화민감종"
   SS_Name_Analysis <- "영향 및 취약성평가"
   SS_Name_Out <- "평가결과"
@@ -647,7 +679,7 @@ if (SE_Language == "English") {
   SS_Name_Out_Vulnerabiity <- "취약성 순위"
   SS_Name_DM_Models <- "확산유형"
   SS_Name_DM_Models_list <- DM_Models_list
-  SS_Name_DM_Models_selected <- "UD"    
+  SS_Name_DM_Models_selected <- "BIOMOD2"    
   SS_Name_CD_Models <- "기후모델"
   SS_Name_CD_Models_list <- CD_Models_list
   SS_Name_CD_Models_selected <- "KMA"    
@@ -690,6 +722,8 @@ if (SE_Language == "English") {
                            "기후시나리오별" = "Climate_Scenario",
                            "모델유형별" = "Model")
   SS_Name_Group3_selected <- "Species"
+  SS_Name_MO_Dir <- "민감종평가 입력폴더"
+  SS_Name_AO_Dir <- "민감종평가 결과폴더"
   IS_Name <- "외래종"
   IS_Name_Anlayis <- "영향 평가"
   IS_Name_Out <- "평가결과"
@@ -702,7 +736,7 @@ if (SE_Language == "English") {
   IS_Name_Out_Stat <- "통계"
   IS_Name_DM_Models <- "확산유형"
   IS_Name_DM_Models_list <- DM_Models_list
-  IS_Name_DM_Models_selected <- "UD"    
+  IS_Name_DM_Models_selected <- "BIOMOD2"    
   IS_Name_CD_Models <- "기후모델"
   IS_Name_CD_Models_list <- CD_Models_list
   IS_Name_CD_Models_selected <- "KMA"    
@@ -736,6 +770,8 @@ if (SE_Language == "English") {
   IS_Name_CD_Year_out <- "예측년도"
   IS_Name_CD_Year_out_list <- CD_Year_list
   IS_Name_CD_Year_out_selected <- "2000"
+  IS_Name_MO_Dir <- "외래종평가 입력폴더"
+  IS_Name_AO_Dir <- "외래종평가 결과폴더"
   VH_Name <- "취약서식지"
   VH_Name_Analysis <- "영향 및 취약성평가"
   VH_Name_Out <- "평가결과"
@@ -756,7 +792,7 @@ if (SE_Language == "English") {
   VH_Name_Out_Stat <- "통계"
   VH_Name_DM_Models <- "확산유형"
   VH_Name_DM_Models_list <- DM_Models_list
-  VH_Name_DM_Models_selected <- "UD"    
+  VH_Name_DM_Models_selected <- "BIOMOD2"    
   VH_Name_CD_Models <- "기후모델"
   VH_Name_CD_Models_list <- CD_Models_list
   VH_Name_CD_Models_selected <- "KMA"    
@@ -793,9 +829,9 @@ if (SE_Language == "English") {
   VH_Name_CD_Year_out <- "예측년도"
   VH_Name_CD_Year_out_list <- CD_Year_list
   VH_Name_CD_Year_out_selected <- "2000"
+  VH_Name_MO_Dir <- "취약서식지평가 입력폴더"
+  VH_Name_AO_Dir <- "취약서식지평가 결과폴더"
   HELP_Name <- "도움말"
   
 }
-
-
 
