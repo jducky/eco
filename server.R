@@ -2,6 +2,24 @@
 
 shinyServer(function(input, output, session) {
   
+  # output$SP_Loc_K_Name_UI <- renderUI({
+    
+  #   rs <- input$SP_Info_rows_selected
+  #   if(length(rs))
+  #   checkboxGroupInput("SP_Loc_K_Name", "K_NAME",	
+  #                      choices = unique(SP_LOC_Info_Table$K_NAME),
+  #                      selected = NULL
+  #   )
+  # })
+  
+  observeEvent(input$c_kname, {
+    print('SP_LOC_Info_Table')
+    print(SP_LOC_Info_Table)
+    
+    print(unique(SP_LOC_Info_Table$K_NAME))
+    print(unique(SP_LOC_Info_Table$K_NAME))
+  })
+  
   # selectAll
   observeEvent(input$all_SP_Info_inst, {
     # print('isolate(input$SP_Info_inst)')
@@ -1900,10 +1918,18 @@ shinyServer(function(input, output, session) {
   
   
   output$SP_LOC_Info <- DT::renderDataTable({
+    
+    rs <- input$SP_Info_rows_selected 
+    print('rs')
+    print(rs)
     input$reset_SP_Loc
-    # inner_join(G_FILE_specieslocation, G_FILE_speciesinfo[input$SP_Info_rows_selected, , drop = FALSE], by = "ID")
-    SP_LOC_Info_Table <<- inner_join(G_FILE_specieslocation_02, G_FILE_speciesinfo_02[input$SP_Info_rows_selected, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = FALSE], by = "ID")
-    SP_LOC_Info_Table
+    if (length(rs)) {
+      SP_LOC_Info_Table <<- inner_join(G_FILE_specieslocation_02, G_FILE_speciesinfo_02[rs, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = FALSE], by = "ID")
+      print('SP_LOC_Info_Table$K_NAME')
+      print(SP_LOC_Info_Table$K_NAME)
+      return ( SP_LOC_Info_Table ) 
+    }
+    
   }, server = TRUE)
   
   
@@ -1915,25 +1941,6 @@ shinyServer(function(input, output, session) {
     
     if (length(rs)) {
       
-      # 조건 선택 확인
-      # if( is.null(isolate(input$SP_Info_inst)) & is.null(isolate(input$SP_Info_type)) ) {
-      #   G_FILE_speciesinfo_02 <<- Temp_G_FILE_speciesinfo_02
-      # }
-      
-      # print('G_FILE_specieslocation_02')
-      # print(G_FILE_specieslocation_02)
-      
-      # print('G_FILE_speciesinfo_02')
-      # print(G_FILE_speciesinfo_02)
-
-      # print('G_FILE_specieslocation_02[rs, , drop = FALSE]')
-      # print(G_FILE_specieslocation_02[rs, , drop = FALSE])
-      
-      # print('G_FILE_speciesinfo_02[rs, , drop = FALSE]')
-      # print(G_FILE_speciesinfo_02[rs, , drop = FALSE])
-  
-      
-      # species_data <- inner_join(G_FILE_specieslocation_02[rs, drop = FALSE], G_FILE_speciesinfo_02[rs, , drop = FALSE], by = "ID")
       species_all_data <- inner_join(G_FILE_specieslocation_02, Temp_G_FILE_speciesinfo_02, by = "ID")
       
       species_data <- SP_LOC_Info_Table[rs, ,drop = FALSE]

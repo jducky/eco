@@ -310,13 +310,16 @@ shinyUI(
                               sidebarLayout(
                                 sidebarPanel(width = 2,
                                              
-                                  checkboxGroupInput("SP_Loc_K_Name", "K_NAME",	
-                                                     choices = NULL,
-                                                     selected = NULL
-                                  ),
+                                  # uiOutput('SP_Loc_K_Name_UI'),
                                   
+                                    checkboxGroupInput("SP_Loc_K_Name", "K_NAME",
+                                                       choices = unique(SP_LOC_Info_Table$K_NAME),
+                                                       selected = NULL),
+                                    
+                                   
                                   actionButton('all_SP_Loc_K_Name',label = "selectAll"),
-                                  actionButton('reset_SP_Loc_K_Name',label = "reset"), br()
+                                  actionButton('reset_SP_Loc_K_Name',label = "reset"), br(),
+                                  actionButton('c_kname',label = "c_kname")
                                   
                                   
                                 ),
