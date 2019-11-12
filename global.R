@@ -387,17 +387,17 @@ customGetColor_Type_Individual_02 <- function(species_data) {
 ####################################################################################################
 
 # PostgreSQL 연결
-psql <- dbDriver("PostgreSQL")
-pgConn <- function(query) {
-  pcon <- dbConnect(psql, dbname = "ecosystem", host = "192.168.0.199", port = "5432", user= "postgres", password = "postgres")
-  dbUser <- query(pcon)
-  dbDisconnect(pcon)
-  return (dbUser)
-}
+# psql <- dbDriver("PostgreSQL")
+# pgConn <- function(query) {
+#   pcon <- dbConnect(psql, dbname = "ecosystem", host = "192.168.0.199", port = "5432", user= "postgres", password = "postgres")
+#   dbUser <- query(pcon)
+#   dbDisconnect(pcon)
+#   return (dbUser)
+# }
 
-HELP_TEST_desc01 <- pgConn(function(con){
-  return ( dbGetQuery(con, paste0("select * from help_test")) )
-})
+# HELP_TEST_desc01 <- pgConn(function(con){
+#   return ( dbGetQuery(con, paste0("select * from help_test")) )
+# })
 
 
 
