@@ -504,7 +504,7 @@ Temp_G_FILE_specieslocation_02 <- G_FILE_specieslocation_02
 SP_LOC_Info_Table <- NULL
 
 ut <- unique(G_FILE_speciesinfo_02$TYPE)
-ut <- c(ut[1],ut[2],ut[3],ut[8],ut[7],ut[1],ut[6],ut[5],ut[4],ut[9]) 
+ut <- c(ut[1],ut[2],ut[3],ut[8],ut[7],ut[6],ut[5],ut[4],ut[9]) 
 
 
 
