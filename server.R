@@ -2,21 +2,24 @@
 
 shinyServer(function(input, output, session) {
   
-  # output$SP_Loc_K_Name_UI <- renderUI({
+  output$SP_Loc_K_Name_UI <- renderUI({
     
-  #   rs <- input$SP_Info_rows_selected
-  #   if(length(rs))
-  #   checkboxGroupInput("SP_Loc_K_Name", "K_NAME",	
-  #                      choices = unique(SP_LOC_Info_Table$K_NAME),
-  #                      selected = NULL
-  #   )
-  # })
+    rs <- input$SP_Info_rows_selected
+    
+    if(length(rs)){
+      
+      checkboxGroupInput("SP_Loc_K_Name", "K_NAME",
+                         choices = R_LOC_SelectBox$SP_LOC_Info_Table_K_NAME,
+                         selected = NULL)
+    }
+    
+    
+  })
   
   observeEvent(input$c_kname, {
     print('SP_LOC_Info_Table')
     print(SP_LOC_Info_Table)
     
-    print(unique(SP_LOC_Info_Table$K_NAME))
     print(unique(SP_LOC_Info_Table$K_NAME))
   })
   
@@ -103,20 +106,34 @@ shinyServer(function(input, output, session) {
   }
   
   printTable_Loc <- function(){
-    resInfo_Loc <- G_FILE_speciesinfo_02
+    resInfo_Loc <- SP_LOC_Info_Table
     
-    SP_Loc_K_Name <- isolate(input$SP_Loc_K_Name)
+    selectedNames <- isolate(input$SP_Loc_K_Name)
     
-    if(is.null(SP_Loc_K_Name)) {SP_Loc_K_Name <- ""} 
-    G_FILE_speciesinfo_02 <<- subset(resInfo_Loc, K_NAME %in% SP_Loc_K_Name)
+    print('resInfo_Loc <- SP_LOC_Info_Table')
+    print(resInfo_Loc)
     
-    renderTable("SP_LOC_Info", G_FILE_speciesinfo_02)
+    if(is.null(selectedNames)) {
+      selectedList <- SP_LOC_Info_Table
+      
+    } else {
+      selectedList <- subset(resInfo_Loc, K_NAME %in% selectedNames)
+    }
+    
+    renderTable("SP_LOC_Info", selectedList)
   }
   
   observeEvent(input$SP_Info_inst,{printTable()}, ignoreNULL = F, ignoreInit = T)
   observeEvent(input$SP_Info_type,{printTable()}, ignoreNULL = F, ignoreInit = T)
   
-  observeEvent(input$SP_Loc_K_Name,{printTable_Loc()}, ignoreNULL = F, ignoreInit = T)
+  
+  observeEvent(input$SP_Loc_K_Name,{
+    
+    print('K_NAME 이벤트 발생')
+    
+    printTable_Loc()
+    
+    }, ignoreNULL = T, ignoreInit = T)
   
   
   observeEvent(input$reset_SP_Info, {
@@ -1925,8 +1942,9 @@ shinyServer(function(input, output, session) {
     input$reset_SP_Loc
     if (length(rs)) {
       SP_LOC_Info_Table <<- inner_join(G_FILE_specieslocation_02, G_FILE_speciesinfo_02[rs, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = FALSE], by = "ID")
-      print('SP_LOC_Info_Table$K_NAME')
-      print(SP_LOC_Info_Table$K_NAME)
+      R_LOC_SelectBox$SP_LOC_Info_Table_K_NAME <<- unique(SP_LOC_Info_Table$K_NAME)
+      print('R_LOC_SelectBox$SP_LOC_Info_Table_K_NAME <<- unique(SP_LOC_Info_Table$K_NAME)')
+      print(isolate(R_LOC_SelectBox$SP_LOC_Info_Table_K_NAME))
       return ( SP_LOC_Info_Table ) 
     }
     

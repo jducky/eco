@@ -501,7 +501,17 @@ G_FILE_speciesfreq_02 <- count(G_FILE_specieslocation_02, ID)
 G_FILE_speciesinfo_02 <- inner_join(G_FILE_speciesfreq_02, G_FILE_speciesindex_02, by = "ID")
 Temp_G_FILE_speciesinfo_02 <- G_FILE_speciesinfo_02
 Temp_G_FILE_specieslocation_02 <- G_FILE_specieslocation_02
+
+# 생물종위치
+# SP_Info_rows_selected click event table
 SP_LOC_Info_Table <- NULL
+
+# selectBox click event
+# SP_LOC_Info_Table_SelectBox <- NULL
+
+# selectBox K_NAME list
+R_LOC_SelectBox <- reactiveValues();
+
 
 ut <- unique(G_FILE_speciesinfo_02$TYPE)
 ut <- c(ut[1],ut[2],ut[3],ut[8],ut[7],ut[6],ut[5],ut[4],ut[9]) 
