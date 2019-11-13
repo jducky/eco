@@ -2179,7 +2179,7 @@ shinyServer(function(input, output, session) {
   
   
   output$SDM_OU_Species <- renderUI({
-    SDM_Name_Species_list <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution"), full.names = FALSE, recursive = FALSE)
+    SDM_Name_Species_list <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution", "test1"), full.names = FALSE, recursive = FALSE)
     SDM_Name_Species_selected <- SDM_Name_Species_list[1]
     selectInput("SDM_OU_Species", "Select a species",
                 choices = c(SDM_Name_Species_list),
@@ -2188,20 +2188,22 @@ shinyServer(function(input, output, session) {
   })
   
   output$SDM_OU_Projection_model <- renderUI({
-    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2", paste(as.name(paste(input$SDM_OU_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SDM_OU_Species, "BIOMOD2", paste(as.name(paste(input$SDM_OU_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
     SDM_Name_Projection_Models_list <- as.character(G_FILE_species_evaluation$Projection)
     SDM_Name_Projection_Models_selected <- SDM_Name_Projection_Models_list[1]
     selectInput("SDM_OU_Projection_model", "Select Projection models",
-                choices = "PA1_Full_GAM"
+                # 파일 불러오는 과정에서 GLM으로 되어 있어서 수정
+                # choices = "PA1_Full_GAM"
+                choices = "PA1_Full_GLM"
                 
                 
     )
   })
   
   output$SDM_OU_Prediction_model <- renderUI({
-    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2", paste(as.name(paste(input$SDM_OU_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SDM_OU_Species, "BIOMOD2", paste(as.name(paste(input$SDM_OU_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
     SDM_Name_Prediction_Models_list <- as.character(G_FILE_species_evaluation$Prediction)
@@ -2215,10 +2217,15 @@ shinyServer(function(input, output, session) {
   
   output$SDM_OU_Validation <- DT::renderDataTable({
     
-    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2", paste(as.name(paste(input$SDM_OU_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+    print('renderDataTable')
+    
+    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SDM_OU_Species, "BIOMOD2", paste(as.name(paste(isolate(input$SDM_OU_Species), "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+    print('destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SDM_OU_Species, "BIOMOD2", paste(as.name(paste(input$SDM_OU_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))')
+    print(destfile)
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
-    t(all_eval)
+    all_eval
+    # t(all_eval)
     
   })
   
@@ -2239,13 +2246,17 @@ shinyServer(function(input, output, session) {
               col="orange",
               border="brown"
       )
+      
+    } else {
+      print('NULL')
+      NULL
     }
     
   })
   
   output$SDM_OU_Contribution <- DT::renderDataTable({
     
-    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2", paste(as.name(paste(input$SDM_OU_Species, "_impot.csv", sep = "")), sep = "", collapse = "--"))
+    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SDM_OU_Species, "BIOMOD2", paste(as.name(paste(input$SDM_OU_Species, "_impot.csv", sep = "")), sep = "", collapse = "--"))
     
     if (!file.exists(destfile)) {
       return(NULL)
@@ -2263,7 +2274,7 @@ shinyServer(function(input, output, session) {
   
   output$SDM_OU_Contribution_Radarchart <- renderPlot({
     
-    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2", paste(as.name(paste(input$SDM_OU_Species, "_impot.csv", sep = "")), sep = "", collapse = "--"))
+    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SDM_OU_Species, "BIOMOD2", paste(as.name(paste(input$SDM_OU_Species, "_impot.csv", sep = "")), sep = "", collapse = "--"))
     
     if (!file.exists(destfile)) {
       return(NULL)
@@ -2286,7 +2297,7 @@ shinyServer(function(input, output, session) {
   
   output$SDM_OU_Contribution_Radarchart22 <- renderPlot({
     
-    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2", paste(as.name(paste(input$SDM_OU_Species, "_impot.csv", sep = "")), sep = "", collapse = "--"))
+    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SDM_OU_Species, "BIOMOD2", paste(as.name(paste(input$SDM_OU_Species, "_impot.csv", sep = "")), sep = "", collapse = "--"))
     
     if (!file.exists(destfile)) {
       return(NULL)
@@ -2324,7 +2335,7 @@ shinyServer(function(input, output, session) {
   
   output$SDM_OU_Probability_map <- renderLeaflet({
     
-    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2")
+    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SDM_OU_Species, "BIOMOD2")
     Map <- paste("PROJ", "_", input$SDM_OU_Climate_model, "_", input$SDM_OU_Climate_scenario, "_", input$SDM_OU_Project_year, "_", input$SDM_OU_Species, "_", input$SDM_OU_Projection_model, ".tif", sep = "")
     r <- raster(file.path(dir_path, Map))
     
@@ -2347,7 +2358,7 @@ shinyServer(function(input, output, session) {
   
   output$SDM_OU_PROJ_Summary <- renderPrint({
     
-    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2")
+    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SDM_OU_Species, "BIOMOD2")
     Map <- paste("PROJ", "_", input$SDM_OU_Climate_model, "_", input$SDM_OU_Climate_scenario, "_", input$SDM_OU_Project_year, "_", input$SDM_OU_Species, "_", input$SDM_OU_Projection_model, ".tif", sep = "")
     r <- raster(file.path(dir_path, Map))
     summary(r)
@@ -2356,7 +2367,8 @@ shinyServer(function(input, output, session) {
   
   output$SDM_OU_PROJ_Histogram <- renderPlot({
     
-    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2")
+    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SDM_OU_Species, "BIOMOD2")
+    
     Map <- paste("PROJ", "_", input$SDM_OU_Climate_model, "_", input$SDM_OU_Climate_scenario, "_", input$SDM_OU_Project_year, "_", input$SDM_OU_Species, "_", input$SDM_OU_Projection_model, ".tif", sep = "")
     x <- raster(file.path(dir_path, Map))
     
@@ -2372,7 +2384,7 @@ shinyServer(function(input, output, session) {
   
   output$SDM_OU_Predicted_map <- renderLeaflet({
     
-    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2")
+    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SDM_OU_Species, "BIOMOD2")
     Map <- paste("PRED", "_", input$SDM_OU_Climate_model, "_", input$SDM_OU_Climate_scenario, "_", input$SDM_OU_Project_year, "_", input$SDM_OU_Species, "_", input$SDM_OU_Prediction_model, ".tif", sep = "")
     r <- raster(file.path(dir_path, Map))
     crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
@@ -2395,7 +2407,7 @@ shinyServer(function(input, output, session) {
   
   output$SDM_OU_PRED_Summary <- renderPrint({
     
-    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2")
+    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SDM_OU_Species, "BIOMOD2")
     Map <- paste("PRED", "_", input$SDM_OU_Climate_model, "_", input$SDM_OU_Climate_scenario, "_", input$SDM_OU_Project_year, "_", input$SDM_OU_Species, "_", input$SDM_OU_Prediction_model, ".tif", sep = "")
     r <- raster(file.path(dir_path, Map))
     
@@ -2404,7 +2416,7 @@ shinyServer(function(input, output, session) {
   
   output$SDM_OU_PRED_Histogram <- renderPlot({
     
-    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species, "BIOMOD2")
+    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SDM_OU_Species, "BIOMOD2")
     Map <- paste("PRED", "_", input$SDM_OU_Climate_model, "_", input$SDM_OU_Climate_scenario, "_", input$SDM_OU_Project_year, "_", input$SDM_OU_Species, "_", input$SDM_OU_Prediction_model, ".tif", sep = "")
     x <- raster(file.path(dir_path, Map))
     
@@ -2456,7 +2468,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$SS_CA_SDM_model <- renderUI({
-    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SS_CA_Species[1], "BIOMOD2", paste(as.name(paste(input$SS_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SS_CA_Species[1], "BIOMOD2", paste(as.name(paste(input$SS_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
     SS_Name_Models_list <- as.character(G_FILE_species_evaluation$Prediction)
@@ -2477,7 +2489,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$DM_MO_SDM_model <- renderUI({
-    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$DM_MO_Species[1], "BIOMOD2", paste(as.name(paste(input$DM_MO_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$DM_MO_Species[1], "BIOMOD2", paste(as.name(paste(input$DM_MO_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
     DM_Name_Models_list <- as.character(G_FILE_species_evaluation$Prediction)
@@ -2498,7 +2510,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$DM_OU_SDM_model <- renderUI({
-    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$DM_OU_Species[1], "BIOMOD2", paste(as.name(paste(input$DM_OU_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$DM_OU_Species[1], "BIOMOD2", paste(as.name(paste(input$DM_OU_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
     DM_Name_Models_list <- as.character(G_FILE_species_evaluation$Prediction)

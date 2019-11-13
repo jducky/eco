@@ -450,7 +450,7 @@ G_2019_DATA_graph <- NULL
 if( Sys.info()['sysname'] == "Windows" ) {
   # print(Sys.info()['sysname'])
   ##### Path
-  G[['SE_Dir_Project']] <- "C:/MOTIVE_projects/proj1"
+  G[['SE_Dir_Project']] <- "C:/MOTIVE_projects/proj30"
   G[['SE_Dir_Climate']] <- "C:/MOTIVE_Ecosystem/DATA/Climate2"
   G[['SE_Dir_Link']] <- "C:/MOTIVE_Ecosystem/DATA/Link" 
   G[['SE_Dir_Species']] <- "C:/MOTIVE_Ecosystem/DATA/Species"

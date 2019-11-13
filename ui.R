@@ -542,69 +542,119 @@ shinyUI(
                                   tabsetPanel(
                                     
                                     
-                                    tabPanel("Validation & Contribution",
+                                    tabPanel(SDM_Name_Model_Out_Validation,
                                              
                                              # hr(),
                                              
+                                             # 열 기준
+                                             # fluidRow(
+                                             #   hr(),
+                                             #   column(6, DT::dataTableOutput("SDM_OU_Validation")
+                                             #          
+                                             #   ),
+                                             #   # column(6, DT::dataTableOutput("SDM_OU_Contribution"),
+                                             #   #        plotOutput("SDM_OU_Contribution_Radarchart")
+                                             #   column(6, plotOutput("SDM_OU_Validation_BoxPlot")
+                                             #   )
+                                             # )
+                                             
+                                             
+                                             # 행 기준
                                              fluidRow(
-                                               hr(),
-                                               column(6, DT::dataTableOutput("SDM_OU_Validation")
-                                                      
-                                               ),
-                                               column(6, DT::dataTableOutput("SDM_OU_Contribution"),
-                                                      plotOutput("SDM_OU_Contribution_Radarchart")
-                                               )
-                                             )
+                                               column(6, DT::dataTableOutput("SDM_OU_Validation"))
+                                             ),
+                                             
+                                             hr(),
+                                             
+                                             fluidRow(
+                                               column(6, plotOutput("SDM_OU_Validation_BoxPlot"))
+                                             ),
+                                             hr()
                                              
                                              
                                     ),
                                     
-                                    tabPanel("Map", 
+                                    tabPanel(SDM_Name_Model_Out_Contribution,
+                                             tags$hr(),
+                                             fluidRow(
+                                               column(6, DT::dataTableOutput("SDM_OU_Contribution"))
+                                             ),
+                                             tags$hr(),
+                                             fluidRow(
+                                               column(8,plotOutput("SDM_OU_Contribution_Radarchart"))
+                                             )
+                                    ),
+                                    tabPanel(SDM_Name_Model_Out_Probability, 
                                              tags$head(
                                                # Include our custom CSS
                                                includeCSS("styles.css"),
                                                includeScript("gomap.js")
                                              ),
                                              tags$hr(),
-                                             fluidRow(
-                                               valueBoxOutput("Value_CM"),
-                                               valueBoxOutput("Value_CS"),
-                                               valueBoxOutput("Value_YR")
-                                               
+                                             leafletOutput("SDM_OU_Probability_map", width = "800", height = "600") %>% withSpinner(),
+                                             tags$hr(),
+                                             column(10, verbatimTextOutput("SDM_OU_PROJ_Summary")),
+                                             column(10, plotOutput("SDM_OU_PROJ_Histogram"))
+                                    ),
+                                    tabPanel(SDM_Name_Model_Out_Prediction, 
+                                             tags$head(
+                                               # Include our custom CSS
+                                               includeCSS("styles.css"),
+                                               includeScript("gomap.js")
                                              ),
-                                             fluidRow(class = "text-center",
-                                                      column(6, 
-                                                             # tags$h3("<Probability Map>", style = "text-align: center;"),
-                                                             box(status = "success",
-                                                                 title = "PROBABILITY MAP", width = 20, height = 45, collapsible = T, collapsed = T
-                                                             ),
-                                                             
-                                                             leafletOutput("SDM_OU_Probability_map") %>% withSpinner(),
-                                                             br(),
-                                                             actionButton("Reset_Probability_View", label = "Reset"),
-                                                             tags$hr(),
-                                                             column(12, verbatimTextOutput("SDM_OU_PROJ_Summary")),
-                                                             column(12, plotOutput("SDM_OU_PROJ_Histogram"))
-                                                      ),
-                                                      
-                                                      column(6, 
-                                                             # tags$h3("<Predicted Map>", style = "text-align: center;"),
-                                                             box(status = "success",
-                                                                 title = "PREDICTED MAP", width = 20, height = 45, collapsible = T, collapsed = T
-                                                             ),
-                                                             # tags$h3("<Predicted Map>"),
-                                                             
-                                                             # leafletOutput("SDM_OU_Predicted_map", width = "800", height = "600"),
-                                                             leafletOutput("SDM_OU_Predicted_map") %>% withSpinner(),
-                                                             br(),
-                                                             actionButton("Reset_Predicted_View", label = "Reset"),
-                                                             tags$hr(),
-                                                             column(12, verbatimTextOutput("SDM_OU_PRED_Summary")),
-                                                             column(12, plotOutput("SDM_OU_PRED_Histogram"))
-                                                      )
-                                             )
-                                             
+                                             tags$hr(),
+                                             leafletOutput("SDM_OU_Predicted_map", width = "800", height = "600") %>% withSpinner(),
+                                             tags$hr(),
+                                             column(10, verbatimTextOutput("SDM_OU_PRED_Summary")),
+                                             column(10, plotOutput("SDM_OU_PRED_Histogram"))
                                     )
+                                    
+                                    # tabPanel("Map", 
+                                    #          tags$head(
+                                    #            # Include our custom CSS
+                                    #            includeCSS("styles.css"),
+                                    #            includeScript("gomap.js")
+                                    #          ),
+                                    #          tags$hr(),
+                                    #          fluidRow(
+                                    #            valueBoxOutput("Value_CM"),
+                                    #            valueBoxOutput("Value_CS"),
+                                    #            valueBoxOutput("Value_YR")
+                                    #            
+                                    #          ),
+                                    #          fluidRow(class = "text-center",
+                                    #                   column(6, 
+                                    #                          # tags$h3("<Probability Map>", style = "text-align: center;"),
+                                    #                          box(status = "success",
+                                    #                              title = "PROBABILITY MAP", width = 20, height = 45, collapsible = T, collapsed = T
+                                    #                          ),
+                                    #                          
+                                    #                          leafletOutput("SDM_OU_Probability_map") %>% withSpinner(),
+                                    #                          br(),
+                                    #                          actionButton("Reset_Probability_View", label = "Reset"),
+                                    #                          tags$hr(),
+                                    #                          column(12, verbatimTextOutput("SDM_OU_PROJ_Summary")),
+                                    #                          column(12, plotOutput("SDM_OU_PROJ_Histogram"))
+                                    #                   ),
+                                    #                   
+                                    #                   column(6, 
+                                    #                          # tags$h3("<Predicted Map>", style = "text-align: center;"),
+                                    #                          box(status = "success",
+                                    #                              title = "PREDICTED MAP", width = 20, height = 45, collapsible = T, collapsed = T
+                                    #                          ),
+                                    #                          # tags$h3("<Predicted Map>"),
+                                    #                          
+                                    #                          # leafletOutput("SDM_OU_Predicted_map", width = "800", height = "600"),
+                                    #                          leafletOutput("SDM_OU_Predicted_map") %>% withSpinner(),
+                                    #                          br(),
+                                    #                          actionButton("Reset_Predicted_View", label = "Reset"),
+                                    #                          tags$hr(),
+                                    #                          column(12, verbatimTextOutput("SDM_OU_PRED_Summary")),
+                                    #                          column(12, plotOutput("SDM_OU_PRED_Histogram"))
+                                    #                   )
+                                    #          )
+                                    #          
+                                    # )
                                     
                                   )
                                 )
