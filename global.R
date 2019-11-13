@@ -601,11 +601,15 @@ SDM_models_out_list <- c("GLM (Generalized Linear Model)" = "GLM",
                          "MAXENT.Phillips" = "MAXENT.Phillips",
                          #                  	     "MAXENT (low-memory multinomial logistic regression)" = "MAXENT",
                          "Ensemble" = "EM")
-DM_Models_list <- c("No Dispersal" = "ND",
-                    "SDD (Short Dispersal Distance)" = "SDD",
-                    "MDD (Middle Dispersal Distance)" = "MDD",
-                    "LDD (Long Dispersal Distance)" = "LDD",
-                    "Unlimited Dispersal" = "UD")
+
+# DM_Models_list <- c("No Dispersal" = "ND",
+#                     "SDD (Short Dispersal Distance)" = "SDD",
+#                     "MDD (Middle Dispersal Distance)" = "MDD",
+#                     "LDD (Long Dispersal Distance)" = "LDD",
+#                     "Unlimited Dispersal" = "UD")
+
+DM_Models_list <- c("Species Distribution Model (SDM)" = "BIOMOD2",
+                    "Dispersal Model (DM)" = "MIGCLIM")
 
 ST_Name <- "success"
 
@@ -760,7 +764,7 @@ SE_Language = "Korean"
      DM_Name_DM_MO_Action <- "Run"
      DM_Name_DM_Models <- "DIspersal Models"
      DM_Name_DM_Models_list <- DM_Models_list
-     DM_Name_DM_Models_selected <- "UD" 
+     DM_Name_DM_Models_selected <- "MIGCLIM" 
      DM_Name_CD_Models <- "Climate Models"
      DM_Name_CD_Models_list <- CD_Models_list
      DM_Name_CD_Models_selected <- "KMA"    
@@ -1119,7 +1123,7 @@ SE_Language = "Korean"
      DM_Name_DM_MO_Action <- "실행"
      DM_Name_DM_Models <- "확산모델"
      DM_Name_DM_Models_list <- DM_Models_list
-     DM_Name_DM_Models_selected <- "UD" 
+     DM_Name_DM_Models_selected <- "MIGCLIM" 
      DM_Name_CD_Models <- "기후모델"
      DM_Name_CD_Models_list <- CD_Models_list
      DM_Name_CD_Models_selected <- "KMA"    
@@ -1128,7 +1132,7 @@ SE_Language = "Korean"
      DM_Name_CD_Scenarios_selected <- "RCP4.5"    
      DM_Name_CD_Year <- "예측년도"
      DM_Name_CD_Year_list <- CD_Year_list
-     DM_Name_CD_Year_selected <- "2000"
+     DM_Name_CD_Year_selected <- CD_Year_list
      DM_Name_models <- "모델유형"
      DM_Name_models_list <- SDM_models_list
      DM_Name_models_selected <- "GLM"
