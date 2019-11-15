@@ -687,6 +687,7 @@ shinyUI(
                                 # Sidebar panel for inputs ----
                                 sidebarPanel(width = 2,
                                              
+                                             uiOutput("DM_MO_Species"),
                                              uiOutput("DM_MO_Col_Box_01")
                                              
                                              
@@ -694,7 +695,8 @@ shinyUI(
                                 
                                 sidebarPanel(width = 2,
                                              
-                                             uiOutput("DM_MO_Col_Box_02")
+                                             uiOutput("DM_MO_Col_Box_02"),
+                                             uiOutput("DM_MO_SDM_model")
                                              
                                              
                                 ),
@@ -733,77 +735,59 @@ shinyUI(
                               sidebarLayout(
                                 sidebarPanel(width = 3, Fluid = TRUE,
                                              
-                                             selectInput("DM-OU_Species", "Select a species",
-                                                         choices = c("구상나무" = "option1",
-                                                                     "가문비나무 " = "option2"),
-                                                         selected = "option1"
-                                             ),
+                                             uiOutput("DM_OU_Species"),
                                              tags$hr(),
                                              
+                                             uiOutput('DM_OU_SDM_model'),
                                              
-                                             selectInput("DM-OU_Dispersal_type", "Dispersal Types",
-                                                         choices = c("No Dispersal" = "ND",
-                                                                     "SDD" = "SDD",
-                                                                     "MDD" = "MDD",
-                                                                     "LDD" = "LDD",
-                                                                     "Unlimited Dispersal" = "UD"),
-                                                         selected = "LDD"
+                                             checkboxGroupInput("DM_OU_Dispersal_type", DM_Name_DM_Models,
+                                                                choices = c(DM_Name_DM_Models_list),
+                                                                selected = DM_Name_DM_Models_selected
                                              ),
                                              
-                                             selectInput("DM-OU_SDM_model", "Model Types",
-                                                         choices = c("GLM" = "GLM",
-                                                                     "GAM" = "GAM",
-                                                                     "GBM" = "GBM",
-                                                                     "CTA" = "CTA",
-                                                                     "ANN" = "ANN",
-                                                                     "SRE" = "SRE",
-                                                                     "FDA" = "FDA",
-                                                                     "MARS" = "MARS",
-                                                                     "RF" = "RF",
-                                                                     "MAXENT.Phillips" = "MAXENT.Phillips",
-                                                                     "MAXENT" = "MAXENT",
-                                                                     "Ensemble" = "Ensemble"),
-                                                         selected = "MAXENT.Phillips"
+                                             checkboxGroupInput("DM_OU_Climate_model", DM_Name_CD_Models,
+                                                                choices = c(DM_Name_CD_Models_list),
+                                                                selected = DM_Name_CD_Models_selected
                                              ),
                                              
-                                             # Input: Checkbox if file has header ----
-                                             radioButtons("DM_OU_Climate_model", "Climate Models",
-                                                          choices = c("KMA" = "KMA",
-                                                                      "KEI" = "KEI"),
-                                                          selected = "KMA"
+                                             checkboxGroupInput("DM_OU_Climate_scenario", DM_Name_CD_Scenarios,
+                                                                choices = c(DM_Name_CD_Scenarios_list),
+                                                                selected = DM_Name_CD_Scenarios_selected
                                              ),
                                              
-                                             # Input: Checkbox if file has header ----
-                                             radioButtons("DM_OU_Climate_scenario", "Climate Scenarios",
-                                                          choices = c("RCP 4.5" = "rcp4.5",
-                                                                      "RCP 8.5" = "rcp8.5"),
-                                                          selected = "rcp4.5"
-                                             ),
+                                             checkboxGroupInput("DM_OU_Project_year", DM_Name_CD_Year,
+                                                                choices = c(DM_Name_CD_Year_list),
+                                                                selected = DM_Name_CD_Year_selected
+                                             )
                                              
-                                             
-                                             
-                                             
-                                             sliderInput("DM_OU_Project_year", label = "Projection Year", min = 2000,
-                                                         max = 2080, value = 2000, step = 10, sep = "",
-                                                         animate = animationOptions(interval = 3000))
+                                             # sliderInput("DM_OU_Project_year", label = DM_Name_CD_Year, min = 2000,
+                                             #             max = 2080, value = 2000, step = 10, sep = "",
+                                             #             animate = animationOptions(interval = 3000))
                                 ),
                                 
                                 # Main panel for displaying outputs ----
                                 mainPanel(
-                                  bsCollapse(
-                                    bsCollapsePanel("Summary",
-                                                    verbatimTextOutput("DM_OU_Summary"), style = ST_Name)
-                                  ),
-                                  fluidRow(
-                                    valueBoxOutput("DM_Value_CM"),
-                                    valueBoxOutput("DM_Value_CS"),
-                                    valueBoxOutput("DM_Value_YR")
-                                  ),
-                                  leafletOutput("DM_OU_DIspersal_map", width = "800", height = "650") %>% withSpinner(),
-                                  actionButton("Reset_DM_OU_DIspersal_map", label = "Reset")
                                   
+                                  # bsCollapse(
+                                  #   bsCollapsePanel("Summary",
+                                  #                   verbatimTextOutput("DM_OU_Summary"), style = ST_Name)
+                                  # ),
+                                  # fluidRow(
+                                  #   valueBoxOutput("DM_Value_CM"),
+                                  #   valueBoxOutput("DM_Value_CS"),
+                                  #   valueBoxOutput("DM_Value_YR")
+                                  # ),
+                                  # leafletOutput("DM_OU_DIspersal_map", width = "800", height = "650") %>% withSpinner(),
+                                  # actionButton("Reset_DM_OU_DIspersal_map", label = "Reset")
                                   
-                                )
+                                  tabsetPanel(
+                                    tabPanel(DM_Name_Out_Plot,
+                                             tags$hr(),
+                                             uiOutput("DM_OU_UI_plot")
+                                    )
+                                  )
+                                  
+                                ) # mainPanel
                               )
                      )
                    )

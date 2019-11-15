@@ -663,10 +663,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  
-  
-  
-  
+
   
   output$DM_MO_Col_Box_01 = renderUI({
     
@@ -675,12 +672,6 @@ shinyServer(function(input, output, session) {
     input$reset_DM_MO
     
     x <- div(
-      selectInput("DM-MO_Species", "Select a species",
-                  choices = c("구상나무" = "option1",
-                              "가문비나무 " = "option2"),
-                  selected = "option1"
-      ),
-      # tags$hr(),
       
       selectInput("DM-MO_SDM_model", "Model Types",
                   choices = c("GLM" = "GLM",
@@ -736,15 +727,15 @@ shinyServer(function(input, output, session) {
                                      "2070" = "70",
                                      "2080" = "80"),
                          selected = c("10", "20", "30","40", "50", "60","70", "80")
-      ),
-      
-      
-      checkboxGroupInput("DM-MO_Barrier", "Select Barrier Data",
-                         choices = c("토지이용" = "토지이용",
-                                     "산불" = "FORESTFIRE",
-                                     "산사태" = "산사태"),
-                         selected = c("토지이용", "FORESTFIRE", "산사태")
       )
+      
+      
+      # checkboxGroupInput("DM-MO_Barrier", "Select Barrier Data",
+      #                    choices = c("토지이용" = "토지이용",
+      #                                "산불" = "FORESTFIRE",
+      #                                "산사태" = "산사태"),
+      #                    selected = c("토지이용", "FORESTFIRE", "산사태")
+      # )
     )
     return (x)
     
@@ -756,13 +747,13 @@ shinyServer(function(input, output, session) {
     input$reset_DM_MO
     x <- div(
       
-      checkboxGroupInput("DM-MO_Dispersal_type", "Dispersal Types",
-                         choices = c("ND (No Dispersal)" = "ND",
-                                     "SDD (Short Distance Dispersal)" = "SDD",
-                                     "MDD (Middle Distance Dispersal)" = "MDD",
-                                     "LDD (Long Distance Dispersal)" = "LDD",
-                                     "UD (Unlimited Dispersal)" = "UD"),
-                         selected = "LDD"),
+      # checkboxGroupInput("DM-MO_Dispersal_type", "Dispersal Types",
+      #                    choices = c("ND (No Dispersal)" = "ND",
+      #                                "SDD (Short Distance Dispersal)" = "SDD",
+      #                                "MDD (Middle Distance Dispersal)" = "MDD",
+      #                                "LDD (Long Distance Dispersal)" = "LDD",
+      #                                "UD (Unlimited Dispersal)" = "UD"),
+      #                    selected = "LDD"),
       
       sliderInput("DM-MO_Slider", label = h5("Select a dispersal distance"), min = 0, 
                   max = 10000, value = 1000, step = 50)
@@ -838,9 +829,9 @@ shinyServer(function(input, output, session) {
       # infoBox("선택종명", toString(input[['DM-MO_Species']]), icon = icon("tree"), width = 2),
       infoBox("기후모델", toString(input[['DM-MO_Climate_model']]), icon = icon("sun"), width = 2),
       infoBox("기후시나리오", toString(input[['DM-MO_Climate_scenario']]), icon = icon("clock"), width = 2),
-      infoBox("YEAR", toString(input[['DM-MO_Protect_year']]), icon = icon("calendar"), width = 2),
-      infoBox("Barrier ", toString(input[['DM-MO_Barrier']]), icon = icon("chart-area"), width = 3),
-      infoBox("Dispersal", toString(input[['DM-MO_Dispersal_type']]), icon = icon("external-link-square-alt"), width = 3)
+      infoBox("YEAR", toString(input[['DM-MO_Protect_year']]), icon = icon("calendar"), width = 2)
+      # infoBox("Barrier ", toString(input[['DM-MO_Barrier']]), icon = icon("chart-area"), width = 3),
+      # infoBox("Dispersal", toString(input[['DM-MO_Dispersal_type']]), icon = icon("external-link-square-alt"), width = 3)
     )
     
   })
@@ -2480,11 +2471,11 @@ shinyServer(function(input, output, session) {
   })
   
   output$DM_MO_Species <- renderUI({
-    DM_Name_Species_list <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution"), full.names = FALSE, recursive = FALSE)
+    DM_Name_Species_list <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution", "test1"), full.names = FALSE, recursive = FALSE)
     DM_Name_Species_selected <- DM_Name_Species_list[1]
-    checkboxGroupInput("DM_MO_Species", "Select a species",
-                       choices = c(DM_Name_Species_list),
-                       selected = DM_Name_Species_selected
+    selectInput("DM_MO_Species", "Select a species",
+                choices = c(DM_Name_Species_list),
+                selected = DM_Name_Species_selected
     )
   })
   
@@ -2501,7 +2492,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$DM_OU_Species <- renderUI({
-    DM_Name_Species_list <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution"), full.names = FALSE, recursive = FALSE)
+    DM_Name_Species_list <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution", "test1"), full.names = FALSE, recursive = FALSE)
     DM_Name_Species_selected <- DM_Name_Species_list[1]
     checkboxGroupInput("DM_OU_Species", "Select a species",
                        choices = c(DM_Name_Species_list),
@@ -2528,15 +2519,16 @@ shinyServer(function(input, output, session) {
     clist <- input$DM_OU_Climate_scenario  # c("RCP4.5") # c("RCP4.5", "RCP8.5")
     mlist <- input$DM_OU_SDM_model # c("PA1_Full_GLM_byROC")
     ylist <- input$DM_OU_Project_year
-    #	dtlist <- input$DM_OU_Dispersal_type
+    dtlist <- input$DM_OU_Dispersal_type
     
     n <- 0
     ls <- length(slist)
     ld <- length(dlist)
     lc <- length(clist)
     lm <- length(mlist)
-    ly <- length(ylist)		
-    tl <- ls * ld * lc * lm * ly
+    ly <- length(ylist)
+    ldt <- length(dtlist)
+    tl <- ls * ld * lc * lm * ly * ldt
     
     nc <- 2
     if (tl <  2) {
@@ -2560,14 +2552,28 @@ shinyServer(function(input, output, session) {
     clist <- input$DM_OU_Climate_scenario  # c("RCP4.5") # c("RCP4.5", "RCP8.5")
     mlist <- input$DM_OU_SDM_model # c("PA1_Full_GLM_byROC")
     ylist <- input$DM_OU_Project_year
-    #	dtlist <- input$DM_AO_Dispersal_type
+    dtlist <- input$DM_OU_Dispersal_type
+    
+    print('slist')
+    print(slist)
+    print('dlist')
+    print(dlist)
+    print('clist')
+    print(clist)
+    print('mlist')
+    print(mlist)
+    print('ylist')
+    print(ylist)
+    print('dtlist')
+    print(dtlist)
     
     ls <- length(slist)
     ld <- length(dlist)
     lc <- length(clist)
     lm <- length(mlist)
     ly <- length(ylist)
-    tl <- ls * ld * lc * lm * ly
+    ldt <- length(dtlist)
+    tl <- ls * ld * lc * lm * ly * ldt
     
     nc <- 2
     if (tl <  2) {
@@ -2579,29 +2585,41 @@ shinyServer(function(input, output, session) {
     par(mfrow = c(nr,nc), cex.main = 1.2)
     
     for (s in slist) {
-      dir_path <- file.path(isolate(G$SE_Dir_Project), "Species_Distribution", s, "BIOMOD2")
-      for (d in dlist) {
-        for (c in clist) {
-          for (m in mlist) {
-            if (ly > 0) {
-              if (ly == 1 && ylist[1] == "2000") {
-                Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
-                R_Map1 <- raster(file.path(dir_path, Map1))
-                plot(R_Map1, main = Map1)
-              } else if (ly > 1 && ylist[1] == "2000") {
-                Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
-                R_Map1 <- raster(file.path(dir_path, Map1))
-                plot(R_Map1, main = Map1)
-                for (y in 2:ly) {
-                  Map2 <- paste("PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
-                  R_Map2 <- raster(file.path(dir_path, Map2))
-                  plot(R_Map2, main = Map2)
-                }
-              } else {
-                for (y in 1:ly) {
-                  Map2 <- paste("PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
-                  R_Map2 <- raster(file.path(dir_path, Map2))
-                  plot(R_Map2, main = Map2)
+      for (dt in dtlist) {
+        dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", s, dt)	 
+        print('dir_path')
+        print(dir_path)
+        for (d in dlist) {
+          for (c in clist) {
+            for (m in mlist) {
+              if (ly > 0) {
+                if (ly == 1 && ylist[1] == "2000") {
+                  Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
+                  if (file.exists(file.path(dir_path, Map1))) {
+                    R_Map1 <- raster(file.path(dir_path, Map1))
+                    plot(R_Map1, main = Map1)
+                  }
+                } else if (ly > 1 && ylist[1] == "2000") {
+                  Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
+                  if (file.exists(file.path(dir_path, Map1))) {
+                    R_Map1 <- raster(file.path(dir_path, Map1))
+                    plot(R_Map1, main = Map1)
+                  }
+                  for (y in 2:ly) {
+                    Map2 <- paste("PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
+                    if (file.exists(file.path(dir_path, Map2))) {
+                      R_Map2 <- raster(file.path(dir_path, Map2))
+                      plot(R_Map2, main = Map2)
+                    }
+                  }
+                } else {
+                  for (y in 1:ly) {
+                    Map2 <- paste("PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
+                    if (file.exists(file.path(dir_path, Map2))) {
+                      R_Map2 <- raster(file.path(dir_path, Map2))
+                      plot(R_Map2, main = Map2)
+                    }
+                  }
                 }
               }
             }
