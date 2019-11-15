@@ -1332,35 +1332,71 @@ shinyUI(
                    
           ),          
           
-          
-          tabPanel(HELP_Name, fluid = TRUE,
-                   tags$hr(),
-                   sidebarPanel(width = 5,
-                                helpText("MOTIVE ECOSYSTEM(생태계 기후변화 영향 및 취약성평가모형)은 환경부 기후변화 R&D 과제의 결과물입니다.")
-                                ,
-                                
+          tabPanel(HELP_Name,
+                   tabsetPanel(
+                     tabPanel("Help", fluid = TRUE,
+                              tags$hr(),
+                              sidebarPanel(width = 5,
+                                           helpText("MOTIVE ECOSYSTEM(생태계 기후변화 영향 및 취약성평가모형)은 환경부 기후변화 R&D 과제의 결과물입니다.")
+                              )
+                     ),
+                     tabPanel("Convert Image", fluid = TRUE,
+                              tags$hr(),
+                              sidebarPanel(width = 4,
+                                           fluid = TRUE,
+                                           shinyDirButton("CV_TIF_Folder", "변환할 TIF폴더", "TIF폴더 선택"),
+                                           verbatimTextOutput("CV_TIF_Folder", placeholder = TRUE),
+                                           tags$hr(),
+                                           helpText("변환된 PNG 파일은 output 폴더(create & overwrite)에 저장됨"),
+                                           uiOutput("CV_TIF_Time"),
+                                           tags$hr(),
+                                           actionButton("CV_TIF_run", label = "변환실행")  
+                                           # 
+                                           # uiOutput("VH_AO_SDM_model")
+                              ),
+                              mainPanel(
                                 fluidRow(
-                                  infoBox("New Orders", 10 * 2, icon = icon("credit-card"), width = 12)  
+                                  # valueBoxOutput("Value_TM_DF"),
+                                  # valueBoxOutput("Value_TM_AV")
                                 ),
-                                
                                 fluidRow(
-                                  infoBox("New Orders", 10 * 2, icon = icon("credit-card"), fill = TRUE, width = 12)
-                                ),
-                                
-                                fluidRow(
-                                  infoBox("Progress", "25%", icon = icon("list"), width = 12, color = "purple")
-                                ),
-                                
-                                fluidRow(
-                                  infoBox("Approval", paste0(80, "%"), icon = icon("thumbs-up", lib = "glyphicon") ,width = 12, color = "yellow")
-                                ),
-                                fluidRow(
-                                  # h1(HELP_TEST_desc01)
+                                  # valueBoxOutput("Value_TM_ES"),
+                                  # valueBoxOutput("Value_TM_RM")
                                 )
-                                
-                                
+                              )
+                     )
                    )
+                   
           )
+          
+          # tabPanel(HELP_Name, fluid = TRUE,
+          #          tags$hr(),
+          #          sidebarPanel(width = 5,
+          #                       helpText("MOTIVE ECOSYSTEM(생태계 기후변화 영향 및 취약성평가모형)은 환경부 기후변화 R&D 과제의 결과물입니다.")
+          #                       ,
+          #                       
+          #                       fluidRow(
+          #                         infoBox("New Orders", 10 * 2, icon = icon("credit-card"), width = 12)  
+          #                       ),
+          #                       
+          #                       fluidRow(
+          #                         infoBox("New Orders", 10 * 2, icon = icon("credit-card"), fill = TRUE, width = 12)
+          #                       ),
+          #                       
+          #                       fluidRow(
+          #                         infoBox("Progress", "25%", icon = icon("list"), width = 12, color = "purple")
+          #                       ),
+          #                       
+          #                       fluidRow(
+          #                         infoBox("Approval", paste0(80, "%"), icon = icon("thumbs-up", lib = "glyphicon") ,width = 12, color = "yellow")
+          #                       ),
+          #                       fluidRow(
+          #                         # h1(HELP_TEST_desc01)
+          #                       )
+          #                       
+          #                       
+          #          )
+          # )
           
         )    
         

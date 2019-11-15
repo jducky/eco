@@ -4540,6 +4540,105 @@ shinyServer(function(input, output, session) {
       setView(lng = 128.00, lat = 36.00, zoom = 7)
   })
   
+  ###########################
+  #### START 이미지 변환 ####
+  ###########################
+  observeEvent(input$CV_TIF_Folder, {
+    volumes <- c(main = isolate(G$SE_Dir_Project))
+    shinyDirChoose(input, 'CV_TIF_Folder', roots = volumes) # , defaultPath = "/MOTIVE_projects", defaultRoot = G$SE_Dir_Project)
+    G$CV_TIF_Folder <<- parseDirPath(volumes, input$CV_TIF_Folder)
+    output$CV_TIF_Folder <- renderText({G$CV_TIF_Folder})
+  })
+  
+  ## 변환할 TIFF 폴더 선택
+  output$CV_TIF_Time <- renderUI({
+    setwd(G$CV_TIF_Folder)
+    rlist=list.files(getwd(), pattern="tif$", full.names=FALSE)
+    G$tl <- length(rlist)
+    estTime <- G$tl * 8 / 60
+    helpText("변환된 PNG 파일은 output 폴더(create & overwrite)에 저장됨")
+    sprintf("예상소요시간: %3.2f분 (%d개 x 8초/개)", estTime, G$tl)
+  })
+  
+  ## TIFF --> PNG 변환 (폴더내 파일 전체)
+  observeEvent(input$CV_TIF_run, {
+    withProgress(message = 'Converting TIF --> PNG ... ... ...', value = 0, {
+      # setwd(G$CV_TIF_Folder)
+      # setwd(choose.dir(getwd(), "TIFF --> PNG 폴더 선택"))
+      subDir <- "output"
+      if (!(file.exists(subDir))) { dir.create(file.path(getwd(),subDir)) }
+      rlist=list.files(getwd(), pattern="tif$", full.names=FALSE)
+      tl <- length(rlist)
+      print(tl)
+      n <- 0
+      
+      ## 이미지내에 삽입되는 텍스트 설정
+      tag.map.title <- tags$style(HTML("
+        .leaflet-control.map-title {
+          transform: translate(0%,-100%);
+          position: relative !important;
+          left: 5%;
+          text-align: left;
+          padding-left: 5px; 
+          padding-right: 5px; 
+          background: rgba(220,220,220,0.75);
+          font-weight: bold;
+          font-size: 16px;
+        }
+      "))
+      
+      p <- progress_estimated(tl, min_time = 3)
+      time0 <- Sys.time()
+      print(Sys.time())
+      for(i in rlist) {
+        n <- n + 1
+        headStr <- str_sub(i,end=-5)
+        png <- paste0(G$CV_TIF_Folder,"/",subDir,"/",headStr,".jpg")
+        print(png)
+        r <- raster(i)
+        crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+        pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r), na.color = "transparent")
+        title <- tags$div(tag.map.title, HTML(headStr))
+        m <- leaflet() %>%
+          addTiles(
+            urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+            attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>') %>%
+          addRasterImage(r, colors = pal, opacity = 0.8) %>%
+          addLegend(pal = pal, values = values(r), title = "Legend") %>%
+          addControl(title, position = "bottomleft", className="map-title") %>%
+          setView(lng = 128.00, lat = 36.00, zoom = 7)
+        
+        ## Mapshot Method
+        # mapshot(m, file = png) # 경로/파일명 한글이슈 있음!!
+        
+        ## Weshot Method
+        saveWidget(m, "temp.html", selfcontained = T)
+        webshot("temp.html", file = png, cliprect = "viewport")
+        
+        G$timeNow <- Sys.time()
+        print(Sys.time())
+        integer()
+        G$timeDiff <- round(difftime(G$timeNow,time0,units="secs"), 1)
+        print(G$timeDiff)
+        minDiff <- round(G$timeDiff / 60, 1)
+        G$timeAvg <- round(G$timeDiff / n, 1)
+        G$timeEst <- round(G$timeAvg * tl, 1)
+        minEst <- round(G$timeEst / 60, 1)
+        G$timeRem <- G$timeEst - G$timeDiff
+        minRem <- round(G$timeRem / 60, 1)
+        incProgress(1/tl, detail=paste0("[",n,"/",tl,"] ",
+                                        "경과:",G$timeDiff,"s(",minDiff,"m) ",
+                                        "평균:",G$timeAvg,"s ",
+                                        "총예상:",G$timeEst,"s(",minEst,"m) ",
+                                        "잔여:",G$timeRem,"s(",minRem,"m)"
+        ))
+      }
+      
+    })
+  })
+  #########################
+  #### END 이미지 변환 ####
+  #########################
   
   
 })
