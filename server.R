@@ -110,8 +110,8 @@ shinyServer(function(input, output, session) {
     
     selectedNames <- isolate(input$SP_Loc_K_Name)
     
-    print('resInfo_Loc <- SP_LOC_Info_Table')
-    print(resInfo_Loc)
+    # print('resInfo_Loc <- SP_LOC_Info_Table')
+    # print(resInfo_Loc)
     
     if(is.null(selectedNames)) {
       selectedList <- SP_LOC_Info_Table
@@ -129,7 +129,7 @@ shinyServer(function(input, output, session) {
   
   observeEvent(input$SP_Loc_K_Name,{
     
-    print('K_NAME 이벤트 발생')
+    # print('K_NAME 이벤트 발생')
     
     printTable_Loc()
     
@@ -2450,7 +2450,7 @@ shinyServer(function(input, output, session) {
   
   output$SS_CA_Species <- renderUI({
     input$reset_SS_CA
-    SS_Name_Species_list <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution"), full.names = FALSE, recursive = FALSE)
+    SS_Name_Species_list <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution", "test1"), full.names = FALSE, recursive = FALSE)
     SS_Name_Species_selected <- SS_Name_Species_list[1]
     checkboxGroupInput("SS_CA_Species", "Select a species",
                        choices = c(SS_Name_Species_list),
@@ -2553,19 +2553,6 @@ shinyServer(function(input, output, session) {
     mlist <- input$DM_OU_SDM_model # c("PA1_Full_GLM_byROC")
     ylist <- input$DM_OU_Project_year
     dtlist <- input$DM_OU_Dispersal_type
-    
-    print('slist')
-    print(slist)
-    print('dlist')
-    print(dlist)
-    print('clist')
-    print(clist)
-    print('mlist')
-    print(mlist)
-    print('ylist')
-    print(ylist)
-    print('dtlist')
-    print(dtlist)
     
     ls <- length(slist)
     ld <- length(dlist)
@@ -2898,7 +2885,7 @@ shinyServer(function(input, output, session) {
   
   output$SS_AO_Species <- renderUI({
     input$reset_SS_AO
-    SS_Name_Species_list <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution"), full.names = FALSE, recursive = FALSE)
+    SS_Name_Species_list <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution", "test1"), full.names = FALSE, recursive = FALSE)
     SS_Name_Species_selected <- SS_Name_Species_list[1]
     checkboxGroupInput("SS_AO_Species", "Select a species",
                        choices = c(SS_Name_Species_list),
@@ -2908,7 +2895,7 @@ shinyServer(function(input, output, session) {
   
   output$SS_AO_SDM_model <- renderUI({
     input$reset_SS_AO
-    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SS_CA_Species, "BIOMOD2", paste(as.name(paste(input$SS_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SS_CA_Species, "BIOMOD2", paste(as.name(paste(input$SS_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
     SS_Name_Models_list <- as.character(G_FILE_species_evaluation$Prediction)
