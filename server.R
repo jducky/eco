@@ -3458,6 +3458,9 @@ shinyServer(function(input, output, session) {
   })
   
   output$IS_AO_SDM_model <- renderUI({
+    validate(
+      need(input$data !="", "Please Select Data Folder...")
+    )
     destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$IS_CA_Species[1], "BIOMOD2", paste(as.name(paste(input$IS_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
@@ -3470,6 +3473,9 @@ shinyServer(function(input, output, session) {
   })
   
   output$IS_AO_SD_Map <- renderLeaflet({
+    validate(
+      need(input$data !="", "Please Select Data Folder...")
+    )
     dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$IS_AO_Species, "BIOMOD2")
     Map <- paste("PRED", "_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_Project_year, "_", input$IS_AO_Species, "_", input$IS_AO_SDM_model, ".tif", sep = "")
     r <- raster(file.path(dir_path, Map))
@@ -4552,6 +4558,9 @@ shinyServer(function(input, output, session) {
   
   ## 변환할 TIFF 폴더 선택
   output$CV_TIF_Time <- renderUI({
+    validate(
+      need(input$data !="", "Please Select Data Folder...")
+    )
     setwd(G$CV_TIF_Folder)
     rlist=list.files(getwd(), pattern="tif$", full.names=FALSE)
     G$tl <- length(rlist)
