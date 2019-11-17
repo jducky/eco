@@ -4650,6 +4650,87 @@ shinyServer(function(input, output, session) {
   #### END 이미지 변환 ####
   #########################
   
+  ## 변환할 TIFF 폴더 선택
+  output$SHOW_Map1 <- renderUI({
+    # fluidRow(
+      box(
+        title = "[KMA - RCP4.5]", width = NULL, solidHeader = TRUE, status = "primary", collapsible = T,
+        column(4, class = "text-center",
+               print("<2020>"),
+               tags$img(src = "test.jpg", width = ww, height = hh)
+        ),
+        column(4, class = "text-center",
+               print("<2050>"),
+               tags$img(src = "test.jpg", width = ww, height = hh)
+        ),
+        column(4, class = "text-center",
+               print("<2080>"),
+               tags$img(src = "test.jpg", width = ww, height = hh)
+        )
+      )
+    # )
+  })
+    
+  output$SHOW_Map2 <- renderUI({
+  # fluidRow(
+    box(
+      title = "[KMA - RCP8.5]", width = NULL, solidHeader = TRUE, status = "warning", collapsible = T,
+      column(4, class = "text-center",
+             print("<2020>"),
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      ),
+      column(4, class = "text-center",
+             print("<2050>"),
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      ),
+      column(4, class = "text-center",
+             print("<2080>"),
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      )
+    )
+  # )
+  })
+  
+  output$SHOW_Map3 <- renderUI({
+    # fluidRow(
+    box(
+      title = "[KEI - RCP4.5]", width = NULL, solidHeader = TRUE, status = "primary", collapsible = T,
+      column(4, class = "text-center",
+             print("<2020>"),
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      ),
+      column(4, class = "text-center",
+             print("<2050>"),
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      ),
+      column(4, class = "text-center",
+             print("<2080>"),
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      )
+    )
+  # )
+  })
+  
+  output$SHOW_Map4 <- renderUI({
+    # fluidRow(
+    box(
+      title = "[KEI - RCP8.5]", width = NULL, solidHeader = TRUE, status = "warning", collapsible = T,
+      column(4, class = "text-center",
+             print("<2020>"),
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      ),
+      column(4, class = "text-center",
+             print("<2050>"),
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      ),
+      column(4, class = "text-center",
+             print("<2080>"),
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      )
+    )
+  # )
+  })
+ 
   observeEvent(input$myFile, {
     inFile <- input$myFile
     if (is.null(inFile))

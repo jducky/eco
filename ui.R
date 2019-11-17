@@ -1337,93 +1337,105 @@ shinyUI(
                      tabPanel("Help", fluid = TRUE,
                               tags$hr(),
                               sidebarPanel(width = 5,
-                                           helpText("MOTIVE ECOSYSTEM(생태계 기후변화 영향 및 취약성평가모형)은 환경부 기후변화 R&D 과제의 결과물입니다.")
+                                           helpText("MOTIVE ECOSYSTEM(생태계 기후변화 영향 및 취약성평가모형)은 환경부 기후변화 R&D 과제의 결과물입니다."),
+                                           helpText(hh)
                               )
                      ),
                      tabPanel("ShowImage", fluid = TRUE,
                               tags$hr(),
                               sidebarLayout(
-                                sidebarPanel(
+                                sidebarPanel(width=3,
                                   fluidRow( 
                                     fileInput("myFile", "Choose a file", accept = c('image/png', 'image/jpeg'))
                                   )
                                 ),
                                 mainPanel(
-                                  div(id = "image-container", style = "display:flexbox")
+                                  uiOutput("SHOW_Map1"),
+                                  uiOutput("SHOW_Map2")
+                                  # uiOutput("SHOW_Map3"),
+                                  # uiOutput("SHOW_Map4")
                                 )
                               )
-                              # img(src="C:/MOTIVE_projects/proj30/img/test.jpg")
-                              # imageOutput("image1", height=400)
                      ),
                      tabPanel("Gallery", fluid = TRUE,
+                              tags$hr(),
                               sidebarLayout(
                                 sidebarPanel(width=3,
                                     fileInput("myFile", "Choose a file", accept = c('image/png', 'image/jpeg')),
                                     tags$hr(),
                                     print("<Current>"),
-                                    tags$img(src = "test.jpg", width = 400, height = 300)
+                                    tags$img(src = "test.jpg", width = ww, height = hh, alt = "This is alternate text")
                                   
                                 ),
                                 mainPanel(
-                                         fluidRow(
-                                           column(4,
-                                                  print("<2020>"),
-                                                  tags$img(src = "test.jpg", width = 400, height = 300)
-                                                  ),
-                                           column(4,
-                                                  print("<2050>"),
-                                                  tags$img(src = "test.jpg", width = 400, height = 300)
-                                           ),
-                                           column(4,
-                                                  print("<2080>"),
-                                                  tags$img(src = "test.jpg", width = 400, height = 300)
-                                           )
-                                         ),
-                                         tags$hr(),
-                                         fluidRow(
-                                           column(4,
-                                                  print("<2020>"),
-                                                  tags$img(src = "test.jpg", width = 400, height = 300)
-                                           ),
-                                           column(4,
-                                                  print("<2050>"),
-                                                  tags$img(src = "test.jpg", width = 400, height = 300)
-                                           ),
-                                           column(4,
-                                                  print("<2080>"),
-                                                  tags$img(src = "test.jpg", width = 400, height = 300)
-                                           )
-                                         ),
-                                         tags$hr(),
-                                         fluidRow(
-                                           column(4,
-                                                  print("<2020>"),
-                                                  tags$img(src = "test.jpg", width = 400, height = 300)
-                                           ),
-                                           column(4,
-                                                  print("<2050>"),
-                                                  tags$img(src = "test.jpg", width = 400, height = 300)
-                                           ),
-                                           column(4,
-                                                  print("<2080>"),
-                                                  tags$img(src = "test.jpg", width = 400, height = 300)
-                                           )
-                                         ),
-                                         tags$hr(),
-                                         fluidRow(
-                                           column(4,
-                                                  print("<2020>"),
-                                                  tags$img(src = "test.jpg", width = 400, height = 300)
-                                           ),
-                                           column(4,
-                                                  print("<2050>"),
-                                                  tags$img(src = "test.jpg", width = 400, height = 300)
-                                           ),
-                                           column(4,
-                                                  print("<2080>"),
-                                                  tags$img(src = "test.jpg", width = 400, height = 300)
-                                           )
-                                         )
+                                  fluidRow(
+                                     box(
+                                       title = "[KMA - RCP4.5]", width = NULL, solidHeader = TRUE, status = "primary", collapsible = T,
+                                       column(4, class = "text-center",
+                                              print("<2020>"),
+                                              tags$img(src = "test.jpg", width = ww, height = hh)
+                                       ),
+                                       column(4, class = "text-center",
+                                              print("<2050>"),
+                                              tags$img(src = "test.jpg", width = ww, height = hh)
+                                       ),
+                                       column(4, class = "text-center",
+                                              print("<2080>"),
+                                              tags$img(src = "test.jpg", width = ww, height = hh)
+                                       )
+                                     )
+                                 ),
+                                  fluidRow(
+                                    box(
+                                      title = "[KMA - RCP8.5]", width = NULL, solidHeader = TRUE, status = "warning", collapsible = T,
+                                      column(4, class = "text-center",
+                                             print("<2020>"),
+                                             tags$img(src = "test.jpg", width = ww, height = hh)
+                                      ),
+                                      column(4, class = "text-center",
+                                             print("<2050>"),
+                                             tags$img(src = "test.jpg", width = ww, height = hh)
+                                      ),
+                                      column(4, class = "text-center",
+                                             print("<2080>"),
+                                             tags$img(src = "test.jpg", width = ww, height = hh)
+                                      )
+                                    )
+                                  ),
+                                  fluidRow(
+                                    box(
+                                      title = "[KEI - RCP4.5]", width = NULL, solidHeader = TRUE, status = "primary", collapsible = T,
+                                      column(4, class = "text-center",
+                                             print("<2020>"),
+                                             tags$img(src = "test.jpg", width = ww, height = hh)
+                                      ),
+                                      column(4, class = "text-center",
+                                             print("<2050>"),
+                                             tags$img(src = "test.jpg", width = ww, height = hh)
+                                      ),
+                                      column(4, class = "text-center",
+                                             print("<2080>"),
+                                             tags$img(src = "test.jpg", width = ww, height = hh)
+                                      )
+                                    )
+                                  ),
+                                  fluidRow(
+                                    box(
+                                      title = "[KEI - RCP8.5]", width = NULL, solidHeader = TRUE, status = "warning", collapsible = T,
+                                      column(4, class = "text-center",
+                                             print("<2020>"),
+                                             tags$img(src = "test.jpg", width = ww, height = hh)
+                                      ),
+                                      column(4, class = "text-center",
+                                             print("<2050>"),
+                                             tags$img(src = "test.jpg", width = ww, height = hh)
+                                      ),
+                                      column(4, class = "text-center",
+                                             print("<2080>"),
+                                             tags$img(src = "test.jpg", width = ww, height = hh)
+                                      )
+                                    )
+                                  )
                                 )
                               ),
 

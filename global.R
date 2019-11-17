@@ -613,7 +613,8 @@ DM_Models_list <- c("Species Distribution Model (SDM)" = "BIOMOD2",
                     "Dispersal Model (DM)" = "MIGCLIM")
 
 ST_Name <- "success"
-
+ww <- 360
+hh <- 270
 
 ##### Language
 SE_Language = "Korean"
