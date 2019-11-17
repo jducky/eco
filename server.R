@@ -4671,53 +4671,51 @@ shinyServer(function(input, output, session) {
     # )
   })
     
-  output$SHOW_Map2 <- renderUI({
-  # fluidRow(
-    box(
-      title = "[KMA - RCP8.5]", width = NULL, solidHeader = TRUE, status = "warning", collapsible = T,
+  output$SHOW_Map2 <- renderPlot({
+  fluidRow(
+    # box(
+    #   title = "[KMA - RCP8.5]", width = NULL, solidHeader = TRUE, status = "warning", collapsible = T,
       column(4, class = "text-center",
-             print("<2020>"),
-             tags$img(src = "test.jpg", width = ww, height = hh)
+             ggplot(mtcars, aes(wt, mpg)) +
+               geom_point()
       ),
       column(4, class = "text-center",
-             print("<2050>"),
-             tags$img(src = "test.jpg", width = ww, height = hh)
+             ggplot(mtcars, aes(wt, mpg)) +
+               geom_point()
       ),
       column(4, class = "text-center",
-             print("<2080>"),
-             tags$img(src = "test.jpg", width = ww, height = hh)
+             ggplot(mtcars, aes(wt, mpg)) +
+               geom_point()
       )
-    )
-  # )
+    # )
+  )
   })
   
-  output$SHOW_Map3 <- renderUI({
-    # fluidRow(
-    box(
-      title = "[KEI - RCP4.5]", width = NULL, solidHeader = TRUE, status = "primary", collapsible = T,
-      column(4, class = "text-center",
-             print("<2020>"),
-             tags$img(src = "test.jpg", width = ww, height = hh)
-      ),
-      column(4, class = "text-center",
-             print("<2050>"),
-             tags$img(src = "test.jpg", width = ww, height = hh)
-      ),
-      column(4, class = "text-center",
-             print("<2080>"),
-             tags$img(src = "test.jpg", width = ww, height = hh)
-      )
-    )
-  # )
+  output$SHOW_Map3 <- renderPlot({
+    # box(
+    #   title = "[KMA - RCP8.5]", width = NULL, solidHeader = TRUE, status = "warning", collapsible = T,
+    ggplot(mtcars, aes(wt, mpg)) +
+      geom_point()
+    # )
   })
   
-  output$SHOW_Map4 <- renderUI({
+  output$SHOW_Map4 <- renderPlot({
+    dist <- input$dist
+    n <- input$n
+    
+    hist(d(),
+         main = paste("r", dist, "(", n, ")", sep = ""),
+         col = "#75AADB", border = "white")
+  })
+  
+  output$SHOW_MapX <- renderUI({
     # fluidRow(
     box(
       title = "[KEI - RCP8.5]", width = NULL, solidHeader = TRUE, status = "warning", collapsible = T,
       column(4, class = "text-center",
              print("<2020>"),
-             tags$img(src = "test.jpg", width = ww, height = hh)
+               ggplot(mtcars, aes(wt, mpg)) +
+                 geom_point()
       ),
       column(4, class = "text-center",
              print("<2050>"),

@@ -1351,9 +1351,9 @@ shinyUI(
                                 ),
                                 mainPanel(
                                   uiOutput("SHOW_Map1"),
-                                  uiOutput("SHOW_Map2")
-                                  # uiOutput("SHOW_Map3"),
-                                  # uiOutput("SHOW_Map4")
+                                  # plotOutput("SHOW_Map2"),
+                                  plotOutput("SHOW_Map3"),
+                                  # plotOutput("SHOW_Map4")
                                 )
                               )
                      ),
