@@ -4558,9 +4558,9 @@ shinyServer(function(input, output, session) {
   
   ## 변환할 TIFF 폴더 선택
   output$CV_TIF_Time <- renderUI({
-    validate(
-      need(input$data !="", "Please Select Data Folder...")
-    )
+    # validate(
+    #   need(input$data !="", "Please Select Data Folder...")
+    # )
     setwd(G$CV_TIF_Folder)
     rlist=list.files(getwd(), pattern="tif$", full.names=FALSE)
     G$tl <- length(rlist)
@@ -4581,7 +4581,7 @@ shinyServer(function(input, output, session) {
       print(tl)
       n <- 0
       
-      ## 이미지내에 삽입되는 텍스트 설정
+      ## 이미지내에 삽입되는 Text(파일명) Style 설정
       tag.map.title <- tags$style(HTML("
         .leaflet-control.map-title {
           transform: translate(0%,-100%);
@@ -4602,8 +4602,8 @@ shinyServer(function(input, output, session) {
       for(i in rlist) {
         n <- n + 1
         headStr <- str_sub(i,end=-5)
-        png <- paste0(G$CV_TIF_Folder,"/",subDir,"/",headStr,".jpg")
-        print(png)
+        convertedIMG <- paste0(G$CV_TIF_Folder,"/",subDir,"/",headStr,".jpg")
+        print(convertedIMG)
         r <- raster(i)
         crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
         pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r), na.color = "transparent")
@@ -4618,11 +4618,12 @@ shinyServer(function(input, output, session) {
           setView(lng = 128.00, lat = 36.00, zoom = 7)
         
         ## Mapshot Method
-        # mapshot(m, file = png) # 경로/파일명 한글이슈 있음!!
+        # mapshot(m, file = convertedIMG) # 경로/파일명 한글이슈 있음!!
         
         ## Weshot Method
         saveWidget(m, "temp.html", selfcontained = T)
-        webshot("temp.html", file = png, cliprect = "viewport")
+        webshot("temp.html", file = convertedIMG, cliprect = "viewport")
+        webshot
         
         G$timeNow <- Sys.time()
         print(Sys.time())
@@ -4649,6 +4650,26 @@ shinyServer(function(input, output, session) {
   #### END 이미지 변환 ####
   #########################
   
+  observeEvent(input$myFile, {
+    inFile <- input$myFile
+    if (is.null(inFile))
+      return()
+    
+    b64 <- base64enc::dataURI(file = inFile$datapath, mime = "image/png")
+    insertUI(
+      selector = "#image-container",
+      where = "afterBegin",
+      ui = img(src = b64, width = 400, height = 300)
+    )
+  })
+  
+  output$image1 <- renderImage({
+    # im <- "C:/MOTIVE_projects/proj30/img/test.jpg"
+    im <- load.image("C:/MOTIVE_projects/proj30/img/test.jpg")
+    plot(im)
+    # plot("C:/MOTIVE_projects/proj30/img/yy.jpg")
+    # rasterImage(im,100,300,150,350)
+  })
   
 })
 
