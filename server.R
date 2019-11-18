@@ -4650,11 +4650,11 @@ shinyServer(function(input, output, session) {
   #### END 이미지 변환 ####
   #########################
   
-  ## 변환할 TIFF 폴더 선택
+  ## 통합 리포트
   output$SHOW_Map1 <- renderUI({
     # fluidRow(
       box(
-        title = "[KMA - RCP4.5]", width = NULL, solidHeader = TRUE, status = "primary", collapsible = T,
+        title = "[민감종 변화 (2020/2050/2080)]", width = NULL, solidHeader = TRUE, status = "primary", collapsible = T,
         column(4, class = "text-center",
                print("<2020>"),
                tags$img(src = "test.jpg", width = ww, height = hh)
@@ -4694,9 +4694,23 @@ shinyServer(function(input, output, session) {
   output$SHOW_Map3 <- renderPlot({
     # box(
     #   title = "[KMA - RCP8.5]", width = NULL, solidHeader = TRUE, status = "warning", collapsible = T,
-    ggplot(mtcars, aes(wt, mpg)) +
-      geom_point()
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
     # )
+  })
+  
+  output$SHOW_Map4 <- renderPlot({
+    # box(
+    #   title = "[KMA - RCP8.5]", width = NULL, solidHeader = TRUE, status = "warning", collapsible = T,
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+    # )
+  })
+  
+  output$SHOW_Map31 <- renderPlot({
+    # Render a barplot
+    barplot(WorldPhones[,input$region]*1000, 
+            main=input$region,
+            ylab="Number of Telephones",
+            xlab="Year")
   })
   
   output$SHOW_Map4 <- renderPlot({

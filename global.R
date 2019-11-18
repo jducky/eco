@@ -19,6 +19,7 @@ libraries <- c("shiny", "shinyWidgets", "shinyFiles", "shinyalert", "tiff", "sf"
 library(webshot)
 library(imager)
 library(jpeg)
+library(datasets)
 
 # installing packages 
 CHK_packages <- setdiff(packages, rownames(installed.packages()))

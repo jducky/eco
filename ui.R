@@ -1341,23 +1341,36 @@ shinyUI(
                                            helpText(hh)
                               )
                      ),
-                     tabPanel("ShowImage", fluid = TRUE,
+                     tabPanel("통합리포트", fluid = TRUE,
                               tags$hr(),
                               sidebarLayout(
                                 sidebarPanel(width=3,
                                   fluidRow( 
                                     fileInput("myFile", "Choose a file", accept = c('image/png', 'image/jpeg'))
-                                  )
+                                  ),
+                                    selectInput("region", "Region:", 
+                                                choices=colnames(WorldPhones)),
+                                    hr(),
+                                    helpText("Data from AT&T (1961) The World's Telephones.")
                                 ),
                                 mainPanel(
-                                  uiOutput("SHOW_Map1"),
-                                  # plotOutput("SHOW_Map2"),
-                                  plotOutput("SHOW_Map3"),
-                                  # plotOutput("SHOW_Map4")
+                                  box(
+                                    title = "[민감종 변화 (통계)]", width = NULL, solidHeader = TRUE, status = "primary", collapsible = T,
+                                    column(6, class = "text-center",
+                                      plotOutput("SHOW_Map31")
+                                    ),
+                                    # column(3, class = "text-center",
+                                    #        plotOutput("SHOW_Map3")
+                                    # ),
+                                    column(6, class = "text-center",
+                                           plotOutput("SHOW_Map3")
+                                    )
+                                  ),
+                                  uiOutput("SHOW_Map1")
                                 )
                               )
                      ),
-                     tabPanel("Gallery", fluid = TRUE,
+                     tabPanel("주제도", fluid = TRUE,
                               tags$hr(),
                               sidebarLayout(
                                 sidebarPanel(width=3,
@@ -1443,6 +1456,7 @@ shinyUI(
                         # img(src="C:/MOTIVE_projects/proj30/img/test.jpg")
                         # imageOutput("image1", height=400)
                      ),
+
                      tabPanel("Convert Image", fluid = TRUE,
                               tags$hr(),
                               sidebarPanel(width = 4,
