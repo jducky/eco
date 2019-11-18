@@ -1341,36 +1341,125 @@ shinyUI(
                                            helpText(hh)
                               )
                      ),
-                     tabPanel("통합리포트", fluid = TRUE,
+                     tabPanel("서식지 변동", fluid = TRUE,
                               tags$hr(),
                               sidebarLayout(
                                 sidebarPanel(width=3,
-                                  fluidRow( 
-                                    fileInput("myFile", "Choose a file", accept = c('image/png', 'image/jpeg'))
-                                  ),
-                                    selectInput("region", "Region:", 
-                                                choices=colnames(WorldPhones)),
-                                    hr(),
-                                    helpText("Data from AT&T (1961) The World's Telephones.")
+                                             fluidRow( 
+                                               fileInput("myFile", "Choose a file", accept = c('image/png', 'image/jpeg'))
+                                             ),
+                                             selectInput("RP_Type1", "Type of Map1",
+                                                         choices = RP_Name_Type_list,
+                                                         selected = RP_Name_Type1_selected
+                                             ),
+                                             selectInput("RP_Type2", "Type of Map2",
+                                                         choices = RP_Name_Type_list,
+                                                         selected = RP_Name_Type2_selected
+                                             ),
+                                             selectInput("RP_Type3", "Type of Map3",
+                                                         choices = RP_Name_Type_list,
+                                                         selected = RP_Name_Type3_selected
+                                             )
                                 ),
                                 mainPanel(
-                                  box(
-                                    title = "[민감종 변화 (통계)]", width = NULL, solidHeader = TRUE, status = "primary", collapsible = T,
-                                    column(6, class = "text-center",
-                                      plotOutput("SHOW_Map31")
-                                    ),
-                                    # column(3, class = "text-center",
-                                    #        plotOutput("SHOW_Map3")
-                                    # ),
-                                    column(6, class = "text-center",
-                                           plotOutput("SHOW_Map3")
-                                    )
+                                  fluidRow(
+                                    valueBoxOutput("RP_Value_GN"),
+                                    valueBoxOutput("RP_Value_ST"),
+                                    valueBoxOutput("RP_Value_LS")
                                   ),
-                                  uiOutput("SHOW_Map1")
+                                  uiOutput("MAP_2020"),
+                                  uiOutput("MAP_2050"),
+                                  uiOutput("MAP_2080")
                                 )
                               )
                      ),
-                     tabPanel("주제도", fluid = TRUE,
+                     tabPanel("취약성지수", fluid = TRUE,
+                              tags$hr(),
+                              sidebarLayout(
+                                sidebarPanel(width=3,
+                                             fluidRow( 
+                                               fileInput("myFile", "Choose a file", accept = c('image/png', 'image/jpeg'))
+                                             ),
+                                             selectInput("RP_Type1", "Type of Map1",
+                                                         choices = RP_Name_Type_list,
+                                                         selected = RP_Name_Type1_selected
+                                             ),
+                                             selectInput("RP_Type2", "Type of Map2",
+                                                         choices = RP_Name_Type_list,
+                                                         selected = RP_Name_Type2_selected
+                                             ),
+                                             selectInput("RP_Type3", "Type of Map3",
+                                                         choices = RP_Name_Type_list,
+                                                         selected = RP_Name_Type3_selected
+                                             )
+                                ),
+                                mainPanel(
+                                  fluidRow(
+                                    valueBox("취약성지수", "Themes", icon = icon("thumbs-up"), color = "green", width = 6),
+                                    valueBox("KMA", "Model", icon = icon("thumbs-up"), color = "yellow", width = 3),
+                                    valueBox("RCP4.5", "Scenario", icon = icon("thumbs-up"), color = "yellow", width = 3)
+                                  ),
+                                  fluidRow(
+                                    box(width=3, title="1km", solidHeader = TRUE, status = "info", class = "text-center"),
+                                    box(width=3, title="5km", solidHeader = TRUE, status = "info"),
+                                    box(width=3, title="10km", solidHeader = TRUE, status = "info"),
+                                    box(width=3, title="Unlimited", solidHeader = TRUE, status = "info")
+                                  ),
+                                  # fluidRow(
+                                  #   infoBox("Distance", "1km", icon = icon("check"), color="aqua", width = 3),
+                                  #   infoBox("Distance", "5km", icon = icon("check"), color="light-blue", width = 3),
+                                  #   infoBox("Distance", "10km", icon = icon("check"), color="blue", width = 3),
+                                  #   infoBox("Distance", "UnLimited", icon = icon("check"), color="purple", width = 3),
+                                  # ),
+                                  box(
+                                    title = "[취약성 RCP4.5 2030]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
+                                    column(3, class = "text-center",
+                                           plotOutput("VH_45_30_01", height=250)
+                                    ),
+                                    column(3, class = "text-center",
+                                           plotOutput("VH_45_30_05", height=250)
+                                    ),
+                                    column(3, class = "text-center",
+                                           plotOutput("VH_45_30_10", height=250)
+                                    ),
+                                    column(3, class = "text-center",
+                                           plotOutput("VH_45_30_UN", height=250)
+                                    )
+                                  ),
+                                  box(
+                                    title = "[취약성 RCP4.5 2050]", width = NULL, solidHeader = TRUE, status = "primary", collapsible = T,
+                                    column(3, class = "text-center",
+                                           plotOutput("VH_45_50_01", height=250)
+                                    ),
+                                    column(3, class = "text-center",
+                                           plotOutput("VH_45_50_05", height=250)
+                                    ),
+                                    column(3, class = "text-center",
+                                           plotOutput("VH_45_50_10", height=250)
+                                    ),
+                                    column(3, class = "text-center",
+                                           plotOutput("VH_45_50_UN", height=250)
+                                    )
+                                  ),
+                                  box(
+                                    title = "[취약성 RCP4.5 2080]", width = NULL, solidHeader = TRUE, status = "warning", collapsible = T,
+                                    column(3, class = "text-center",
+                                           plotOutput("VH_45_80_01", height=250)
+                                    ),
+                                    column(3, class = "text-center",
+                                           plotOutput("VH_45_80_05", height=250)
+                                    ),
+                                    column(3, class = "text-center",
+                                           plotOutput("VH_45_80_10", height=250)
+                                    ),
+                                    column(3, class = "text-center",
+                                           plotOutput("VH_45_80_UN", height=250)
+                                    )
+                                  )
+                                )
+                              )
+                     ),
+                     tabPanel("시나리오별 리포트", fluid = TRUE,
                               tags$hr(),
                               sidebarLayout(
                                 sidebarPanel(width=3,
@@ -1383,7 +1472,7 @@ shinyUI(
                                 mainPanel(
                                   fluidRow(
                                      box(
-                                       title = "[KMA - RCP4.5]", width = NULL, solidHeader = TRUE, status = "primary", collapsible = T,
+                                       title = "[KMA - RCP4.5]", width = NULL, solidHeader = TRUE, status = "info", collapsible = T,
                                        column(4, class = "text-center",
                                               print("<2020>"),
                                               tags$img(src = "test.jpg", width = ww, height = hh)
@@ -1417,7 +1506,7 @@ shinyUI(
                                   ),
                                   fluidRow(
                                     box(
-                                      title = "[KEI - RCP4.5]", width = NULL, solidHeader = TRUE, status = "primary", collapsible = T,
+                                      title = "[KEI - RCP4.5]", width = NULL, solidHeader = TRUE, status = "info", collapsible = T,
                                       column(4, class = "text-center",
                                              print("<2020>"),
                                              tags$img(src = "test.jpg", width = ww, height = hh)
@@ -1456,7 +1545,40 @@ shinyUI(
                         # img(src="C:/MOTIVE_projects/proj30/img/test.jpg")
                         # imageOutput("image1", height=400)
                      ),
-
+                     tabPanel("통합리포트", fluid = TRUE,
+                              tags$hr(),
+                              sidebarLayout(
+                                sidebarPanel(width=3,
+                                             fluidRow( 
+                                               fileInput("myFile", "Choose a file", accept = c('image/png', 'image/jpeg'))
+                                             ),
+                                             selectInput("region", "Region:", 
+                                                         choices=colnames(WorldPhones)),
+                                             hr(),
+                                             helpText("Data from AT&T (1961) The World's Telephones.")
+                                ),
+                                mainPanel(
+                                  fluidRow(
+                                    valueBoxOutput("RP_Value_CM"),
+                                    valueBoxOutput("RP_Value_CS"),
+                                    valueBoxOutput("RP_Value_YR")
+                                  ),
+                                  box(
+                                    title = "[민감종 변화 (통계)]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
+                                    column(6, class = "text-center",
+                                           plotOutput("SHOW_Map31")
+                                    ),
+                                    # column(3, class = "text-center",
+                                    #        plotOutput("SHOW_Map3")
+                                    # ),
+                                    column(6, class = "text-center",
+                                           plotOutput("SHOW_Map3")
+                                    )
+                                  ),
+                                  uiOutput("SHOW_Map1")
+                                )
+                              )
+                     ),
                      tabPanel("Convert Image", fluid = TRUE,
                               tags$hr(),
                               sidebarPanel(width = 4,

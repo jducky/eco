@@ -4651,20 +4651,161 @@ shinyServer(function(input, output, session) {
   #########################
   
   ## 통합 리포트
+  # output$RP_Value_CM <- renderValueBox({
+  #   valueBox(input$DM_OU_Climate_model, "Climate Models",
+  #            icon = icon("credit-card"), color = "blue", width = 3
+  #   )
+  # })
+  
+  output$RP_Value_CM <- renderValueBox({
+    valueBox("KMA", "Climate Models",
+             icon = icon("credit-card"), color = "blue", width = 3
+    )
+  })
+  
+  output$RP_Value_CS <- renderValueBox({
+    valueBox("RCP4.5", "Climate Scenarios",
+             icon = icon("list"), color = "purple", width = 3
+    )
+  })  
+  
+  output$RP_Value_YR <- renderValueBox({
+    valueBox("2050", "Projecting Years",
+             icon = icon("thumbs-up"), color = "yellow", width = 3
+    )
+  })  
+
+  ## 연도별 리포트
+  output$RP_Value_GN <- renderValueBox({
+    valueBox(input$RP_Type1, "Map Type",
+             icon = icon("list"), color = "blue", width = 3
+    )
+  })
+  
+  output$RP_Value_ST <- renderValueBox({
+    valueBox(input$RP_Type2, "Map Type",
+             icon = icon("list"), color = "purple", width = 3
+    )
+  })  
+  
+  output$RP_Value_LS <- renderValueBox({
+    valueBox(input$RP_Type3, "Map Type",
+             icon = icon("list"), color = "yellow", width = 3
+    )
+  })  
+  
+  output$MAP_2020 <- renderUI({
+    box(
+      title = "[2020]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
+      column(4, class = "text-center",
+             tags$img(src = "GAIN_PRED_KMA_RCP4.5_2020_세뿔투구꽃_PA1_Full_GAM_byROC.jpg", width = ww, height = hh)
+      ),
+      column(4, class = "text-center",
+             tags$img(src = "STAY_PRED_KMA_RCP4.5_2020_세뿔투구꽃_PA1_Full_GAM_byROC.jpg", width = ww, height = hh)
+      ),
+      column(4, class = "text-center",
+             tags$img(src = "LOSS_PRED_KMA_RCP4.5_2020_세뿔투구꽃_PA1_Full_GAM_byROC.jpg", width = ww, height = hh)
+      )
+    )
+  })
+  
+  output$MAP_2050 <- renderUI({
+    box(
+      title = "[2050]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
+      column(4, class = "text-center",
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      ),
+      column(4, class = "text-center",
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      ),
+      column(4, class = "text-center",
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      )
+    )
+  })
+
+  output$MAP_2080 <- renderUI({
+    box(
+      title = "[2080]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
+      column(4, class = "text-center",
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      ),
+      column(4, class = "text-center",
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      ),
+      column(4, class = "text-center",
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      )
+    )
+  })
+  ############################
+  
+  ## 취약성 2030
+  output$VH_45_30_01 <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  output$VH_45_30_05 <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  output$VH_45_30_10 <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  output$VH_45_30_UN <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  ## 취약성 2050
+  output$VH_45_50_01 <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  output$VH_45_50_05 <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  output$VH_45_50_10 <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  output$VH_45_50_UN <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  ## 취약성 2080
+  output$VH_45_80_01 <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  output$VH_45_80_05 <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  output$VH_45_80_10 <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  output$VH_45_80_UN <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  ######################
   output$SHOW_Map1 <- renderUI({
     # fluidRow(
       box(
-        title = "[민감종 변화 (2020/2050/2080)]", width = NULL, solidHeader = TRUE, status = "primary", collapsible = T,
+        title = "[민감종 변화 (GAIN / STAY / LOSS)]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
         column(4, class = "text-center",
-               print("<2020>"),
+               print("<GAIN>"),
                tags$img(src = "test.jpg", width = ww, height = hh)
         ),
         column(4, class = "text-center",
-               print("<2050>"),
+               print("<STAY>"),
                tags$img(src = "test.jpg", width = ww, height = hh)
         ),
         column(4, class = "text-center",
-               print("<2080>"),
+               print("<LOSS>"),
                tags$img(src = "test.jpg", width = ww, height = hh)
         )
       )
@@ -4674,7 +4815,7 @@ shinyServer(function(input, output, session) {
   output$SHOW_Map2 <- renderPlot({
   fluidRow(
     # box(
-    #   title = "[KMA - RCP8.5]", width = NULL, solidHeader = TRUE, status = "warning", collapsible = T,
+    #   title = "[KMA - RCP8.5]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
       column(4, class = "text-center",
              ggplot(mtcars, aes(wt, mpg)) +
                geom_point()
@@ -4693,14 +4834,14 @@ shinyServer(function(input, output, session) {
   
   output$SHOW_Map3 <- renderPlot({
     # box(
-    #   title = "[KMA - RCP8.5]", width = NULL, solidHeader = TRUE, status = "warning", collapsible = T,
+    #   title = "[KMA - RCP8.5]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
     ggplot(mtcars, aes(wt, mpg)) + geom_point()
     # )
   })
   
   output$SHOW_Map4 <- renderPlot({
     # box(
-    #   title = "[KMA - RCP8.5]", width = NULL, solidHeader = TRUE, status = "warning", collapsible = T,
+    #   title = "[KMA - RCP8.5]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
     ggplot(mtcars, aes(wt, mpg)) + geom_point()
     # )
   })
