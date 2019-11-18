@@ -200,8 +200,6 @@ init_colors <- function(species_id) {
   
   names(temp_colors) <<- species_id
   is_init_colors <<- T
-  
-  
 }
 
 customGetColor <- function(species_data) {
@@ -424,6 +422,10 @@ lang_selection <- F
 # Temp_G_FILE_speciesinfo <- G_FILE_speciesinfo
 
 
+
+
+
+
 ### 시작 윈도우, 리눅스 경로 ###
 
 G <- reactiveValues()
@@ -556,11 +558,18 @@ ut <- c(ut[1],ut[2],ut[3],ut[8],ut[7],ut[6],ut[5],ut[4],ut[9])
 
 
 
-
-
-
 G$IS_VA_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
 G$IS_AO_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
+
+
+
+test1_WD_List_Dirs <- list.dirs(path = file.path(isolate(G$SE_Dir_Project), "Species_Distribution", "test1"), full.names = FALSE, recursive = FALSE)
+
+test3_Invasive_Dir <- "C:\\MOTIVE_projects\\proj1\\Invasive_Species\\test3"
+test3_Invasive_F <- function(fileName) {
+  read.csv(file.path(test3_Invasive_Dir, paste(fileName, ".csv", sep = "")))
+} 
+
 
 Input_img <- "tif"  #asc",
 Output_img <- "tif"

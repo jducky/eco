@@ -133,8 +133,6 @@ shinyUI(
       fluidPage(div(
         h4(System_Name, style = "display: inline-block; color: white; font-size: 200%; margin-left: 20px; position: absolute; line-height: 8vh;"), 
         div( style = "display: inline-block; font-size: 110%; color: white; margin-top: 10px; margin-right: 10px; float: right;",
-             
-             
              tags$ul( style = "list-style: none;" , class = "title_ul",
                       
                       tags$li(
@@ -151,22 +149,13 @@ shinyUI(
                       tags$li(
                         a("LOGOUT", style = "cursor:pointer; color: white;" )
                       )
-                      
              )
-             
-             
         )
         , style = "background-image: url(eco_title.png); height: 10vh; position: relative;"),
         
-        
         theme = shinytheme("yeti"),
         # shinythemes::themeSelector(),
-        
-        
-        
-        
         br(),
-        
         tabsetPanel(
           tabPanel(OV_Name,
                    
@@ -178,7 +167,6 @@ shinyUI(
                      br(),br()
                    )
           ),    
-          
           
           tabPanel(SP_Name, icon = icon("folder-open"),
                    tabsetPanel(
@@ -536,7 +524,6 @@ shinyUI(
                                 ),
                                 
                                 
-                                
                                 # Main panel for displaying outputs ----
                                 mainPanel(
                                   tabsetPanel(
@@ -547,114 +534,117 @@ shinyUI(
                                              # hr(),
                                              
                                              # 열 기준
-                                             # fluidRow(
-                                             #   hr(),
-                                             #   column(6, DT::dataTableOutput("SDM_OU_Validation")
-                                             #          
-                                             #   ),
-                                             #   # column(6, DT::dataTableOutput("SDM_OU_Contribution"),
-                                             #   #        plotOutput("SDM_OU_Contribution_Radarchart")
-                                             #   column(6, plotOutput("SDM_OU_Validation_BoxPlot")
-                                             #   )
-                                             # )
-                                             
-                                             
-                                             # 행 기준
                                              fluidRow(
-                                               column(6, DT::dataTableOutput("SDM_OU_Validation"))
-                                             ),
-                                             
-                                             hr(),
-                                             
-                                             fluidRow(
+                                               hr(),
+                                               column(6, DT::dataTableOutput("SDM_OU_Validation")),
                                                column(6, plotOutput("SDM_OU_Validation_BoxPlot"))
+                                               
                                              ),
-                                             hr()
                                              
-                                             
-                                    ),
-                                    
-                                    tabPanel(SDM_Name_Model_Out_Contribution,
-                                             tags$hr(),
                                              fluidRow(
-                                               column(6, DT::dataTableOutput("SDM_OU_Contribution"))
-                                             ),
-                                             tags$hr(),
-                                             fluidRow(
-                                               column(8,plotOutput("SDM_OU_Contribution_Radarchart"))
+                                               br(), hr(),
+                                               column(6, DT::dataTableOutput("SDM_OU_Contribution"), hr(), plotOutput("SDM_OU_Contribution_Radarchart"))
+                                               
                                              )
+                                             
+                                             # seo03
+                                             # 행 기준
+                                             # fluidRow(
+                                             #   column(6, DT::dataTableOutput("SDM_OU_Validation"))
+                                             # ),
+                                             # 
+                                             # hr(),
+                                             # 
+                                             # fluidRow(
+                                             #   column(6, plotOutput("SDM_OU_Validation_BoxPlot"))
+                                             # ),
+                                             # hr()
+                                             
+                                             
                                     ),
-                                    tabPanel(SDM_Name_Model_Out_Probability, 
-                                             tags$head(
-                                               # Include our custom CSS
-                                               includeCSS("styles.css"),
-                                               includeScript("gomap.js")
-                                             ),
-                                             tags$hr(),
-                                             leafletOutput("SDM_OU_Probability_map", width = "800", height = "600") %>% withSpinner(),
-                                             tags$hr(),
-                                             column(10, verbatimTextOutput("SDM_OU_PROJ_Summary")),
-                                             column(10, plotOutput("SDM_OU_PROJ_Histogram"))
-                                    ),
-                                    tabPanel(SDM_Name_Model_Out_Prediction, 
-                                             tags$head(
-                                               # Include our custom CSS
-                                               includeCSS("styles.css"),
-                                               includeScript("gomap.js")
-                                             ),
-                                             tags$hr(),
-                                             leafletOutput("SDM_OU_Predicted_map", width = "800", height = "600") %>% withSpinner(),
-                                             tags$hr(),
-                                             column(10, verbatimTextOutput("SDM_OU_PRED_Summary")),
-                                             column(10, plotOutput("SDM_OU_PRED_Histogram"))
-                                    )
                                     
-                                    # tabPanel("Map", 
+                                    # seo03
+                                    # tabPanel(SDM_Name_Model_Out_Contribution,
+                                    #          tags$hr(),
+                                    #          fluidRow(
+                                    #            column(6, DT::dataTableOutput("SDM_OU_Contribution"))
+                                    #          ),
+                                    #          tags$hr(),
+                                    #          fluidRow(
+                                    #            column(8,plotOutput("SDM_OU_Contribution_Radarchart"))
+                                    #          )
+                                    # ),
+                                    # tabPanel(SDM_Name_Model_Out_Probability, 
                                     #          tags$head(
                                     #            # Include our custom CSS
                                     #            includeCSS("styles.css"),
                                     #            includeScript("gomap.js")
                                     #          ),
                                     #          tags$hr(),
-                                    #          fluidRow(
-                                    #            valueBoxOutput("Value_CM"),
-                                    #            valueBoxOutput("Value_CS"),
-                                    #            valueBoxOutput("Value_YR")
-                                    #            
+                                    #          leafletOutput("SDM_OU_Probability_map", width = "800", height = "600") %>% withSpinner(),
+                                    #          tags$hr(),
+                                    #          column(10, verbatimTextOutput("SDM_OU_PROJ_Summary")),
+                                    #          column(10, plotOutput("SDM_OU_PROJ_Histogram"))
+                                    # ),
+                                    # tabPanel(SDM_Name_Model_Out_Prediction, 
+                                    #          tags$head(
+                                    #            # Include our custom CSS
+                                    #            includeCSS("styles.css"),
+                                    #            includeScript("gomap.js")
                                     #          ),
-                                    #          fluidRow(class = "text-center",
-                                    #                   column(6, 
-                                    #                          # tags$h3("<Probability Map>", style = "text-align: center;"),
-                                    #                          box(status = "success",
-                                    #                              title = "PROBABILITY MAP", width = 20, height = 45, collapsible = T, collapsed = T
-                                    #                          ),
-                                    #                          
-                                    #                          leafletOutput("SDM_OU_Probability_map") %>% withSpinner(),
-                                    #                          br(),
-                                    #                          actionButton("Reset_Probability_View", label = "Reset"),
-                                    #                          tags$hr(),
-                                    #                          column(12, verbatimTextOutput("SDM_OU_PROJ_Summary")),
-                                    #                          column(12, plotOutput("SDM_OU_PROJ_Histogram"))
-                                    #                   ),
-                                    #                   
-                                    #                   column(6, 
-                                    #                          # tags$h3("<Predicted Map>", style = "text-align: center;"),
-                                    #                          box(status = "success",
-                                    #                              title = "PREDICTED MAP", width = 20, height = 45, collapsible = T, collapsed = T
-                                    #                          ),
-                                    #                          # tags$h3("<Predicted Map>"),
-                                    #                          
-                                    #                          # leafletOutput("SDM_OU_Predicted_map", width = "800", height = "600"),
-                                    #                          leafletOutput("SDM_OU_Predicted_map") %>% withSpinner(),
-                                    #                          br(),
-                                    #                          actionButton("Reset_Predicted_View", label = "Reset"),
-                                    #                          tags$hr(),
-                                    #                          column(12, verbatimTextOutput("SDM_OU_PRED_Summary")),
-                                    #                          column(12, plotOutput("SDM_OU_PRED_Histogram"))
-                                    #                   )
-                                    #          )
-                                    #          
+                                    #          tags$hr(),
+                                    #          leafletOutput("SDM_OU_Predicted_map", width = "800", height = "600") %>% withSpinner(),
+                                    #          tags$hr(),
+                                    #          column(10, verbatimTextOutput("SDM_OU_PRED_Summary")),
+                                    #          column(10, plotOutput("SDM_OU_PRED_Histogram"))
                                     # )
+                                    
+                                    tabPanel("Map",
+                                             tags$head(
+                                               # Include our custom CSS
+                                               includeCSS("styles.css"),
+                                               includeScript("gomap.js")
+                                             ),
+                                             tags$hr(),
+                                             fluidRow(
+                                               valueBoxOutput("Value_CM"),
+                                               valueBoxOutput("Value_CS"),
+                                               valueBoxOutput("Value_YR")
+
+                                             ),
+                                             fluidRow(class = "text-center",
+                                                      column(6,
+                                                             # tags$h3("<Probability Map>", style = "text-align: center;"),
+                                                             box(status = "success",
+                                                                 title = "PROBABILITY MAP", width = 20, height = 45, collapsible = T, collapsed = T
+                                                             ),
+
+                                                             leafletOutput("SDM_OU_Probability_map") %>% withSpinner(),
+                                                             br(),
+                                                             actionButton("Reset_Probability_View", label = "Reset"),
+                                                             tags$hr(),
+                                                             column(12, verbatimTextOutput("SDM_OU_PROJ_Summary")),
+                                                             column(12, plotOutput("SDM_OU_PROJ_Histogram"))
+                                                      ),
+
+                                                      column(6,
+                                                             # tags$h3("<Predicted Map>", style = "text-align: center;"),
+                                                             box(status = "success",
+                                                                 title = "PREDICTED MAP", width = 20, height = 45, collapsible = T, collapsed = T
+                                                             ),
+                                                             # tags$h3("<Predicted Map>"),
+
+                                                             # leafletOutput("SDM_OU_Predicted_map", width = "800", height = "600"),
+                                                             leafletOutput("SDM_OU_Predicted_map") %>% withSpinner(),
+                                                             br(),
+                                                             actionButton("Reset_Predicted_View", label = "Reset"),
+                                                             tags$hr(),
+                                                             column(12, verbatimTextOutput("SDM_OU_PRED_Summary")),
+                                                             column(12, plotOutput("SDM_OU_PRED_Histogram"))
+                                                      )
+                                             )
+
+                                    )
                                     
                                   )
                                 )
@@ -783,7 +773,7 @@ shinyUI(
                                   tabsetPanel(
                                     tabPanel(DM_Name_Out_Plot,
                                              tags$hr(),
-                                             uiOutput("DM_OU_UI_plot")
+                                             uiOutput("DM_OU_UI_plot") %>% withSpinner()
                                     )
                                   )
                                   
@@ -855,11 +845,11 @@ shinyUI(
                                 # Main panel for displaying outputs ----
                                 mainPanel(
                                   tabsetPanel(
-                                    tabPanel("Species Distribution Change Plot",
+                                    tabPanel(SS_Name_Out_ChangePlot,
                                              tags$hr(),
                                              uiOutput("SS_AO_UI_plot")
                                     ),
-                                    tabPanel("Vulnerability Pattern", 
+                                    tabPanel(SS_Name_Out_Pattern, 
                                              tags$hr(),
                                              fluidRow(
                                                column(6, 
@@ -881,7 +871,7 @@ shinyUI(
                                                column(6, plotOutput("SS_AO_IV_Plot21"))
                                              )
                                     ),
-                                    tabPanel("Vulnerable Priority", 
+                                    tabPanel(SS_Name_Out_Vulnerabiity, 
                                              tags$hr(),
                                              fluidRow(
                                                column(6, 
@@ -890,7 +880,28 @@ shinyUI(
                                              ),
                                              fluidRow(
                                                tags$hr(),
-                                               plotOutput("SS_AO_VP_Priority",width = "100%", height = "600px"))
+                                               uiOutput("SS_AO_VP_UI_plot1"),
+                                               tags$hr(),
+                                               column(6, plotOutput("SS_AO_VP_Plot1")),
+                                               column(6, plotOutput("SS_AO_VP_Plot2"))
+                                             ),
+                                             fluidRow(
+                                               tags$hr(),
+                                               uiOutput("SS_AO_VP_UI_plot2"),
+                                               tags$hr(),
+                                               column(6, plotOutput("SS_AO_VP_Plot11")),
+                                               column(6, plotOutput("SS_AO_VP_Plot21"))
+                                             ),
+                                             fluidRow(
+                                               tags$hr(),
+                                               uiOutput("SS_AO_VP_UI_plot3"),
+                                               tags$hr(),
+                                               column(6, plotOutput("SS_AO_VP_Plot12")),
+                                               column(6, plotOutput("SS_AO_VP_Plot22"))
+                                             )
+                                             # fluidRow(
+                                             #   tags$hr(),
+                                             #   plotOutput("SS_AO_VP_Priority",width = "100%", height = "600px"))
                                     )
                                   )
                                 )
@@ -1012,8 +1023,6 @@ shinyUI(
                                     ),
                                     
                                     
-                                    # 추가됨 시작
-                                    
                                     tabPanel(IS_Name_Out_SR,	
                                              tags$br(), tags$br(),	
                                              # fluidRow(	
@@ -1029,7 +1038,7 @@ shinyUI(
                                              fluidRow(
                                                column(4, class = "text-center",
                                                       print("< 외래종 풍부도 >"),
-                                                      leafletOutput("IS_AO_SR_Map", width = "360", height = "600") %>% withSpinner()    ),
+                                                      leafletOutput("IS_AO_SR_Map", width = "360", height = "600") %>% withSpinner() ),
                                                column(4, class = "text-center",
                                                       print("< 시도 통계 >"),
                                                       leafletOutput("IS_AO_SR_SIDO_Map", width = "360", height = "600") %>% withSpinner()  ,
@@ -1049,8 +1058,6 @@ shinyUI(
                                              tabsetPanel(
                                                tabPanel(IS_Name_Out_Map,
                                                         
-                                                        
-                                                        # 추가됨 끝         
                                                         
                                                         
                                                         #          column(6, leafletOutput("IS_AO_Map1", width = "800", height = "650") %>% withSpinner(),
