@@ -4884,6 +4884,54 @@ shinyServer(function(input, output, session) {
   # )
   })
  
+  output$RP_SS_AO_IV_Table <- DT::renderDataTable({
+    # destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SS_AO_Species, "BIOMOD2", paste(as.name(paste(input$SS_AO_Species, "_VINDEX.csv", sep = "")), sep = "", collapse = "--"))
+    vindex <- read.csv("test_VINDEX.csv")
+    vindex
+  })
+  
+  output$RP_SS_AO_IV_Plot <- renderPlot({
+    vindex <- read.csv("test_VINDEX.csv")
+    gplot <- ggplot(vindex, aes(x=Year, y=Area, color=Model))+
+      geom_point()+
+      facet_wrap(~ Climate_Scenario)+
+      labs(title = 'SPECIES',
+           x = 'Year of observation',
+           y = 'Number of species') +
+      theme(text=element_text(size=26, family="Arial")) +
+      theme_bw()
+    gplot
+    # ggsave("name_of_file.png", gplot, width=5, height=2)
+  })
+  
+  output$RP_SS_AO_IV_Plot2 <- renderPlot({
+    vindex <- read.csv("test_VINDEX.csv")
+    gplot <- ggplot(vindex, aes(x=Year, y=Area_Ratio, color=Model))+
+      geom_line()+
+      facet_wrap(~ Climate_Scenario)+
+      labs(title = 'AREA RATIO')+
+      theme_bw()+
+      theme(panel.grid.major.x = element_blank(), 
+            panel.grid.minor.x = element_blank(),
+            panel.grid.major.y = element_blank(),
+            panel.grid.minor.y = element_blank())
+    gplot
+  })
+  
+  output$RP_SS_AO_IV_Plot3 <- renderPlot({
+    vindex <- read.csv("test_VINDEX.csv")
+    gplot <- ggplot(vindex, aes(x=Year, y=Area, color=Model))+
+      geom_bar(binwidth = 20000)+
+      facet_wrap(~ Climate_Scenario)+
+      labs(title = 'SPECIES',
+           x = 'Year of observation',
+           y = 'Number of species') +
+      theme(text=element_text(size=26, family="Arial")) +
+      theme_bw()
+    gplot
+    # ggsave("name_of_file.png", gplot, width=5, height=2)
+  })
+  
   observeEvent(input$myFile, {
     inFile <- input$myFile
     if (is.null(inFile))

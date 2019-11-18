@@ -1564,18 +1564,20 @@ shinyUI(
                                     valueBoxOutput("RP_Value_YR")
                                   ),
                                   box(
-                                    title = "[민감종 변화 (통계)]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
-                                    column(6, class = "text-center",
-                                           plotOutput("SHOW_Map31")
-                                    ),
-                                    # column(3, class = "text-center",
-                                    #        plotOutput("SHOW_Map3")
-                                    # ),
-                                    column(6, class = "text-center",
-                                           plotOutput("SHOW_Map3")
-                                    )
+                                    title = "[확산면적]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
+                                    plotOutput("RP_SS_AO_IV_Plot", height=300)
                                   ),
-                                  uiOutput("SHOW_Map1")
+                                  box(
+                                    title = "[확산면적 비율]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
+                                    plotOutput("RP_SS_AO_IV_Plot2", height=300)
+                                  ),
+                                  box(
+                                    title = "[확산면적(Bar)]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
+                                    plotOutput("RP_SS_AO_IV_Plot3", height=300)
+                                  ),
+                                  # plotOutput("RP_SS_AO_IV_Plot"),
+                                  # plotOutput("RP_SS_AO_IV_Plot2"),
+                                  DT::dataTableOutput("RP_SS_AO_IV_Table")
                                 )
                               )
                      ),
