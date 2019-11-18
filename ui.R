@@ -298,16 +298,18 @@ shinyUI(
                               sidebarLayout(
                                 sidebarPanel(width = 2,
                                              
-                                  uiOutput('SP_Loc_K_Name_UI'),
+                                  
                                   
                                     # checkboxGroupInput("SP_Loc_K_Name", "K_NAME",
                                     #                    choices = unique(SP_LOC_Info_Table$K_NAME),
                                     #                    selected = NULL),
                                     
-                                   
-                                  actionButton('all_SP_Loc_K_Name',label = "selectAll"),
-                                  actionButton('reset_SP_Loc_K_Name',label = "reset"), br(),
-                                  actionButton('c_kname',label = "c_kname")
+                                  # uiOutput('SP_Loc_K_Name_UI'),
+                                  # actionButton('all_SP_Loc_K_Name',label = "selectAll"),
+                                  # actionButton('reset_SP_Loc_K_Name',label = "reset"), br(),
+                                  # actionButton('c_kname',label = "c_kname")
+                                  
+                                  NULL
                                   
                                   
                                 ),
@@ -1363,6 +1365,11 @@ shinyUI(
                                 ),
                                 fluidRow(
                                   h1(HELP_TEST_desc01)
+                                ),
+                                
+                                fluidRow(
+                                  shinyDirButton("SE_Dir_Project", SE_Name_WE_Project, SE_Name_WE_Project),
+                                  verbatimTextOutput("SE_Dir_Project", placeholder = TRUE)
                                 )
                                 
                                 

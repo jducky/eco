@@ -384,25 +384,27 @@ customGetColor_Type_Individual_02 <- function(species_data) {
 }
 ####################################################################################################
 
+
+HELP_TEST_desc01 <- NULL
+
 # PostgreSQL 연결
-psql <- dbDriver("PostgreSQL")
-pgConn <- function(query) {
-  pcon <- dbConnect(psql, dbname = "ecosystem", host = "192.168.0.199", port = "5432", user= "postgres", password = "postgres")
-  dbUser <- query(pcon)
-  dbDisconnect(pcon)
-  return (dbUser)
-}
-
-HELP_TEST_desc01 <- pgConn(function(con){
-  return ( dbGetQuery(con, paste0("select * from help_test")) )
-})
-
-
+# psql <- dbDriver("PostgreSQL")
+# pgConn <- function(query) {
+#   pcon <- dbConnect(psql, dbname = "ecosystem", host = "192.168.0.199", port = "5432", user= "postgres", password = "postgres")
+#   dbUser <- query(pcon)
+#   dbDisconnect(pcon)
+#   return (dbUser)
+# }
+# 
+# 
+# 
+# HELP_TEST_desc01 <- pgConn(function(con){
+#   return ( dbGetQuery(con, paste0("select * from help_test")) )
+# })
 
 
 #Select language
 lang_selection <- F
-
 
 
 
@@ -420,9 +422,6 @@ lang_selection <- F
 # G_FILE_speciesfreq <- count(G_FILE_specieslocation, ID)
 # G_FILE_speciesinfo <- inner_join(G_FILE_speciesfreq, G_FILE_speciesindex, by = "ID")
 # Temp_G_FILE_speciesinfo <- G_FILE_speciesinfo
-
-
-
 
 
 
@@ -449,6 +448,17 @@ sensitive_species_57 <- NULL
 G_2019_DATA_graph <- NULL
 
 
+G$IS_VA_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
+# G$IS_AO_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
+G$IS_AO_Dir_Folder <- NULL
+
+test1_WD_List_Dirs <- list.dirs(path = file.path(isolate(G$SE_Dir_Project), "Species_Distribution", "test1"), full.names = FALSE, recursive = FALSE)
+test3_Invasive_Dir <- "C:\\MOTIVE_projects\\proj1\\Invasive_Species\\test3"
+test3_Invasive_F <- function(fileName) {
+  read.csv(file.path(test3_Invasive_Dir, paste(fileName, ".csv", sep = "")))
+} 
+
+
 if( Sys.info()['sysname'] == "Windows" ) {
   # print(Sys.info()['sysname'])
   ##### Path
@@ -468,6 +478,8 @@ if( Sys.info()['sysname'] == "Windows" ) {
   S251_path <- "C:/Projects/2019_DATA/4. forest fire, landslide/forest fire/S251"
   sensitive_species_57 <- "C:/Projects/2019_DATA/1. unlimited dispersal/1. 민감종 57종"
   G_2019_DATA_graph <- "C:/Projects/2019_DATA/3. graph"
+  
+  G[['IS_AO_Dir_Folder']] <- paste("C:\\MOTIVE_Ecosystem\\DATA\\proj1", "/Invasive_Species", "test3", sep = "")
  
 } else if ( Sys.info()['sysname'] == "Linux" ) {
   # print(Sys.info()['sysname'])
@@ -489,6 +501,9 @@ if( Sys.info()['sysname'] == "Windows" ) {
   sensitive_species_57 <- "/home/admin/R/Ecosystem_Data_191106/Projects/2019_DATA/1. unlimited dispersal/1. 민감종 57종"
   G_2019_DATA_graph <- "/home/admin/R/Ecosystem_Data_191106/Projects/2019_DATA/3. graph"
   
+  G[['IS_AO_Dir_Folder']] <- paste("/home/admin/R/Ecosystem_Data_191106/MOTIVE_Ecosystem/DATA/proj1", "/Invasive_Species", "test3", sep = "")
+  
+  
 }
 
 
@@ -506,7 +521,7 @@ Temp_G_FILE_specieslocation_02 <- G_FILE_specieslocation_02
 
 # 생물종위치
 # SP_Info_rows_selected click event table
-SP_LOC_Info_Table <- NULL
+# SP_LOC_Info_Table <- NULL
 
 # selectBox click event
 # SP_LOC_Info_Table_SelectBox <- NULL
@@ -557,18 +572,6 @@ ut <- c(ut[1],ut[2],ut[3],ut[8],ut[7],ut[6],ut[5],ut[4],ut[9])
 # }
 
 
-
-G$IS_VA_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
-G$IS_AO_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
-
-
-
-test1_WD_List_Dirs <- list.dirs(path = file.path(isolate(G$SE_Dir_Project), "Species_Distribution", "test1"), full.names = FALSE, recursive = FALSE)
-
-test3_Invasive_Dir <- "C:\\MOTIVE_projects\\proj1\\Invasive_Species\\test3"
-test3_Invasive_F <- function(fileName) {
-  read.csv(file.path(test3_Invasive_Dir, paste(fileName, ".csv", sep = "")))
-} 
 
 
 Input_img <- "tif"  #asc",

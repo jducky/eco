@@ -2,6 +2,8 @@
 
 shinyServer(function(input, output, session) {
   
+  
+  
   output$SP_Loc_K_Name_UI <- renderUI({
     
     rs <- input$SP_Info_rows_selected
@@ -18,9 +20,9 @@ shinyServer(function(input, output, session) {
   
   observeEvent(input$c_kname, {
     print('SP_LOC_Info_Table')
-    print(SP_LOC_Info_Table)
+    print(isolate(R_LOC_SelectBox$SP_LOC_Info_Table))
     
-    print(unique(SP_LOC_Info_Table$K_NAME))
+    print(unique(isolate(R_LOC_SelectBox$SP_LOC_Info_Table$K_NAME)))
   })
   
   # selectAll
@@ -105,35 +107,34 @@ shinyServer(function(input, output, session) {
     })
   }
   
-  printTable_Loc <- function(){
-    resInfo_Loc <- SP_LOC_Info_Table
-    
-    selectedNames <- isolate(input$SP_Loc_K_Name)
-    
-    # print('resInfo_Loc <- SP_LOC_Info_Table')
-    # print(resInfo_Loc)
-    
-    if(is.null(selectedNames)) {
-      selectedList <- SP_LOC_Info_Table
-      
-    } else {
-      selectedList <- subset(resInfo_Loc, K_NAME %in% selectedNames)
-    }
-    
-    renderTable("SP_LOC_Info", selectedList)
-  }
+
   
   observeEvent(input$SP_Info_inst,{printTable()}, ignoreNULL = F, ignoreInit = T)
   observeEvent(input$SP_Info_type,{printTable()}, ignoreNULL = F, ignoreInit = T)
   
   
-  observeEvent(input$SP_Loc_K_Name,{
-    
-    # print('K_NAME 이벤트 발생')
-    
-    printTable_Loc()
-    
-    }, ignoreNULL = T, ignoreInit = T)
+  # observeEvent(input$SP_Loc_K_Name,{
+  #   
+  #   
+  #   resInfo_Loc <- isolate(R_LOC_SelectBox$SP_LOC_Info_Table)
+  #   
+  #   selectedNames <- isolate(input$SP_Loc_K_Name)
+  #   
+  #   
+  #   if( is.null(selectedNames) ) {
+  #     selectedList <- NULL
+  # 
+  #   } else {
+  #     selectedList <- subset(resInfo_Loc, K_NAME %in% selectedNames)
+  #   }
+  #   
+  #   
+  #   renderTable("SP_LOC_Info", selectedList)
+  #   
+  #   
+  #   }, ignoreNULL = T, ignoreInit = T)
+  
+
   
   
   observeEvent(input$reset_SP_Info, {
@@ -1111,7 +1112,7 @@ shinyServer(function(input, output, session) {
   
   
   
-  # output$SE_Dir_Project <- renderText({G$SE_Dir_Project})
+  output$SE_Dir_Project <- renderText({G$SE_Dir_Project})
   output$SE_Dir_Climate <- renderText({G$SE_Dir_Climate})
   output$SE_Dir_Link <- renderText({G$SE_Dir_Link})
   output$SE_Dir_Species <- renderText({G$SE_Dir_Species})
@@ -1133,6 +1134,12 @@ shinyServer(function(input, output, session) {
     volumes <- getVolumes()
     shinyDirChoose(input, 'SE_Dir_Project', roots = volumes)
     G$SE_Dir_Project <<- parseDirPath(volumes, input$SE_Dir_Project)
+    print('volumes()')
+    print(volumes())
+    print('input$SE_Dir_Project')
+    print(isolate(input$SE_Dir_Project))
+    print('G$SE_Dir_Project')
+    print(isolate(G$SE_Dir_Project))
     output$SE_Dir_Project <- renderText({G$SE_Dir_Project})
   })
   
@@ -1924,20 +1931,30 @@ shinyServer(function(input, output, session) {
     }
   })
   
+  observe({
+    x <- input$SP_Info_rows_selected
+    print('테이블 선택')
+    print(x)
+  })
+
   
   output$SP_LOC_Info <- DT::renderDataTable({
     
-    rs <- input$SP_Info_rows_selected 
+    rs <- input$SP_Info_rows_selected
     print('rs')
     print(rs)
-    input$reset_SP_Loc
+    
     if (length(rs)) {
-      SP_LOC_Info_Table <<- inner_join(G_FILE_specieslocation_02, G_FILE_speciesinfo_02[rs, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = FALSE], by = "ID")
-      R_LOC_SelectBox$SP_LOC_Info_Table_K_NAME <<- unique(SP_LOC_Info_Table$K_NAME)
+      R_LOC_SelectBox$SP_LOC_Info_Table <<- inner_join(G_FILE_specieslocation_02, G_FILE_speciesinfo_02[rs, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = FALSE], by = "ID")
+      R_LOC_SelectBox$SP_LOC_Info_Table_K_NAME <<- unique(isolate(R_LOC_SelectBox$SP_LOC_Info_Table$K_NAME))
       print('R_LOC_SelectBox$SP_LOC_Info_Table_K_NAME <<- unique(SP_LOC_Info_Table$K_NAME)')
       print(isolate(R_LOC_SelectBox$SP_LOC_Info_Table_K_NAME))
-      return ( SP_LOC_Info_Table ) 
+      
+    } else {
+      R_LOC_SelectBox$SP_LOC_Info_Table <<- NULL
+      return (NULL)
     }
+    isolate(R_LOC_SelectBox$SP_LOC_Info_Table)
     
   }, server = TRUE)
   
@@ -1952,7 +1969,7 @@ shinyServer(function(input, output, session) {
       
       species_all_data <- inner_join(G_FILE_specieslocation_02, Temp_G_FILE_speciesinfo_02, by = "ID")
       
-      species_data <- SP_LOC_Info_Table[rs, ,drop = FALSE]
+      species_data <- isolate(R_LOC_SelectBox$SP_LOC_Info_Table[rs, ,drop = FALSE])
       
       print('species_data')
       print(species_data)
@@ -3438,7 +3455,8 @@ shinyServer(function(input, output, session) {
   })
   
   observeEvent(input$IS_AO_Dir_Folder, {
-    volumes <- c(main = isolate(G$SE_Dir_Project))
+    # volumes <- c(main = isolate(G$SE_Dir_Project))
+    volumes <- getVolumes()
     shinyDirChoose(input, 'IS_AO_Dir_Folder', roots = volumes) # , defaultPath = "/MOTIVE_projects", defaultRoot = G$SE_Dir_Project)
     G$IS_AO_Dir_Folder <<- parseDirPath(volumes, input$IS_AO_Dir_Folder)
     output$IS_AO_Dir_Folder <- renderText({G$IS_AO_Dir_Folder})
