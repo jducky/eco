@@ -4698,13 +4698,13 @@ shinyServer(function(input, output, session) {
     box(
       title = "[2020]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
       column(4, class = "text-center",
-             tags$img(src = "GAIN_PRED_KMA_RCP4.5_2020_세뿔투구꽃_PA1_Full_GAM_byROC.jpg", width = ww, height = hh)
+             tags$img(src = "test.jpg", width = ww, height = hh)
       ),
       column(4, class = "text-center",
-             tags$img(src = "STAY_PRED_KMA_RCP4.5_2020_세뿔투구꽃_PA1_Full_GAM_byROC.jpg", width = ww, height = hh)
+             tags$img(src = "test.jpg", width = ww, height = hh)
       ),
       column(4, class = "text-center",
-             tags$img(src = "LOSS_PRED_KMA_RCP4.5_2020_세뿔투구꽃_PA1_Full_GAM_byROC.jpg", width = ww, height = hh)
+             tags$img(src = "test.jpg", width = ww, height = hh)
       )
     )
   })
@@ -4921,7 +4921,7 @@ shinyServer(function(input, output, session) {
   output$RP_SS_AO_IV_Plot3 <- renderPlot({
     vindex <- read.csv("test_VINDEX.csv")
     gplot <- ggplot(vindex, aes(x=Year, y=Area, color=Model))+
-      geom_bar(binwidth = 20000)+
+      geom_bar(stat="identity")+
       facet_wrap(~ Climate_Scenario)+
       labs(title = 'SPECIES',
            x = 'Year of observation',
@@ -4952,6 +4952,30 @@ shinyServer(function(input, output, session) {
     # plot("C:/MOTIVE_projects/proj30/img/yy.jpg")
     # rasterImage(im,100,300,150,350)
   })
+
+  output$imgOut <- renderImage({
+    # im <- "C:/MOTIVE_projects/proj30/img/test.jpg"
+    # im <- "./images/car.jpg"
+    # im <- load.image("C:/MOTIVE_projects/proj30/img/test.jpg")
+    # plot(im)
+    # img(src = im, height = 240, width = 300)
+    list(src = "./images/car.jpg", height = 240, width = 300)
+  })
+
+  output$plot1 <- renderImage({
+    # A temp file to save the output. It will be deleted after renderImage
+    # sends it, because deleteFile=TRUE.
+    outfile <- tempfile(fileext='.png')
+
+    # Generate a png
+    png(outfile, width=400, height=400)
+    hist(rnorm(input$n))
+    dev.off()
+
+    # Return a list
+    list(src = outfile,
+         alt = "This is alternate text")
+  }, deleteFile = TRUE)
   
 })
 

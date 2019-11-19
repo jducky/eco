@@ -1369,7 +1369,8 @@ shinyUI(
                                   ),
                                   uiOutput("MAP_2020"),
                                   uiOutput("MAP_2050"),
-                                  uiOutput("MAP_2080")
+                                  uiOutput("MAP_2080"),
+                                  imageOutput("imgOut")
                                 )
                               )
                      ),
