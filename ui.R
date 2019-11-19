@@ -1712,7 +1712,7 @@ shinyUI(
       ), # tab1
     
     tabItem(tabName = "report",
-            h2("[통합리포트]"),
+            h2("[MOTIVE 리포트]"),
             fluidRow(
             tabBox(
               # title = "통합리포트",
@@ -1726,19 +1726,21 @@ shinyUI(
                           # tags$hr(),
                           sidebarPanel(width = 22,
                              h3("MOTIVE ECOSYSTEM"),
-                             h4("서식지 변동"),
-                             h4("취약성지수"),
-                             h4("시나리오별 리포트"),
-                             h4("통합리포트")
+                             tags$li("서식지 변동"),
+                             tags$li("취약성지수"),
+                             tags$li("시나리오별 리포트"),
+                             tags$li("통합리포트")
                           )
                        ),
                        tabPanel("서식지변동", fluid = TRUE,
                                 tags$hr(),
                                 sidebarLayout(
                                   sidebarPanel(width=3,
-                                               fluidRow( 
-                                                 fileInput("myFile", "Choose a file", accept = c('image/png', 'image/jpeg'))
-                                               ),
+                                               h3("연도별 서식지 변동"),
+                                               hr(),
+                                               # fluidRow( 
+                                               #   fileInput("myFile", "Choose a file", accept = c('image/png', 'image/jpeg'))
+                                               # ),
                                                selectInput("RP_Type1", "Type of Map1",
                                                            choices = RP_Name_Type_list,
                                                            selected = RP_Name_Type1_selected
@@ -1769,6 +1771,8 @@ shinyUI(
                                 tags$hr(),
                                 sidebarLayout(
                                   sidebarPanel(width=3,
+                                               h3("확산범위별 취약성지수"),
+                                               hr(),
                                                print("<Current>"),
                                                tags$img(src = "test.jpg", width = ww, height = hh, alt = "This is alternate text")
                                                # fluidRow(
@@ -1789,9 +1793,11 @@ shinyUI(
                                   ),
                                   mainPanel(
                                     fluidRow(
-                                      valueBox("취약성지수", "Themes", icon = icon("thumbs-up"), color = "green", width = 6),
-                                      valueBox("KMA", "Model", icon = icon("thumbs-up"), color = "yellow", width = 3),
-                                      valueBox("RCP4.5", "Scenario", icon = icon("thumbs-up"), color = "yellow", width = 3)
+                                      valueBox("KMA/KEI", "Model", icon = icon("thumbs-up"), color = "light-blue", width = 4),
+                                      valueBox("RCP4.5/8.5", "Scenario", icon = icon("list"), color = "green", width = 4),
+                                      valueBox("2030/50/80", "Years", icon = icon("calendar"), color = "yellow", width = 4)
+                                      # valueBox("RCP4.5", "Scenario", icon = icon("list"), color = "green", width = 4),
+                                      # valueBox("2030/50/80", "Model", icon = icon("calendar"), color = "yellow", width = 4)
                                     ),
                                     fluidRow(
                                       box(width=3, title="1km", solidHeader = TRUE, status = "info", class = "text-center"),
@@ -1800,13 +1806,19 @@ shinyUI(
                                       box(width=3, title="Unlimited", solidHeader = TRUE, status = "info")
                                     ),
                                     # fluidRow(
+                                    #   box(width=3, title="1km", solidHeader = TRUE, status = "info", class = "text-center"),
+                                    #   box(width=3, title="5km", solidHeader = TRUE, status = "info"),
+                                    #   box(width=3, title="10km", solidHeader = TRUE, status = "info"),
+                                    #   box(width=3, title="Unlimited", solidHeader = TRUE, status = "info")
+                                    # ),
+                                    # fluidRow(
                                     #   infoBox("Distance", "1km", icon = icon("check"), color="aqua", width = 3),
                                     #   infoBox("Distance", "5km", icon = icon("check"), color="light-blue", width = 3),
                                     #   infoBox("Distance", "10km", icon = icon("check"), color="blue", width = 3),
                                     #   infoBox("Distance", "UnLimited", icon = icon("check"), color="purple", width = 3),
                                     # ),
                                     box(
-                                      title = "[취약성 RCP4.5 2030]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
+                                      title = "[취약성 RCP4.5 2030]", width = NULL, solidHeader = F, status = "success", collapsible = T,
                                       column(3, class = "text-center",
                                              plotOutput("VH_45_30_01", height=250)
                                       ),
@@ -1821,7 +1833,7 @@ shinyUI(
                                       )
                                     ),
                                     box(
-                                      title = "[취약성 RCP4.5 2050]", width = NULL, solidHeader = TRUE, status = "primary", collapsible = T,
+                                      title = "[취약성 RCP4.5 2050]", width = NULL, solidHeader = F, status = "primary", collapsible = T,
                                       column(3, class = "text-center",
                                              plotOutput("VH_45_50_01", height=250)
                                       ),
@@ -1836,7 +1848,7 @@ shinyUI(
                                       )
                                     ),
                                     box(
-                                      title = "[취약성 RCP4.5 2080]", width = NULL, solidHeader = TRUE, status = "warning", collapsible = T,
+                                      title = "[취약성 RCP4.5 2080]", width = NULL, solidHeader = F, status = "warning", collapsible = T,
                                       column(3, class = "text-center",
                                              plotOutput("VH_45_80_01", height=250)
                                       ),
@@ -1853,10 +1865,12 @@ shinyUI(
                                   )
                                 )
                        ),
-                       tabPanel("시나리오별 리포트", fluid = TRUE,
+                       tabPanel("통합 리포트", fluid = TRUE,
                                 tags$hr(),
                                 sidebarLayout(
                                   sidebarPanel(width=3,
+                                               h3("통합 리포트"),
+                                               hr(),
                                                # fileInput("myFile", "Choose a file", accept = c('image/png', 'image/jpeg')),
                                                # tags$hr(),
                                                print("<Current>"),
@@ -1865,8 +1879,13 @@ shinyUI(
                                   ),
                                   mainPanel(
                                     fluidRow(
+                                      valueBox("KMA/KEI", "Model", icon = icon("thumbs-up"), color = "light-blue", width = 4),
+                                      valueBox("RCP4.5/8.5", "Scenario", icon = icon("list"), color = "green", width = 4),
+                                      valueBox("2030/50/80", "Years", icon = icon("calendar"), color = "yellow", width = 4)
+                                    ),
+                                    fluidRow(
                                       box(
-                                        title = "[KMA - RCP4.5]", width = NULL, solidHeader = TRUE, status = "info", collapsible = T,
+                                        title = "[KMA - RCP4.5]", width = NULL, solidHeader = F, status = "info", collapsible = T,
                                         column(4, class = "text-center",
                                                print("<2020>"),
                                                tags$img(src = "test.jpg", width = ww, height = hh)
@@ -1883,7 +1902,7 @@ shinyUI(
                                     ),
                                     fluidRow(
                                       box(
-                                        title = "[KMA - RCP8.5]", width = NULL, solidHeader = TRUE, status = "warning", collapsible = T,
+                                        title = "[KMA - RCP8.5]", width = NULL, solidHeader = F, status = "warning", collapsible = T,
                                         column(4, class = "text-center",
                                                print("<2020>"),
                                                tags$img(src = "test.jpg", width = ww, height = hh)
@@ -1900,7 +1919,7 @@ shinyUI(
                                     ),
                                     fluidRow(
                                       box(
-                                        title = "[KEI - RCP4.5]", width = NULL, solidHeader = TRUE, status = "info", collapsible = T,
+                                        title = "[KEI - RCP4.5]", width = NULL, solidHeader = F, status = "info", collapsible = T,
                                         column(4, class = "text-center",
                                                print("<2020>"),
                                                tags$img(src = "test.jpg", width = ww, height = hh)
@@ -1917,7 +1936,7 @@ shinyUI(
                                     ),
                                     fluidRow(
                                       box(
-                                        title = "[KEI - RCP8.5]", width = NULL, solidHeader = TRUE, status = "warning", collapsible = T,
+                                        title = "[KEI - RCP8.5]", width = NULL, solidHeader = F, status = "warning", collapsible = T,
                                         column(4, class = "text-center",
                                                print("<2020>"),
                                                tags$img(src = "test.jpg", width = ww, height = hh)
@@ -1939,17 +1958,14 @@ shinyUI(
                                 # img(src="C:/MOTIVE_projects/proj30/img/test.jpg")
                                 # imageOutput("image1", height=400)
                        ),
-                       tabPanel("통합리포트", fluid = TRUE,
+                       tabPanel("맞춤형 리포트", fluid = TRUE,
                                 tags$hr(),
                                 sidebarLayout(
                                   sidebarPanel(width=3,
-                                               fluidRow( 
-                                                 fileInput("myFile", "Choose a file", accept = c('image/png', 'image/jpeg'))
-                                               ),
-                                               selectInput("region", "Region:", 
-                                                           choices=colnames(WorldPhones)),
+                                               h3("사용자 맞춤형 리포트"),
                                                hr(),
-                                               helpText("Data from AT&T (1961) The World's Telephones.")
+                                               print("<Current>"),
+                                               tags$img(src = "test.jpg", width = ww, height = hh, alt = "This is alternate text")
                                   ),
                                   mainPanel(
                                     fluidRow(
@@ -1958,15 +1974,15 @@ shinyUI(
                                       valueBoxOutput("RP_Value_YR")
                                     ),
                                     box(
-                                      title = "[확산면적]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
+                                      title = "[확산면적]", width = NULL, solidHeader = F, status = "success", collapsible = T,
                                       plotOutput("RP_SS_AO_IV_Plot", height=300)
                                     ),
                                     box(
-                                      title = "[확산면적 비율]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
+                                      title = "[확산면적 비율]", width = NULL, solidHeader = F, status = "success", collapsible = T,
                                       plotOutput("RP_SS_AO_IV_Plot2", height=300)
                                     ),
                                     box(
-                                      title = "[확산면적(Bar)]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
+                                      title = "[확산면적(Bar)]", width = NULL, solidHeader = F, status = "success", collapsible = T,
                                       plotOutput("RP_SS_AO_IV_Plot3", height=300)
                                     ),
                                     # plotOutput("RP_SS_AO_IV_Plot"),

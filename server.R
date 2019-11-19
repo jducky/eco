@@ -4670,20 +4670,20 @@ shinyServer(function(input, output, session) {
   })  
   
   output$RP_Value_YR <- renderValueBox({
-    valueBox("2050", "Projecting Years",
+    valueBox("2000~2080", "Projecting Years",
              icon = icon("thumbs-up"), color = "yellow", width = 3
     )
   })  
 
   ## 연도별 리포트
   output$RP_Value_GN <- renderValueBox({
-    valueBox(input$RP_Type1, "Map Type",
+    valueBox(input$RP_Type1, "Map Type", 
              icon = icon("list"), color = "blue", width = 3
     )
   })
   
   output$RP_Value_ST <- renderValueBox({
-    valueBox(input$RP_Type2, "Map Type",
+    valueBox(input$RP_Type2, "Map Type", 
              icon = icon("list"), color = "purple", width = 3
     )
   })  
@@ -4696,7 +4696,7 @@ shinyServer(function(input, output, session) {
   
   output$MAP_2020 <- renderUI({
     box(
-      title = "[2020]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
+      title = "[2020]", width = NULL, solidHeader = F, status = "success", collapsible = T,
       column(4, class = "text-center",
              tags$img(src = "test.jpg", width = ww, height = hh)
       ),
@@ -4711,7 +4711,7 @@ shinyServer(function(input, output, session) {
   
   output$MAP_2050 <- renderUI({
     box(
-      title = "[2050]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
+      title = "[2050]", width = NULL, solidHeader = F, status = "success", collapsible = T,
       column(4, class = "text-center",
              tags$img(src = "test.jpg", width = ww, height = hh)
       ),
@@ -4726,7 +4726,7 @@ shinyServer(function(input, output, session) {
 
   output$MAP_2080 <- renderUI({
     box(
-      title = "[2080]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
+      title = "[2080]", width = NULL, solidHeader = F, status = "success", collapsible = T,
       column(4, class = "text-center",
              tags$img(src = "test.jpg", width = ww, height = hh)
       ),
