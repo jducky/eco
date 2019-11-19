@@ -448,15 +448,7 @@ sensitive_species_57 <- NULL
 G_2019_DATA_graph <- NULL
 
 
-G$IS_VA_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
-# G$IS_AO_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
-G$IS_AO_Dir_Folder <- NULL
 
-test1_WD_List_Dirs <- list.dirs(path = file.path(isolate(G$SE_Dir_Project), "Species_Distribution", "test1"), full.names = FALSE, recursive = FALSE)
-test3_Invasive_Dir <- "C:\\MOTIVE_projects\\proj1\\Invasive_Species\\test3"
-test3_Invasive_F <- function(fileName) {
-  read.csv(file.path(test3_Invasive_Dir, paste(fileName, ".csv", sep = "")))
-} 
 
 
 if( Sys.info()['sysname'] == "Windows" ) {
@@ -518,6 +510,19 @@ G_FILE_speciesfreq_02 <- count(G_FILE_specieslocation_02, ID)
 G_FILE_speciesinfo_02 <- inner_join(G_FILE_speciesfreq_02, G_FILE_speciesindex_02, by = "ID")
 Temp_G_FILE_speciesinfo_02 <- G_FILE_speciesinfo_02
 Temp_G_FILE_specieslocation_02 <- G_FILE_specieslocation_02
+
+
+
+G$IS_VA_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
+# G$IS_AO_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
+G$IS_AO_Dir_Folder <- NULL
+
+test1_WD_List_Dirs <- list.dirs(path = file.path(isolate(G$SE_Dir_Project), "Species_Distribution", "test1"), full.names = FALSE, recursive = FALSE)
+test3_Invasive_Dir <- "C:\\MOTIVE_projects\\proj1\\Invasive_Species\\test3"
+test3_Invasive_F <- function(fileName) {
+  read.csv(file.path(test3_Invasive_Dir, paste(fileName, ".csv", sep = "")))
+} 
+
 
 # 생물종위치
 # SP_Info_rows_selected click event table

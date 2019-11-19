@@ -160,11 +160,14 @@ shinyUI(
           tabPanel(OV_Name,
                    
                    hr(),
+                   
                    mainPanel(
+                     
                      img(src="eco01.png"),
                      hr(),
                      img(src="eco02.png"),
                      br(),br()
+                     
                    )
           ),    
           
