@@ -76,6 +76,10 @@ shinyUI(
                 	color: #3498db;
                 }
                 
+                .fa-clipboard-list {
+                  color: #00FF80;
+                }
+                
                 .fa-pie-chart {
                 	color: #9b59b6;
                 }
@@ -113,6 +117,9 @@ shinyUI(
                 .icon02 {
                   color: blue;
                 }
+                
+         
+
                 
                 
              '))),
@@ -464,6 +471,74 @@ shinyUI(
                        
                      )
                    )
+                   
+          ),  
+          
+          
+          tabPanel(MR_Name, fluid = TRUE, icon = icon("clipboard-list"),
+                   column(8, 
+                          actionButton('reset_SP_Info',label = "Reset", style = "float: right; margin-bottom: 15px;"), br(),
+                          DT::dataTableOutput("MR_Info")
+                   ),
+                   br(),br(),br(),br(),
+                   sidebarPanel(width = 3, Fluid = TRUE,
+                                
+                                plotOutput("MR_Result")
+                   )
+                   
+          ),  
+          
+          tabPanel(RP_Name, fluid = TRUE, icon = icon("clipboard-list"),
+                   
+                   h4("외래종변화"),
+                   sidebarPanel(width = 4,
+                                br(),br(),br(),
+                                h4("현재"),
+                                plotOutput("MR_Result0")
+                     
+                   ),
+                   style = "margin-top: 1px, margin-left: 1px",
+                   sidebarPanel( width = 8,
+                     
+                     fluidRow(
+                       
+                       column(4, 
+                              h4("RCP4.5 20"),
+                              plotOutput("MR_Result1")
+                       ),
+                       column(4,
+                              h4("RCP4.5 50"),
+                              plotOutput("MR_Result2")
+                       ),
+                       column(4,
+                              h4("RCP4.5 80"),
+                              plotOutput("MR_Result3")
+                       )
+                       
+                     ),
+                     style = "margin-top: 1px, margin-left: 1px",
+                     fluidRow(
+                       
+                       column(4, 
+                              h4("RCP4.5 20"),
+                              leafletOutput("CD_Map1") %>% withSpinner()
+                       ),
+                       column(4,
+                              h4("RCP4.5 50"),
+                              leafletOutput("CD_Map2") %>% withSpinner()
+                       ),
+                       column(4,
+                              h4("RCP4.5 80"),
+                              leafletOutput("CD_Map3") %>% withSpinner()
+                       )
+                       
+                     )
+                     
+                   )
+                   
+                   
+                   
+                   
                    
           ),  
           

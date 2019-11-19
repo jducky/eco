@@ -1748,6 +1748,66 @@ shinyServer(function(input, output, session) {
     Temp_G_FILE_speciesinfo_02[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
   }, server = TRUE)
   
+  output$MR_Info <- DT::renderDataTable({
+    read.csv("C:/MOTIVE_projects/model_result_list.csv")
+  }, server = TRUE)
+  
+  output$MR_Result <- renderPlot({
+    table <- read.csv("C:/MOTIVE_projects/model_result_list.csv")
+    rs <- input$MR_Info_rows_selected
+    
+    #print(table$filename[max(rs)])
+    #
+    #print(file[max(rs)])
+    #MR_Info_file <- read.csv(file.path(isolate(table$path[max(rs)]), isolate(table$filename[max(rs)])), header = T, sep = ",", stringsAsFactors = F , fileEncoding = "CP949", encoding = "UTF-8")
+    #print(MR_Info_file)
+    #print(paste(table$path[max(rs)], " ====== ", table$filename[max(rs)]))
+    #plot(raster("C:/MOTIVE_projects/proj30/Species_Distribution/test1/세뿔투구꽃/BIOMOD2/PRED_KMA_RCP4.5_2010_세뿔투구꽃_PA1_Full_GLM_byROC.tif"))
+    
+    
+    #print(index)
+    if(is.null(rs)){
+       index <- 1
+    }else{
+       index <- rs  
+    }
+    
+    path <- table$path[index]
+    filename <- table$filename[index]
+    
+    # path <- "C:/MOTIVE_projects/proj30/Species_Distribution/test1/세뿔투구꽃/BIOMOD2"
+    # filename <- "PRED_KMA_RCP4.5_2010_세뿔투구꽃_PA1_Full_GLM_byROC.tif"
+    
+    test <- "C:/MOTIVE_projects/proj30/Species_Distribution/test1/세뿔투구꽃/BIOMOD2/PRED_KMA_RCP4.5_2010_세뿔투구꽃_PA1_Full_GLM_byROC.tif"
+    
+    # if(is.null(path) || path == "NA"){
+    #   path <- table$path[1]
+    # }
+    # if(is.null(filename) || filename == "NA"){
+    #   filename <- table$filename[1]
+    # }
+    print(paste(path,filename,sep="/",collapse = NULL))
+    plot(raster(paste(path,filename,sep="/",collapse = NULL)))
+  })
+  
+  output$MR_Result0 <- renderPlot({
+    plot(raster("C:/MOTIVE_projects/proj30/Species_Distribution/test1/세뿔투구꽃/BIOMOD2/PRED_KMA_RCP4.5_2010_세뿔투구꽃_PA1_Full_GLM_byROC.tif"))
+    })
+  
+  output$MR_Result1 <- renderPlot({
+    plot(raster("C:/MOTIVE_projects/proj30/Species_Distribution/test1/세뿔투구꽃/BIOMOD2/PRED_KMA_RCP4.5_2010_세뿔투구꽃_PA1_Full_GLM_byROC.tif"))
+  })
+  
+  output$MR_Result2 <- renderPlot({
+    plot(raster("C:/MOTIVE_projects/proj30/Species_Distribution/test1/세뿔투구꽃/BIOMOD2/PRED_KMA_RCP4.5_2010_세뿔투구꽃_PA1_Full_GLM_byROC.tif"))
+  })
+  
+  output$MR_Result3 <- renderPlot({
+    plot(raster("C:/MOTIVE_projects/proj30/Species_Distribution/test1/세뿔투구꽃/BIOMOD2/PRED_KMA_RCP4.5_2010_세뿔투구꽃_PA1_Full_GLM_byROC.tif"))
+  })
+  
+  
+  
   
   output$SP_Summary <- renderPrint({
     
@@ -2122,6 +2182,79 @@ shinyServer(function(input, output, session) {
   })
   
   output$CD_Map <- renderLeaflet({
+    
+    #    file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = ""))
+    #    r_asc <- read.asc(file)
+    #    r <- raster(r_asc)
+    file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".tif", sep = ""))
+    r <- raster(file)
+    crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+    
+    pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r),
+                        na.color = "transparent")
+    
+    leaflet() %>%
+      addTiles(
+        urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+      ) %>%        
+      
+      addRasterImage(r, colors = pal, opacity = 0.8) %>%
+      addLegend(pal = pal, values = values(r), title = "Legend")  %>%
+      
+      setView(lng = 128.00, lat = 36.00, zoom = 7)
+  })
+  
+  
+  output$CD_Map1 <- renderLeaflet({
+    
+    #    file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = ""))
+    #    r_asc <- read.asc(file)
+    #    r <- raster(r_asc)
+    file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".tif", sep = ""))
+    r <- raster(file)
+    crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+    
+    pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r),
+                        na.color = "transparent")
+    
+    leaflet() %>%
+      addTiles(
+        urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+      ) %>%        
+      
+      addRasterImage(r, colors = pal, opacity = 0.8) %>%
+      addLegend(pal = pal, values = values(r), title = "Legend")  %>%
+      
+      setView(lng = 128.00, lat = 36.00, zoom = 7)
+  })
+  
+  output$CD_Map2 <- renderLeaflet({
+    
+    #    file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = ""))
+    #    r_asc <- read.asc(file)
+    #    r <- raster(r_asc)
+    file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".tif", sep = ""))
+    r <- raster(file)
+    crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+    
+    pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r),
+                        na.color = "transparent")
+    
+    leaflet() %>%
+      addTiles(
+        urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+      ) %>%        
+      
+      addRasterImage(r, colors = pal, opacity = 0.8) %>%
+      addLegend(pal = pal, values = values(r), title = "Legend")  %>%
+      
+      setView(lng = 128.00, lat = 36.00, zoom = 7)
+  })
+  
+  output$CD_Map3 <- renderLeaflet({
     
     #    file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = ""))
     #    r_asc <- read.asc(file)
