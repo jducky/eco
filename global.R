@@ -1019,7 +1019,12 @@ SE_Language = "Korean"
      System_Name <- "생태계 기후변화 영향 및 취약성 평가모형" 
      OV_Name <- "모형개요"
      
-     LD_Variables_list  <- c("토지이용" = "landuse",
+     # LD_Variables_list  <- c("토지이용" = "landuse",
+     #                         "산불" = "forestfire",
+     #                         "산사태" = "landslide")
+     LD_Variables_list  <- c("토지이용_ssp1" = "landuse_ssp1",
+                             "토지이용_ssp2" = "landuse_ssp2",
+                             "토지이용_ssp3" = "landuse_ssp3",
                              "산불" = "forestfire",
                              "산사태" = "landslide")
      CD_Variables_list <- c("BIOCLIM 01 (연평균 기온)" = "bio01",
@@ -1062,10 +1067,9 @@ SE_Language = "Korean"
                              "BIOCLIM 19 (추운 분기의 강수량)" = paste("bio19.", Input_img, sep = ""))
      CD_Models_list <- c("KMA (기상청)" = "KMA",
                          "KEI (한국환경정책평가연구원)" = "KEI")
-     RP_Type_list  <- c("GAIN" = "GAIN",
-                        "STAY" = "STAY",
-                        "LOSS" = "LOSS",
-                        "GAP" = "GAP")
+     
+     
+     
      
      SE_Name_System <- "MOTIVE ECOSYSTEM (생태계 기후변화 영향 및 취약성 평가모형)"
      SE_Name <- "환경설정"
@@ -1110,9 +1114,7 @@ SE_Language = "Korean"
      CD_Name_Scenarios_selected <- "RCP4.5"    
      CD_Name_Year <- "예측년도"
      CD_Name_Year_list <- CD_Year_list
-     CD_Name_Year_selected <- "2000" 
-     MR_Name <- "환경설정"
-     RP_Name <- "보고서"
+     CD_Name_Year_selected <- "2000"     
      SDM_Name <- "종분포모형"
      SDM_Name_Model <- "모형구동"
      SDM_Name_Model_Species <- "종선택"
@@ -1153,8 +1155,11 @@ SE_Language = "Korean"
      SDM_Name_CD_Year_out <- "예측년도"
      SDM_Name_CD_Year_out_list <- CD_Year_list
      SDM_Name_CD_Year_out_selected <- "2000"
+     SDM_Name_Dir <- "SDM 평가결과 폴더"
      DM_Name <- "종확산모형"
      DM_Name_Model <- "모형구동"
+     DM_Name_Model_SDM <- "SDM모형 옵션"
+     DM_Name_Model_DM <- "확산모형 옵션"
      DM_Name_Model_Out <- "모형결과"
      DM_Name_Out_Plot <- "생물종 분포변화"
      DM_Name_DM_MO_Barriers <- "장애물"
@@ -1173,7 +1178,7 @@ SE_Language = "Korean"
      DM_Name_CD_Scenarios_selected <- "RCP4.5"    
      DM_Name_CD_Year <- "예측년도"
      DM_Name_CD_Year_list <- CD_Year_list
-     DM_Name_CD_Year_selected <- CD_Year_list_init
+     DM_Name_CD_Year_selected <- CD_Year_list
      DM_Name_models <- "모델유형"
      DM_Name_models_list <- SDM_models_list
      DM_Name_models_selected <- "GLM"
@@ -1191,6 +1196,11 @@ SE_Language = "Korean"
      DM_Name_CD_Year_out <- "예측년도"
      DM_Name_CD_Year_out_list <- CD_Year_list
      DM_Name_CD_Year_out_selected <- "2000"
+     DM_Name_Display_types <- "출력결과 모델"
+     DM_Name_Display_types_list <- c("종분포모형" = "SDM",
+                                     "종확산모형" = "DM")
+     DM_Name_Display_types_selected <- "SDM"
+     DM_Name_Dir <- "DM 평가결과 폴더"
      SS_Name <- "기후변화민감종"
      SS_Name_Analysis <- "영향 및 취약성평가"
      SS_Name_Out <- "평가결과"
@@ -1199,7 +1209,7 @@ SE_Language = "Korean"
      SS_Name_Out_Vulnerabiity <- "취약성 순위"
      SS_Name_DM_Models <- "확산유형"
      SS_Name_DM_Models_list <- DM_Models_list
-     SS_Name_DM_Models_selected <- "UD"    
+     SS_Name_DM_Models_selected <- "BIOMOD2"    
      SS_Name_CD_Models <- "기후모델"
      SS_Name_CD_Models_list <- CD_Models_list
      SS_Name_CD_Models_selected <- "KMA"    
@@ -1237,6 +1247,13 @@ SE_Language = "Korean"
                               "기후시나리오별" = "Climate_Scenario",
                               "모델유형별" = "Model")
      SS_Name_Group2_selected <- "Model"
+     SS_Name_Group3_list <- c("생물종별" = "Species",
+                              "기후모델별" = "Climate_Model",
+                              "기후시나리오별" = "Climate_Scenario",
+                              "모델유형별" = "Model")
+     SS_Name_Group3_selected <- "Species"
+     SS_Name_MO_Dir <- "민감종평가 입력폴더"
+     SS_Name_AO_Dir <- "민감종평가 결과폴더"
      IS_Name <- "외래종"
      IS_Name_Anlayis <- "영향 평가"
      IS_Name_Out <- "평가결과"
@@ -1249,7 +1266,7 @@ SE_Language = "Korean"
      IS_Name_Out_Stat <- "통계"
      IS_Name_DM_Models <- "확산유형"
      IS_Name_DM_Models_list <- DM_Models_list
-     IS_Name_DM_Models_selected <- "UD"    
+     IS_Name_DM_Models_selected <- "BIOMOD2"    
      IS_Name_CD_Models <- "기후모델"
      IS_Name_CD_Models_list <- CD_Models_list
      IS_Name_CD_Models_selected <- "KMA"    
@@ -1283,28 +1300,8 @@ SE_Language = "Korean"
      IS_Name_CD_Year_out <- "예측년도"
      IS_Name_CD_Year_out_list <- CD_Year_list
      IS_Name_CD_Year_out_selected <- "2000"
-     IS_Name_Group1_list <- c("by Species" = "Species",
-                              "by Climate Model" = "Climate_Model",
-                              "by Climate Scenario" = "Climate_Scenario",
-                              "by Model" = "Model",
-                              "by Year" = "Year")
-     IS_Name_Group1_selected <- "Year"
-     IS_Name_Group2_list <- c("by Species" = "Species",
-                              "by Climate Model" = "Climate_Model",
-                              "by Climate Scenario" = "Climate_Scenario",
-                              "by Model" = "Model")
-     IS_Name_Group2_selected <- "Model"
-     IS_Name_OU_Option1 <- "Assessment Type"
-     IS_Name_OU_Option1_list <- c("Species Richness" = "IS_SR",
-                                  "Species Loss" = "IS_LOSS",
-                                  "Species Stay" = "IS_STAY",
-                                  "Species Gain" = "IS_GAIN")
-     IS_Name_OU_Option1_selected <- "IS_SR"
-     IS_Name_OU_Option2 <- "Vulnerability Type"
-     IS_Name_OU_Option2_list <- c("Vulnerability1 (Species Loss)" = "IS_VI1",
-                                  "Vulnerability2 (Species Loss Ratio)" = "IS_VI2",
-                                  "Vulnerability3 (Species Inside Loss Outside Gain)" = "IS_VI3")
-     IS_Name_OU_Option2_selected <- "IS_VI1"
+     IS_Name_MO_Dir <- "외래종평가 입력폴더"
+     IS_Name_AO_Dir <- "외래종평가 결과폴더"
      VH_Name <- "취약서식지"
      VH_Name_Analysis <- "영향 및 취약성평가"
      VH_Name_Out <- "평가결과"
@@ -1325,7 +1322,7 @@ SE_Language = "Korean"
      VH_Name_Out_Stat <- "통계"
      VH_Name_DM_Models <- "확산유형"
      VH_Name_DM_Models_list <- DM_Models_list
-     VH_Name_DM_Models_selected <- "UD"    
+     VH_Name_DM_Models_selected <- "BIOMOD2"    
      VH_Name_CD_Models <- "기후모델"
      VH_Name_CD_Models_list <- CD_Models_list
      VH_Name_CD_Models_selected <- "KMA"    
@@ -1362,7 +1359,17 @@ SE_Language = "Korean"
      VH_Name_CD_Year_out <- "예측년도"
      VH_Name_CD_Year_out_list <- CD_Year_list
      VH_Name_CD_Year_out_selected <- "2000"
+     VH_Name_MO_Dir <- "취약서식지평가 입력폴더"
+     VH_Name_AO_Dir <- "취약서식지평가 결과폴더"
      HELP_Name <- "도움말"
+     
+     ## ENGIS ADD
+     RP_Type_list  <- c("GAIN" = "GAIN",
+                        "STAY" = "STAY",
+                        "LOSS" = "LOSS",
+                        "GAP" = "GAP")
+     MR_Name <- "환경설정"
+     RP_Name <- "보고서"
      RP_Name_Type <- "Link Data"
      RP_Name_Type_list <- RP_Type_list
      RP_Name_Type1_selected <- "GAIN"

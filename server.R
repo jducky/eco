@@ -2196,7 +2196,9 @@ shinyServer(function(input, output, session) {
   
   output$LD_Map <- renderLeaflet({
     
-    r <- raster(file.path(S251_path, "barrier11.tif"))
+    # r <- raster(file.path(S251_path, "barrier11.tif"))
+    r_asc <- read.asc(file.path(G$SE_Dir_Link, input$LD_Climate_model, input$LD_Climate_scenario, input$LD_Project_year, paste(input$LD_Variables, ".asc", sep = "")))
+    r <- raster(r_asc)
     crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
     
     pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r),
@@ -3913,13 +3915,11 @@ shinyServer(function(input, output, session) {
       setView(lng = 128.00, lat = 36.00, zoom = 7)
   })
   
-  
   output$IS_AO_SR_SIDO_Map <- renderLeaflet({
     
-    poly <- readOGR(file.path(isolate(G$SE_Dir_Admin), paste("O_SD", ".shp", sep = "")))
-    # x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SD", ".csv", sep = "")))
-    x <- test3_Invasive_F("IS_SD")
-    names(poly) <- c(names(x))
+    poly <- readOGR(file.path(isolate(G$IS_AO_Dir_Folder), paste("SD", ".shp", sep = "")))
+    x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SD", ".csv", sep = "")))
+    names(poly) <- c(names(x)[-1])
     X_NAME <- names(poly[5])
     V_NAME <- paste("IS_SR_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_SDM_model, "_", input$IS_AO_Project_year, sep = "")
     
@@ -3927,7 +3927,7 @@ shinyServer(function(input, output, session) {
     pal <- colorBin("YlOrRd", domain = poly[[V_NAME]], bins = bins)
     
     labels <- sprintf(
-      "<strong>%s</strong><br/>%g people / mi<sup>2</sup>",
+      "<strong>%s</strong><br/>%g Species", # people / mi<sup>2</sup>",
       poly[[X_NAME]], poly[[V_NAME]]
     ) %>% lapply(htmltools::HTML)
     
@@ -3962,6 +3962,54 @@ shinyServer(function(input, output, session) {
                 position = "bottomright")
   })
   
+  # output$IS_AO_SR_SIDO_Map <- renderLeaflet({
+  #   
+  #   poly <- readOGR(file.path(isolate(G$SE_Dir_Admin), paste("O_SD", ".shp", sep = "")))
+  #   x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SD", ".csv", sep = "")))
+  #   # x <- test3_Invasive_F("IS_SD")
+  #   names(poly) <- c(names(x))
+  #   X_NAME <- names(poly[5])
+  #   V_NAME <- paste("IS_SR_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_SDM_model, "_", input$IS_AO_Project_year, sep = "")
+  #   
+  #   bins <- c(0, 1, 2, 3, 4, 5, Inf)
+  #   pal <- colorBin("YlOrRd", domain = poly[[V_NAME]], bins = bins)
+  #   
+  #   labels <- sprintf(
+  #     "<strong>%s</strong><br/>%g people / mi<sup>2</sup>",
+  #     poly[[X_NAME]], poly[[V_NAME]]
+  #   ) %>% lapply(htmltools::HTML)
+  #   
+  #   leaflet(poly) %>%
+  #     setView(lng = 128.00, lat = 36.00, zoom = 7) %>%
+  #     addProviderTiles("MapBox", options = providerTileOptions(
+  #       id = "mapbox.light",
+  #       accessToken = Sys.getenv('MAPBOX_ACCESS_TOKEN'))) %>%
+  #     addTiles(
+  #       urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+  #       attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+  #     ) %>%   
+  #     addPolygons(
+  #       fillColor = ~pal(poly[[V_NAME]]),
+  #       weight = 2,
+  #       opacity = 1,
+  #       color = "grey",
+  #       dashArray = "3",
+  #       fillOpacity = 0.7,
+  #       highlight = highlightOptions(
+  #         weight = 5,
+  #         color = "#666",
+  #         dashArray = "",
+  #         fillOpacity = 0.7,
+  #         bringToFront = TRUE),
+  #       label = labels,
+  #       labelOptions = labelOptions(
+  #         style = list("font-weight" = "normal", padding = "3px 8px"),
+  #         textsize = "15px",
+  #         direction = "auto")) %>%
+  #     addLegend(pal = pal, values = ~poly[[V_NAME]], opacity = 0.7, title = NULL,
+  #               position = "bottomright")
+  # })
+  
   output$IS_AO_SR_SIDO_Stat <- renderPlot({
     
     # df <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SD", ".csv", sep = "")))
@@ -3985,14 +4033,9 @@ shinyServer(function(input, output, session) {
   })
   #	geom_text(aes(label = Vulnerability_Area_Loss_Ratio), size = 3, hjust = 0.5, vjust = 3) + 
   
-  
-  
   output$IS_AO_SR_SGG_Map <- renderLeaflet({
-    poly <- readOGR(file.path(isolate(G$SE_Dir_Admin), paste("O_SGG", ".shp", sep = "")))
-    # x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SGG", ".csv", sep = "")))
-    # x <- read.csv(file.path("C:\\MOTIVE_projects\\proj1\\Invasive_Species\\test3", paste("IS_SGG", ".csv", sep = "")))
-    x <- test3_Invasive_F("IS_SGG");
-    
+    poly <- readOGR(file.path(isolate(G$SE_Dir_GIS), paste("O_SGG", ".shp", sep = "")))
+    x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SGG", ".csv", sep = "")))
     names(poly) <- c(names(x[-1]))
     X_NAME <- names(poly[2])
     V_NAME <- paste("IS_SR_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_SDM_model, "_", input$IS_AO_Project_year, sep = "")
@@ -4035,6 +4078,55 @@ shinyServer(function(input, output, session) {
       addLegend(pal = pal, values = ~poly[[V_NAME]], opacity = 0.7, title = NULL,
                 position = "bottomright")
   })
+  
+  # output$IS_AO_SR_SGG_Map <- renderLeaflet({
+  #   poly <- readOGR(file.path(isolate(G$SE_Dir_Admin), paste("O_SGG", ".shp", sep = "")))
+  #   x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SGG", ".csv", sep = "")))
+  #   # x <- read.csv(file.path("C:\\MOTIVE_projects\\proj1\\Invasive_Species\\test3", paste("IS_SGG", ".csv", sep = "")))
+  #   # x <- test3_Invasive_F("IS_SGG");
+  #   
+  #   names(poly) <- c(names(x[-1]))
+  #   X_NAME <- names(poly[2])
+  #   V_NAME <- paste("IS_SR_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_SDM_model, "_", input$IS_AO_Project_year, sep = "")
+  #   
+  #   #	  bins <- c(0, 1, 2, 3, 4, 5, Inf)
+  #   pal <- colorBin("YlOrRd", domain = poly[[V_NAME]], bins = 7)
+  #   
+  #   labels <- sprintf(
+  #     "<strong>%s</strong><br/>%g people / mi<sup>2</sup>",
+  #     poly[[X_NAME]], poly[[V_NAME]]
+  #   ) %>% lapply(htmltools::HTML)
+  #   
+  #   leaflet(poly) %>%
+  #     setView(lng = 128.00, lat = 36.00, zoom = 7) %>%
+  #     addProviderTiles("MapBox", options = providerTileOptions(
+  #       id = "mapbox.light",
+  #       accessToken = Sys.getenv('MAPBOX_ACCESS_TOKEN'))) %>%
+  #     addTiles(
+  #       urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+  #       attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+  #     ) %>%   
+  #     addPolygons(
+  #       fillColor = ~pal(poly[[V_NAME]]),
+  #       weight = 2,
+  #       opacity = 1,
+  #       color = "grey",
+  #       dashArray = "3",
+  #       fillOpacity = 0.7,
+  #       highlight = highlightOptions(
+  #         weight = 5,
+  #         color = "#666",
+  #         dashArray = "",
+  #         fillOpacity = 0.7,
+  #         bringToFront = TRUE),
+  #       label = labels,
+  #       labelOptions = labelOptions(
+  #         style = list("font-weight" = "normal", padding = "3px 8px"),
+  #         textsize = "15px",
+  #         direction = "auto")) %>%
+  #     addLegend(pal = pal, values = ~poly[[V_NAME]], opacity = 0.7, title = NULL,
+  #               position = "bottomright")
+  # })
   
   output$IS_AO_SR_SGG_Stat <- renderPlot({
     

@@ -492,12 +492,14 @@ shinyUI(
                    sidebarLayout(
                      sidebarPanel(width = 3, Fluid = TRUE,
                                   
-                                  
-                                  
-                                  selectInput("LD_Type", LD_Name_Variables,
+                                  selectInput("LD_Variables", LD_Name_Variables,
                                               choices = LD_Name_Variables_list,
-                                              selected = LD_Name_Variables_selected
-                                  ),
+                                              selected = LD_Name_Variables_selected),
+                                  
+                                  # selectInput("LD_Type", LD_Name_Variables,
+                                  #             choices = LD_Name_Variables_list,
+                                  #             selected = LD_Name_Variables_selected
+                                  # ),
                                   
                                   fluidRow(
                                     
@@ -586,22 +588,13 @@ shinyUI(
                      
                      # Main panel for displaying outputs ----
                      mainPanel(
-                       
-                       fluidRow(
-                         column(3,
-                                bsCollapse(
-                                  bsCollapsePanel("Summary & Histogram",
-                                                  
-                                                  fluidRow(
-                                                    column(4,verbatimTextOutput("CD_Summary")),
-                                                    column(6,plotOutput("LD_Histogram2"))
-                                                  ) 
-                                  )
-                                )
-                         )
-                         
-                       )
-                       ,
+                        bsCollapsePanel("Summary & Histogram",
+                                        style = ST_Name,
+                                        fluidRow(
+                                          column(4,verbatimTextOutput("CD_Summary")),
+                                          column(6,plotOutput("LD_Histogram2"))
+                                        ) 
+                        ),
                        fluidRow(
                          valueBoxOutput("CD_Value_CM"),
                          valueBoxOutput("CD_Value_CS"),
@@ -1070,20 +1063,38 @@ shinyUI(
           
           
           tabPanel(SS_Name, icon = icon("table"),
-                   
-                   
                    tags$hr(),
                    sidebarLayout(
                      sidebarPanel(width = 3, Fluid = TRUE,
+                                  # shinyDirButton("SS_AO_Dir_Folder", SS_Name_AO_Dir, SS_Name_AO_Dir),
+                                  # verbatimTextOutput("SS_AO_Dir_Folder", placeholder = TRUE),
+                                  # tags$hr(),
                                   
                                   uiOutput("SS_AO_Species"),
                                   tags$hr(),
                                   
                                   uiOutput("SS_AO_SDM_model"),
                                   
-                                  uiOutput("SS_AO_DT_CM_CS_PY"),
-                                  hr(),
-                                  actionButton('reset_SS_AO', label = "Reset")
+                                  radioButtons("SS_AO_Dispersal_type", SS_Name_DM_Models,
+                                               choices = c(SS_Name_DM_Models_list),
+                                               selected = SS_Name_DM_Models_selected),
+                                  
+                                  # Input: Checkbox if file has header ----
+                                  checkboxGroupInput("SS_AO_Climate_model", SS_Name_CD_Models,
+                                                     choices = c(SS_Name_CD_Models_list),
+                                                     selected = SS_Name_CD_Models_selected),
+                                  
+                                  # Input: Checkbox if file has header ----
+                                  checkboxGroupInput("SS_AO_Climate_scenario", SS_Name_CD_Scenarios,
+                                                     choices = c(SS_Name_CD_Scenarios_list),
+                                                     selected = SS_Name_CD_Scenarios_selected),
+                                  
+                                  # Input: Checkbox if file has header ----
+                                  checkboxGroupInput("SS_AO_Project_year", SS_Name_CD_Year,
+                                                     choices = c(SS_Name_CD_Year_list),
+                                                     selected = SS_Name_CD_Year_selected),
+                                  shinyDirButton("SS_AO_Dir_Folder", SS_Name_AO_Dir, SS_Name_AO_Dir),
+                                  verbatimTextOutput("SS_AO_Dir_Folder", placeholder = TRUE)
                      ),
                      
                      # Main panel for displaying outputs ----
@@ -1096,9 +1107,7 @@ shinyUI(
                          tabPanel(SS_Name_Out_Pattern, 
                                   tags$hr(),
                                   fluidRow(
-                                    column(6, 
-                                           DT::dataTableOutput("SS_AO_IV_Table")
-                                    )
+                                    column(6, DT::dataTableOutput("SS_AO_IV_Table"))
                                   ),
                                   fluidRow(
                                     tags$hr(),
@@ -1118,9 +1127,7 @@ shinyUI(
                          tabPanel(SS_Name_Out_Vulnerabiity, 
                                   tags$hr(),
                                   fluidRow(
-                                    column(6, 
-                                           DT::dataTableOutput("SS_AO_VP_Table")
-                                    )
+                                    column(6,DT::dataTableOutput("SS_AO_VP_Table"))
                                   ),
                                   fluidRow(
                                     tags$hr(),
@@ -1143,13 +1150,89 @@ shinyUI(
                                     column(6, plotOutput("SS_AO_VP_Plot12")),
                                     column(6, plotOutput("SS_AO_VP_Plot22"))
                                   )
-                                  # fluidRow(
-                                  #   tags$hr(),
-                                  #   plotOutput("SS_AO_VP_Priority",width = "100%", height = "600px"))
                          )
                        )
                      )
                    )
+                   
+                   
+                   # sidebarLayout(
+                   #   sidebarPanel(width = 3, Fluid = TRUE,
+                   #                
+                   #                uiOutput("SS_AO_Species"),
+                   #                tags$hr(),
+                   #                
+                   #                uiOutput("SS_AO_SDM_model"),
+                   #                
+                   #                uiOutput("SS_AO_DT_CM_CS_PY"),
+                   #                hr(),
+                   #                actionButton('reset_SS_AO', label = "Reset")
+                   #   ),
+                   #   
+                   #   # Main panel for displaying outputs ----
+                   #   mainPanel(
+                   #     tabsetPanel(
+                   #       tabPanel(SS_Name_Out_ChangePlot,
+                   #                tags$hr(),
+                   #                uiOutput("SS_AO_UI_plot")
+                   #       ),
+                   #       tabPanel(SS_Name_Out_Pattern, 
+                   #                tags$hr(),
+                   #                fluidRow(
+                   #                  column(6, 
+                   #                         DT::dataTableOutput("SS_AO_IV_Table")
+                   #                  )
+                   #                ),
+                   #                fluidRow(
+                   #                  tags$hr(),
+                   #                  uiOutput("SS_AO_IV_UI_plot1"),
+                   #                  tags$hr(),
+                   #                  column(6, plotOutput("SS_AO_IV_Plot1")),
+                   #                  column(6, plotOutput("SS_AO_IV_Plot2"))
+                   #                ),
+                   #                fluidRow(
+                   #                  tags$hr(),
+                   #                  uiOutput("SS_AO_IV_UI_plot2"),
+                   #                  tags$hr(),
+                   #                  column(6, plotOutput("SS_AO_IV_Plot11")),
+                   #                  column(6, plotOutput("SS_AO_IV_Plot21"))
+                   #                )
+                   #       ),
+                   #       tabPanel(SS_Name_Out_Vulnerabiity, 
+                   #                tags$hr(),
+                   #                fluidRow(
+                   #                  column(6, 
+                   #                         DT::dataTableOutput("SS_AO_VP_Table")
+                   #                  )
+                   #                ),
+                   #                fluidRow(
+                   #                  tags$hr(),
+                   #                  uiOutput("SS_AO_VP_UI_plot1"),
+                   #                  tags$hr(),
+                   #                  column(6, plotOutput("SS_AO_VP_Plot1")),
+                   #                  column(6, plotOutput("SS_AO_VP_Plot2"))
+                   #                ),
+                   #                fluidRow(
+                   #                  tags$hr(),
+                   #                  uiOutput("SS_AO_VP_UI_plot2"),
+                   #                  tags$hr(),
+                   #                  column(6, plotOutput("SS_AO_VP_Plot11")),
+                   #                  column(6, plotOutput("SS_AO_VP_Plot21"))
+                   #                ),
+                   #                fluidRow(
+                   #                  tags$hr(),
+                   #                  uiOutput("SS_AO_VP_UI_plot3"),
+                   #                  tags$hr(),
+                   #                  column(6, plotOutput("SS_AO_VP_Plot12")),
+                   #                  column(6, plotOutput("SS_AO_VP_Plot22"))
+                   #                )
+                   #                # fluidRow(
+                   #                #   tags$hr(),
+                   #                #   plotOutput("SS_AO_VP_Priority",width = "100%", height = "600px"))
+                   #       )
+                   #     )
+                   #   )
+                   # )
                    
                    
                    # tabsetPanel(
@@ -1283,39 +1366,69 @@ shinyUI(
                    
                    sidebarLayout(
                      sidebarPanel(width = 3, Fluid = TRUE,
-                                  # shinyDirButton("IS_AO_Dir_Folder", "Invasive Assessment Output Folder", "Invasive Assessment Output Folder"),
-                                  # verbatimTextOutput("IS_AO_Dir_Folder", placeholder = TRUE),
+                                  shinyDirButton("IS_MI_Dir_Folder", IS_Name_MO_Dir, IS_Name_MO_Dir),
+                                  verbatimTextOutput("IS_MI_Dir_Folder", placeholder = TRUE),
                                   tags$hr(),
+                                  shinyDirButton("IS_AO_Dir_Folder", IS_Name_AO_Dir, IS_Name_AO_Dir),
+                                  verbatimTextOutput("IS_AO_Dir_Folder", placeholder = TRUE),
+                                  tags$hr(),
+                                  #uiOutput("IS_AO_Species"),
                                   uiOutput("IS_AO_Species"),
                                   tags$hr(),
-                                  
-                                  
-                                  
                                   uiOutput("IS_AO_SDM_model"),
                                   
                                   radioButtons("IS_AO_Dispersal_type", IS_Name_DM_Models,
                                                choices = c(IS_Name_DM_Models_list),
-                                               selected = IS_Name_DM_Models_selected
-                                  ),
+                                               selected = IS_Name_DM_Models_selected),
                                   
                                   # Input: Checkbox if file has header ----
                                   radioButtons("IS_AO_Climate_model", IS_Name_CD_Models,
                                                choices = c(IS_Name_CD_Models_list),
-                                               selected = IS_Name_CD_Models_selected
-                                  ),
+                                               selected = IS_Name_CD_Models_selected),
                                   
                                   # Input: Checkbox if file has header ----
                                   radioButtons("IS_AO_Climate_scenario", IS_Name_CD_Scenarios,
                                                choices = c(IS_Name_CD_Scenarios_list),
-                                               selected = IS_Name_CD_Scenarios_selected
-                                  ),
+                                               selected = IS_Name_CD_Scenarios_selected),
                                   
                                   # Input: Checkbox if file has header ----
                                   radioButtons("IS_AO_Project_year", IS_Name_CD_Year,
                                                choices = c(IS_Name_CD_Year_list),
-                                               selected = IS_Name_CD_Year_selected
-                                  )
+                                               selected = IS_Name_CD_Year_selected)
                      ),
+                     
+                     # sidebarPanel(width = 3, Fluid = TRUE,
+                     #              # shinyDirButton("IS_AO_Dir_Folder", "Invasive Assessment Output Folder", "Invasive Assessment Output Folder"),
+                     #              # verbatimTextOutput("IS_AO_Dir_Folder", placeholder = TRUE),
+                     #              # tags$hr(),
+                     #              uiOutput("IS_AO_Species"),
+                     #              tags$hr(),
+                     #              
+                     #              uiOutput("IS_AO_SDM_model"),
+                     #              
+                     #              radioButtons("IS_AO_Dispersal_type", IS_Name_DM_Models,
+                     #                           choices = c(IS_Name_DM_Models_list),
+                     #                           selected = IS_Name_DM_Models_selected
+                     #              ),
+                     #              
+                     #              # Input: Checkbox if file has header ----
+                     #              radioButtons("IS_AO_Climate_model", IS_Name_CD_Models,
+                     #                           choices = c(IS_Name_CD_Models_list),
+                     #                           selected = IS_Name_CD_Models_selected
+                     #              ),
+                     #              
+                     #              # Input: Checkbox if file has header ----
+                     #              radioButtons("IS_AO_Climate_scenario", IS_Name_CD_Scenarios,
+                     #                           choices = c(IS_Name_CD_Scenarios_list),
+                     #                           selected = IS_Name_CD_Scenarios_selected
+                     #              ),
+                     #              
+                     #              # Input: Checkbox if file has header ----
+                     #              radioButtons("IS_AO_Project_year", IS_Name_CD_Year,
+                     #                           choices = c(IS_Name_CD_Year_list),
+                     #                           selected = IS_Name_CD_Year_selected
+                     #              )
+                     # ),
                      
                      # Main panel for displaying outputs ----
                      mainPanel(
@@ -1327,11 +1440,6 @@ shinyUI(
                                     includeScript("gomap.js")
                                   ),
                                   tags$hr(),
-                                  
-                                  
-                                  
-                                  
-                                  
                                   column(6, leafletOutput("IS_AO_SD_Map", width = "800", height = "650")),
                                   tags$hr(),
                                   column(10, verbatimTextOutput("IS_AO_SD_Summary")),
@@ -1361,11 +1469,12 @@ shinyUI(
                                            tags$br(), tags$br(),
                                            actionButton('Reset_IS_AO_SR_Map', label = 'Reset'),
                                            tags$br(), tags$br(),
-                                           plotOutput("IS_AO_SR_SIDO_Stat")
+                                           # plotOutput("IS_AO_SR_SIDO_Stat")
                                     ),
                                     column(4, class = "text-center",
                                            print("< 시군구 통계 >"),
-                                           leafletOutput("IS_AO_SR_SGG_Map", width = "360", height = "600") %>% withSpinner()
+                                           leafletOutput("IS_AO_SR_SGG_Map", width = "360", height = "600") %>% withSpinner(),
+                                           # plotOutput("IS_AO_SR_SGG_Stat")
                                     )
                                   )
                          ),
