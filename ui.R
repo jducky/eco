@@ -9,46 +9,46 @@ shinyUI(
   dashboardPage(
     skin = "green",
 # <<<<<<< HEAD
-    dashboardHeader(title = tags$a(href='http://mycompanyishere.com',
-                                   tags$img(src='logo3.png')),  tags$li(class = "dropdown",
-                                                                        tags$style(".main-header {max-height: 65px;}"),
-                                                                        tags$style(".main-header .logo {height: 65px}") ),
-                    dropdownMenu(
-                      # type = "notifications", 
-                      icon = icon("question-circle"),
-                      # tags$li(src='logo3.png'),
-                      badgeStatus = NULL,
-                      # headerText = "See also:",
-                      
-                      notificationItem("shiny", icon = icon("file"),
-                                       href = "http://shiny.rstudio.com/"),
-                      notificationItem("shinydashboard", icon = icon("file"),
-                                       href = "https://rstudio.github.io/shinydashboard/")
-                    )
-                    ),
-    dashboardSidebar(
-      
-      # sidebarUserPanel("User Name",
-      #                  subtitle = a(href = "#", icon("circle", class = "text-success"), "Online"),
-      #                  # Image file should be in www/ subdir
-      #                  image = "userimage.png"
-      # ),
-      # sidebarSearchForm(label = "Enter a number", "searchText", "searchButton"),
-      
-      
-      # sidebarMenu(
-      #   # Setting id makes input$tabs give the tabName of currently-selected tab
-      #   id = "tabs",
-      #   menuItem("모형개요", tabName = "dashboard", icon = icon("dashboard")),
-      #   menuItem("Widgets", icon = icon("th"), tabName = "widgets", badgeLabel = "new",
-      #            badgeColor = "green"),
-      #   menuItem("Charts", icon = icon("bar-chart-o"),
-      #            menuSubItem("Sub-item 1", tabName = "subitem1"),
-      #            menuSubItem("Sub-item 2", tabName = "subitem2")
-      #   )
-      # )
-      
-    ),
+    # dashboardHeader(title = tags$a(href='http://mycompanyishere.com',
+    #                                tags$img(src='logo3.png')),  tags$li(class = "dropdown",
+    #                                                                     tags$style(".main-header {max-height: 65px;}"),
+    #                                                                     tags$style(".main-header .logo {height: 65px}") ),
+    #                 dropdownMenu(
+    #                   # type = "notifications", 
+    #                   icon = icon("question-circle"),
+    #                   # tags$li(src='logo3.png'),
+    #                   badgeStatus = NULL,
+    #                   # headerText = "See also:",
+    #                   
+    #                   notificationItem("shiny", icon = icon("file"),
+    #                                    href = "http://shiny.rstudio.com/"),
+    #                   notificationItem("shinydashboard", icon = icon("file"),
+    #                                    href = "https://rstudio.github.io/shinydashboard/")
+    #                 )
+    #                 ),
+    # dashboardSidebar(
+    #   
+    #   # sidebarUserPanel("User Name",
+    #   #                  subtitle = a(href = "#", icon("circle", class = "text-success"), "Online"),
+    #   #                  # Image file should be in www/ subdir
+    #   #                  image = "userimage.png"
+    #   # ),
+    #   # sidebarSearchForm(label = "Enter a number", "searchText", "searchButton"),
+    #   
+    #   
+    #   # sidebarMenu(
+    #   #   # Setting id makes input$tabs give the tabName of currently-selected tab
+    #   #   id = "tabs",
+    #   #   menuItem("모형개요", tabName = "dashboard", icon = icon("dashboard")),
+    #   #   menuItem("Widgets", icon = icon("th"), tabName = "widgets", badgeLabel = "new",
+    #   #            badgeColor = "green"),
+    #   #   menuItem("Charts", icon = icon("bar-chart-o"),
+    #   #            menuSubItem("Sub-item 1", tabName = "subitem1"),
+    #   #            menuSubItem("Sub-item 2", tabName = "subitem2")
+    #   #   )
+    #   # )
+    #   
+    # ),
 # =======
     dashboardHeader(title = "MOTIVE Ecosystem",
                     disable=F,
@@ -2421,7 +2421,7 @@ shinyUI(
                                   uiOutput('radio_Table')
                                 ))
           )
-=======
+# =======
           # tabPanel(HELP_Name, fluid = TRUE,
           #          tags$hr(),
           #          sidebarPanel(width = 5,
@@ -2514,10 +2514,10 @@ shinyUI(
       #   </div>
       #      ')
       
-=======
-      tags$hr(), # theme에 따라서 선이 보이지 않을 수 있음!!
-      tags$footer("MOTIVE ECOSYSTEM(생태계 기후변화 영향 및 취약성평가모형)")
->>>>>>> lx02jd2
+# =======
+      # tags$hr(), # theme에 따라서 선이 보이지 않을 수 있음!!
+      # tags$footer("MOTIVE ECOSYSTEM(생태계 기후변화 영향 및 취약성평가모형)")
+# >>>>>>> lx02jd2
       
       ), # tab1
     
@@ -2629,7 +2629,7 @@ shinyUI(
                                      )
                                    )
                                  )
-                               ),
+                               )
                                
                                # tags$img(src = "yy.jpg")
                                # img(src="C:/MOTIVE_projects/proj30/img/test.jpg")
@@ -2894,9 +2894,9 @@ shinyUI(
     
 # <<<<<<< HEAD
     
-  )
+  # )
 # )
 # =======
-  # ) # page
-# ) # shiny UI
+  ) # page
+) # shiny UI
 # >>>>>>> lx02jd2
