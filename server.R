@@ -1744,6 +1744,28 @@ shinyServer(function(input, output, session) {
   
   
   
+  
+  output$radio_Table <- renderText({
+    
+      radioTable(tbl = head(Temp_G_FILE_speciesinfo_02[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]),
+                 inputId = "chooseSpecies",
+                 label = "",
+                 # choices = paste0("car", 1:nrow(Temp_G_FILE_speciesinfo_02)),
+                 choices = paste0("species", 1:nrow(head(Temp_G_FILE_speciesinfo_02))),
+                 table_label = "Select a Species",
+                 pixie = . %>%
+                   sprinkle(bg_pattern_by = "rows") %>%
+                   sprinkle_table(pad = 7) 
+                 # %>%
+                 #   sprinkle_colnames('rownames(head(Temp_G_FILE_speciesinfo_02[,, drop = F]))' = "",
+                 #                     control = "")
+                 )
+  })
+  
+  output$choice_radio_Table <- renderText(input$chooseSpecies)
+  
+  
+  
   output$SP_Info <- DT::renderDataTable({
     Temp_G_FILE_speciesinfo_02[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
   }, server = TRUE)

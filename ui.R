@@ -476,15 +476,22 @@ shinyUI(
           
           
           tabPanel(MR_Name, fluid = TRUE, icon = icon("clipboard-list"),
-                   column(8, 
-                          actionButton('reset_SP_Info',label = "Reset", style = "float: right; margin-bottom: 15px;"), br(),
-                          DT::dataTableOutput("MR_Info")
-                   ),
-                   br(),br(),br(),br(),
-                   sidebarPanel(width = 3, Fluid = TRUE,
-                                
-                                plotOutput("MR_Result")
-                   )
+                   
+                   
+                   # column(8, 
+                   #        actionButton('reset_SP_Info',label = "Reset", style = "float: right; margin-bottom: 15px;"), br(),
+                   #        DT::dataTableOutput("MR_Info")
+                   # ),
+                   # 
+                   # br(),br(),br(),br(),
+                   # 
+                   # sidebarPanel(width = 3, Fluid = TRUE,
+                   #              
+                   #              plotOutput("MR_Result")
+                   # )
+                   
+                   1
+                   
                    
           ),  
           
@@ -1448,10 +1455,14 @@ shinyUI(
                                 fluidRow(
                                   shinyDirButton("SE_Dir_Project", SE_Name_WE_Project, SE_Name_WE_Project),
                                   verbatimTextOutput("SE_Dir_Project", placeholder = TRUE)
-                                )
+                                ),
                                 
-                                
-                   )
+                                fluidRow(
+                                  br(),br(),br(),
+                                  hr(),
+                                  verbatimTextOutput("choice_radio_Table"),
+                                  uiOutput('radio_Table')
+                                ))
           )
           
         )    
