@@ -592,6 +592,27 @@ ut <- c(ut[1],ut[2],ut[3],ut[8],ut[7],ut[6],ut[5],ut[4],ut[9])
 # }
 
 
+##### Path
+G <- reactiveValues()
+G$SE_Dir_Project <- "C:/MOTIVE_projects/proj1_2"
+G$SE_Dir_Climate <- "C:/MOTIVE_Ecosystem/DATA/Climate2"
+G$SE_Dir_Link <- "C:/MOTIVE_Ecosystem/DATA/Link" 
+G$SE_Dir_Species <- "C:/MOTIVE_Ecosystem/DATA/Species"
+G$SE_Dir_GIS <- "C:/MOTIVE_Ecosystem/DATA/GIS"
+G$SE_speciesindex <- "speciesname_final.csv"
+G$SE_specieslocation <- "shin_specieslocation.csv"
+G_FILE_speciesindex <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_speciesindex)), header = T, sep = ",")
+G_FILE_specieslocation <- read.csv(file.path(isolate(G$SE_Dir_Species), isolate(G$SE_specieslocation)), header = T, sep = ",")
+G_FILE_speciesfreq <- count(G_FILE_specieslocation, ID)
+G_FILE_speciesinfo <- inner_join(G_FILE_speciesfreq, G_FILE_speciesindex, by = "ID")
+
+G$SDM_MO_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Species_Distribution", sep = "")
+G$SDM_AO_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Species_Distribution", sep = "")
+G$IS_MO_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
+G$IS_VA_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
+G$IS_MI_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
+G$IS_AO_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
+
 
 
 Input_img <- "tif"  #asc",

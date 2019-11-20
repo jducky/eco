@@ -2187,7 +2187,8 @@ shinyServer(function(input, output, session) {
   
   
   output$SDM_OU_Species <- renderUI({
-    SDM_Name_Species_list <- test1_WD_List_Dirs
+    # SDM_Name_Species_list <- test1_WD_List_Dirs
+    SDM_Name_Species_list <- list.dirs(path = G$SDM_AO_Dir_Folder, full.names = FALSE, recursive = FALSE)
     SDM_Name_Species_selected <- SDM_Name_Species_list[1]
     selectInput("SDM_OU_Species", "Select a species",
                 choices = c(SDM_Name_Species_list),
