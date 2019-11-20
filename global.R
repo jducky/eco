@@ -528,6 +528,7 @@ G$IS_VA_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep 
 G$IS_AO_Dir_Folder <- NULL
 
 test1_WD_List_Dirs <- list.dirs(path = file.path(isolate(G$SE_Dir_Project), "Species_Distribution", "test1"), full.names = FALSE, recursive = FALSE)
+# test1_WD_List_Dirs <- list.dirs(path = file.path(isolate(G$SE_Dir_Project), "Species_Distribution", "교란종_식물11종"), full.names = FALSE, recursive = FALSE)
 test3_Invasive_Dir <- "C:\\MOTIVE_projects\\proj1\\Invasive_Species\\test3"
 test3_Invasive_F <- function(fileName) {
   read.csv(file.path(test3_Invasive_Dir, paste(fileName, ".csv", sep = "")))
@@ -1110,7 +1111,7 @@ SE_Language = "Korean"
      CD_Name_Year <- "예측년도"
      CD_Name_Year_list <- CD_Year_list
      CD_Name_Year_selected <- "2000" 
-     MR_Name <- "모델결과리스트"
+     MR_Name <- "환경설정"
      RP_Name <- "보고서"
      SDM_Name <- "종분포모형"
      SDM_Name_Model <- "모형구동"

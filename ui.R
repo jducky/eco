@@ -292,34 +292,34 @@ shinyUI(
                      
                    )
           ),    
-          
-          
-          tabPanel(MR_Name, fluid = TRUE, icon = icon("clipboard-list"),
+
+          tabPanel(MR_Name, fluid = TRUE, icon = icon("list"),
+                   tags$hr(),
                    
-                   
+                   fluidRow(
                    column(8,
-                          br(),br(),
                           # DT::dataTableOutput("MR_Info")
                           # uiOutput("MR_Info"),
-                          
-                          
-                          box(width = 12, title = "모델결과리스트", status = "primary", height = "500", solidHeader = T, collapsible = TRUE,
+                          box(width = 12, title = "모형목록", status = "primary", height = "500", solidHeader = T, collapsible = TRUE,
                               div(style = "overflow-y: scroll;height:400px;", width = "600",
                                   uiOutput("MR_Info")
                               )
                           )
                    ),
-                   
-                   br(),br(),br(),br(),
-                   
-                   sidebarPanel(width = 4, Fluid = TRUE,
-                                
-                                plotOutput("MR_Result")
-                   )
-                   
-                   
-                   
-                   
+                    column(4,
+                           plotOutput("MR_Result")
+                           )
+                   # br(),br(),br(),br(),
+                   # sidebarPanel(width = 4, Fluid = TRUE,
+                   #              plotOutput("MR_Result")
+                   # )
+                   ),
+                   fluidRow(
+                     box(width = 8, title = "프로젝트 폴더 선택", status = "primary", solidHeader = F, collapsible = TRUE,
+                         shinyDirButton("SE_Dir_Project", SE_Name_WE_Project, SE_Name_WE_Project),
+                         verbatimTextOutput("SE_Dir_Project", placeholder = TRUE)
+                     )
+                   ),
           ), 
           
           tabPanel(SP_Name, icon = icon("folder-open"),
@@ -619,65 +619,6 @@ shinyUI(
                    )
                    
           ),  
-          
-          
-           
-          
-          tabPanel(RP_Name, fluid = TRUE, icon = icon("clipboard-list"),
-                   
-                   h4("외래종변화"),
-                   sidebarPanel(width = 4,
-                                br(),br(),br(),
-                                h4("현재"),
-                                plotOutput("MR_Result0")
-                     
-                   ),
-                   style = "margin-top: 1px, margin-left: 1px",
-                   
-                   sidebarPanel( width = 8,
-                     
-                     fluidRow(
-                       
-                       column(4, 
-                              h4("RCP4.5 20"),
-                              plotOutput("MR_Result1")
-                       ),
-                       column(4,
-                              h4("RCP4.5 50"),
-                              plotOutput("MR_Result2")
-                       ),
-                       column(4,
-                              h4("RCP4.5 80"),
-                              plotOutput("MR_Result3")
-                       )
-                       
-                     ),
-                     style = "margin-top: 1px, margin-left: 1px",
-                     fluidRow(
-                       
-                       column(4, 
-                              h4("RCP4.5 20"),
-                              leafletOutput("CD_Map1") %>% withSpinner()
-                       ),
-                       column(4,
-                              h4("RCP4.5 50"),
-                              leafletOutput("CD_Map2") %>% withSpinner()
-                       ),
-                       column(4,
-                              h4("RCP4.5 80"),
-                              leafletOutput("CD_Map3") %>% withSpinner()
-                       )
-                       
-                     )
-                     
-                   )
-                   
-                   
-                   
-                   
-                   
-          ),  
-          
           
           
           tabPanel(SDM_Name, icon = icon("pie-chart"),
@@ -2410,11 +2351,6 @@ shinyUI(
                                 ),
                                 
                                 fluidRow(
-                                  shinyDirButton("SE_Dir_Project", SE_Name_WE_Project, SE_Name_WE_Project),
-                                  verbatimTextOutput("SE_Dir_Project", placeholder = TRUE)
-                                ),
-                                
-                                fluidRow(
                                   br(),br(),br(),
                                   hr(),
                                   verbatimTextOutput("choice_radio_Table"),
@@ -2542,6 +2478,55 @@ shinyUI(
                              tags$li("통합리포트")
                           )
                        ),
+            
+            tabPanel(RP_Name, fluid = TRUE, icon = icon("clipboard-list"),
+                     
+                     h4("외래종변화"),
+                     sidebarPanel(width = 4,
+                                  br(),br(),br(),
+                                  h4("현재"),
+                                  plotOutput("MR_Result0")
+                                  
+                     ),
+                     style = "margin-top: 1px, margin-left: 1px",
+                     
+                     sidebarPanel( width = 8,
+                                   
+                                   fluidRow(
+                                     
+                                     column(4, 
+                                            h4("RCP4.5 20"),
+                                            plotOutput("MR_Result1")
+                                     ),
+                                     column(4,
+                                            h4("RCP4.5 50"),
+                                            plotOutput("MR_Result2")
+                                     ),
+                                     column(4,
+                                            h4("RCP4.5 80"),
+                                            plotOutput("MR_Result3")
+                                     )
+                                     
+                                   ),
+                                   style = "margin-top: 1px, margin-left: 1px",
+                                   fluidRow(
+                                     
+                                     column(4, 
+                                            h4("RCP4.5 20"),
+                                            leafletOutput("CD_Map1") %>% withSpinner()
+                                     ),
+                                     column(4,
+                                            h4("RCP4.5 50"),
+                                            leafletOutput("CD_Map2") %>% withSpinner()
+                                     ),
+                                     column(4,
+                                            h4("RCP4.5 80"),
+                                            leafletOutput("CD_Map3") %>% withSpinner()
+                                     )
+                                   )
+                     )
+            ),  
+
                       tabPanel("종합리포트", fluid = TRUE,
                                tags$hr(),
                                sidebarLayout(
