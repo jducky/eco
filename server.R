@@ -1778,7 +1778,7 @@ shinyServer(function(input, output, session) {
     
     
     radioTable( 
-               tbl = G_FILE_modelresult[, 	c('PROJECT','WORK',	'REMARK'), drop = F],
+               tbl = G_FILE_modelresult[, 	c('PROJECT', 'CREATOR', 'WORK',	'REMARK'), drop = F],
                inputId = "ModelIndex",
                label = "",
                # choices = paste0("car", 1:nrow(Temp_G_FILE_speciesinfo_02)),
@@ -1798,7 +1798,6 @@ shinyServer(function(input, output, session) {
   })
   
   output$MR_Result <- renderPlot({
-    
     table <- G_FILE_modelresult
     # rs <- input$MR_Info_rows_selected
     rs <- input$ModelIndex
