@@ -1712,7 +1712,7 @@ shinyUI(
       ), # tab1
     
     tabItem(tabName = "report",
-            h2("[MOTIVE 리포트]"),
+            h2("[통합 리포트]"),
             fluidRow(
             tabBox(
               # title = "통합리포트",
@@ -1732,41 +1732,100 @@ shinyUI(
                              tags$li("통합리포트")
                           )
                        ),
-                       tabPanel("서식지변동", fluid = TRUE,
-                                tags$hr(),
-                                sidebarLayout(
-                                  sidebarPanel(width=3,
-                                               h3("연도별 서식지 변동"),
-                                               hr(),
-                                               # fluidRow( 
-                                               #   fileInput("myFile", "Choose a file", accept = c('image/png', 'image/jpeg'))
-                                               # ),
-                                               selectInput("RP_Type1", "Type of Map1",
-                                                           choices = RP_Name_Type_list,
-                                                           selected = RP_Name_Type1_selected
-                                               ),
-                                               selectInput("RP_Type2", "Type of Map2",
-                                                           choices = RP_Name_Type_list,
-                                                           selected = RP_Name_Type2_selected
-                                               ),
-                                               selectInput("RP_Type3", "Type of Map3",
-                                                           choices = RP_Name_Type_list,
-                                                           selected = RP_Name_Type3_selected
-                                               )
-                                  ),
-                                  mainPanel(
-                                    fluidRow(
-                                      valueBoxOutput("RP_Value_GN"),
-                                      valueBoxOutput("RP_Value_ST"),
-                                      valueBoxOutput("RP_Value_LS")
-                                    ),
-                                    uiOutput("MAP_2020"),
-                                    uiOutput("MAP_2050"),
-                                    uiOutput("MAP_2080"),
-                                    imageOutput("imgOut")
-                                  )
-                                )
-                       ),
+                      tabPanel("종합리포트", fluid = TRUE,
+                               tags$hr(),
+                               sidebarLayout(
+                                 sidebarPanel(width=3,
+                                              h3("종합 리포트"),
+                                              hr(),
+                                              # fileInput("myFile", "Choose a file", accept = c('image/png', 'image/jpeg')),
+                                              # tags$hr(),
+                                              print("<Current>"),
+                                              tags$img(src = "test.jpg", width = ww, height = hh, alt = "This is alternate text")
+                                              
+                                 ),
+                                 mainPanel(
+                                   fluidRow(
+                                     valueBox("KMA/KEI", "Model", icon = icon("thumbs-up"), color = "light-blue", width = 4),
+                                     valueBox("RCP4.5/8.5", "Scenario", icon = icon("list"), color = "green", width = 4),
+                                     valueBox("2030/50/80", "Years", icon = icon("calendar"), color = "yellow", width = 4)
+                                   ),
+                                   fluidRow(
+                                     box(
+                                       title = "[KMA - RCP4.5]", width = NULL, solidHeader = F, status = "info", collapsible = T,
+                                       column(4, class = "text-center",
+                                              print("<2020>"),
+                                              tags$img(src = "test.jpg", width = ww, height = hh)
+                                       ),
+                                       column(4, class = "text-center",
+                                              print("<2050>"),
+                                              tags$img(src = "test.jpg", width = ww, height = hh)
+                                       ),
+                                       column(4, class = "text-center",
+                                              print("<2080>"),
+                                              tags$img(src = "test.jpg", width = ww, height = hh)
+                                       )
+                                     )
+                                   ),
+                                   fluidRow(
+                                     box(
+                                       title = "[KMA - RCP8.5]", width = NULL, solidHeader = F, status = "warning", collapsible = T,
+                                       column(4, class = "text-center",
+                                              print("<2020>"),
+                                              tags$img(src = "test.jpg", width = ww, height = hh)
+                                       ),
+                                       column(4, class = "text-center",
+                                              print("<2050>"),
+                                              tags$img(src = "test.jpg", width = ww, height = hh)
+                                       ),
+                                       column(4, class = "text-center",
+                                              print("<2080>"),
+                                              tags$img(src = "test.jpg", width = ww, height = hh)
+                                       )
+                                     )
+                                   ),
+                                   fluidRow(
+                                     box(
+                                       title = "[KEI - RCP4.5]", width = NULL, solidHeader = F, status = "info", collapsible = T,
+                                       column(4, class = "text-center",
+                                              print("<2020>"),
+                                              tags$img(src = "test.jpg", width = ww, height = hh)
+                                       ),
+                                       column(4, class = "text-center",
+                                              print("<2050>"),
+                                              tags$img(src = "test.jpg", width = ww, height = hh)
+                                       ),
+                                       column(4, class = "text-center",
+                                              print("<2080>"),
+                                              tags$img(src = "test.jpg", width = ww, height = hh)
+                                       )
+                                     )
+                                   ),
+                                   fluidRow(
+                                     box(
+                                       title = "[KEI - RCP8.5]", width = NULL, solidHeader = F, status = "warning", collapsible = T,
+                                       column(4, class = "text-center",
+                                              print("<2020>"),
+                                              tags$img(src = "test.jpg", width = ww, height = hh)
+                                       ),
+                                       column(4, class = "text-center",
+                                              print("<2050>"),
+                                              tags$img(src = "test.jpg", width = ww, height = hh)
+                                       ),
+                                       column(4, class = "text-center",
+                                              print("<2080>"),
+                                              tags$img(src = "test.jpg", width = ww, height = hh)
+                                       )
+                                     )
+                                   )
+                                 )
+                               ),
+                               
+                               # tags$img(src = "yy.jpg")
+                               # img(src="C:/MOTIVE_projects/proj30/img/test.jpg")
+                               # imageOutput("image1", height=400)
+                      ),
+                       
                        tabPanel("취약성지수", fluid = TRUE,
                                 tags$hr(),
                                 sidebarLayout(
@@ -1865,99 +1924,40 @@ shinyUI(
                                   )
                                 )
                        ),
-                       tabPanel("통합 리포트", fluid = TRUE,
-                                tags$hr(),
-                                sidebarLayout(
-                                  sidebarPanel(width=3,
-                                               h3("통합 리포트"),
-                                               hr(),
-                                               # fileInput("myFile", "Choose a file", accept = c('image/png', 'image/jpeg')),
-                                               # tags$hr(),
-                                               print("<Current>"),
-                                               tags$img(src = "test.jpg", width = ww, height = hh, alt = "This is alternate text")
-                                               
-                                  ),
-                                  mainPanel(
-                                    fluidRow(
-                                      valueBox("KMA/KEI", "Model", icon = icon("thumbs-up"), color = "light-blue", width = 4),
-                                      valueBox("RCP4.5/8.5", "Scenario", icon = icon("list"), color = "green", width = 4),
-                                      valueBox("2030/50/80", "Years", icon = icon("calendar"), color = "yellow", width = 4)
-                                    ),
-                                    fluidRow(
-                                      box(
-                                        title = "[KMA - RCP4.5]", width = NULL, solidHeader = F, status = "info", collapsible = T,
-                                        column(4, class = "text-center",
-                                               print("<2020>"),
-                                               tags$img(src = "test.jpg", width = ww, height = hh)
-                                        ),
-                                        column(4, class = "text-center",
-                                               print("<2050>"),
-                                               tags$img(src = "test.jpg", width = ww, height = hh)
-                                        ),
-                                        column(4, class = "text-center",
-                                               print("<2080>"),
-                                               tags$img(src = "test.jpg", width = ww, height = hh)
-                                        )
-                                      )
-                                    ),
-                                    fluidRow(
-                                      box(
-                                        title = "[KMA - RCP8.5]", width = NULL, solidHeader = F, status = "warning", collapsible = T,
-                                        column(4, class = "text-center",
-                                               print("<2020>"),
-                                               tags$img(src = "test.jpg", width = ww, height = hh)
-                                        ),
-                                        column(4, class = "text-center",
-                                               print("<2050>"),
-                                               tags$img(src = "test.jpg", width = ww, height = hh)
-                                        ),
-                                        column(4, class = "text-center",
-                                               print("<2080>"),
-                                               tags$img(src = "test.jpg", width = ww, height = hh)
-                                        )
-                                      )
-                                    ),
-                                    fluidRow(
-                                      box(
-                                        title = "[KEI - RCP4.5]", width = NULL, solidHeader = F, status = "info", collapsible = T,
-                                        column(4, class = "text-center",
-                                               print("<2020>"),
-                                               tags$img(src = "test.jpg", width = ww, height = hh)
-                                        ),
-                                        column(4, class = "text-center",
-                                               print("<2050>"),
-                                               tags$img(src = "test.jpg", width = ww, height = hh)
-                                        ),
-                                        column(4, class = "text-center",
-                                               print("<2080>"),
-                                               tags$img(src = "test.jpg", width = ww, height = hh)
-                                        )
-                                      )
-                                    ),
-                                    fluidRow(
-                                      box(
-                                        title = "[KEI - RCP8.5]", width = NULL, solidHeader = F, status = "warning", collapsible = T,
-                                        column(4, class = "text-center",
-                                               print("<2020>"),
-                                               tags$img(src = "test.jpg", width = ww, height = hh)
-                                        ),
-                                        column(4, class = "text-center",
-                                               print("<2050>"),
-                                               tags$img(src = "test.jpg", width = ww, height = hh)
-                                        ),
-                                        column(4, class = "text-center",
-                                               print("<2080>"),
-                                               tags$img(src = "test.jpg", width = ww, height = hh)
-                                        )
-                                      )
-                                    )
-                                  )
-                                ),
-                                
-                                # tags$img(src = "yy.jpg")
-                                # img(src="C:/MOTIVE_projects/proj30/img/test.jpg")
-                                # imageOutput("image1", height=400)
-                       ),
+                        tabPanel("서식지변동", fluid = TRUE,
+                                 tags$hr(),
+                                 sidebarLayout(
+                                   sidebarPanel(width=3,
+                                                h3("연도별 서식지 변동"),
+                                                hr(),
+                                                # fluidRow( 
+                                                #   fileInput("myFile", "Choose a file", accept = c('image/png', 'image/jpeg'))
+                                                # ),
+                                                selectInput("RP_Type1", "Type of Map1",
+                                                            choices = RP_Name_Type_list,
+                                                            selected = RP_Name_Type1_selected
+                                                ),
+                                                selectInput("RP_Type2", "Type of Map2",
+                                                            choices = RP_Name_Type_list,
+                                                            selected = RP_Name_Type2_selected
+                                                ),
+                                                selectInput("RP_Type3", "Type of Map3",
+                                                            choices = RP_Name_Type_list,
+                                                            selected = RP_Name_Type3_selected
+                                                )
+                                   ),
+                                   mainPanel(
+                                     fluidRow(
+                                       valueBoxOutput("RP_Value_GN"),
+                                       valueBoxOutput("RP_Value_ST"),
+                                       valueBoxOutput("RP_Value_LS")
+                                     ),
+                                     uiOutput("MAP_2020"),
+                                     uiOutput("MAP_2050"),
+                                     uiOutput("MAP_2080")
+                                   )
+                                 )
+                        ),
                        tabPanel("맞춤형 리포트", fluid = TRUE,
                                 tags$hr(),
                                 sidebarLayout(
