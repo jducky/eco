@@ -18,6 +18,10 @@ packages <- c("shiny", "shinyWidgets", "shinyFiles", "shinyalert", "tiff", "sf",
 libraries <- c("shiny", "shinyWidgets", "shinyFiles", "shinyalert", "tiff", "sf", "SDMTools", "proj4", "gdata", "colorspace", "plyr", "leaflet", "RColorBrewer", "scales", "lattice", "dplyr", "maps", "sp", "biomod2", "raster", "rgdal", "ggplot2", "hrbrthemes", "plotly", "grid", "reshape", "stringr", "rgdal", "MigClim", "mgcv", "gsubfn", "DT", "fmsb", "data.table", "scales", "leaflet.minicharts", "manipulateWidget", "shinydashboard", "shinyBS","shinycssloaders", "shinyjs", "RPostgreSQL", "shinydust")
 
 
+library(webshot)
+library(imager)
+library(jpeg)
+library(datasets)
 
 # installing packages 
 CHK_packages <- setdiff(packages, rownames(installed.packages()))
@@ -639,7 +643,8 @@ DM_Models_list <- c("Species Distribution Model (SDM)" = "BIOMOD2",
                     "Dispersal Model (DM)" = "MIGCLIM")
 
 ST_Name <- "success"
-
+ww <- 360
+hh <- 270
 
 ##### Language
 SE_Language = "Korean"
@@ -1001,6 +1006,9 @@ SE_Language = "Korean"
                               "by Model" = "Model")
      VH_Name_Group2_selected <- "Model"
      HELP_Name <- "Help"
+     RP_Name_Type <- "Link Data"
+     RP_Name_Type_list <- RP_Type_list
+     RP_Name_Type_selected <- "gain"
      
      
      
@@ -1051,9 +1059,10 @@ SE_Language = "Korean"
                              "BIOCLIM 19 (추운 분기의 강수량)" = paste("bio19.", Input_img, sep = ""))
      CD_Models_list <- c("KMA (기상청)" = "KMA",
                          "KEI (한국환경정책평가연구원)" = "KEI")
-     
-     
-     
+     RP_Type_list  <- c("GAIN" = "GAIN",
+                        "STAY" = "STAY",
+                        "LOSS" = "LOSS",
+                        "GAP" = "GAP")
      
      SE_Name_System <- "MOTIVE ECOSYSTEM (생태계 기후변화 영향 및 취약성 평가모형)"
      SE_Name <- "환경설정"
@@ -1351,10 +1360,9 @@ SE_Language = "Korean"
      VH_Name_CD_Year_out_list <- CD_Year_list
      VH_Name_CD_Year_out_selected <- "2000"
      HELP_Name <- "도움말"
+     RP_Name_Type <- "Link Data"
+     RP_Name_Type_list <- RP_Type_list
+     RP_Name_Type1_selected <- "GAIN"
+     RP_Name_Type2_selected <- "STAY"
+     RP_Name_Type3_selected <- "LOSS"
    }
-
-
-
-
-System_Name <- ""
-

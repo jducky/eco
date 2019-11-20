@@ -3661,7 +3661,14 @@ shinyServer(function(input, output, session) {
   })
   
   output$IS_AO_SDM_model <- renderUI({
+# <<<<<<< HEAD
     destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$IS_CA_Species[1], "BIOMOD2", paste(as.name(paste(input$IS_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+# =======
+#     validate(
+#       need(input$data !="", "Please Select Data Folder...")
+#     )
+#     destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$IS_CA_Species[1], "BIOMOD2", paste(as.name(paste(input$IS_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+# >>>>>>> lx02jd2
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
     IS_Name_Models_list <- as.character(G_FILE_species_evaluation$Prediction)
@@ -3673,7 +3680,14 @@ shinyServer(function(input, output, session) {
   })
   
   output$IS_AO_SD_Map <- renderLeaflet({
+# <<<<<<< HEAD
     dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$IS_AO_Species, "BIOMOD2")
+# =======
+#     validate(
+#       need(input$data !="", "Please Select Data Folder...")
+#     )
+#     dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$IS_AO_Species, "BIOMOD2")
+# >>>>>>> lx02jd2
     Map <- paste("PRED", "_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_Project_year, "_", input$IS_AO_Species, "_", input$IS_AO_SDM_model, ".tif", sep = "")
     r <- raster(file.path(dir_path, Map))
     crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
@@ -4756,7 +4770,436 @@ shinyServer(function(input, output, session) {
       setView(lng = 128.00, lat = 36.00, zoom = 7)
   })
   
+  ###########################
+  #### START 이미지 변환 ####
+  ###########################
+  observeEvent(input$CV_TIF_Folder, {
+    volumes <- c(main = isolate(G$SE_Dir_Project))
+    shinyDirChoose(input, 'CV_TIF_Folder', roots = volumes) # , defaultPath = "/MOTIVE_projects", defaultRoot = G$SE_Dir_Project)
+    G$CV_TIF_Folder <<- parseDirPath(volumes, input$CV_TIF_Folder)
+    output$CV_TIF_Folder <- renderText({G$CV_TIF_Folder})
+  })
   
+  ## 변환할 TIFF 폴더 선택
+  output$CV_TIF_Time <- renderUI({
+    # validate(
+    #   need(input$data !="", "Please Select Data Folder...")
+    # )
+    setwd(G$CV_TIF_Folder)
+    rlist=list.files(getwd(), pattern="tif$", full.names=FALSE)
+    G$tl <- length(rlist)
+    estTime <- G$tl * 8 / 60
+    helpText("변환된 PNG 파일은 output 폴더(create & overwrite)에 저장됨")
+    sprintf("예상소요시간: %3.2f분 (%d개 x 8초/개)", estTime, G$tl)
+  })
+  
+  ## TIFF --> PNG 변환 (폴더내 파일 전체)
+  observeEvent(input$CV_TIF_run, {
+    withProgress(message = 'Converting TIF --> PNG ... ... ...', value = 0, {
+      # setwd(G$CV_TIF_Folder)
+      # setwd(choose.dir(getwd(), "TIFF --> PNG 폴더 선택"))
+      subDir <- "output"
+      if (!(file.exists(subDir))) { dir.create(file.path(getwd(),subDir)) }
+      rlist=list.files(getwd(), pattern="tif$", full.names=FALSE)
+      tl <- length(rlist)
+      print(tl)
+      n <- 0
+      
+      ## 이미지내에 삽입되는 Text(파일명) Style 설정
+      tag.map.title <- tags$style(HTML("
+        .leaflet-control.map-title {
+          transform: translate(0%,-100%);
+          position: relative !important;
+          left: 5%;
+          text-align: left;
+          padding-left: 5px; 
+          padding-right: 5px; 
+          background: rgba(220,220,220,0.75);
+          font-weight: bold;
+          font-size: 16px;
+        }
+      "))
+      
+      p <- progress_estimated(tl, min_time = 3)
+      time0 <- Sys.time()
+      print(Sys.time())
+      for(i in rlist) {
+        n <- n + 1
+        headStr <- str_sub(i,end=-5)
+        convertedIMG <- paste0(G$CV_TIF_Folder,"/",subDir,"/",headStr,".jpg")
+        print(convertedIMG)
+        r <- raster(i)
+        crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+        pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r), na.color = "transparent")
+        title <- tags$div(tag.map.title, HTML(headStr))
+        m <- leaflet() %>%
+          addTiles(
+            urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+            attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>') %>%
+          addRasterImage(r, colors = pal, opacity = 0.8) %>%
+          addLegend(pal = pal, values = values(r), title = "Legend") %>%
+          addControl(title, position = "bottomleft", className="map-title") %>%
+          setView(lng = 128.00, lat = 36.00, zoom = 7)
+        
+        ## Mapshot Method
+        # mapshot(m, file = convertedIMG) # 경로/파일명 한글이슈 있음!!
+        
+        ## Weshot Method
+        saveWidget(m, "temp.html", selfcontained = T)
+        webshot("temp.html", file = convertedIMG, cliprect = "viewport")
+        webshot
+        
+        G$timeNow <- Sys.time()
+        print(Sys.time())
+        integer()
+        G$timeDiff <- round(difftime(G$timeNow,time0,units="secs"), 1)
+        print(G$timeDiff)
+        minDiff <- round(G$timeDiff / 60, 1)
+        G$timeAvg <- round(G$timeDiff / n, 1)
+        G$timeEst <- round(G$timeAvg * tl, 1)
+        minEst <- round(G$timeEst / 60, 1)
+        G$timeRem <- G$timeEst - G$timeDiff
+        minRem <- round(G$timeRem / 60, 1)
+        incProgress(1/tl, detail=paste0("[",n,"/",tl,"] ",
+                                        "경과:",G$timeDiff,"s(",minDiff,"m) ",
+                                        "평균:",G$timeAvg,"s ",
+                                        "총예상:",G$timeEst,"s(",minEst,"m) ",
+                                        "잔여:",G$timeRem,"s(",minRem,"m)"
+        ))
+      }
+      
+    })
+  })
+  #########################
+  #### END 이미지 변환 ####
+  #########################
+  
+  ## 통합 리포트
+  # output$RP_Value_CM <- renderValueBox({
+  #   valueBox(input$DM_OU_Climate_model, "Climate Models",
+  #            icon = icon("credit-card"), color = "blue", width = 3
+  #   )
+  # })
+  
+  output$RP_Value_CM <- renderValueBox({
+    valueBox("KMA", "Climate Models",
+             icon = icon("credit-card"), color = "blue", width = 3
+    )
+  })
+  
+  output$RP_Value_CS <- renderValueBox({
+    valueBox("RCP4.5", "Climate Scenarios",
+             icon = icon("list"), color = "purple", width = 3
+    )
+  })  
+  
+  output$RP_Value_YR <- renderValueBox({
+    valueBox("2000~2080", "Projecting Years",
+             icon = icon("thumbs-up"), color = "yellow", width = 3
+    )
+  })  
+
+  ## 연도별 리포트
+  output$RP_Value_GN <- renderValueBox({
+    valueBox(input$RP_Type1, "Map Type", 
+             icon = icon("list"), color = "blue", width = 3
+    )
+  })
+  
+  output$RP_Value_ST <- renderValueBox({
+    valueBox(input$RP_Type2, "Map Type", 
+             icon = icon("list"), color = "purple", width = 3
+    )
+  })  
+  
+  output$RP_Value_LS <- renderValueBox({
+    valueBox(input$RP_Type3, "Map Type",
+             icon = icon("list"), color = "yellow", width = 3
+    )
+  })  
+  
+  output$MAP_2020 <- renderUI({
+    box(
+      title = "[2020]", width = NULL, solidHeader = F, status = "success", collapsible = T,
+      column(4, class = "text-center",
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      ),
+      column(4, class = "text-center",
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      ),
+      column(4, class = "text-center",
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      )
+    )
+  })
+  
+  output$MAP_2050 <- renderUI({
+    box(
+      title = "[2050]", width = NULL, solidHeader = F, status = "success", collapsible = T,
+      column(4, class = "text-center",
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      ),
+      column(4, class = "text-center",
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      ),
+      column(4, class = "text-center",
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      )
+    )
+  })
+
+  output$MAP_2080 <- renderUI({
+    box(
+      title = "[2080]", width = NULL, solidHeader = F, status = "success", collapsible = T,
+      column(4, class = "text-center",
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      ),
+      column(4, class = "text-center",
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      ),
+      column(4, class = "text-center",
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      )
+    )
+  })
+  ############################
+  
+  ## 취약성 2030
+  output$VH_45_30_01 <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  output$VH_45_30_05 <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  output$VH_45_30_10 <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  output$VH_45_30_UN <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  ## 취약성 2050
+  output$VH_45_50_01 <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  output$VH_45_50_05 <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  output$VH_45_50_10 <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  output$VH_45_50_UN <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  ## 취약성 2080
+  output$VH_45_80_01 <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  output$VH_45_80_05 <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  output$VH_45_80_10 <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  output$VH_45_80_UN <- renderPlot({
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  })
+  
+  ######################
+  output$SHOW_Map1 <- renderUI({
+    # fluidRow(
+      box(
+        title = "[민감종 변화 (GAIN / STAY / LOSS)]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
+        column(4, class = "text-center",
+               print("<GAIN>"),
+               tags$img(src = "test.jpg", width = ww, height = hh)
+        ),
+        column(4, class = "text-center",
+               print("<STAY>"),
+               tags$img(src = "test.jpg", width = ww, height = hh)
+        ),
+        column(4, class = "text-center",
+               print("<LOSS>"),
+               tags$img(src = "test.jpg", width = ww, height = hh)
+        )
+      )
+    # )
+  })
+    
+  output$SHOW_Map2 <- renderPlot({
+  fluidRow(
+    # box(
+    #   title = "[KMA - RCP8.5]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
+      column(4, class = "text-center",
+             ggplot(mtcars, aes(wt, mpg)) +
+               geom_point()
+      ),
+      column(4, class = "text-center",
+             ggplot(mtcars, aes(wt, mpg)) +
+               geom_point()
+      ),
+      column(4, class = "text-center",
+             ggplot(mtcars, aes(wt, mpg)) +
+               geom_point()
+      )
+    # )
+  )
+  })
+  
+  output$SHOW_Map3 <- renderPlot({
+    # box(
+    #   title = "[KMA - RCP8.5]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+    # )
+  })
+  
+  output$SHOW_Map4 <- renderPlot({
+    # box(
+    #   title = "[KMA - RCP8.5]", width = NULL, solidHeader = TRUE, status = "success", collapsible = T,
+    ggplot(mtcars, aes(wt, mpg)) + geom_point()
+    # )
+  })
+  
+  output$SHOW_Map31 <- renderPlot({
+    # Render a barplot
+    barplot(WorldPhones[,input$region]*1000, 
+            main=input$region,
+            ylab="Number of Telephones",
+            xlab="Year")
+  })
+  
+  output$SHOW_Map4 <- renderPlot({
+    dist <- input$dist
+    n <- input$n
+    
+    hist(d(),
+         main = paste("r", dist, "(", n, ")", sep = ""),
+         col = "#75AADB", border = "white")
+  })
+  
+  output$SHOW_MapX <- renderUI({
+    # fluidRow(
+    box(
+      title = "[KEI - RCP8.5]", width = NULL, solidHeader = TRUE, status = "warning", collapsible = T,
+      column(4, class = "text-center",
+             print("<2020>"),
+               ggplot(mtcars, aes(wt, mpg)) +
+                 geom_point()
+      ),
+      column(4, class = "text-center",
+             print("<2050>"),
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      ),
+      column(4, class = "text-center",
+             print("<2080>"),
+             tags$img(src = "test.jpg", width = ww, height = hh)
+      )
+    )
+  # )
+  })
+ 
+  output$RP_SS_AO_IV_Table <- DT::renderDataTable({
+    # destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SS_AO_Species, "BIOMOD2", paste(as.name(paste(input$SS_AO_Species, "_VINDEX.csv", sep = "")), sep = "", collapse = "--"))
+    vindex <- read.csv("test_VINDEX.csv")
+    vindex
+  })
+  
+  output$RP_SS_AO_IV_Plot <- renderPlot({
+    vindex <- read.csv("test_VINDEX.csv")
+    gplot <- ggplot(vindex, aes(x=Year, y=Area, color=Model))+
+      geom_point()+
+      facet_wrap(~ Climate_Scenario)+
+      labs(title = 'SPECIES',
+           x = 'Year of observation',
+           y = 'Number of species') +
+      theme(text=element_text(size=26, family="Arial")) +
+      theme_bw()
+    gplot
+    # ggsave("name_of_file.png", gplot, width=5, height=2)
+  })
+  
+  output$RP_SS_AO_IV_Plot2 <- renderPlot({
+    vindex <- read.csv("test_VINDEX.csv")
+    gplot <- ggplot(vindex, aes(x=Year, y=Area_Ratio, color=Model))+
+      geom_line()+
+      facet_wrap(~ Climate_Scenario)+
+      labs(title = 'AREA RATIO')+
+      theme_bw()+
+      theme(panel.grid.major.x = element_blank(), 
+            panel.grid.minor.x = element_blank(),
+            panel.grid.major.y = element_blank(),
+            panel.grid.minor.y = element_blank())
+    gplot
+  })
+  
+  output$RP_SS_AO_IV_Plot3 <- renderPlot({
+    vindex <- read.csv("test_VINDEX.csv")
+    gplot <- ggplot(vindex, aes(x=Year, y=Area, color=Model))+
+      geom_bar(stat="identity")+
+      facet_wrap(~ Climate_Scenario)+
+      labs(title = 'SPECIES',
+           x = 'Year of observation',
+           y = 'Number of species') +
+      theme(text=element_text(size=26, family="Arial")) +
+      theme_bw()
+    gplot
+    # ggsave("name_of_file.png", gplot, width=5, height=2)
+  })
+  
+  observeEvent(input$myFile, {
+    inFile <- input$myFile
+    if (is.null(inFile))
+      return()
+    
+    b64 <- base64enc::dataURI(file = inFile$datapath, mime = "image/png")
+    insertUI(
+      selector = "#image-container",
+      where = "afterBegin",
+      ui = img(src = b64, width = 400, height = 300)
+    )
+  })
+  
+  output$image1 <- renderImage({
+    # im <- "C:/MOTIVE_projects/proj30/img/test.jpg"
+    im <- load.image("C:/MOTIVE_projects/proj30/img/test.jpg")
+    plot(im)
+    # plot("C:/MOTIVE_projects/proj30/img/yy.jpg")
+    # rasterImage(im,100,300,150,350)
+  })
+
+  output$imgOut <- renderImage({
+    # im <- "C:/MOTIVE_projects/proj30/img/test.jpg"
+    # im <- "./images/car.jpg"
+    # im <- load.image("C:/MOTIVE_projects/proj30/img/test.jpg")
+    # plot(im)
+    # img(src = im, height = 240, width = 300)
+    list(src = "./images/car.jpg", height = 240, width = 300)
+  })
+
+  output$plot1 <- renderImage({
+    # A temp file to save the output. It will be deleted after renderImage
+    # sends it, because deleteFile=TRUE.
+    outfile <- tempfile(fileext='.png')
+
+    # Generate a png
+    png(outfile, width=400, height=400)
+    hist(rnorm(input$n))
+    dev.off()
+
+    # Return a list
+    list(src = outfile,
+         alt = "This is alternate text")
+  }, deleteFile = TRUE)
   
 })
 
