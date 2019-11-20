@@ -1369,7 +1369,7 @@ SE_Language = "Korean"
                         "LOSS" = "LOSS",
                         "GAP" = "GAP")
      MR_Name <- "환경설정"
-     RP_Name <- "보고서"
+     RP_Name <- "동적 리포트"
      RP_Name_Type <- "Link Data"
      RP_Name_Type_list <- RP_Type_list
      RP_Name_Type1_selected <- "GAIN"

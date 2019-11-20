@@ -1850,19 +1850,19 @@ shinyServer(function(input, output, session) {
   
   
   output$MR_Result0 <- renderPlot({
-    plot(raster("C:/MOTIVE_projects/proj30/Species_Distribution/test1/세뿔투구꽃/BIOMOD2/PRED_KMA_RCP4.5_2010_세뿔투구꽃_PA1_Full_GLM_byROC.tif"))
+    plot(raster("C:/MOTIVE_projects/proj30/Species_Distribution/교란종_식물11종/가시박/BIOMOD2/GAIN_PRED_KMA_RCP4.5_2010_가시박_PA1_Full_GLM_byROC.tif"))
     })
   
   output$MR_Result1 <- renderPlot({
-    plot(raster("C:/MOTIVE_projects/proj30/Species_Distribution/test1/세뿔투구꽃/BIOMOD2/PRED_KMA_RCP4.5_2010_세뿔투구꽃_PA1_Full_GLM_byROC.tif"))
+    plot(raster("C:/MOTIVE_projects/proj30/Species_Distribution/교란종_식물11종/가시박/BIOMOD2/GAIN_PRED_KMA_RCP4.5_2030_가시박_PA1_Full_GLM_byROC.tif"))
   })
   
   output$MR_Result2 <- renderPlot({
-    plot(raster("C:/MOTIVE_projects/proj30/Species_Distribution/test1/세뿔투구꽃/BIOMOD2/PRED_KMA_RCP4.5_2010_세뿔투구꽃_PA1_Full_GLM_byROC.tif"))
+    plot(raster("C:/MOTIVE_projects/proj30/Species_Distribution/교란종_식물11종/가시박/BIOMOD2/GAIN_PRED_KMA_RCP4.5_2050_가시박_PA1_Full_GLM_byROC.tif"))
   })
   
   output$MR_Result3 <- renderPlot({
-    plot(raster("C:/MOTIVE_projects/proj30/Species_Distribution/test1/세뿔투구꽃/BIOMOD2/PRED_KMA_RCP4.5_2010_세뿔투구꽃_PA1_Full_GLM_byROC.tif"))
+    plot(raster("C:/MOTIVE_projects/proj30/Species_Distribution/교란종_식물11종/가시박/BIOMOD2/GAIN_PRED_KMA_RCP4.5_2080_가시박_PA1_Full_GLM_byROC.tif"))
   })
   
   
@@ -4012,8 +4012,8 @@ shinyServer(function(input, output, session) {
   
   output$IS_AO_SR_SIDO_Stat <- renderPlot({
     
-    # df <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SD", ".csv", sep = "")))
-    df <- test3_Invasive_F("IS_SD")
+    df <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SD", ".csv", sep = "")))
+    # df <- test3_Invasive_F("IS_SD")
     X_NAME <- names(df[5])
     V_NAME <- paste("IS_SR_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_SDM_model, "_", input$IS_AO_Project_year, sep="")
     
@@ -4029,7 +4029,16 @@ shinyServer(function(input, output, session) {
                 position = position_dodge(0.9), size=3.5) +
       scale_fill_brewer(palette="Paired") +
       theme_minimal() +
-      coord_flip()
+      coord_flip() +
+      labs(title = "시도 외래종 분포") + labs(x = "시도") + labs(y = "외래종수")
+    
+    # ggplot(data=df, aes(x=df[[X_NAME]], y=df[[V_NAME]])) + #, fill=df[[X_NAME]])) +
+    #   geom_bar(stat="identity", position=position_dodge()) +
+    #   geom_text(aes(label=df[[V_NAME]]), vjust=1.6, color="white",
+    #             position = position_dodge(0.9), size=3.5) +
+    #   scale_fill_brewer(palette="Paired") +
+    #   theme_minimal() +
+    #   coord_flip()
   })
   #	geom_text(aes(label = Vulnerability_Area_Loss_Ratio), size = 3, hjust = 0.5, vjust = 3) + 
   
