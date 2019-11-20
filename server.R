@@ -3662,7 +3662,7 @@ shinyServer(function(input, output, session) {
   
   output$IS_AO_SDM_model <- renderUI({
 # <<<<<<< HEAD
-    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$IS_CA_Species[1], "BIOMOD2", paste(as.name(paste(input$IS_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$IS_AO_Species[1], "BIOMOD2", paste(as.name(paste(input$IS_AO_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
 # =======
 #     validate(
 #       need(input$data !="", "Please Select Data Folder...")
@@ -4308,7 +4308,7 @@ shinyServer(function(input, output, session) {
   
   output$VH_AO_SDM_model <- renderUI({
     input$reset_VH_AO
-    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$VH_CA_Species, "BIOMOD2", paste(as.name(paste(input$VH_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$VH_AO_Species, "BIOMOD2", paste(as.name(paste(input$VH_AO_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
     VH_Name_Models_lVHt <- as.character(G_FILE_species_evaluation$Prediction)

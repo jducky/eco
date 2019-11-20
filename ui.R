@@ -1342,8 +1342,8 @@ shinyUI(
                    
                    sidebarLayout(
                      sidebarPanel(width = 3, Fluid = TRUE,
-                                  shinyDirButton("IS_AO_Dir_Folder", "Invasive Assessment Output Folder", "Invasive Assessment Output Folder"),
-                                  verbatimTextOutput("IS_AO_Dir_Folder", placeholder = TRUE),
+                                  # shinyDirButton("IS_AO_Dir_Folder", "Invasive Assessment Output Folder", "Invasive Assessment Output Folder"),
+                                  # verbatimTextOutput("IS_AO_Dir_Folder", placeholder = TRUE),
                                   tags$hr(),
                                   uiOutput("IS_AO_Species"),
                                   tags$hr(),
