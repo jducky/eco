@@ -512,6 +512,10 @@ Temp_G_FILE_speciesinfo_02 <- G_FILE_speciesinfo_02
 Temp_G_FILE_specieslocation_02 <- G_FILE_specieslocation_02
 
 
+# 모델결과리스트 테이블
+G_FILE_modelresult <- read.csv("C:/MOTIVE_projects/model_result_list.csv", stringsAsFactors = F)
+
+
 
 G$IS_VA_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
 # G$IS_AO_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
@@ -595,6 +599,12 @@ CD_Year_list <- c("2000" = "2000",
                   "2060" = "2060",
                   "2070" = "2070",
                   "2080" = "2080")
+
+CD_Year_list_init <- c("2000" = "2000",
+                  "2030" = "2030",
+                  "2050" = "2050",
+                  "2080" = "2080")
+
 SDM_models_list <- c("GLM (Generalized Linear Model)" = "GLM",
                      "GAM (Generalized Additive Model)" = "GAM",
                      "GBM (Generalized Boosting Model)" = "GBM",
@@ -1151,7 +1161,7 @@ SE_Language = "Korean"
      DM_Name_CD_Scenarios_selected <- "RCP4.5"    
      DM_Name_CD_Year <- "예측년도"
      DM_Name_CD_Year_list <- CD_Year_list
-     DM_Name_CD_Year_selected <- CD_Year_list
+     DM_Name_CD_Year_selected <- CD_Year_list_init
      DM_Name_models <- "모델유형"
      DM_Name_models_list <- SDM_models_list
      DM_Name_models_selected <- "GLM"

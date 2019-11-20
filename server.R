@@ -1770,13 +1770,42 @@ shinyServer(function(input, output, session) {
     Temp_G_FILE_speciesinfo_02[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
   }, server = TRUE)
   
-  output$MR_Info <- DT::renderDataTable({
-    read.csv("C:/MOTIVE_projects/model_result_list.csv")
-  }, server = TRUE)
+
+  
+  output$MR_Info <- renderText({
+    
+    # G_FILE_modelresult[, 	c('project',	'species',	'work',	'remark'), drop = F]
+    
+    
+    radioTable( 
+               tbl = G_FILE_modelresult[, 	c('project','work',	'remark'), drop = F],
+               inputId = "ModelIndex",
+               label = "",
+               # choices = paste0("car", 1:nrow(Temp_G_FILE_speciesinfo_02)),
+               choices = 1:nrow(G_FILE_modelresult),
+               # table_label = "Select a Species",
+               pixie = . %>%
+                 sprinkle(bg_pattern_by = "rows") %>%
+                 sprinkle_table(pad = 10),
+               options(width = 500)
+               # %>%
+               #   sprinkle_colnames('rownames(head(Temp_G_FILE_speciesinfo_02[,, drop = F]))' = "",
+               #                     control = "")
+    )
+    
+    
+    
+  })
   
   output$MR_Result <- renderPlot({
-    table <- read.csv("C:/MOTIVE_projects/model_result_list.csv")
-    rs <- input$MR_Info_rows_selected
+    
+    table <- G_FILE_modelresult
+    # rs <- input$MR_Info_rows_selected
+    rs <- input$ModelIndex
+    
+    rs <- as.numeric(rs)
+    
+    print(rs)
     
     #print(table$filename[max(rs)])
     #
@@ -1788,19 +1817,22 @@ shinyServer(function(input, output, session) {
     
     
     #print(index)
-    if(is.null(rs)){
-       index <- 1
-    }else{
-       index <- rs  
-    }
+    # if(is.null(rs)){
+    #    index <- 1
+    # }else{
+    #    index <- rs  
+    # }
     
+    index <- rs  
     path <- table$path[index]
     filename <- table$filename[index]
+    
+    print(path)
+    print(filename)
     
     # path <- "C:/MOTIVE_projects/proj30/Species_Distribution/test1/세뿔투구꽃/BIOMOD2"
     # filename <- "PRED_KMA_RCP4.5_2010_세뿔투구꽃_PA1_Full_GLM_byROC.tif"
     
-    test <- "C:/MOTIVE_projects/proj30/Species_Distribution/test1/세뿔투구꽃/BIOMOD2/PRED_KMA_RCP4.5_2010_세뿔투구꽃_PA1_Full_GLM_byROC.tif"
     
     # if(is.null(path) || path == "NA"){
     #   path <- table$path[1]
@@ -1808,9 +1840,14 @@ shinyServer(function(input, output, session) {
     # if(is.null(filename) || filename == "NA"){
     #   filename <- table$filename[1]
     # }
+    
     print(paste(path,filename,sep="/",collapse = NULL))
     plot(raster(paste(path,filename,sep="/",collapse = NULL)))
+    
   })
+  
+  
+  
   
   output$MR_Result0 <- renderPlot({
     plot(raster("C:/MOTIVE_projects/proj30/Species_Distribution/test1/세뿔투구꽃/BIOMOD2/PRED_KMA_RCP4.5_2010_세뿔투구꽃_PA1_Full_GLM_byROC.tif"))
@@ -1862,6 +1899,10 @@ shinyServer(function(input, output, session) {
     rs <- input$SP_Info_rows_selected  # G_FILE_specieslocation   # st_read("species.shp")
     test_groups <<- NULL
     x <- NULL
+    if (length(rs) == 0) {
+      rs <- 1
+    }
+    
     if (length(rs)) {
       
       # print('rs')
@@ -1999,6 +2040,8 @@ shinyServer(function(input, output, session) {
         
         
         addLayersControl(
+          
+          
           overlayGroups = test_groups,
           # overlayGroups = ~test_groups[factor(K_NAME)],
           
@@ -2756,19 +2799,19 @@ shinyServer(function(input, output, session) {
                   Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
                   if (file.exists(file.path(dir_path, Map1))) {
                     R_Map1 <- raster(file.path(dir_path, Map1))
-                    plot(R_Map1, main = Map1)
+                    plot(R_Map1, main = Map1, style = "font-size: 24px;")
                   }
                 } else if (ly > 1 && ylist[1] == "2000") {
                   Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
                   if (file.exists(file.path(dir_path, Map1))) {
                     R_Map1 <- raster(file.path(dir_path, Map1))
-                    plot(R_Map1, main = Map1)
+                    plot(R_Map1, main = Map1, style = "font-size: 24px;")
                   }
                   for (y in 2:ly) {
                     Map2 <- paste("PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
                     if (file.exists(file.path(dir_path, Map2))) {
                       R_Map2 <- raster(file.path(dir_path, Map2))
-                      plot(R_Map2, main = Map2)
+                      plot(R_Map2, main = Map2, style = "font-size: 24px;")
                     }
                   }
                 } else {
@@ -2776,7 +2819,7 @@ shinyServer(function(input, output, session) {
                     Map2 <- paste("PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
                     if (file.exists(file.path(dir_path, Map2))) {
                       R_Map2 <- raster(file.path(dir_path, Map2))
-                      plot(R_Map2, main = Map2)
+                      plot(R_Map2, main = Map2, style = "font-size: 24px;")
                     }
                   }
                 }
@@ -3067,7 +3110,7 @@ shinyServer(function(input, output, session) {
   
   output$SS_AO_SDM_model <- renderUI({
     input$reset_SS_AO
-    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SS_CA_Species, "BIOMOD2", paste(as.name(paste(input$SS_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SS_AO_Species, "BIOMOD2", paste(as.name(paste(input$SS_AO_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
     SS_Name_Models_list <- as.character(G_FILE_species_evaluation$Prediction)
