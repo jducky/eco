@@ -2,10 +2,6 @@ library(shinythemes)
 ###
 shinyUI(
   
-  
-  
-  
-  
   dashboardPage(
     skin = "green",
 # <<<<<<< HEAD
@@ -58,7 +54,7 @@ shinyUI(
                      message = "시스템 오픈 일정"
                    ),
                    messageItem(
-                     from = "충남대학교",
+                     from = "국립생태원",
                      message = "회원등록 문의",
                      icon = icon("question"),
                      time = "13:45"
@@ -114,6 +110,10 @@ shinyUI(
     
 # >>>>>>> lx02jd2
     dashboardBody(
+      tags$head(
+        tags$style(type='text/css', 
+                   ".nav-tabs {font-size: 17px; 
+                   font-weight: bold}")),
       tabItems(
         tabItem(tabName = "ecosystem",
 
@@ -241,14 +241,14 @@ shinyUI(
 
       )),
       
-      tabItems(
-        tabItem(tabName = "dashboard",
-                "모형개요"
-                ),
-        tabItem(tabName = "widgets",
-                "위"
-        )
-      ),
+      # tabItems(
+      #   tabItem(tabName = "dashboard",
+      #           "모형개요"
+      #           ),
+      #   tabItem(tabName = "widgets",
+      #           "위"
+      #   )
+      # ),
       
       
       
@@ -280,16 +280,12 @@ shinyUI(
         br(),
         tabsetPanel(
           tabPanel(OV_Name,
-                   
                    hr(),
-                   
                    mainPanel(
-                     
-                     img(src="eco01.png"),
-                     hr(),
-                     img(src="eco02.png"),
+                     img(src="eco01.png", height="400"),
+                     # hr(),
+                     img(src="eco02.png", height="400"),
                      br(),br()
-                     
                    )
           ),    
 
@@ -2522,6 +2518,7 @@ shinyUI(
       
       # tags$footer( style = "background-color: grey;",
       fluidRow(
+        tags$hr(),
         column(6,
                tags$footer( style = "font-size: 11px;",
                  p("(우)30147 세종특별자치시 시청대로 370 세종국책연구단지 B동(과학 ·인프라동) 8층~11층 한국환경정책·평가연구원 국가기후변화적응센터"),
@@ -2532,10 +2529,15 @@ shinyUI(
                )
                ),
         column(6,
-               tags$select(
-                 tags$option('관련사이트')
-               ),
-               tags$button('이동')
+               selectInput("Input1", "관련사이트:", 
+                           choices = c('국립생태원'='1',
+                                       '국립생물자원관'='2',
+                                       '한국환경정책평가연구원'='3',
+                                       '환경부'='4'))
+               # tags$select(
+               #   tags$option('관련사이트')
+               # ),
+               # tags$button('이동')
                )
       )
       
@@ -2577,76 +2579,81 @@ shinyUI(
       ), # tab1
     
     tabItem(tabName = "report",
+            # theme = shinytheme("yeti"),            
             h2("[통합 리포트]"),
             fluidRow(
+
             tabBox(
               # title = "통합리포트",
               width = 12,
               id = "tabset1",
               # height = "250px",
               
+              
+              
             # tabPanel(HELP_Name,
             #          tabsetPanel(
-                       tabPanel("개요", fluid = TRUE, width = 3,
-                          # tags$hr(),
-                          sidebarPanel(width = 22,
-                             h3("MOTIVE ECOSYSTEM"),
-                             tags$li("서식지 변동"),
-                             tags$li("취약성지수"),
-                             tags$li("시나리오별 리포트"),
-                             tags$li("통합리포트")
-                          )
-                       ),
+             tabPanel("개요", fluid = TRUE, width = 3,
+                      tags$hr(),
+                # tags$hr(),
+                sidebarPanel(width = 22,
+                   h3("MOTIVE ECOSYSTEM"),
+                   tags$li("서식지 변동"),
+                   tags$li("취약성지수"),
+                   tags$li("시나리오별 리포트"),
+                   tags$li("통합리포트")
+                )
+             ),
             
-            tabPanel(RP_Name, fluid = TRUE, icon = icon("list"),
-                     
-                     h4("외래종변화"),
-                     sidebarPanel(width = 4,
-                                  br(),br(),br(),
-                                  h4("현재"),
-                                  plotOutput("MR_Result0")
-                                  
+            tabPanel(RP_Name, fluid = TRUE, icon = icon("folder-open"),
+                     tags$hr(),
+                 sidebarLayout(
+                     sidebarPanel(width = 3,
+                        h3("외래종변화"),
+                        hr(),
+                        h4("현재"),
+                        plotOutput("MR_Result0", height=350)
                      ),
-                     style = "margin-top: 1px, margin-left: 1px",
+                     # style = "margin-top: 1px, margin-left: 1px",
                      
-                     sidebarPanel( width = 8,
-                                   
-                                   fluidRow(
-                                     
-                                     column(4, 
-                                            h4("RCP4.5 20"),
-                                            plotOutput("MR_Result1")
-                                     ),
-                                     column(4,
-                                            h4("RCP4.5 50"),
-                                            plotOutput("MR_Result2")
-                                     ),
-                                     column(4,
-                                            h4("RCP4.5 80"),
-                                            plotOutput("MR_Result3")
-                                     )
-                                     
-                                   ),
-                                   style = "margin-top: 1px, margin-left: 1px",
-                                   fluidRow(
-                                     
-                                     column(4, 
-                                            h4("RCP4.5 20"),
-                                            leafletOutput("CD_Map1") %>% withSpinner()
-                                     ),
-                                     column(4,
-                                            h4("RCP4.5 50"),
-                                            leafletOutput("CD_Map2") %>% withSpinner()
-                                     ),
-                                     column(4,
-                                            h4("RCP4.5 80"),
-                                            leafletOutput("CD_Map3") %>% withSpinner()
-                                     )
-                                   )
+                     mainPanel( width = 8,
+                           fluidRow(
+                             # style = "height:200px; background-color: light-gray;",
+                             column(4, 
+                                    h4("[RCP4.5 20]"),
+                                    plotOutput("MR_Result1", height=270)
+                             ),
+                             column(4,
+                                    h4("[RCP4.5 50]"),
+                                    plotOutput("MR_Result2", height=270)
+                             ),
+                             column(4,
+                                    h4("[RCP4.5 80]"),
+                                    plotOutput("MR_Result3", height=270)
+                             )
+                           ),
+                        hr(),
+                           # style = "margin-top: 1px, margin-left: 1px",
+                           fluidRow(
+                             
+                             column(4, 
+                                    h4("[RCP4.5 20]"),
+                                    leafletOutput("CD_Map1", height=300, width=280) %>% withSpinner()
+                             ),
+                             column(4,
+                                    h4("[RCP4.5 50]"),
+                                    leafletOutput("CD_Map2", height=300, width=280) %>% withSpinner()
+                             ),
+                             column(4,
+                                    h4("[RCP4.5 80]"),
+                                    leafletOutput("CD_Map3", height=300, width=280) %>% withSpinner()
+                             )
+                           )
                      )
+                 )
             ),  
 
-                      tabPanel("종합리포트", fluid = TRUE, icon = icon("list"),
+                      tabPanel("종합리포트", fluid = TRUE, icon = icon("folder-open"),
                                tags$hr(),
                                sidebarLayout(
                                  sidebarPanel(width=3,
@@ -2740,7 +2747,7 @@ shinyUI(
                                # imageOutput("image1", height=400)
                       ),
                        
-                       tabPanel("취약성지수", fluid = TRUE, icon = icon("card"),
+                       tabPanel("취약성지수", fluid = TRUE, icon = icon("pie-chart"),
                                 tags$hr(),
                                 sidebarLayout(
                                   sidebarPanel(width=3,
@@ -2838,7 +2845,7 @@ shinyUI(
                                   )
                                 )
                        ),
-                        tabPanel("서식지변동", fluid = TRUE, icon = icon("card"),
+                        tabPanel("서식지변동", fluid = TRUE, icon = icon("pie-chart"),
                                  tags$hr(),
                                  sidebarLayout(
                                    sidebarPanel(width=3,
@@ -2872,7 +2879,7 @@ shinyUI(
                                    )
                                  )
                         ),
-                       tabPanel("맞춤형 리포트", fluid = TRUE, icon = icon("list"),
+                       tabPanel("맞춤형 리포트", fluid = TRUE, icon = icon("table"),
                                 tags$hr(),
                                 sidebarLayout(
                                   sidebarPanel(width=3,
@@ -2905,7 +2912,7 @@ shinyUI(
                                   )
                                 )
                        ),
-                       tabPanel("Convert Image", fluid = TRUE,
+                       tabPanel("SUPPORT", fluid = TRUE,
                                 tags$hr(),
                                 sidebarPanel(width = 4,
                                              fluid = TRUE,

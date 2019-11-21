@@ -1784,6 +1784,7 @@ shinyServer(function(input, output, session) {
                # choices = paste0("car", 1:nrow(Temp_G_FILE_speciesinfo_02)),
                choices = 1:nrow(G_FILE_modelresult),
                # table_label = "Select a Species",
+               selected= 1,
                pixie = . %>%
                  sprinkle(bg_pattern_by = "rows") %>%
                  sprinkle_table(pad = 10),
@@ -1899,7 +1900,7 @@ shinyServer(function(input, output, session) {
     test_groups <<- NULL
     x <- NULL
     if (length(rs) == 0) {
-      rs <- 1
+      rs <- 46
     }
     
     if (length(rs)) {
