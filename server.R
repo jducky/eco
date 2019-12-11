@@ -1813,7 +1813,7 @@ shinyServer(function(input, output, session) {
     #MR_Info_file <- read.csv(file.path(isolate(table$path[max(rs)]), isolate(table$filename[max(rs)])), header = T, sep = ",", stringsAsFactors = F , fileEncoding = "CP949", encoding = "UTF-8")
     #print(MR_Info_file)
     #print(paste(table$path[max(rs)], " ====== ", table$filename[max(rs)]))
-    #plot(raster("C:/MOTIVE_projects/proj30/Species_Distribution/test1/세뿔투구꽃/BIOMOD2/PRED_KMA_RCP4.5_2010_세뿔투구꽃_PA1_Full_GLM_byROC.tif"))
+    # plot(raster("C:/MOTIVE_projects/proj30/Species_Distribution/test1/세뿔투구꽃/BIOMOD2/PRED_KMA_RCP4.5_2010_세뿔투구꽃_PA1_Full_GLM_byROC.tif"))
     
     
     #print(index)
@@ -1842,8 +1842,8 @@ shinyServer(function(input, output, session) {
     # }
     
     print(paste(path,filename,sep="/",collapse = NULL))
-    plot(raster(paste(path,filename,sep="/",collapse = NULL)))
-    
+    # plot(raster(paste(path,filename,sep="/",collapse = NULL)))
+    plot(raster("C:/MOTIVE_projects/project_20191120/Species_Distribution/교란종_식물11종/가시박/BIOMOD2/PROJ_KMA_RCP4.5_2000_가시박_PA1_Full_GLM.tif"))
   })
   
   
