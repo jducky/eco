@@ -2161,8 +2161,8 @@ shinyServer(function(input, output, session) {
   
   output$LD_Summary <- renderPrint({
     
-    r <- raster(file.path(S251_path, "barrier11.tif"))
-    
+    # r <- raster(file.path(S251_path, "barrier11.tif"))
+    r <- raster(file.path("C:/Projects/2019_DATA/4. forest fire, landslide/forest fire/S251", "barrier11.tif"))
     summary(r)
   })
   
