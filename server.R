@@ -1134,12 +1134,12 @@ shinyServer(function(input, output, session) {
     volumes <- getVolumes()
     shinyDirChoose(input, 'SE_Dir_Project', roots = volumes)
     G$SE_Dir_Project <<- parseDirPath(volumes, input$SE_Dir_Project)
-    print('volumes()')
-    print(volumes())
-    print('input$SE_Dir_Project')
-    print(isolate(input$SE_Dir_Project))
-    print('G$SE_Dir_Project')
-    print(isolate(G$SE_Dir_Project))
+    # print('volumes()')
+    # print(volumes())
+    # print('input$SE_Dir_Project')
+    # print(isolate(input$SE_Dir_Project))
+    # print('G$SE_Dir_Project')
+    # print(isolate(G$SE_Dir_Project))
     output$SE_Dir_Project <- renderText({G$SE_Dir_Project})
   })
   
@@ -2229,7 +2229,7 @@ shinyServer(function(input, output, session) {
   output$CD_Histogram <- renderPlot({
     file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".tif", sep = ""))
     x <- raster(file)
-    crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+    crs(x) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
     hist(x, # breaks = bins, 
          col="orange",
          border="brown",
@@ -2375,9 +2375,30 @@ shinyServer(function(input, output, session) {
   #   }
   # })
   
-  
+  observeEvent(input$SDM_AO_Dir_Folder, {
+    volumes <- c(main = file.path(G$SE_Dir_Project, "Species_Distribution"))
+    shinyDirChoose(input, 'SDM_AO_Dir_Folder', roots = volumes) # , defaultPath = "/MOTIVE_projects", defaultRoot = G$SE_Dir_Project)
+    G$SDM_AO_Dir_Folder <<- parseDirPath(volumes, input$SDM_AO_Dir_Folder)
+    output$SDM_AO_Dir_Folder <- renderText({G$SDM_AO_Dir_Folder})
+    G$DM_SDM_Dir_Folder <<- G$SDM_AO_Dir_Folder
+    output$DM_SDM_Dir_Folder <- renderText({G$DM_SDM_Dir_Folder})
+  })
+
+  output$SDM_OU_Species0 <- renderUI({
+    volumes <- paste(G$SE_Dir_Project, "Species_Distribution", sep="/")
+    SDM_Name_Species_list0 <- list.dirs(path = volumes, full.names = FALSE, recursive = FALSE)
+    SDM_Name_Species_selected0 <- SDM_Name_Species_list0[1]
+    selectInput("SDM_OU_Species0", "Select Working Folder",
+                choices = c(SDM_Name_Species_list0),
+                selected = SDM_Name_Species_selected0
+    )
+    # G$SDM_AO_Dir_Folder <<- paste(volumes, SDM_Name_Species_selected0, sep="/")
+  })
+    
   output$SDM_OU_Species <- renderUI({
-    SDM_Name_Species_list <- test1_WD_List_Dirs
+    selfile <- paste(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species0, sep="/")
+    SDM_Name_Species_list <- list.dirs(path = selfile, full.names = FALSE, recursive = FALSE)
+    # SDM_Name_Species_list <- list.dirs(path = G$SDM_AO_Dir_Folder, full.names = FALSE, recursive = FALSE)
     SDM_Name_Species_selected <- SDM_Name_Species_list[1]
     selectInput("SDM_OU_Species", "Select a species",
                 choices = c(SDM_Name_Species_list),

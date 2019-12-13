@@ -617,31 +617,37 @@ shinyUI(
                    sidebarLayout(
                      sidebarPanel(width = 3, Fluid = TRUE,
                                   
-                                  uiOutput("SDM_OU_Species"),
-                                  # tags$hr(),
-                                  
-                                  uiOutput("SDM_OU_Projection_model"),
-                                  # tags$hr(),
-                                  
-                                  uiOutput("SDM_OU_Prediction_model"),
-                                  # tags$hr(),
-                                  
-                                  # Input: Checkbox if file has header ----
-                                  radioButtons("SDM_OU_Climate_model", SDM_Name_CD_Models_out,
-                                               choices = c(SDM_Name_CD_Models_out_list),
-                                               selected = SDM_Name_CD_Models_out_selected
-                                  ),
-                                  
-                                  # Input: Checkbox if file has header ----
-                                  radioButtons("SDM_OU_Climate_scenario", SDM_Name_CD_Scenarios_out,
-                                               choices = c(SDM_Name_CD_Scenarios_out_list),
-                                               selected = SDM_Name_CD_Scenarios_out_selected
-                                  ),
-                                  
-                                  
-                                  sliderInput("SDM_OU_Project_year", label = SDM_Name_CD_Year_out, min = 2000,
-                                              max = 2080, value = 2000, step = 10, sep = "",
-                                              animate = animationOptions(interval = 10000))
+                          # shinyDirButton("SDM_AO_Dir_Folder", SDM_Name_Dir, SDM_Name_Dir),
+                          # verbatimTextOutput("SDM_AO_Dir_Folder", placeholder = TRUE),
+                          # tags$hr(),
+                          
+                          uiOutput("SDM_OU_Species0"),
+                          
+                          uiOutput("SDM_OU_Species"),
+                          # tags$hr(),
+                          
+                          uiOutput("SDM_OU_Projection_model"),
+                          # tags$hr(),
+                          
+                          uiOutput("SDM_OU_Prediction_model"),
+                          # tags$hr(),
+                          
+                          # Input: Checkbox if file has header ----
+                          radioButtons("SDM_OU_Climate_model", SDM_Name_CD_Models_out,
+                                       choices = c(SDM_Name_CD_Models_out_list),
+                                       selected = SDM_Name_CD_Models_out_selected
+                          ),
+                          
+                          # Input: Checkbox if file has header ----
+                          radioButtons("SDM_OU_Climate_scenario", SDM_Name_CD_Scenarios_out,
+                                       choices = c(SDM_Name_CD_Scenarios_out_list),
+                                       selected = SDM_Name_CD_Scenarios_out_selected
+                          ),
+                          
+                          
+                          sliderInput("SDM_OU_Project_year", label = SDM_Name_CD_Year_out, min = 2000,
+                                      max = 2080, value = 2000, step = 10, sep = "",
+                                      animate = animationOptions(interval = 10000))
                      ),
                      
                      
