@@ -1,11 +1,6 @@
+### lx02
 library(shinythemes)
-###
 shinyUI(
-  
-  
-  
-  
-  
   dashboardPage(
     skin = "green",
     dashboardHeader(title = "MOTIVE Ecosystem"),
