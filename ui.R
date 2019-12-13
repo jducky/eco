@@ -365,15 +365,15 @@ shinyUI(
                                 ),
                                 
                                 mainPanel(
-                                  bsCollapse(
-                                    bsCollapsePanel("Summary & Histogram",
-                                                    style = ST_Name,
-                                                    fluidRow(
-                                                      column(5,verbatimTextOutput("SP_Summary")),
-                                                      column(5,plotOutput("SP_Histogram"))
-                                                    ) 
-                                    )
-                                  ),
+                                  # bsCollapse(
+                                  #   bsCollapsePanel("Summary & Histogram",
+                                  #                   style = ST_Name,
+                                  #                   fluidRow(
+                                  #                     column(5,verbatimTextOutput("SP_Summary")),
+                                  #                     column(5,plotOutput("SP_Histogram"))
+                                  #                   ) 
+                                  #   )
+                                  # ),
                                   
                                   fluidRow(
                                     
@@ -533,8 +533,8 @@ shinyUI(
                        bsCollapsePanel("Summary & Histogram",
                                        style = ST_Name,
                                        fluidRow(
-                                         column(5,verbatimTextOutput("LD_Summary")),
-                                         column(6,plotOutput("LD_Histogram"))
+                                         column(3,verbatimTextOutput("LD_Summary")),
+                                         column(9,plotOutput("LD_Histogram"))
                                        ) 
                        ),
                        
@@ -588,7 +588,7 @@ shinyUI(
                                         style = ST_Name,
                                         fluidRow(
                                           column(4,verbatimTextOutput("CD_Summary")),
-                                          column(6,plotOutput("LD_Histogram2"))
+                                          column(6,plotOutput("CD_Histogram"))
                                         ) 
                         ),
                        fluidRow(

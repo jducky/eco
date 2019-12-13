@@ -2167,17 +2167,18 @@ shinyServer(function(input, output, session) {
   })
   
   output$LD_Histogram <- renderPlot({
-    
-    #    r_asc <- read.asc(file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = "")))
-    x <- raster(file.path(S251_path, "barrier11.tif"))
-    #    bins <- seq(which.min(x), which.max(x), length.out = input$bins + 1)
-    
+    r_asc <- read.asc(file.path(G$SE_Dir_Link, input$LD_Climate_model, input$LD_Climate_scenario, input$LD_Project_year, paste(input$LD_Variables, ".asc", sep = "")))
+    x <- raster(r_asc)
     hist(x, # breaks = bins, 
          col="orange",
          border="brown",
          xlab = input$CD_Variables,
          main = "Histogram")
     
+    # r_asc <- read.asc(file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = "")))
+    # x <- raster(file.path(S251_path, "barrier11.tif"))
+    # bins <- seq(which.min(x), which.max(x), length.out = input$bins + 1)
+
   })  
   
   output$LD_Histogram2 <- renderPlot({
@@ -2219,37 +2220,26 @@ shinyServer(function(input, output, session) {
   
   
   output$CD_Summary <- renderPrint({
-    
-    #    file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = ""))
-    #    r_asc <- read.asc(file)
-    #    r <- raster(r_asc)
     file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".tif", sep = ""))
     r <- raster(file)
     crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
-    
     summary(r)
   })
   
   output$CD_Histogram <- renderPlot({
-    
-    #    file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = ""))
-    #    r_asc <- read.asc(file)
-    #    x <- raster(r_asc)
     file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".tif", sep = ""))
     x <- raster(file)
     crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
-    #    bins <- seq(which.min(x), which.max(x), length.out = input$bins + 1)
-    
     hist(x, # breaks = bins, 
          col="orange",
          border="brown",
          xlab = input$CD_Variables,
          main = "Histogram")
-    
   })
   
   output$CD_Map <- renderLeaflet({
-    
+
+        
     #    file <- file.path(G$SE_Dir_Climate, input$CD_Climate_model, input$CD_Climate_scenario, input$CD_Project_year, paste(input$CD_Variables, ".asc", sep = ""))
     #    r_asc <- read.asc(file)
     #    r <- raster(r_asc)
