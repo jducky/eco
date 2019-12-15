@@ -669,7 +669,7 @@ shinyUI(
                                 column(6,
                                        # tags$h3("<Probability Map>", style = "text-align: center;"),
                                        box(status = "success",
-                                           title = "PROBABILITY MAP", width = 20, height = 45, collapsible = T, collapsed = T
+                                           title = SDM_Name_Model_Out_Probability, width = 20, height = 45, collapsible = T, collapsed = T
                                        ),
                                        
                                        leafletOutput("SDM_OU_Probability_map") %>% withSpinner(),
@@ -683,7 +683,7 @@ shinyUI(
                                 column(6,
                                        # tags$h3("<Predicted Map>", style = "text-align: center;"),
                                        box(status = "success",
-                                           title = "PREDICTED MAP", width = 20, height = 45, collapsible = T, collapsed = T
+                                           title = SDM_Name_Model_Out_Prediction, width = 20, height = 45, collapsible = T, collapsed = T
                                        ),
                                        # tags$h3("<Predicted Map>"),
                                        
@@ -895,10 +895,12 @@ shinyUI(
                      
                      sidebarPanel(width = 3, Fluid = TRUE,
                                   
+                                  uiOutput("DM_OU_Species0"),
+                                  
                                   uiOutput("DM_OU_Species"),
                                   tags$hr(),
                                   
-                                  uiOutput('DM_OU_SDM_model'),
+                                  # uiOutput('DM_OU_SDM_model'),
                                   
                                   fluidRow(
                                     checkboxGroupInput("DM_OU_Dispersal_type", DM_Name_DM_Models,

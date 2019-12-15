@@ -456,6 +456,7 @@ G$IS_AO_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep 
 Input_img <- "tif"  #asc",
 Output_img <- "tif"
 
+G$NNN <- NULL
 
 ### 시작 윈도우, 리눅스 경로 ###
 
