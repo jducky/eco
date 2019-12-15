@@ -1024,28 +1024,18 @@ shinyServer(function(input, output, session) {
   })  
   
   ## DM Value
-  output$DM_Value_SP <- renderValueBox({
-    valueBox("구상나무", "선택종명",
-             icon = icon("tree"), color = "green", width =3
-    )
-  })
-  
-  output$DM_Value_CM <- renderValueBox({
-    valueBox(input$DM_OU_Climate_model, "Climate Models",
+  output$DM_Value_WK <- renderValueBox({
+    valueBox(input$DM_OU_Species0, "Work Name",
              icon = icon("credit-card"), color = "blue", width = 3
     )
   })
   
-  output$DM_Value_CS <- renderValueBox({
-    valueBox(input$DM_OU_Climate_scenario, "Climate Scenarios",
-             icon = icon("list"), color = "purple", width = 3
-    )
-  })  
+  output$DM_Value_SP = renderUI({
+    infoBox("Species", toString(input[['DM_OU_Species']]), icon = icon("tree"))
+  })
   
-  output$DM_Value_YR <- renderValueBox({
-    valueBox(input$DM_OU_Project_year, "Projecting Years",
-             icon = icon("thumbs-up"), color = "yellow", width = 3
-    )
+  output$DM_Value_YR <- renderUI({
+    infoBox("Years", toString(input[['DM_OU_Project_year']]), icon = icon("thumbs-up"))
   })  
   
   ## IS Value
@@ -2596,7 +2586,7 @@ shinyServer(function(input, output, session) {
   
   output$SDM_OU_PROJ_Summary <- renderPrint({
     
-    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SDM_OU_Species, "BIOMOD2")
+    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species0, input$SDM_OU_Species, "BIOMOD2")
     Map <- paste("PROJ", "_", input$SDM_OU_Climate_model, "_", input$SDM_OU_Climate_scenario, "_", input$SDM_OU_Project_year, "_", input$SDM_OU_Species, "_", input$SDM_OU_Projection_model, ".tif", sep = "")
     r <- raster(file.path(dir_path, Map))
     summary(r)
@@ -2605,7 +2595,7 @@ shinyServer(function(input, output, session) {
   
   output$SDM_OU_PROJ_Histogram <- renderPlot({
     
-    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SDM_OU_Species, "BIOMOD2")
+    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species0, input$SDM_OU_Species, "BIOMOD2")
     
     Map <- paste("PROJ", "_", input$SDM_OU_Climate_model, "_", input$SDM_OU_Climate_scenario, "_", input$SDM_OU_Project_year, "_", input$SDM_OU_Species, "_", input$SDM_OU_Projection_model, ".tif", sep = "")
     x <- raster(file.path(dir_path, Map))
@@ -2639,22 +2629,22 @@ shinyServer(function(input, output, session) {
       addRasterImage(r, colors = pal, opacity = 0.8,) %>%
       addLegend(pal = pal, values = values(r), title = "Legend")  %>%
       
-      setView(lng = 127.00, lat = 38.00, zoom = 6)
+      setView(lng = 127.00, lat = 36.00, zoom = 6)
     
   })  
   
   output$SDM_OU_PRED_Summary <- renderPrint({
     
-    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SDM_OU_Species, "BIOMOD2")
+    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species0, input$SDM_OU_Species, "BIOMOD2")
     Map <- paste("PRED", "_", input$SDM_OU_Climate_model, "_", input$SDM_OU_Climate_scenario, "_", input$SDM_OU_Project_year, "_", input$SDM_OU_Species, "_", input$SDM_OU_Prediction_model, ".tif", sep = "")
     r <- raster(file.path(dir_path, Map))
-    
+    # describe(r)
     summary(r)
   })
   
   output$SDM_OU_PRED_Histogram <- renderPlot({
     
-    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SDM_OU_Species, "BIOMOD2")
+    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SDM_OU_Species0, input$SDM_OU_Species, "BIOMOD2")
     Map <- paste("PRED", "_", input$SDM_OU_Climate_model, "_", input$SDM_OU_Climate_scenario, "_", input$SDM_OU_Project_year, "_", input$SDM_OU_Species, "_", input$SDM_OU_Prediction_model, ".tif", sep = "")
     x <- raster(file.path(dir_path, Map))
     
@@ -2756,38 +2746,26 @@ shinyServer(function(input, output, session) {
                        choices = c(DM_Name_Species_list),
                        selected = DM_Name_Species_selected
     )
-    
+  })
+  
+  output$DM_OU_SDM_model <- renderUI({
     destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$DM_OU_Species0, input$DM_OU_Species[1], "BIOMOD2", paste(as.name(paste(input$DM_OU_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
     DM_Name_Models_list <- as.character(G_FILE_species_evaluation$Prediction)
     DM_Name_Models_selected <- DM_Name_Models_list[1]
-    G$NNN <<- DM_Name_Models_selected
-    # checkboxGroupInput("DM_OU_SDM_model", "Select models",
-    #                    choices = c(DM_Name_Models_list),
-    #                    selected = DM_Name_Models_selected
-    # )
+    checkboxGroupInput("DM_OU_SDM_model", "Select models",
+                       choices = c(DM_Name_Models_list),
+                       selected = DM_Name_Models_selected
+    )
   })
-  
-  # output$DM_OU_SDM_model <- renderUI({
-  #   destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$DM_OU_Species0, input$DM_OU_Species[1], "BIOMOD2", paste(as.name(paste(input$DM_OU_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
-  #   all_eval <- read.csv(destfile)
-  #   G_FILE_species_evaluation <<- all_eval
-  #   DM_Name_Models_list <- as.character(G_FILE_species_evaluation$Prediction)
-  #   DM_Name_Models_selected <- DM_Name_Models_list[1]
-  #   checkboxGroupInput("DM_OU_SDM_model", "Select models",
-  #                      choices = c(DM_Name_Models_list),
-  #                      selected = DM_Name_Models_selected
-  #   )
-  # })
   
   output$DM_OU_UI_plot <- renderUI({
     # setting Climate change scenarios, Future time, Species and current environmental path
     slist <- input$DM_OU_Species
     dlist <- input$DM_OU_Climate_model  # c("KMA") # c("KMA", "KEI", "WORLDCLIM")
     clist <- input$DM_OU_Climate_scenario  # c("RCP4.5") # c("RCP4.5", "RCP8.5")
-    mlist <- G$NNN # c("PA1_Full_GLM_byROC")
-    # mlist <- input$DM_OU_SDM_model # c("PA1_Full_GLM_byROC")
+    mlist <- input$DM_OU_SDM_model # c("PA1_Full_GLM_byROC")
     ylist <- input$DM_OU_Project_year
     dtlist <- input$DM_OU_Dispersal_type
     
@@ -2820,8 +2798,7 @@ shinyServer(function(input, output, session) {
     slist <- input$DM_OU_Species
     dlist <- input$DM_OU_Climate_model  # c("KMA") # c("KMA", "KEI", "WORLDCLIM")
     clist <- input$DM_OU_Climate_scenario  # c("RCP4.5") # c("RCP4.5", "RCP8.5")
-    mlist <- G$NNN # c("PA1_Full_GLM_byROC")
-    # mlist <- input$DM_OU_SDM_model # c("PA1_Full_GLM_byROC")
+    mlist <- input$DM_OU_SDM_model # c("PA1_Full_GLM_byROC")
     ylist <- input$DM_OU_Project_year
     dtlist <- input$DM_OU_Dispersal_type
     
@@ -2844,9 +2821,7 @@ shinyServer(function(input, output, session) {
     
     for (s in slist) {
       for (dt in dtlist) {
-        dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", s, dt)	 
-        print('dir_path')
-        print(dir_path)
+        dir_path <- file.path(G$DM_AO_Dir_Folder, s, dt)
         for (d in dlist) {
           for (c in clist) {
             for (m in mlist) {
@@ -2855,19 +2830,19 @@ shinyServer(function(input, output, session) {
                   Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
                   if (file.exists(file.path(dir_path, Map1))) {
                     R_Map1 <- raster(file.path(dir_path, Map1))
-                    plot(R_Map1, main = Map1, style = "font-size: 24px;")
+                    plot(R_Map1, main = Map1)
                   }
                 } else if (ly > 1 && ylist[1] == "2000") {
                   Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
                   if (file.exists(file.path(dir_path, Map1))) {
                     R_Map1 <- raster(file.path(dir_path, Map1))
-                    plot(R_Map1, main = Map1, style = "font-size: 24px;")
+                    plot(R_Map1, main = Map1)
                   }
                   for (y in 2:ly) {
                     Map2 <- paste("PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
                     if (file.exists(file.path(dir_path, Map2))) {
                       R_Map2 <- raster(file.path(dir_path, Map2))
-                      plot(R_Map2, main = Map2, style = "font-size: 24px;")
+                      plot(R_Map2, main = Map2)
                     }
                   }
                 } else {
@@ -2875,7 +2850,7 @@ shinyServer(function(input, output, session) {
                     Map2 <- paste("PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
                     if (file.exists(file.path(dir_path, Map2))) {
                       R_Map2 <- raster(file.path(dir_path, Map2))
-                      plot(R_Map2, main = Map2, style = "font-size: 24px;")
+                      plot(R_Map2, main = Map2)
                     }
                   }
                 }

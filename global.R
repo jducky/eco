@@ -24,6 +24,7 @@ library(webshot)
 library(imager)
 library(jpeg)
 library(datasets)
+library(psych)
 
 # installing packages 
 CHK_packages <- setdiff(packages, rownames(installed.packages()))
