@@ -1038,6 +1038,21 @@ shinyServer(function(input, output, session) {
     infoBox("Years", toString(input[['DM_OU_Project_year']]), icon = icon("thumbs-up"))
   })  
   
+  ## SS Value
+  output$SS_Value_WK <- renderValueBox({
+    valueBox(input$SS_AO_Species0, "Work Name",
+             icon = icon("list"), color = "blue", width = 3
+    )
+  })
+  
+  output$SS_Value_SP = renderUI({
+    infoBox("Species", toString(input[['SS_AO_Species']]), icon = icon("tree"))
+  })
+  
+  output$SS_Value_YR <- renderUI({
+    infoBox("Years", toString(input[['SS_AO_Project_year']]), icon = icon("calendar"))
+  })  
+  
   ## IS Value
   output$IS_Value_CM <- renderValueBox({
     valueBox(input$IS_AO_Dispersal_type, IS_Name_DM_Models,
@@ -2740,6 +2755,7 @@ shinyServer(function(input, output, session) {
   
   output$DM_OU_Species <- renderUI({
     selfile <- paste(G$SE_Dir_Project, "Species_Distribution", input$DM_OU_Species0, sep="/")
+    G$DM_AO_Dir_Folder <<- selfile
     DM_Name_Species_list <- list.dirs(path = selfile, full.names = FALSE, recursive = FALSE)
     DM_Name_Species_selected <- DM_Name_Species_list[1]
     checkboxGroupInput("DM_OU_Species", "Select a species",
@@ -2863,6 +2879,35 @@ shinyServer(function(input, output, session) {
     ##### End Plot GAP output =========================================
   })
   
+  observeEvent(input$SS_MO_Dir_Folder, {
+    volumes <- c(main = file.path(G$SE_Dir_Project, "Species_Distribution"))
+    shinyDirChoose(input, 'SS_MO_Dir_Folder', roots = volumes) # , defaultPath = "/MOTIVE_projects", defaultRoot = G$SE_Dir_Project)
+    G$SS_MO_Dir_Folder <<- parseDirPath(volumes, input$SS_MO_Dir_Folder)
+    output$SS_MO_Dir_Folder <- renderText({G$SS_MO_Dir_Folder})
+    G$SS_AO_Dir_Folder <<- G$SS_MO_Dir_Folder
+    output$SS_AO_Dir_Folder <- renderText({G$SS_AO_Dir_Folder})
+  })
+  
+  output$SS_CA_Species <- renderUI({
+    SS_Name_Species_list <- list.dirs(path = G$SS_MO_Dir_Folder, full.names = FALSE, recursive = FALSE)
+    SS_Name_Species_selected <- SS_Name_Species_list[1]
+    checkboxGroupInput("SS_CA_Species", "Select a species",
+                       choices = c(SS_Name_Species_list),
+                       selected = SS_Name_Species_selected
+    )
+  })
+  
+  output$SS_CA_SDM_model <- renderUI({
+    destfile <- file.path(G$SS_MO_Dir_Folder, input$SS_CA_Species[1], "BIOMOD2", paste(as.name(paste(input$SS_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+    all_eval <- read.csv(destfile)
+    G_FILE_species_evaluation <<- all_eval
+    SS_Name_Models_list <- as.character(G_FILE_species_evaluation$Prediction)
+    SS_Name_Models_selected <- SS_Name_Models_list[1]
+    checkboxGroupInput("SS_CA_SDM_model", "Select models",
+                       choices = c(SS_Name_Models_list),
+                       selected = SS_Name_Models_selected
+    )
+  })
   
   observeEvent(input$SS_CA_Action_change, {
     #####========================================================

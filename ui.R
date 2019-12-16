@@ -906,87 +906,48 @@ shinyUI(
                    sidebarLayout(
                      
                      sidebarPanel(width = 3, Fluid = TRUE,
-                                  
-                          uiOutput("DM_OU_Species0"),
-                          
-                          uiOutput("DM_OU_Species"),
-                          tags$hr(),
-                          
-                          uiOutput('DM_OU_SDM_model'),
-                          
-                          checkboxGroupInput("DM_OU_Dispersal_type", DM_Name_DM_Models,
-                                             choices = c(DM_Name_DM_Models_list),
-                                             selected = DM_Name_DM_Models_selected
+                          fluidRow(
+                            uiOutput("DM_OU_Species0")  
                           ),
                           
-                          # Input: Checkbox if file has header ----
-                          checkboxGroupInput("DM_OU_Climate_model", DM_Name_CD_Models,
-                                             choices = c(DM_Name_CD_Models_list),
-                                             selected = DM_Name_CD_Models_selected
+                          fluidRow(
+                            column(6,
+                                   checkboxGroupInput("DM_OU_Climate_model", DM_Name_CD_Models,
+                                                      choices = c(DM_Name_CD_Models_list),
+                                                      selected = DM_Name_CD_Models_selected
+                                   ),
+                                   
+                                   # Input: Checkbox if file has header ----
+                                   checkboxGroupInput("DM_OU_Climate_scenario", DM_Name_CD_Scenarios,
+                                                      choices = c(DM_Name_CD_Scenarios_list),
+                                                      selected = DM_Name_CD_Scenarios_selected
+                                   ),
+                                   
+                                   # Input: Checkbox if file has header ----
+                                   checkboxGroupInput("DM_OU_Project_year", DM_Name_CD_Year,
+                                                      choices = c(DM_Name_CD_Year_list),
+                                                      selected = DM_Name_CD_Year_selected
+                                   )
+                            ),
+                            column(6,
+                                   uiOutput("DM_OU_Species"),
+                                   
+                            )
                           ),
                           
-                          # Input: Checkbox if file has header ----
-                          checkboxGroupInput("DM_OU_Climate_scenario", DM_Name_CD_Scenarios,
-                                             choices = c(DM_Name_CD_Scenarios_list),
-                                             selected = DM_Name_CD_Scenarios_selected
-                          ),
-                          
-                          # Input: Checkbox if file has header ----
-                          checkboxGroupInput("DM_OU_Project_year", DM_Name_CD_Year,
-                                             choices = c(DM_Name_CD_Year_list),
-                                             selected = DM_Name_CD_Year_selected
+                          fluidRow(
+                            bsCollapse(id = "OptionSelect", open = "Option",
+                               bsCollapsePanel("Option",
+                                   # style = ST_Name,
+                                   uiOutput('DM_OU_SDM_model'),
+                                   
+                                   checkboxGroupInput("DM_OU_Dispersal_type", DM_Name_DM_Models,
+                                                      choices = c(DM_Name_DM_Models_list),
+                                                      selected = DM_Name_DM_Models_selected
+                                   )
+                               )
+                            )
                           )
-                          
-                          # bsCollapsePanel("Summary & Histogram",
-                          #   style = ST_Name,
-                          #   fluidRow(
-                          #     checkboxGroupInput("DM_OU_Dispersal_type", DM_Name_DM_Models,
-                          #                        choices = c(DM_Name_DM_Models_list),
-                          #                        selected = DM_Name_DM_Models_selected
-                          #     ),
-                          #     
-                          #     checkboxGroupInput("DM_OU_Climate_model", DM_Name_CD_Models,
-                          #                        choices = c(DM_Name_CD_Models_list),
-                          #                        selected = DM_Name_CD_Models_selected
-                          #     ),
-                          #     
-                          #     checkboxGroupInput("DM_OU_Climate_scenario", DM_Name_CD_Scenarios,
-                          #                        choices = c(DM_Name_CD_Scenarios_list),
-                          #                        selected = DM_Name_CD_Scenarios_selected
-                          #     ),
-                          #     
-                          #     checkboxGroupInput("DM_OU_Project_year", DM_Name_CD_Year,
-                          #                        choices = c(DM_Name_CD_Year_list),
-                          #                        selected = DM_Name_CD_Year_selected
-                          #     )
-                          #   ) 
-                          # )
-                          
-                          
-                          # fluidRow(
-                          #   checkboxGroupInput("DM_OU_Dispersal_type", DM_Name_DM_Models,
-                          #                      choices = c(DM_Name_DM_Models_list),
-                          #                      selected = DM_Name_DM_Models_selected
-                          #   ),
-                          #   
-                          #   checkboxGroupInput("DM_OU_Climate_model", DM_Name_CD_Models,
-                          #                      choices = c(DM_Name_CD_Models_list),
-                          #                      selected = DM_Name_CD_Models_selected
-                          #   ),
-                          #   
-                          #   checkboxGroupInput("DM_OU_Climate_scenario", DM_Name_CD_Scenarios,
-                          #                      choices = c(DM_Name_CD_Scenarios_list),
-                          #                      selected = DM_Name_CD_Scenarios_selected
-                          #   ),
-                          #   
-                          #   checkboxGroupInput("DM_OU_Project_year", DM_Name_CD_Year,
-                          #                      choices = c(DM_Name_CD_Year_list),
-                          #                      selected = DM_Name_CD_Year_selected
-                          #                      
-                          #   )
-                          # )
-                          # ,style = "margin-top: 1px, margin-left: 1px"
-
                      ),
                      
                      # Main panel for displaying outputs ----
@@ -1000,11 +961,8 @@ shinyUI(
                        uiOutput("DM_OU_UI_plot")
                      )
 
-                     # mainPanel(
-                     # 
-                     #   
+                     # mainPanel(                     #   
                      #   uiOutput("DM_OU_UI_plot") %>% withSpinner()
-                     #   
                      # ) # mainPanel
                      
                    )
@@ -1183,6 +1141,11 @@ shinyUI(
                      
                      # Main panel for displaying outputs ----
                      mainPanel(
+                       fluidRow(
+                         valueBoxOutput("SS_Value_WK"),
+                         uiOutput("SS_Value_SP"),
+                         uiOutput("SS_Value_YR")
+                       ),
                        tabsetPanel(
                          tabPanel(SS_Name_Out_ChangePlot,
                                   tags$hr(),
