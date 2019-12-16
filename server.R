@@ -3129,9 +3129,21 @@ shinyServer(function(input, output, session) {
     ##### End GAP analyzing =========================================    
   })
   
+  output$SS_AO_Species0 <- renderUI({
+    volumes <- paste(G$SE_Dir_Project, "Species_Distribution", sep="/")
+    SS_Name_Species_list0 <- list.dirs(path = volumes, full.names = FALSE, recursive = FALSE)
+    SS_Name_Species_selected0 <- SS_Name_Species_list0[1]
+    selectInput("SS_AO_Species0", "Select Working Folder",
+                choices = c(SS_Name_Species_list0),
+                selected = SS_Name_Species_selected0
+    )
+  })
+  
   output$SS_AO_Species <- renderUI({
-    input$reset_SS_AO
-    SS_Name_Species_list <- test1_WD_List_Dirs
+    # input$reset_SS_AO
+    selfile <- paste(G$SE_Dir_Project, "Species_Distribution", input$SS_AO_Species0, sep="/")
+    G$SS_AO_Dir_Folder <<- selfile
+    SS_Name_Species_list <- list.dirs(path = selfile, full.names = FALSE, recursive = FALSE)
     SS_Name_Species_selected <- SS_Name_Species_list[1]
     checkboxGroupInput("SS_AO_Species", "Select a species",
                        choices = c(SS_Name_Species_list),
@@ -3140,8 +3152,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$SS_AO_SDM_model <- renderUI({
-    input$reset_SS_AO
-    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SS_AO_Species, "BIOMOD2", paste(as.name(paste(input$SS_AO_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+    destfile <- file.path(G$SS_AO_Dir_Folder, input$SS_AO_Species[1], "BIOMOD2", paste(as.name(paste(input$SS_AO_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
     SS_Name_Models_list <- as.character(G_FILE_species_evaluation$Prediction)
@@ -3152,6 +3163,19 @@ shinyServer(function(input, output, session) {
     )
   })
   
+  # output$SS_AO_SDM_model <- renderUI({
+  #   input$reset_SS_AO
+  #   destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$SS_AO_Species0, input$SS_AO_Species, "BIOMOD2", paste(as.name(paste(input$SS_AO_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+  #   all_eval <- read.csv(destfile)
+  #   G_FILE_species_evaluation <<- all_eval
+  #   SS_Name_Models_list <- as.character(G_FILE_species_evaluation$Prediction)
+  #   SS_Name_Models_selected <- SS_Name_Models_list[1]
+  #   checkboxGroupInput("SS_AO_SDM_model", "Select models",
+  #                      choices = c(SS_Name_Models_list),
+  #                      selected = SS_Name_Models_selected
+  #   )
+  # })
+  
   output$SS_AO_UI_plot <- renderUI({
     # setting Climate change scenarios, Future time, Species and current environmental path
     slist <- input$SS_AO_Species
@@ -3159,7 +3183,7 @@ shinyServer(function(input, output, session) {
     clist <- input$SS_AO_Climate_scenario  # c("RCP4.5") # c("RCP4.5", "RCP8.5")
     mlist <- input$SS_AO_SDM_model # c("PA1_Full_GLM_byROC")
     ylist <- input$SS_AO_Project_year
-    #	dtlist <- input$SS_AO_Dispersal_type
+    dtlist <- input$SS_AO_Dispersal_type
     
     n <- 0
     ls <- length(slist)
@@ -3167,7 +3191,8 @@ shinyServer(function(input, output, session) {
     lc <- length(clist)
     lm <- length(mlist)
     ly <- length(ylist)		
-    tl <- ls * ld * lc * lm * ly
+    ldt <- length(dtlist)
+    tl <- ls * ld * lc * lm * ly * ldt
     
     nc <- 2
     if (tl <  2) {
@@ -3191,14 +3216,15 @@ shinyServer(function(input, output, session) {
     clist <- input$SS_AO_Climate_scenario  # c("RCP4.5") # c("RCP4.5", "RCP8.5")
     mlist <- input$SS_AO_SDM_model # c("PA1_Full_GLM_byROC")
     ylist <- input$SS_AO_Project_year
-    #	dtlist <- input$SS_AO_Dispersal_type
+    dtlist <- input$SS_AO_Dispersal_type
     
     ls <- length(slist)
     ld <- length(dlist)
     lc <- length(clist)
     lm <- length(mlist)
     ly <- length(ylist)
-    tl <- ls * ld * lc * lm * ly
+    ldt <- length(dtlist)
+    tl <- ls * ld * lc * lm * ly * ldt 
     
     nc <- 2
     if (tl <  2) {
@@ -3210,29 +3236,31 @@ shinyServer(function(input, output, session) {
     par(mfrow = c(nr,nc), cex.main = 1.2)
     
     for (s in slist) {
-      dir_path <- file.path(isolate(G$SE_Dir_Project), "Species_Distribution", "test1", s, "BIOMOD2")
-      for (d in dlist) {
-        for (c in clist) {
-          for (m in mlist) {
-            if (ly > 0) {
-              if (ly == 1 && ylist[1] == "2000") {
-                Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
-                R_Map1 <- raster(file.path(dir_path, Map1))
-                plot(R_Map1, main = Map1)
-              } else if (ly > 1 && ylist[1] == "2000") {
-                Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
-                R_Map1 <- raster(file.path(dir_path, Map1))
-                plot(R_Map1, main = Map1)
-                for (y in 2:ly) {
-                  Map2 <- paste("GAP_", "PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
-                  R_Map2 <- raster(file.path(dir_path, Map2))
-                  plot(R_Map2, main = Map2)
-                }
-              } else {
-                for (y in 1:ly) {
-                  Map2 <- paste("GAP_", "PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
-                  R_Map2 <- raster(file.path(dir_path, Map2))
-                  plot(R_Map2, main = Map2)
+      for (dt in dtlist) {
+        dir_path <- file.path(G$SS_AO_Dir_Folder, s, dt)
+        for (d in dlist) {
+          for (c in clist) {
+            for (m in mlist) {
+              if (ly > 0) {
+                if (ly == 1 && ylist[1] == "2000") {
+                  Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
+                  R_Map1 <- raster(file.path(dir_path, Map1))
+                  plot(R_Map1, main = Map1)
+                } else if (ly > 1 && ylist[1] == "2000") {
+                  Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
+                  R_Map1 <- raster(file.path(dir_path, Map1))
+                  plot(R_Map1, main = Map1)
+                  for (y in 2:ly) {
+                    Map2 <- paste("GAP_", "PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
+                    R_Map2 <- raster(file.path(dir_path, Map2))
+                    plot(R_Map2, main = Map2)
+                  }
+                } else {
+                  for (y in 1:ly) {
+                    Map2 <- paste("GAP_", "PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
+                    R_Map2 <- raster(file.path(dir_path, Map2))
+                    plot(R_Map2, main = Map2)
+                  }
                 }
               }
             }
@@ -3244,7 +3272,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$SS_AO_IV_Table <- DT::renderDataTable({
-    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$SS_AO_Species, "BIOMOD2", paste(as.name(paste(input$SS_AO_Species, "_VINDEX.csv", sep = "")), sep = "", collapse = "--"))
+    destfile <- file.path(G$SS_AO_Dir_Folder, input$SS_AO_Species, "BIOMOD2", paste(as.name(paste(input$SS_AO_Species, "_VINDEX.csv", sep = "")), sep = "", collapse = "--"))
     vindex <- read.csv(destfile)
     G_FILE_species_vindex <<- vindex
     vindex
@@ -3345,7 +3373,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$SS_AO_VP_Table <- DT::renderDataTable({
-    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", 'test1', input$SS_AO_Species, "BIOMOD2", paste(as.name(paste(input$SS_AO_Species, "_VINDEX.csv", sep = "")), sep = "", collapse = "--"))
+    destfile <- file.path(G$SS_AO_Dir_Folder, paste(input$SS_AO_Dispersal_type, "_Speices_VINDEX.csv", sep = "")) # , sep = "", collapse = "--")
     vindex <- read.csv(destfile)
     G_FILE_species_vindex <<- vindex
     vindex
@@ -3437,8 +3465,59 @@ shinyServer(function(input, output, session) {
     }
   })
   
+  output$SS_AO_VP_UI_plot3 <- renderUI({
+    selectInput("SS_AO_VP_UI_plot3", "Select a group",
+                choices = c(SS_Name_Group3_list),
+                selected = SS_Name_Group3_selected
+    )
+  })
+  
+  output$SS_AO_VP_Plot12 <- renderPlot({
+    rs <- input$SS_AO_VP_Table_rows_selected  # G_FILE_specieslocation   # st_read("species.shp")
+    if (length(rs)) {
+      vindex <- G_FILE_species_vindex[rs, , drop = FALSE]
+      
+      Group <- vindex[, input$SS_AO_VP_UI_plot3]
+      vindex$X <- ifelse(vindex$Vulnerability_Area_Loss_Ratio < 0, "below", "above")  # above / below avg flag
+      vindex <- vindex[order(vindex$Vulnerability_Area_Loss_Ratio), ]  # sort
+      vindex$Species <- factor(vindex$Species, ordered = is.ordered(vindex)) #, levels = vindex$Species)  # convert to factor to retain sorted order in plot.
+      
+      # Diverging Barcharts
+      ggplot(vindex, aes(x=Species, y=Vulnerability_Area_Loss_Ratio, label=Vulnerability_Area_Loss_Ratio)) + 
+        geom_bar(stat='identity', aes(fill=X), width=.5)  +
+        scale_fill_manual(name="Vulnerability", 
+                          labels = c("Above Average", "Below Average"), 
+                          values = c("above"="#00ba38", "below"="#f8766d")) + 
+        labs(subtitle="Species Vulnerability Index", 
+             title= "Diverging Bars") + 
+        coord_flip()
+    }
+  })
+  
+  output$SS_AO_VP_Plot22 <- renderPlot({
+    rs <- input$SS_AO_VP_Table_rows_selected  # G_FILE_specieslocation   # st_read("species.shp")
+    if (length(rs)) {
+      vindex <- G_FILE_species_vindex[rs, , drop = FALSE]
+      
+      Group <- vindex[, input$SS_AO_VP_UI_plot2]
+      vindex$X <- ifelse(vindex$Vulnerability_Area_LossIN_GainOUT_Ratio < 0, "below", "above")  # above / below avg flag
+      vindex <- vindex[order(vindex$Vulnerability_Area_LossIN_GainOUT_Ratio), ]  # sort
+      vindex$Species <- factor(vindex$Species, ordered = is.ordered(vindex)) #, levels = vindex$Species)  # convert to factor to retain sorted order in plot.
+      
+      # Diverging Barcharts
+      ggplot(vindex, aes(x=Species, y=Vulnerability_Area_LossIN_GainOUT_Ratio, label=Vulnerability_Area_LossIN_GainOUT_Ratio)) + 
+        geom_bar(stat='identity', aes(fill=X), width=.5)  +
+        scale_fill_manual(name="Vulnerability", 
+                          labels = c("Above Average", "Below Average"), 
+                          values = c("above"="#00ba38", "below"="#f8766d")) + 
+        labs(subtitle="Species Vulnerability Index", 
+             title= "Diverging Bars") + 
+        coord_flip()
+    }
+  })
+  
   output$SS_SP_Change <- renderPlot({
-    dataset <- read.csv(file.path(G_2019_DATA_graph, "VI_2.csv"))
+    dataset <- read.csv("C:/Projects/2019_DATA/3. graph/VI_2.csv")
     a=c(2000, 2030, 2050, 2080)
     b=c(dataset$X4530_0[1],dataset$X4530_L[1],dataset$X4550_L[1],dataset$X4580_L[1])
     c=c(dataset$X4530_0[68],dataset$X4530_L[68],dataset$X4550_L[68],dataset$X4580_L[68])

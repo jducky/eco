@@ -626,10 +626,11 @@ shinyUI(
                           uiOutput("SDM_OU_Species"),
                           # tags$hr(),
                           
-                          uiOutput("SDM_OU_Projection_model"),
+                          
+                          # uiOutput("SDM_OU_Projection_model"),
                           # tags$hr(),
                           
-                          uiOutput("SDM_OU_Prediction_model"),
+                          # uiOutput("SDM_OU_Prediction_model"),
                           # tags$hr(),
                           
                           # Input: Checkbox if file has header ----
@@ -647,7 +648,16 @@ shinyUI(
                           
                           sliderInput("SDM_OU_Project_year", label = SDM_Name_CD_Year_out, min = 2000,
                                       max = 2080, value = 2000, step = 10, sep = "",
-                                      animate = animationOptions(interval = 10000))
+                                      animate = animationOptions(interval = 10000)
+                          ),
+                          bsCollapse(id = "ModelSelect", open = "Model",
+                            bsCollapsePanel("Model",
+                              # style = ST_Name,
+                              uiOutput("SDM_OU_Projection_model"),
+                              # tags$hr(),
+                              uiOutput("SDM_OU_Prediction_model")
+                            )
+                          )
                      ),
                      
                      
@@ -1132,35 +1142,43 @@ shinyUI(
                    tags$hr(),
                    sidebarLayout(
                      sidebarPanel(width = 3, Fluid = TRUE,
-                                  # shinyDirButton("SS_AO_Dir_Folder", SS_Name_AO_Dir, SS_Name_AO_Dir),
-                                  # verbatimTextOutput("SS_AO_Dir_Folder", placeholder = TRUE),
-                                  # tags$hr(),
-                                  
-                                  uiOutput("SS_AO_Species"),
-                                  tags$hr(),
-                                  
-                                  uiOutput("SS_AO_SDM_model"),
-                                  
-                                  radioButtons("SS_AO_Dispersal_type", SS_Name_DM_Models,
-                                               choices = c(SS_Name_DM_Models_list),
-                                               selected = SS_Name_DM_Models_selected),
-                                  
-                                  # Input: Checkbox if file has header ----
-                                  checkboxGroupInput("SS_AO_Climate_model", SS_Name_CD_Models,
-                                                     choices = c(SS_Name_CD_Models_list),
-                                                     selected = SS_Name_CD_Models_selected),
-                                  
-                                  # Input: Checkbox if file has header ----
-                                  checkboxGroupInput("SS_AO_Climate_scenario", SS_Name_CD_Scenarios,
-                                                     choices = c(SS_Name_CD_Scenarios_list),
-                                                     selected = SS_Name_CD_Scenarios_selected),
-                                  
-                                  # Input: Checkbox if file has header ----
-                                  checkboxGroupInput("SS_AO_Project_year", SS_Name_CD_Year,
-                                                     choices = c(SS_Name_CD_Year_list),
-                                                     selected = SS_Name_CD_Year_selected),
-                                  shinyDirButton("SS_AO_Dir_Folder", SS_Name_AO_Dir, SS_Name_AO_Dir),
-                                  verbatimTextOutput("SS_AO_Dir_Folder", placeholder = TRUE)
+                        
+                        fluidRow(
+                          uiOutput("SS_AO_Species0")  
+                        ),
+                        
+                        fluidRow(
+                          column(6,
+                                 checkboxGroupInput("SS_AO_Climate_model", SS_Name_CD_Models,
+                                                    choices = c(SS_Name_CD_Models_list),
+                                                    selected = SS_Name_CD_Models_selected),
+                                 checkboxGroupInput("SS_AO_Climate_scenario", SS_Name_CD_Scenarios,
+                                                    choices = c(SS_Name_CD_Scenarios_list),
+                                                    selected = SS_Name_CD_Scenarios_selected),
+                                 
+                                 # Input: Checkbox if file has header ----
+                                 checkboxGroupInput("SS_AO_Project_year", SS_Name_CD_Year,
+                                                    choices = c(SS_Name_CD_Year_list),
+                                                    selected = SS_Name_CD_Year_selected)
+                          ),
+                          column(6,
+                                 uiOutput("SS_AO_Species"),
+                                 
+                          )
+                        ),
+                        
+                        fluidRow(
+                          bsCollapse(id = "OptionSelect", open = "Option",
+                             bsCollapsePanel("Option",
+                               # style = ST_Name,
+                               uiOutput("SS_AO_SDM_model"),
+                               
+                               radioButtons("SS_AO_Dispersal_type", SS_Name_DM_Models,
+                                  choices = c(SS_Name_DM_Models_list),
+                                  selected = SS_Name_DM_Models_selected)
+                             )
+                          )
+                        )
                      ),
                      
                      # Main panel for displaying outputs ----
