@@ -25,6 +25,10 @@ library(imager)
 library(jpeg)
 library(datasets)
 library(psych)
+library(extrafont) ## 잊지마세요 package 불러오기!
+
+# font_import()
+# theme_set(theme_gray(base_family='NanumGothic'))
 
 # installing packages 
 CHK_packages <- setdiff(packages, rownames(installed.packages()))
