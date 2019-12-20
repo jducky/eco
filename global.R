@@ -29,6 +29,9 @@ library(psych)
 # library(extrafont) ## 잊지마세요 package 불러오기!
 # font_import()
 
+# theme_set(theme_get() + theme(text = element_text(family = 'Nanumgothic')))
+theme(text = element_text(family = 'Nanumgothic'))
+
 # installing packages 
 CHK_packages <- setdiff(packages, rownames(installed.packages()))
 if (length(CHK_packages) > 0) {
