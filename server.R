@@ -1325,19 +1325,19 @@ shinyServer(function(input, output) {
                   Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
                   if (file.exists(file.path(dir_path, Map1))) {
                     R_Map1 <- raster(file.path(dir_path, Map1))
-                    plot(R_Map1, main = Map1)
+                    plot(R_Map1, main = Map1, family="Nanumgothic")
                   }
                 } else if (ly > 1 && ylist[1] == "2000") {
                   Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
                   if (file.exists(file.path(dir_path, Map1))) {
                     R_Map1 <- raster(file.path(dir_path, Map1))
-                    plot(R_Map1, main = Map1)
+                    plot(R_Map1, main = Map1, family="Nanumgothic")
                   }
                   for (y in 2:ly) {
                     Map2 <- paste("PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
                     if (file.exists(file.path(dir_path, Map2))) {
                       R_Map2 <- raster(file.path(dir_path, Map2))
-                      plot(R_Map2, main = Map2)
+                      plot(R_Map2, main = Map2, family="Nanumgothic")
                     }
                   }
                 } else {
@@ -1345,7 +1345,7 @@ shinyServer(function(input, output) {
                     Map2 <- paste("PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
                     if (file.exists(file.path(dir_path, Map2))) {
                       R_Map2 <- raster(file.path(dir_path, Map2))
-                      plot(R_Map2, main = Map2)
+                      plot(R_Map2, main = Map2, family="Nanumgothic")
                     }
                   }
                 }
