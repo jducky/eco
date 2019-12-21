@@ -40,7 +40,7 @@ if (length(CHK_libraries) > 0) {
 #####=========================================================
 
 
-setwd("C:/MOTIVE_Ecosystem/R/Programs/ecosystem")
+setwd("C:/MOTIVE_Ecosystem/R/Programs/ecoseo")
 rm(list = ls())
 
 ##### Path

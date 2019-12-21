@@ -911,6 +911,7 @@ shinyUI(
                               sidebarLayout(
                                 sidebarPanel(width = 3, Fluid = TRUE,
                                              shinyDirButton("IS_MI_Dir_Folder", IS_Name_MO_Dir, IS_Name_MO_Dir),
+                                             #shinyDirButton("IS_MI_Dir_Folder", "입력", "입력"),
                                              verbatimTextOutput("IS_MI_Dir_Folder", placeholder = TRUE),
                                              tags$hr(),
                                              shinyDirButton("IS_AO_Dir_Folder", IS_Name_AO_Dir, IS_Name_AO_Dir),
