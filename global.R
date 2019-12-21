@@ -30,7 +30,7 @@ library(psych)
 # font_import()
 
 # theme_set(theme_get() + theme(text = element_text(family = 'Nanumgothic')))
-theme(text = element_text(family = 'Nanumgothic'))
+# theme(text = element_text(family = 'Nanumgothic'))
 
 # installing packages 
 CHK_packages <- setdiff(packages, rownames(installed.packages()))

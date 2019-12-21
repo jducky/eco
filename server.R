@@ -1054,6 +1054,24 @@ shinyServer(function(input, output, session) {
   })  
   
   ## IS Value
+  output$IS_Value_WK2 <- renderValueBox({
+    valueBox(input$IS_VA_Dir_Folder, "Output Work Name",
+             icon = icon("list"), color = "purple", width = 3
+    )
+  })
+  
+  output$IS_Value_WK <- renderValueBox({
+    valueBox(input$IS_AO_Species0, "Input Work Name",
+             icon = icon("list"), color = "blue", width = 3
+    )
+  })
+  
+  output$IS_Value_SP <- renderValueBox({
+    valueBox(input$IS_AO_Species, "Species Name",
+             icon = icon("tree"), color = "green", width = 3
+    )
+  })
+  
   output$IS_Value_CM <- renderValueBox({
     valueBox(input$IS_AO_Dispersal_type, IS_Name_DM_Models,
              icon = icon("credit-card"), color = "blue", width = 3
@@ -2746,7 +2764,7 @@ shinyServer(function(input, output, session) {
   output$DM_OU_Species0 <- renderUI({
     volumes <- paste(G$SE_Dir_Project, "Species_Distribution", sep="/")
     DM_Name_Species_list0 <- list.dirs(path = volumes, full.names = FALSE, recursive = FALSE)
-    DM_Name_Species_selected0 <- DM_Name_Species_list0[1]
+    DM_Name_Species_selected0 <- DM_Name_Species_list0[5]
     selectInput("DM_OU_Species0", "Select Working Folder",
                 choices = c(DM_Name_Species_list0),
                 selected = DM_Name_Species_selected0
@@ -3177,7 +3195,7 @@ shinyServer(function(input, output, session) {
   output$SS_AO_Species0 <- renderUI({
     volumes <- paste(G$SE_Dir_Project, "Species_Distribution", sep="/")
     SS_Name_Species_list0 <- list.dirs(path = volumes, full.names = FALSE, recursive = FALSE)
-    SS_Name_Species_selected0 <- SS_Name_Species_list0[1]
+    SS_Name_Species_selected0 <- SS_Name_Species_list0[2]
     selectInput("SS_AO_Species0", "Select Working Folder",
                 choices = c(SS_Name_Species_list0),
                 selected = SS_Name_Species_selected0
@@ -3617,12 +3635,12 @@ shinyServer(function(input, output, session) {
     )
   })
   
-  observeEvent(input$IS_VA_Dir_Folder, {
-    volumes <- c(main = isolate(G$SE_Dir_Project))
-    shinyDirChoose(input, 'IS_VA_Dir_Folder', roots = volumes) # , defaultPath = "/MOTIVE_projects", defaultRoot = G$SE_Dir_Project)
-    G$IS_VA_Dir_Folder <<- parseDirPath(volumes, input$IS_VA_Dir_Folder)
-    output$IS_VA_Dir_Folder <- renderText({G$IS_VA_Dir_Folder})
-  })
+  # observeEvent(input$IS_VA_Dir_Folder, {
+  #   volumes <- c(main = isolate(G$SE_Dir_Project))
+  #   shinyDirChoose(input, 'IS_VA_Dir_Folder', roots = volumes) # , defaultPath = "/MOTIVE_projects", defaultRoot = G$SE_Dir_Project)
+  #   G$IS_VA_Dir_Folder <<- parseDirPath(volumes, input$IS_VA_Dir_Folder)
+  #   output$IS_VA_Dir_Folder <- renderText({G$IS_VA_Dir_Folder})
+  # })
   
   observeEvent(input$IS_VA_Action_Analysis, {
     # setting Climate change scenarios, Future time, Species and current environmental path
@@ -3806,8 +3824,77 @@ shinyServer(function(input, output, session) {
     })
   })
   
+  output$IS_MO_SDM_model <- renderUI({
+    volumes <- paste(G$SE_Dir_Project, "Species_Distribution", sep="/")
+    IS_Name_Species_list0 <- list.dirs(path = volumes, full.names = FALSE, recursive = FALSE)
+    IS_Name_Species_selected0 <- IS_Name_Species_list0[1]
+    selectInput("IS_AO_Species0", "Select a species",
+                choices = c(IS_Name_Species_list0),
+                selected = IS_Name_Species_selected0
+    )
+  })
+  
+  output$IS_AO_SDM_model <- renderUI({
+    destfile <- file.path(G$IS_MI_Dir_Folder, input$IS_AO_Species[1], "BIOMOD2", paste(as.name(paste(input$IS_AO_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+    all_eval <- read.csv(destfile)
+    G_FILE_species_evaluation <<- all_eval
+    IS_Name_Models_list <- as.character(G_FILE_species_evaluation$Prediction)
+    IS_Name_Models_selected <- IS_Name_Models_list[1]
+    radioButtons("IS_AO_SDM_model", "Select models",
+                 choices = c(IS_Name_Models_list),
+                 selected = IS_Name_Models_selected
+    )
+  })
+  
+  #   output$IS_AO_SDM_model <- renderUI({
+  # # <<<<<<< HEAD
+  #     destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$IS_AO_Species[1], "BIOMOD2", paste(as.name(paste(input$IS_AO_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+  # # =======
+  # #     validate(
+  # #       need(input$data !="", "Please Select Data Folder...")
+  # #     )
+  # #     destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$IS_CA_Species[1], "BIOMOD2", paste(as.name(paste(input$IS_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+  # # >>>>>>> lx02jd2
+  #     all_eval <- read.csv(destfile)
+  #     G_FILE_species_evaluation <<- all_eval
+  #     IS_Name_Models_list <- as.character(G_FILE_species_evaluation$Prediction)
+  #     IS_Name_Models_selected <- IS_Name_Models_list[1]
+  #     radioButtons("IS_AO_SDM_model", "Select models",
+  #                  choices = c(IS_Name_Models_list),
+  #                  selected = IS_Name_Models_selected
+  #     )
+  #   })
+  
+  output$IS_VA_Dir_Folder <- renderUI({
+    selfile <- paste(G$SE_Dir_Project, "Invasive_Species", sep="/")
+    IS_Name_VA_list <- list.dirs(path = selfile, full.names = FALSE, recursive = FALSE)
+    IS_Name_VA_selected0 <- IS_Name_VA_list[1]
+    selectInput("IS_VA_Dir_Folder", IS_Name_AO_Dir,
+                choices = c(IS_Name_VA_list),
+                selected = IS_Name_VA_selected0
+    )
+  })
+  
+  output$IS_AO_Species0 <- renderUI({
+    selfile <- paste(G$SE_Dir_Project, "Species_Distribution", sep="/")
+    IS_Name_Species_list0 <- list.dirs(path = selfile, full.names = FALSE, recursive = FALSE)
+    IS_Name_Species_selected0 <- IS_Name_Species_list0[1]
+    selectInput("IS_AO_Species0", IS_Name_MO_Dir,
+                choices = c(IS_Name_Species_list0),
+                selected = IS_Name_Species_selected0
+    )
+  })
+  
   output$IS_AO_Species <- renderUI({
-    IS_Name_Species_list <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution", 'test1'), full.names = FALSE, recursive = FALSE)
+    selfile <- paste(G$SE_Dir_Project, "Species_Distribution", input$IS_AO_Species0, sep="/")
+    G$IS_MO_Dir_Folder <<- selfile
+    G$IS_MI_Dir_Folder <<- G$IS_MO_Dir_Folder
+    
+    selfile2 <- paste(G$SE_Dir_Project, "Invasive_Species", input$IS_VA_Dir_Folder, sep="/")
+    G$IS_VA_Dir_Folder <<- selfile
+    G$IS_AO_Dir_Folder <<- G$IS_VA_Dir_Folder
+    
+    IS_Name_Species_list <- list.dirs(path = selfile, full.names = FALSE, recursive = FALSE)
     IS_Name_Species_selected <- IS_Name_Species_list[1]
     selectInput("IS_AO_Species", "Select a species",
                 choices = c(IS_Name_Species_list),
@@ -3823,34 +3910,8 @@ shinyServer(function(input, output, session) {
     output$IS_AO_Dir_Folder <- renderText({G$IS_AO_Dir_Folder})
   })
   
-  output$IS_AO_SDM_model <- renderUI({
-# <<<<<<< HEAD
-    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$IS_AO_Species[1], "BIOMOD2", paste(as.name(paste(input$IS_AO_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
-# =======
-#     validate(
-#       need(input$data !="", "Please Select Data Folder...")
-#     )
-#     destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$IS_CA_Species[1], "BIOMOD2", paste(as.name(paste(input$IS_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
-# >>>>>>> lx02jd2
-    all_eval <- read.csv(destfile)
-    G_FILE_species_evaluation <<- all_eval
-    IS_Name_Models_list <- as.character(G_FILE_species_evaluation$Prediction)
-    IS_Name_Models_selected <- IS_Name_Models_list[1]
-    radioButtons("IS_AO_SDM_model", "Select models",
-                 choices = c(IS_Name_Models_list),
-                 selected = IS_Name_Models_selected
-    )
-  })
-  
   output$IS_AO_SD_Map <- renderLeaflet({
-# <<<<<<< HEAD
-    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$IS_AO_Species, "BIOMOD2")
-# =======
-#     validate(
-#       need(input$data !="", "Please Select Data Folder...")
-#     )
-#     dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$IS_AO_Species, "BIOMOD2")
-# >>>>>>> lx02jd2
+    dir_path <- file.path(G$IS_MI_Dir_Folder, input$IS_AO_Species, input$IS_AO_Dispersal_type)
     Map <- paste("PRED", "_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_Project_year, "_", input$IS_AO_Species, "_", input$IS_AO_SDM_model, ".tif", sep = "")
     r <- raster(file.path(dir_path, Map))
     crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
@@ -3866,17 +3927,43 @@ shinyServer(function(input, output, session) {
       addRasterImage(r, colors = pal, opacity = 0.8,) %>%
       addLegend(pal = pal, values = values(r), title = "Legend")  %>%
       setView(lng = 127.00, lat = 36.00, zoom = 7)
-  })  
+  })
+  
+#   output$IS_AO_SD_Map <- renderLeaflet({
+# # <<<<<<< HEAD
+#     dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$IS_AO_Species, "BIOMOD2")
+# # =======
+# #     validate(
+# #       need(input$data !="", "Please Select Data Folder...")
+# #     )
+# #     dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$IS_AO_Species, "BIOMOD2")
+# # >>>>>>> lx02jd2
+#     Map <- paste("PRED", "_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_Project_year, "_", input$IS_AO_Species, "_", input$IS_AO_SDM_model, ".tif", sep = "")
+#     r <- raster(file.path(dir_path, Map))
+#     crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+#     pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r),
+#                         na.color = "transparent")
+#     
+#     leaflet() %>%
+#       addTiles(
+#         urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+#         attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+#       ) %>%        
+#       
+#       addRasterImage(r, colors = pal, opacity = 0.8,) %>%
+#       addLegend(pal = pal, values = values(r), title = "Legend")  %>%
+#       setView(lng = 127.00, lat = 36.00, zoom = 7)
+#   })  
   
   output$IS_AO_SD_Summary <- renderPrint({
-    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$IS_AO_Species, "BIOMOD2")
+    dir_path <- file.path(G$IS_MI_Dir_Folder, input$IS_AO_Species, "BIOMOD2")
     Map <- paste("PRED", "_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_Project_year, "_", input$IS_AO_Species, "_", input$IS_AO_SDM_model, ".tif", sep = "")
     r <- raster(file.path(dir_path, Map))
     summary(r)
   })
   
   output$IS_AO_SD_Histogram <- renderPlot({
-    dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$IS_AO_Species, "BIOMOD2")
+    dir_path <- file.path(G$IS_MI_Dir_Folder, input$IS_AO_Species, "BIOMOD2")
     Map <- paste("PRED", "_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_Project_year, "_", input$IS_AO_Species, "_", input$IS_AO_SDM_model, ".tif", sep = "")
     x <- raster(file.path(dir_path, Map))
     
@@ -3886,7 +3973,6 @@ shinyServer(function(input, output, session) {
          xlab = "Predicted Value",
          main = "Histogram")
   })
-  
   
   output$IS_AO_UI_plot1 <- renderUI({
     
@@ -4123,59 +4209,10 @@ shinyServer(function(input, output, session) {
                 position = "bottomright")
   })
   
-  # output$IS_AO_SR_SIDO_Map <- renderLeaflet({
-  #   
-  #   poly <- readOGR(file.path(isolate(G$SE_Dir_Admin), paste("O_SD", ".shp", sep = "")))
-  #   x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SD", ".csv", sep = "")))
-  #   # x <- test3_Invasive_F("IS_SD")
-  #   names(poly) <- c(names(x))
-  #   X_NAME <- names(poly[5])
-  #   V_NAME <- paste("IS_SR_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_SDM_model, "_", input$IS_AO_Project_year, sep = "")
-  #   
-  #   bins <- c(0, 1, 2, 3, 4, 5, Inf)
-  #   pal <- colorBin("YlOrRd", domain = poly[[V_NAME]], bins = bins)
-  #   
-  #   labels <- sprintf(
-  #     "<strong>%s</strong><br/>%g people / mi<sup>2</sup>",
-  #     poly[[X_NAME]], poly[[V_NAME]]
-  #   ) %>% lapply(htmltools::HTML)
-  #   
-  #   leaflet(poly) %>%
-  #     setView(lng = 128.00, lat = 36.00, zoom = 7) %>%
-  #     addProviderTiles("MapBox", options = providerTileOptions(
-  #       id = "mapbox.light",
-  #       accessToken = Sys.getenv('MAPBOX_ACCESS_TOKEN'))) %>%
-  #     addTiles(
-  #       urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
-  #       attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
-  #     ) %>%   
-  #     addPolygons(
-  #       fillColor = ~pal(poly[[V_NAME]]),
-  #       weight = 2,
-  #       opacity = 1,
-  #       color = "grey",
-  #       dashArray = "3",
-  #       fillOpacity = 0.7,
-  #       highlight = highlightOptions(
-  #         weight = 5,
-  #         color = "#666",
-  #         dashArray = "",
-  #         fillOpacity = 0.7,
-  #         bringToFront = TRUE),
-  #       label = labels,
-  #       labelOptions = labelOptions(
-  #         style = list("font-weight" = "normal", padding = "3px 8px"),
-  #         textsize = "15px",
-  #         direction = "auto")) %>%
-  #     addLegend(pal = pal, values = ~poly[[V_NAME]], opacity = 0.7, title = NULL,
-  #               position = "bottomright")
-  # })
-  
   output$IS_AO_SR_SIDO_Stat <- renderPlot({
     
     df <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SD", ".csv", sep = "")))
-    # df <- test3_Invasive_F("IS_SD")
-    X_NAME <- names(df[5])
+    X_NAME <- names(df[6])
     V_NAME <- paste("IS_SR_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_SDM_model, "_", input$IS_AO_Project_year, sep="")
     
     
@@ -4190,17 +4227,39 @@ shinyServer(function(input, output, session) {
                 position = position_dodge(0.9), size=3.5) +
       scale_fill_brewer(palette="Paired") +
       theme_minimal() +
-      coord_flip() +
       labs(title = "시도 외래종 분포") + labs(x = "시도") + labs(y = "외래종수")
-    
-    # ggplot(data=df, aes(x=df[[X_NAME]], y=df[[V_NAME]])) + #, fill=df[[X_NAME]])) +
-    #   geom_bar(stat="identity", position=position_dodge()) +
-    #   geom_text(aes(label=df[[V_NAME]]), vjust=1.6, color="white",
-    #             position = position_dodge(0.9), size=3.5) +
-    #   scale_fill_brewer(palette="Paired") +
-    #   theme_minimal() +
-    #   coord_flip()
   })
+  
+  # output$IS_AO_SR_SIDO_Stat <- renderPlot({
+  #   
+  #   df <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SD", ".csv", sep = "")))
+  #   # df <- test3_Invasive_F("IS_SD")
+  #   X_NAME <- names(df[5])
+  #   V_NAME <- paste("IS_SR_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_SDM_model, "_", input$IS_AO_Project_year, sep="")
+  #   
+  #   
+  #   #		df2 <- data.frame(시도 = rep(c("서울", "경기도"), each=3),
+  #   #							연도 = rep(c("Current", "2030", "2050"),2),
+  #   #							외래종 = c(6.8, 15, 33, 4.2, 10, 29.5))
+  #   #		head(df2)
+  #   
+  #   ggplot(data=df, aes(x=df[[X_NAME]], y=df[[V_NAME]])) + #, fill=df[[X_NAME]])) +
+  #     geom_bar(stat="identity", position=position_dodge()) +
+  #     geom_text(aes(label=df[[V_NAME]]), vjust=1.6, color="white",
+  #               position = position_dodge(0.9), size=3.5) +
+  #     scale_fill_brewer(palette="Paired") +
+  #     theme_minimal() +
+  #     coord_flip() +
+  #     labs(title = "시도 외래종 분포") + labs(x = "시도") + labs(y = "외래종수")
+  #   
+  #   # ggplot(data=df, aes(x=df[[X_NAME]], y=df[[V_NAME]])) + #, fill=df[[X_NAME]])) +
+  #   #   geom_bar(stat="identity", position=position_dodge()) +
+  #   #   geom_text(aes(label=df[[V_NAME]]), vjust=1.6, color="white",
+  #   #             position = position_dodge(0.9), size=3.5) +
+  #   #   scale_fill_brewer(palette="Paired") +
+  #   #   theme_minimal() +
+  #   #   coord_flip()
+  # })
   #	geom_text(aes(label = Vulnerability_Area_Loss_Ratio), size = 3, hjust = 0.5, vjust = 3) + 
   
   output$IS_AO_SR_SGG_Map <- renderLeaflet({

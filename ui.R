@@ -710,192 +710,6 @@ shinyUI(
                        )
                      )
                    )
-                   # tabsetPanel(
-                   #   tabPanel(SDM_Name_Model,
-                   #            
-                   #            fluidRow(
-                   #              tags$hr(),
-                   #              uiOutput("SDM_Sel_Box"),
-                   #              column(4, 
-                   #                     actionButton('resetSpeciesInfo',label = "Reset", style = ST_Name),
-                   #                     tags$style(type='text/css', "button#resetSpeciesInfo {margin-left: 90%;}"),
-                   #                     br(),br(),
-                   #                     DT::dataTableOutput("SDM_SP_Info")
-                   #              ),
-                   #              column(4,
-                   #                     
-                   #                     
-                   #                     uiOutput('SDM_MO_Condition_CheckBoxGroup')
-                   #              ),
-                   #              column(4,
-                   #                     useShinyalert(),  # Set up shinyalert
-                   #                     actionButton("SDM_MO_SDM_run", label = SDM_Name_models_run)
-                   #              )
-                   #              
-                   #            )
-                   #   ),
-                   #   
-                   #   
-                   #   tabPanel(SDM_Name_Model_Out, fluid = TRUE,
-                   #            tags$hr(),
-                   #            sidebarLayout(
-                   #              sidebarPanel(width = 3, Fluid = TRUE,
-                   #                           
-                   #                           uiOutput("SDM_OU_Species"),
-                   #                           # tags$hr(),
-                   #                           
-                   #                           uiOutput("SDM_OU_Projection_model"),
-                   #                           # tags$hr(),
-                   #                           
-                   #                           uiOutput("SDM_OU_Prediction_model"),
-                   #                           # tags$hr(),
-                   #                           
-                   #                           # Input: Checkbox if file has header ----
-                   #                           radioButtons("SDM_OU_Climate_model", SDM_Name_CD_Models_out,
-                   #                                        choices = c(SDM_Name_CD_Models_out_list),
-                   #                                        selected = SDM_Name_CD_Models_out_selected
-                   #                           ),
-                   #                           
-                   #                           # Input: Checkbox if file has header ----
-                   #                           radioButtons("SDM_OU_Climate_scenario", SDM_Name_CD_Scenarios_out,
-                   #                                        choices = c(SDM_Name_CD_Scenarios_out_list),
-                   #                                        selected = SDM_Name_CD_Scenarios_out_selected
-                   #                           ),
-                   #                           
-                   #                           
-                   #                           sliderInput("SDM_OU_Project_year", label = SDM_Name_CD_Year_out, min = 2000,
-                   #                                       max = 2080, value = 2000, step = 10, sep = "",
-                   #                                       animate = animationOptions(interval = 10000))
-                   #              ),
-                   #              
-                   #              
-                   #              # Main panel for displaying outputs ----
-                   #              mainPanel(
-                   #                tabsetPanel(
-                   #                  
-                   #                  
-                   #                  tabPanel(SDM_Name_Model_Out_Validation,
-                   #                           
-                   #                           # hr(),
-                   #                           
-                   #                           # 열 기준
-                   #                           fluidRow(
-                   #                             hr(),
-                   #                             column(6, DT::dataTableOutput("SDM_OU_Validation")),
-                   #                             column(6, plotOutput("SDM_OU_Validation_BoxPlot"))
-                   #                             
-                   #                           ),
-                   #                           
-                   #                           fluidRow(
-                   #                             br(), hr(),
-                   #                             column(6, DT::dataTableOutput("SDM_OU_Contribution"), hr(), plotOutput("SDM_OU_Contribution_Radarchart"))
-                   #                             
-                   #                           )
-                   #                           
-                   #                           # seo03
-                   #                           # 행 기준
-                   #                           # fluidRow(
-                   #                           #   column(6, DT::dataTableOutput("SDM_OU_Validation"))
-                   #                           # ),
-                   #                           # 
-                   #                           # hr(),
-                   #                           # 
-                   #                           # fluidRow(
-                   #                           #   column(6, plotOutput("SDM_OU_Validation_BoxPlot"))
-                   #                           # ),
-                   #                           # hr()
-                   #                           
-                   #                           
-                   #                  ),
-                   #                  
-                   #                  # seo03
-                   #                  # tabPanel(SDM_Name_Model_Out_Contribution,
-                   #                  #          tags$hr(),
-                   #                  #          fluidRow(
-                   #                  #            column(6, DT::dataTableOutput("SDM_OU_Contribution"))
-                   #                  #          ),
-                   #                  #          tags$hr(),
-                   #                  #          fluidRow(
-                   #                  #            column(8,plotOutput("SDM_OU_Contribution_Radarchart"))
-                   #                  #          )
-                   #                  # ),
-                   #                  # tabPanel(SDM_Name_Model_Out_Probability, 
-                   #                  #          tags$head(
-                   #                  #            # Include our custom CSS
-                   #                  #            includeCSS("styles.css"),
-                   #                  #            includeScript("gomap.js")
-                   #                  #          ),
-                   #                  #          tags$hr(),
-                   #                  #          leafletOutput("SDM_OU_Probability_map", width = "800", height = "600") %>% withSpinner(),
-                   #                  #          tags$hr(),
-                   #                  #          column(10, verbatimTextOutput("SDM_OU_PROJ_Summary")),
-                   #                  #          column(10, plotOutput("SDM_OU_PROJ_Histogram"))
-                   #                  # ),
-                   #                  # tabPanel(SDM_Name_Model_Out_Prediction, 
-                   #                  #          tags$head(
-                   #                  #            # Include our custom CSS
-                   #                  #            includeCSS("styles.css"),
-                   #                  #            includeScript("gomap.js")
-                   #                  #          ),
-                   #                  #          tags$hr(),
-                   #                  #          leafletOutput("SDM_OU_Predicted_map", width = "800", height = "600") %>% withSpinner(),
-                   #                  #          tags$hr(),
-                   #                  #          column(10, verbatimTextOutput("SDM_OU_PRED_Summary")),
-                   #                  #          column(10, plotOutput("SDM_OU_PRED_Histogram"))
-                   #                  # )
-                   #                  
-                   #                  tabPanel("Map",
-                   #                           tags$head(
-                   #                             # Include our custom CSS
-                   #                             includeCSS("styles.css"),
-                   #                             includeScript("gomap.js")
-                   #                           ),
-                   #                           tags$hr(),
-                   #                           fluidRow(
-                   #                             valueBoxOutput("Value_CM"),
-                   #                             valueBoxOutput("Value_CS"),
-                   #                             valueBoxOutput("Value_YR")
-                   # 
-                   #                           ),
-                   #                           fluidRow(class = "text-center",
-                   #                                    column(6,
-                   #                                           # tags$h3("<Probability Map>", style = "text-align: center;"),
-                   #                                           box(status = "success",
-                   #                                               title = "PROBABILITY MAP", width = 20, height = 45, collapsible = T, collapsed = T
-                   #                                           ),
-                   # 
-                   #                                           leafletOutput("SDM_OU_Probability_map") %>% withSpinner(),
-                   #                                           br(),
-                   #                                           actionButton("Reset_Probability_View", label = "Reset"),
-                   #                                           tags$hr(),
-                   #                                           column(12, verbatimTextOutput("SDM_OU_PROJ_Summary")),
-                   #                                           column(12, plotOutput("SDM_OU_PROJ_Histogram"))
-                   #                                    ),
-                   # 
-                   #                                    column(6,
-                   #                                           # tags$h3("<Predicted Map>", style = "text-align: center;"),
-                   #                                           box(status = "success",
-                   #                                               title = "PREDICTED MAP", width = 20, height = 45, collapsible = T, collapsed = T
-                   #                                           ),
-                   #                                           # tags$h3("<Predicted Map>"),
-                   # 
-                   #                                           # leafletOutput("SDM_OU_Predicted_map", width = "800", height = "600"),
-                   #                                           leafletOutput("SDM_OU_Predicted_map") %>% withSpinner(),
-                   #                                           br(),
-                   #                                           actionButton("Reset_Predicted_View", label = "Reset"),
-                   #                                           tags$hr(),
-                   #                                           column(12, verbatimTextOutput("SDM_OU_PRED_Summary")),
-                   #                                           column(12, plotOutput("SDM_OU_PRED_Histogram"))
-                   #                                    )
-                   #                           )
-                   # 
-                   #                  )
-                   #                  
-                   #                )
-                   #              )
-                   #            )
-                   #   )
-                   # )
           ),  
           
           
@@ -960,139 +774,7 @@ shinyUI(
                        tags$hr(),
                        uiOutput("DM_OU_UI_plot")
                      )
-
-                     # mainPanel(                     #   
-                     #   uiOutput("DM_OU_UI_plot") %>% withSpinner()
-                     # ) # mainPanel
-                     
                    )
-                   
-                   # tabsetPanel(
-                     # tabPanel(DM_Name_Model, fluid = TRUE,
-                     #          tags$hr(),
-                     #          fluidRow(
-                     #            column(2,
-                     #                   
-                     #                   valueBox("구상나무", "선택종명",
-                     #                            icon = icon("tree"), color = "green", width = 12
-                     #                   )
-                     #            ),
-                     #            
-                     #            column(10,
-                     #                   uiOutput("DM_Sel_Box")
-                     #            )
-                     #          ),
-                     #          tags$hr(),
-                     #          fluidRow(
-                     #            
-                     #            
-                     #            # Sidebar panel for inputs ----
-                     #            sidebarPanel(width = 2,
-                     #                         
-                     #                         uiOutput("DM_MO_Species"),
-                     #                         uiOutput("DM_MO_Col_Box_01")
-                     #                         
-                     #                         
-                     #            ),
-                     #            
-                     #            sidebarPanel(width = 2,
-                     #                         
-                     #                         uiOutput("DM_MO_Col_Box_02"),
-                     #                         uiOutput("DM_MO_SDM_model")
-                     #                         
-                     #                         
-                     #            ),
-                     #            
-                     #            column( 3,
-                     #                    fluidRow( sidebarPanel(width = 12, Fluid = TRUE, 
-                     #                                           uiOutput("DM_MO_Col_Box_03") 
-                     #                    )
-                     #                    ),
-                     #                    
-                     #                    fluidRow( 
-                     #                      sidebarPanel(width = 12, Fluid = TRUE, 
-                     #                                   div( actionButton('reset_DM_MO',label = "Reset"), style = "margin: 0 60% 0 40%;" ) 
-                     #                      )
-                     #                    )
-                     #                    
-                     #                    
-                     #            ),
-                     #            
-                     #            
-                     #            
-                     #            sidebarPanel(width = 3, Fluid = TRUE,
-                     #                         tags$hr(),  
-                     #                         # infoBox("Model Run", "RUN", icon = icon("angle-double-right"), width = 2),
-                     #                         actionButton("DM_MO_Action", label = "Run"),
-                     #                         tags$hr()
-                     #            )
-                     #            
-                     #          )
-                     #          
-                     # ),
-                     
-                     
-                     # tabPanel(DM_Name_Model_Out, fluid = TRUE,
-                     #          tags$hr(),
-                     #          sidebarLayout(
-                     #            sidebarPanel(width = 3, Fluid = TRUE,
-                     #                         
-                     #                         uiOutput("DM_OU_Species"),
-                     #                         tags$hr(),
-                     #                         
-                     #                         uiOutput('DM_OU_SDM_model'),
-                     #                         
-                     #                         checkboxGroupInput("DM_OU_Dispersal_type", DM_Name_DM_Models,
-                     #                                            choices = c(DM_Name_DM_Models_list),
-                     #                                            selected = DM_Name_DM_Models_selected
-                     #                         ),
-                     #                         
-                     #                         checkboxGroupInput("DM_OU_Climate_model", DM_Name_CD_Models,
-                     #                                            choices = c(DM_Name_CD_Models_list),
-                     #                                            selected = DM_Name_CD_Models_selected
-                     #                         ),
-                     #                         
-                     #                         checkboxGroupInput("DM_OU_Climate_scenario", DM_Name_CD_Scenarios,
-                     #                                            choices = c(DM_Name_CD_Scenarios_list),
-                     #                                            selected = DM_Name_CD_Scenarios_selected
-                     #                         ),
-                     #                         
-                     #                         checkboxGroupInput("DM_OU_Project_year", DM_Name_CD_Year,
-                     #                                            choices = c(DM_Name_CD_Year_list),
-                     #                                            selected = DM_Name_CD_Year_selected
-                     #                         )
-                     #                         
-                     #                         # sliderInput("DM_OU_Project_year", label = DM_Name_CD_Year, min = 2000,
-                     #                         #             max = 2080, value = 2000, step = 10, sep = "",
-                     #                         #             animate = animationOptions(interval = 3000))
-                     #            ),
-                     #            
-                     #            # Main panel for displaying outputs ----
-                     #            mainPanel(
-                     #              
-                     #              # bsCollapse(
-                     #              #   bsCollapsePanel("Summary",
-                     #              #                   verbatimTextOutput("DM_OU_Summary"), style = ST_Name)
-                     #              # ),
-                     #              # fluidRow(
-                     #              #   valueBoxOutput("DM_Value_CM"),
-                     #              #   valueBoxOutput("DM_Value_CS"),
-                     #              #   valueBoxOutput("DM_Value_YR")
-                     #              # ),
-                     #              # leafletOutput("DM_OU_DIspersal_map", width = "800", height = "650") %>% withSpinner(),
-                     #              # actionButton("Reset_DM_OU_DIspersal_map", label = "Reset")
-                     #              
-                     #              tabsetPanel(
-                     #                tabPanel(DM_Name_Out_Plot,
-                     #                         tags$hr(),
-                     #                         uiOutput("DM_OU_UI_plot") %>% withSpinner()
-                     #                )
-                     #              )
-                     #              
-                     #            ) # mainPanel
-                     #          )
-                     # )
-                   # )
           ), 
           
           
@@ -1201,210 +883,6 @@ shinyUI(
                        )
                      )
                    )
-                   
-                   
-                   # sidebarLayout(
-                   #   sidebarPanel(width = 3, Fluid = TRUE,
-                   #                
-                   #                uiOutput("SS_AO_Species"),
-                   #                tags$hr(),
-                   #                
-                   #                uiOutput("SS_AO_SDM_model"),
-                   #                
-                   #                uiOutput("SS_AO_DT_CM_CS_PY"),
-                   #                hr(),
-                   #                actionButton('reset_SS_AO', label = "Reset")
-                   #   ),
-                   #   
-                   #   # Main panel for displaying outputs ----
-                   #   mainPanel(
-                   #     tabsetPanel(
-                   #       tabPanel(SS_Name_Out_ChangePlot,
-                   #                tags$hr(),
-                   #                uiOutput("SS_AO_UI_plot")
-                   #       ),
-                   #       tabPanel(SS_Name_Out_Pattern, 
-                   #                tags$hr(),
-                   #                fluidRow(
-                   #                  column(6, 
-                   #                         DT::dataTableOutput("SS_AO_IV_Table")
-                   #                  )
-                   #                ),
-                   #                fluidRow(
-                   #                  tags$hr(),
-                   #                  uiOutput("SS_AO_IV_UI_plot1"),
-                   #                  tags$hr(),
-                   #                  column(6, plotOutput("SS_AO_IV_Plot1")),
-                   #                  column(6, plotOutput("SS_AO_IV_Plot2"))
-                   #                ),
-                   #                fluidRow(
-                   #                  tags$hr(),
-                   #                  uiOutput("SS_AO_IV_UI_plot2"),
-                   #                  tags$hr(),
-                   #                  column(6, plotOutput("SS_AO_IV_Plot11")),
-                   #                  column(6, plotOutput("SS_AO_IV_Plot21"))
-                   #                )
-                   #       ),
-                   #       tabPanel(SS_Name_Out_Vulnerabiity, 
-                   #                tags$hr(),
-                   #                fluidRow(
-                   #                  column(6, 
-                   #                         DT::dataTableOutput("SS_AO_VP_Table")
-                   #                  )
-                   #                ),
-                   #                fluidRow(
-                   #                  tags$hr(),
-                   #                  uiOutput("SS_AO_VP_UI_plot1"),
-                   #                  tags$hr(),
-                   #                  column(6, plotOutput("SS_AO_VP_Plot1")),
-                   #                  column(6, plotOutput("SS_AO_VP_Plot2"))
-                   #                ),
-                   #                fluidRow(
-                   #                  tags$hr(),
-                   #                  uiOutput("SS_AO_VP_UI_plot2"),
-                   #                  tags$hr(),
-                   #                  column(6, plotOutput("SS_AO_VP_Plot11")),
-                   #                  column(6, plotOutput("SS_AO_VP_Plot21"))
-                   #                ),
-                   #                fluidRow(
-                   #                  tags$hr(),
-                   #                  uiOutput("SS_AO_VP_UI_plot3"),
-                   #                  tags$hr(),
-                   #                  column(6, plotOutput("SS_AO_VP_Plot12")),
-                   #                  column(6, plotOutput("SS_AO_VP_Plot22"))
-                   #                )
-                   #                # fluidRow(
-                   #                #   tags$hr(),
-                   #                #   plotOutput("SS_AO_VP_Priority",width = "100%", height = "600px"))
-                   #       )
-                   #     )
-                   #   )
-                   # )
-                   
-                   
-                   # tabsetPanel(
-                   #   tabPanel(SS_Name_Analysis, fluid = TRUE,
-                   #            
-                   #            uiOutput("SS_Analy_Box"),
-                   #            
-                   #            tags$hr(),
-                   #            fluidRow(
-                   #              sidebarPanel(width = 2, Fluid = TRUE,
-                   #                           uiOutput("SS_CA_Species"),
-                   #                           
-                   #                           uiOutput("SS_CA_Types")
-                   #                           
-                   #                           
-                   #              ),
-                   #              sidebarPanel(width = 2, Fluid = TRUE,             
-                   #                           
-                   #                           
-                   #                           uiOutput("SS_CA_Col_Box_02")
-                   #                           
-                   #                           
-                   #              ),
-                   #              sidebarPanel(width = 2,
-                   #                           uiOutput("SS_CA_SDM_model"),
-                   #                           br(),
-                   #                           actionButton('reset_SS_CA', label = "Reset")
-                   #              ),
-                   #              sidebarPanel(width = 1,
-                   #                           cat("Hello"),
-                   #                           # print("=====>"),
-                   #                           tags$br(),
-                   #                           tags$br()
-                   #              ),
-                   #              sidebarPanel(width = 3,
-                   #                           actionButton("SS_CA_Action_change", label = "Analayzing the change of Species Distribution"),
-                   #                           tags$br(),
-                   #                           tags$br(),
-                   #                           actionButton("SS_CA_Action_Vindex", label = "Calculating the Climate Vulnerability Index of Species")
-                   #              )
-                   #            )
-                   #   ),
-                   #   
-                   #   
-                   #   tabPanel(SS_Name_Out, fluid = TRUE,
-                   #            tags$hr(),
-                   #            sidebarLayout(
-                   #              sidebarPanel(width = 3, Fluid = TRUE,
-                   #                           
-                   #                           uiOutput("SS_AO_Species"),
-                   #                           tags$hr(),
-                   #                           
-                   #                           uiOutput("SS_AO_SDM_model"),
-                   #                           
-                   #                           uiOutput("SS_AO_DT_CM_CS_PY"),
-                   #                           hr(),
-                   #                           actionButton('reset_SS_AO', label = "Reset")
-                   #              ),
-                   #              
-                   #              # Main panel for displaying outputs ----
-                   #              mainPanel(
-                   #                tabsetPanel(
-                   #                  tabPanel(SS_Name_Out_ChangePlot,
-                   #                           tags$hr(),
-                   #                           uiOutput("SS_AO_UI_plot")
-                   #                  ),
-                   #                  tabPanel(SS_Name_Out_Pattern, 
-                   #                           tags$hr(),
-                   #                           fluidRow(
-                   #                             column(6, 
-                   #                                    DT::dataTableOutput("SS_AO_IV_Table")
-                   #                             )
-                   #                           ),
-                   #                           fluidRow(
-                   #                             tags$hr(),
-                   #                             uiOutput("SS_AO_IV_UI_plot1"),
-                   #                             tags$hr(),
-                   #                             column(6, plotOutput("SS_AO_IV_Plot1")),
-                   #                             column(6, plotOutput("SS_AO_IV_Plot2"))
-                   #                           ),
-                   #                           fluidRow(
-                   #                             tags$hr(),
-                   #                             uiOutput("SS_AO_IV_UI_plot2"),
-                   #                             tags$hr(),
-                   #                             column(6, plotOutput("SS_AO_IV_Plot11")),
-                   #                             column(6, plotOutput("SS_AO_IV_Plot21"))
-                   #                           )
-                   #                  ),
-                   #                  tabPanel(SS_Name_Out_Vulnerabiity, 
-                   #                           tags$hr(),
-                   #                           fluidRow(
-                   #                             column(6, 
-                   #                                    DT::dataTableOutput("SS_AO_VP_Table")
-                   #                             )
-                   #                           ),
-                   #                           fluidRow(
-                   #                             tags$hr(),
-                   #                             uiOutput("SS_AO_VP_UI_plot1"),
-                   #                             tags$hr(),
-                   #                             column(6, plotOutput("SS_AO_VP_Plot1")),
-                   #                             column(6, plotOutput("SS_AO_VP_Plot2"))
-                   #                           ),
-                   #                           fluidRow(
-                   #                             tags$hr(),
-                   #                             uiOutput("SS_AO_VP_UI_plot2"),
-                   #                             tags$hr(),
-                   #                             column(6, plotOutput("SS_AO_VP_Plot11")),
-                   #                             column(6, plotOutput("SS_AO_VP_Plot21"))
-                   #                           ),
-                   #                           fluidRow(
-                   #                             tags$hr(),
-                   #                             uiOutput("SS_AO_VP_UI_plot3"),
-                   #                             tags$hr(),
-                   #                             column(6, plotOutput("SS_AO_VP_Plot12")),
-                   #                             column(6, plotOutput("SS_AO_VP_Plot22"))
-                   #                           )
-                   #                           # fluidRow(
-                   #                           #   tags$hr(),
-                   #                           #   plotOutput("SS_AO_VP_Priority",width = "100%", height = "600px"))
-                   #                  )
-                   #                )
-                   #              )
-                   #            )
-                   #   )
-                   # )
           ),      
           
           tabPanel(IS_Name, icon = icon("table"),
@@ -1413,126 +891,104 @@ shinyUI(
                    
                    sidebarLayout(
                      sidebarPanel(width = 3, Fluid = TRUE,
-                                  
-                                  shinyDirButton("IS_AO_Dir_Folder", IS_Name_AO_Dir, IS_Name_AO_Dir),
-                                  verbatimTextOutput("IS_AO_Dir_Folder", placeholder = TRUE),
-                                  tags$hr(),
-                                  #uiOutput("IS_AO_Species"),
-                                  uiOutput("IS_AO_Species"),
-                                  tags$hr(),
-                                  uiOutput("IS_AO_SDM_model"),
-                                  
-                                  radioButtons("IS_AO_Dispersal_type", IS_Name_DM_Models,
-                                               choices = c(IS_Name_DM_Models_list),
-                                               selected = IS_Name_DM_Models_selected),
-                                  
-                                  # Input: Checkbox if file has header ----
-                                  radioButtons("IS_AO_Climate_model", IS_Name_CD_Models,
-                                               choices = c(IS_Name_CD_Models_list),
-                                               selected = IS_Name_CD_Models_selected),
-                                  
-                                  # Input: Checkbox if file has header ----
-                                  radioButtons("IS_AO_Climate_scenario", IS_Name_CD_Scenarios,
-                                               choices = c(IS_Name_CD_Scenarios_list),
-                                               selected = IS_Name_CD_Scenarios_selected),
-                                  
-                                  # Input: Checkbox if file has header ----
-                                  # radioButtons("IS_AO_Project_year", IS_Name_CD_Year,
-                                  #              choices = c(IS_Name_CD_Year_list),
-                                  #              selected = IS_Name_CD_Year_selected),
-                                  
-                                  sliderInput("IS_AO_Project_year", label = IS_Name_CD_Year, min = 2000,
-                                              max = 2080, value = 2000, step = 10, sep = "",
-                                              animate = animationOptions(interval = 3000)),
-                                  
-                                  shinyDirButton("IS_MI_Dir_Folder", IS_Name_MO_Dir, IS_Name_MO_Dir),
-                                  verbatimTextOutput("IS_MI_Dir_Folder", placeholder = TRUE)
+                        
+                        uiOutput("IS_VA_Dir_Folder"),
+                        tags$hr(),
+                        
+                        uiOutput("IS_AO_Species0"),
+                        uiOutput("IS_AO_Species"),
+                        tags$hr(),
+                        
+                        # Input: Checkbox if file has header ----
+                        radioButtons("IS_AO_Climate_model", IS_Name_CD_Models,
+                                     choices = c(IS_Name_CD_Models_list),
+                                     selected = IS_Name_CD_Models_selected),
+
+                        # Input: Checkbox if file has header ----
+                        radioButtons("IS_AO_Climate_scenario", IS_Name_CD_Scenarios,
+                                     choices = c(IS_Name_CD_Scenarios_list),
+                                     selected = IS_Name_CD_Scenarios_selected),
+
+                        # Input: Checkbox if file has header ----
+                        # radioButtons("IS_AO_Project_year", IS_Name_CD_Year,
+                        #              choices = c(IS_Name_CD_Year_list),
+                        #              selected = IS_Name_CD_Year_selected),
+
+                        sliderInput("IS_AO_Project_year", label = IS_Name_CD_Year, min = 2000,
+                                    max = 2080, value = 2000, step = 10, sep = "",
+                                    animate = animationOptions(interval = 3000)),
+                        
+                        fluidRow(
+                          bsCollapse(id = "OptionSelect", open = "Option",
+                             bsCollapsePanel("Option",
+                               # style = ST_Name,
+                               uiOutput("IS_AO_SDM_model"),
+                               
+                               radioButtons("IS_AO_Dispersal_type", IS_Name_DM_Models,
+                                            choices = c(IS_Name_DM_Models_list),
+                                            selected = IS_Name_DM_Models_selected)
+                             )
+                          )
+                        )
                      ),
-                     
-                     # sidebarPanel(width = 3, Fluid = TRUE,
-                     #              # shinyDirButton("IS_AO_Dir_Folder", "Invasive Assessment Output Folder", "Invasive Assessment Output Folder"),
-                     #              # verbatimTextOutput("IS_AO_Dir_Folder", placeholder = TRUE),
-                     #              # tags$hr(),
-                     #              uiOutput("IS_AO_Species"),
-                     #              tags$hr(),
-                     #              
-                     #              uiOutput("IS_AO_SDM_model"),
-                     #              
-                     #              radioButtons("IS_AO_Dispersal_type", IS_Name_DM_Models,
-                     #                           choices = c(IS_Name_DM_Models_list),
-                     #                           selected = IS_Name_DM_Models_selected
-                     #              ),
-                     #              
-                     #              # Input: Checkbox if file has header ----
-                     #              radioButtons("IS_AO_Climate_model", IS_Name_CD_Models,
-                     #                           choices = c(IS_Name_CD_Models_list),
-                     #                           selected = IS_Name_CD_Models_selected
-                     #              ),
-                     #              
-                     #              # Input: Checkbox if file has header ----
-                     #              radioButtons("IS_AO_Climate_scenario", IS_Name_CD_Scenarios,
-                     #                           choices = c(IS_Name_CD_Scenarios_list),
-                     #                           selected = IS_Name_CD_Scenarios_selected
-                     #              ),
-                     #              
-                     #              # Input: Checkbox if file has header ----
-                     #              radioButtons("IS_AO_Project_year", IS_Name_CD_Year,
-                     #                           choices = c(IS_Name_CD_Year_list),
-                     #                           selected = IS_Name_CD_Year_selected
-                     #              )
-                     # ),
                      
                      # Main panel for displaying outputs ----
                      mainPanel(
+                       fluidRow(
+                         valueBoxOutput("IS_Value_WK2"),
+                         valueBoxOutput("IS_Value_WK"),
+                         valueBoxOutput("IS_Value_SP")
+                       ),
                        tabsetPanel(
                          tabPanel(IS_Name_Out_Species, 
-                                  tags$head(
-                                    # Include our custom CSS
-                                    includeCSS("styles.css"),
-                                    includeScript("gomap.js")
-                                  ),
-                                  tags$hr(),
-                                  column(6, leafletOutput("IS_AO_SD_Map", width = "800", height = "650")),
-                                  tags$hr(),
-                                  column(10, verbatimTextOutput("IS_AO_SD_Summary")),
-                                  column(10, plotOutput("IS_AO_SD_Histogram"))
+                            tags$head(
+                              # Include our custom CSS
+                              includeCSS("styles.css"),
+                              includeScript("gomap.js")
+                            ),
+                            tags$hr(),
+                            
+                            bsCollapsePanel("Summary & Histogram",
+                              style = ST_Name,
+                              fluidRow(
+                                column(4, verbatimTextOutput("IS_AO_SD_Summary")),
+                                column(6, plotOutput("IS_AO_SD_Histogram"))
+                              ) 
+                            ),
+                            
+                            column(6, leafletOutput("IS_AO_SD_Map", width = "800", height = "650"))
                          ),
-                         
-                         
+
                          tabPanel(IS_Name_Out_SR,	
-                                  tags$br(), tags$br(),	
-                                  # fluidRow(	
-                                  #   valueBoxOutput("IS_Value_CM"),	
-                                  #   valueBoxOutput("IS_Value_CS"),	
-                                  #   valueBoxOutput("IS_Value_YR")	
-                                  # ),	
-                                  fluidRow(	
-                                    valueBoxOutput("IS_Value_CM"),	
-                                    valueBoxOutput("IS_Value_CS"),	
-                                    valueBoxOutput("IS_Value_YR")
-                                  ),
-                                  fluidRow(
-                                    column(4, class = "text-center",
-                                           h4("< 외래종 풍부도 >"),
-                                           leafletOutput("IS_AO_SR_Map", width = "360", height = "600") %>% withSpinner() ),
-                                    column(4, class = "text-center",
-                                           h4("< 시도 지도 >"),
-                                           leafletOutput("IS_AO_SR_SIDO_Map", width = "360", height = "600") %>% withSpinner()  ,
-                                           tags$br(), tags$br(),
-                                           actionButton('Reset_IS_AO_SR_Map', label = 'Reset')
-                                           # tags$br(), tags$br(),
-                                           # plotOutput("IS_AO_SR_SIDO_Stat")
-                                    ),
-                                    column(4, class = "text-center",
-                                           h4("< 시도 통계 >"),
-                                           plotOutput("IS_AO_SR_SIDO_Stat")
-                                    )
-                                    # column(4, class = "text-center",
-                                    #        h4("< 시군구 통계 >"),
-                                    #        leafletOutput("IS_AO_SR_SGG_Map", width = "360", height = "600") %>% withSpinner()
-                                    # plotOutput("IS_AO_SR_SGG_Stat")
-                                    # )
-                                  )
+                            tags$br(), tags$br(),	
+                            
+                            # fluidRow(	
+                            #   valueBoxOutput("IS_Value_CM"),	
+                            #   valueBoxOutput("IS_Value_CS"),	
+                            #   valueBoxOutput("IS_Value_YR")
+                            # ),
+                            fluidRow(
+                              column(4, class = "text-center",
+                                     h4("< 외래종 풍부도 >"),
+                                     leafletOutput("IS_AO_SR_Map", width = "360", height = "600") %>% withSpinner() ),
+                              column(4, class = "text-center",
+                                     h4("< 시도 지도 >"),
+                                     leafletOutput("IS_AO_SR_SIDO_Map", width = "360", height = "600") %>% withSpinner(),
+                                     tags$br(), tags$br(),
+                                     actionButton('Reset_IS_AO_SR_Map', label = 'Reset'),
+                                     # tags$br(), tags$br(),
+                                     # plotOutput("IS_AO_SR_SIDO_Stat")
+                              ),
+                              column(4, class = "text-center",
+                                     h4("< 시도 통계 >"),
+                                     plotOutput("IS_AO_SR_SIDO_Stat")
+                              )
+                              # column(4, class = "text-center",
+                              #        h4("< 시군구 통계 >"),
+                              #        leafletOutput("IS_AO_SR_SGG_Map", width = "360", height = "600") %>% withSpinner()
+                              # plotOutput("IS_AO_SR_SGG_Stat")
+                              # )
+                            )
                          ),
                          
                          tabPanel(IS_Name_Out_SI,
@@ -1866,347 +1322,344 @@ shinyUI(
           
           
           
-          # tabPanel(VH_Name, icon = icon("table"),
-          #          
-          #          
-          #          tags$hr(),
-          #          sidebarLayout(
-          #            sidebarPanel(width = 3, Fluid = TRUE,
-          #                         
-          #                         uiOutput("VH_AO_Species"),
-          #                         tags$hr(),
-          #                         
-          #                         uiOutput("VH_AO_SDM_model"),
-          #                         
-          #                         uiOutput("VH_AO_DT_CM_CS_PY"),
-          #                         hr(),
-          #                         actionButton('reset_VH_AO', label = "Reset")
-          #                         
-          #            ),
-          #            
-          #            # Main panel for displaying outputs ----
-          #            mainPanel(
-          #              tabsetPanel(
-          #                tabPanel("Species Richness",
-          #                         tabsetPanel(
-          #                           tabPanel("Map", 
-          #                                    tags$head(
-          #                                      # Include our custom CSS
-          #                                      includeCSS("styles.css"),
-          #                                      includeScript("gomap.js")
-          #                                    ),
-          #                                    leafletOutput("VH_OU_SR_Map", width = "800", height = "600") %>% withSpinner(),
-          #                                    actionButton("Reset_VH_OU_SR_Map", label = "Reset") ),
-          #                           tabPanel("Habitat Type",
-          #                                    tabsetPanel(
-          #                                      tabPanel("Map", 
-          #                                               tags$head(
-          #                                                 # Include our custom CSS
-          #                                                 includeCSS("styles.css"),
-          #                                                 includeScript("gomap.js")
-          #                                               ),
-          #                                               leafletOutput("VH_OU_SR_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
-          #                                               actionButton("Reset_VH_OU_SR_Habitat_Map", label = "Reset") ),
-          #                                      tabPanel("Statistics", plotOutput("VH_OU_SR_Habitat_Stat"))
-          #                                    )
-          #                           )
-          #                         )
-          #                ),
-          #                tabPanel("Species Richness Loss",
-          #                         tabsetPanel(
-          #                           tabPanel("Map", 
-          #                                    tags$head(
-          #                                      # Include our custom CSS
-          #                                      includeCSS("styles.css"),
-          #                                      includeScript("gomap.js")
-          #                                    ),
-          #                                    leafletOutput("VH_OU_SRL_Map", width = "800", height = "600") %>% withSpinner(),
-          #                                    actionButton("Reset_VH_OU_SRL_Map", label = "Reset") ),
-          #                           tabPanel("Habitat Type",
-          #                                    tabsetPanel(
-          #                                      tabPanel("Map", 
-          #                                               tags$head(
-          #                                                 # Include our custom CSS
-          #                                                 includeCSS("styles.css"),
-          #                                                 includeScript("gomap.js")
-          #                                               ),
-          #                                               leafletOutput("VH_OU_SRL_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
-          #                                               actionButton("Reset_VH_OU_SRL_Habitat_Map", label = "Reset") ),
-          #                                      tabPanel("Statistics", verbatimTextOutput("VH_OU_SRL_Habitat_Stat"))
-          #                                    )
-          #                           )
-          #                         )
-          #                ),
-          #                tabPanel("Species Loss",
-          #                         tabsetPanel(
-          #                           tabPanel("Map", 
-          #                                    tags$head(
-          #                                      # Include our custom CSS
-          #                                      includeCSS("styles.css"),
-          #                                      includeScript("gomap.js")
-          #                                    ),
-          #                                    leafletOutput("VH_OU_SL_Map", width = "800", height = "600") %>% withSpinner(),
-          #                                    actionButton("Reset_VH_OU_SL_Map", label = "Reset") ),
-          #                           tabPanel("Habitat Type",
-          #                                    tabsetPanel(
-          #                                      tabPanel("Map", 
-          #                                               tags$head(
-          #                                                 # Include our custom CSS
-          #                                                 includeCSS("styles.css"),
-          #                                                 includeScript("gomap.js")
-          #                                               ),
-          #                                               leafletOutput("VH_OU_SL_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
-          #                                               actionButton("Reset_VH_OU_SL_Habitat_Map", label = "Reset") ),
-          #                                      tabPanel("Statistics", verbatimTextOutput("VH_OU_SL_Habitat_Stat"))
-          #                                    )
-          #                           )
-          #                         )
-          #                ),
-          #                tabPanel("Species Stay",
-          #                         tabsetPanel(
-          #                           tabPanel("Map", 
-          #                                    tags$head(
-          #                                      # Include our custom CSS
-          #                                      includeCSS("styles.css"),
-          #                                      includeScript("gomap.js")
-          #                                    ),
-          #                                    leafletOutput("VH_OU_SS_Map", width = "800", height = "600") %>% withSpinner(),
-          #                                    actionButton("Reset_VH_OU_SS_Map", label = "Reset") ),
-          #                           tabPanel("Habitat Type",
-          #                                    tabsetPanel(
-          #                                      tabPanel("Map", 
-          #                                               tags$head(
-          #                                                 # Include our custom CSS
-          #                                                 includeCSS("styles.css"),
-          #                                                 includeScript("gomap.js")
-          #                                               ),
-          #                                               leafletOutput("VH_OU_SS_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
-          #                                               actionButton("Reset_VH_OU_SS_Habitat_Map", label = "Reset") ),
-          #                                      tabPanel("Statistics", verbatimTextOutput("VH_OU_SS_Habitat_Stat"))
-          #                                    )
-          #                           )
-          #                         )
-          #                ),
-          #                tabPanel("Species Introduction",
-          #                         tabsetPanel(
-          #                           tabPanel("Map", 
-          #                                    tags$head(
-          #                                      # Include our custom CSS
-          #                                      includeCSS("styles.css"),
-          #                                      includeScript("gomap.js")
-          #                                    ),
-          #                                    leafletOutput("VH_OU_SI_Map", width = "800", height = "600") %>% withSpinner(),
-          #                                    actionButton("Reset_VH_OU_SI_Map", label = "Reset") ),
-          #                           tabPanel("Habitat Type",
-          #                                    tabsetPanel(
-          #                                      tabPanel("Map", 
-          #                                               tags$head(
-          #                                                 # Include our custom CSS
-          #                                                 includeCSS("styles.css"),
-          #                                                 includeScript("gomap.js")
-          #                                               ),
-          #                                               leafletOutput("VH_OU_SI_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
-          #                                               actionButton("Reset_VH_OU_SI_Habitat_Map", label = "Reset") ),
-          #                                      tabPanel("Statistics", verbatimTextOutput("VH_OU_SI_Habitat_Stat"))
-          #                                    )
-          #                           )
-          #                         )
-          #                )
-          #              )
-          #            )
-          #          )
-          # ),
+          tabPanel(VH_Name, icon = icon("table"),
+                   tags$hr(),
+                   sidebarLayout(
+                     sidebarPanel(width = 3, Fluid = TRUE,
+
+                                  uiOutput("VH_AO_Species"),
+                                  tags$hr(),
+
+                                  uiOutput("VH_AO_SDM_model"),
+
+                                  uiOutput("VH_AO_DT_CM_CS_PY"),
+                                  hr(),
+                                  actionButton('reset_VH_AO', label = "Reset")
+                     ),
+
+                     # Main panel for displaying outputs ----
+                     mainPanel(
+                       tabsetPanel(
+                         tabPanel("Species Richness",
+                                  tabsetPanel(
+                                    tabPanel("Map",
+                                             tags$head(
+                                               # Include our custom CSS
+                                               includeCSS("styles.css"),
+                                               includeScript("gomap.js")
+                                             ),
+                                             leafletOutput("VH_OU_SR_Map", width = "800", height = "600") %>% withSpinner(),
+                                             actionButton("Reset_VH_OU_SR_Map", label = "Reset") ),
+                                    tabPanel("Habitat Type",
+                                             tabsetPanel(
+                                               tabPanel("Map",
+                                                        tags$head(
+                                                          # Include our custom CSS
+                                                          includeCSS("styles.css"),
+                                                          includeScript("gomap.js")
+                                                        ),
+                                                        leafletOutput("VH_OU_SR_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
+                                                        actionButton("Reset_VH_OU_SR_Habitat_Map", label = "Reset") ),
+                                               tabPanel("Statistics", plotOutput("VH_OU_SR_Habitat_Stat"))
+                                             )
+                                    )
+                                  )
+                         ),
+                         tabPanel("Species Richness Loss",
+                                  tabsetPanel(
+                                    tabPanel("Map",
+                                             tags$head(
+                                               # Include our custom CSS
+                                               includeCSS("styles.css"),
+                                               includeScript("gomap.js")
+                                             ),
+                                             leafletOutput("VH_OU_SRL_Map", width = "800", height = "600") %>% withSpinner(),
+                                             actionButton("Reset_VH_OU_SRL_Map", label = "Reset") ),
+                                    tabPanel("Habitat Type",
+                                             tabsetPanel(
+                                               tabPanel("Map",
+                                                        tags$head(
+                                                          # Include our custom CSS
+                                                          includeCSS("styles.css"),
+                                                          includeScript("gomap.js")
+                                                        ),
+                                                        leafletOutput("VH_OU_SRL_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
+                                                        actionButton("Reset_VH_OU_SRL_Habitat_Map", label = "Reset") ),
+                                               tabPanel("Statistics", verbatimTextOutput("VH_OU_SRL_Habitat_Stat"))
+                                             )
+                                    )
+                                  )
+                         ),
+                         tabPanel("Species Loss",
+                                  tabsetPanel(
+                                    tabPanel("Map",
+                                             tags$head(
+                                               # Include our custom CSS
+                                               includeCSS("styles.css"),
+                                               includeScript("gomap.js")
+                                             ),
+                                             leafletOutput("VH_OU_SL_Map", width = "800", height = "600") %>% withSpinner(),
+                                             actionButton("Reset_VH_OU_SL_Map", label = "Reset") ),
+                                    tabPanel("Habitat Type",
+                                             tabsetPanel(
+                                               tabPanel("Map",
+                                                        tags$head(
+                                                          # Include our custom CSS
+                                                          includeCSS("styles.css"),
+                                                          includeScript("gomap.js")
+                                                        ),
+                                                        leafletOutput("VH_OU_SL_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
+                                                        actionButton("Reset_VH_OU_SL_Habitat_Map", label = "Reset") ),
+                                               tabPanel("Statistics", verbatimTextOutput("VH_OU_SL_Habitat_Stat"))
+                                             )
+                                    )
+                                  )
+                         ),
+                         tabPanel("Species Stay",
+                                  tabsetPanel(
+                                    tabPanel("Map",
+                                             tags$head(
+                                               # Include our custom CSS
+                                               includeCSS("styles.css"),
+                                               includeScript("gomap.js")
+                                             ),
+                                             leafletOutput("VH_OU_SS_Map", width = "800", height = "600") %>% withSpinner(),
+                                             actionButton("Reset_VH_OU_SS_Map", label = "Reset") ),
+                                    tabPanel("Habitat Type",
+                                             tabsetPanel(
+                                               tabPanel("Map",
+                                                        tags$head(
+                                                          # Include our custom CSS
+                                                          includeCSS("styles.css"),
+                                                          includeScript("gomap.js")
+                                                        ),
+                                                        leafletOutput("VH_OU_SS_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
+                                                        actionButton("Reset_VH_OU_SS_Habitat_Map", label = "Reset") ),
+                                               tabPanel("Statistics", verbatimTextOutput("VH_OU_SS_Habitat_Stat"))
+                                             )
+                                    )
+                                  )
+                         ),
+                         tabPanel("Species Introduction",
+                                  tabsetPanel(
+                                    tabPanel("Map",
+                                             tags$head(
+                                               # Include our custom CSS
+                                               includeCSS("styles.css"),
+                                               includeScript("gomap.js")
+                                             ),
+                                             leafletOutput("VH_OU_SI_Map", width = "800", height = "600") %>% withSpinner(),
+                                             actionButton("Reset_VH_OU_SI_Map", label = "Reset") ),
+                                    tabPanel("Habitat Type",
+                                             tabsetPanel(
+                                               tabPanel("Map",
+                                                        tags$head(
+                                                          # Include our custom CSS
+                                                          includeCSS("styles.css"),
+                                                          includeScript("gomap.js")
+                                                        ),
+                                                        leafletOutput("VH_OU_SI_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
+                                                        actionButton("Reset_VH_OU_SI_Habitat_Map", label = "Reset") ),
+                                               tabPanel("Statistics", verbatimTextOutput("VH_OU_SI_Habitat_Stat"))
+                                             )
+                                    )
+                                  )
+                         )
+                       )
+                     )
+                   )
+          ),
                    
 # <<<<<<< HEAD
                    
                    
-                   # tabsetPanel(
-                   #   tabPanel(VH_Name_Analysis, fluid = TRUE,
-                   #            tags$hr(),
-                   #            fluidRow(
-                   #              sidebarPanel(width = 3, Fluid = TRUE,
-                   #                           uiOutput("VH_CA_Species")
-                   #              ),
-                   #              sidebarPanel(width = 3, Fluid = TRUE,             
-                   #                           uiOutput("VH_CA_Col_Box_02")
-                   #                           
-                   #              ),
-                   #              sidebarPanel(width = 3,
-                   #                           uiOutput("VH_CA_SDM_model"),
-                   #                           tags$hr(),
-                   #                           
-                   #                           uiOutput("VH_CA_Habitat_Weighting"),
-                   #                           tags$hr(),  
-                   #                           
-                   #                           actionButton('reset_VH_CA', label = "Reset"),
-                   #                           tags$hr(),             
-                   #                           
-                   #                           actionButton("VH_VA_Action_SR", label = "Species Richness"),
-                   #                           br(),
-                   #                           actionButton("VH_VA_Action_SRL", label = "Species Richness Loss"),
-                   #                           tags$hr(),
-                   #                           actionButton("VH_VA_Action_SSA", label = "Species Stay Area"),
-                   #                           br(),
-                   #                           actionButton("VH_VA_Action_SLA", label = "Species Loss Area"),
-                   #                           br(),
-                   #                           actionButton("VH_VA_Action_SIA", label = "Species Introduction Area")
-                   #                           
-                   #              )
-                   #            )
-                   #            
-                   #   ), 
-                   #   
-                   #   tabPanel(VH_Name_Out, fluid = TRUE,
-                   #            tags$hr(),
-                   #            sidebarLayout(
-                   #              sidebarPanel(width = 3, Fluid = TRUE,
-                   #                           
-                   #                           uiOutput("VH_AO_Species"),
-                   #                           tags$hr(),
-                   #                           
-                   #                           uiOutput("VH_AO_SDM_model"),
-                   #                           
-                   #                           uiOutput("VH_AO_DT_CM_CS_PY"),
-                   #                           hr(),
-                   #                           actionButton('reset_VH_AO', label = "Reset")
-                   #                           
-                   #              ),
-                   #              
-                   #              # Main panel for displaying outputs ----
-                   #              mainPanel(
-                   #                tabsetPanel(
-                   #                  tabPanel("Species Richness",
-                   #                           tabsetPanel(
-                   #                             tabPanel("Map", 
-                   #                                      tags$head(
-                   #                                        # Include our custom CSS
-                   #                                        includeCSS("styles.css"),
-                   #                                        includeScript("gomap.js")
-                   #                                      ),
-                   #                                      leafletOutput("VH_OU_SR_Map", width = "800", height = "600") %>% withSpinner(),
-                   #                                      actionButton("Reset_VH_OU_SR_Map", label = "Reset") ),
-                   #                             tabPanel("Habitat Type",
-                   #                                      tabsetPanel(
-                   #                                        tabPanel("Map", 
-                   #                                                 tags$head(
-                   #                                                   # Include our custom CSS
-                   #                                                   includeCSS("styles.css"),
-                   #                                                   includeScript("gomap.js")
-                   #                                                 ),
-                   #                                                 leafletOutput("VH_OU_SR_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
-                   #                                                 actionButton("Reset_VH_OU_SR_Habitat_Map", label = "Reset") ),
-                   #                                        tabPanel("Statistics", plotOutput("VH_OU_SR_Habitat_Stat"))
-                   #                                      )
-                   #                             )
-                   #                           )
-                   #                  ),
-                   #                  tabPanel("Species Richness Loss",
-                   #                           tabsetPanel(
-                   #                             tabPanel("Map", 
-                   #                                      tags$head(
-                   #                                        # Include our custom CSS
-                   #                                        includeCSS("styles.css"),
-                   #                                        includeScript("gomap.js")
-                   #                                      ),
-                   #                                      leafletOutput("VH_OU_SRL_Map", width = "800", height = "600") %>% withSpinner(),
-                   #                                      actionButton("Reset_VH_OU_SRL_Map", label = "Reset") ),
-                   #                             tabPanel("Habitat Type",
-                   #                                      tabsetPanel(
-                   #                                        tabPanel("Map", 
-                   #                                                 tags$head(
-                   #                                                   # Include our custom CSS
-                   #                                                   includeCSS("styles.css"),
-                   #                                                   includeScript("gomap.js")
-                   #                                                 ),
-                   #                                                 leafletOutput("VH_OU_SRL_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
-                   #                                                 actionButton("Reset_VH_OU_SRL_Habitat_Map", label = "Reset") ),
-                   #                                        tabPanel("Statistics", verbatimTextOutput("VH_OU_SRL_Habitat_Stat"))
-                   #                                      )
-                   #                             )
-                   #                           )
-                   #                  ),
-                   #                  tabPanel("Species Loss",
-                   #                           tabsetPanel(
-                   #                             tabPanel("Map", 
-                   #                                      tags$head(
-                   #                                        # Include our custom CSS
-                   #                                        includeCSS("styles.css"),
-                   #                                        includeScript("gomap.js")
-                   #                                      ),
-                   #                                      leafletOutput("VH_OU_SL_Map", width = "800", height = "600") %>% withSpinner(),
-                   #                                      actionButton("Reset_VH_OU_SL_Map", label = "Reset") ),
-                   #                             tabPanel("Habitat Type",
-                   #                                      tabsetPanel(
-                   #                                        tabPanel("Map", 
-                   #                                                 tags$head(
-                   #                                                   # Include our custom CSS
-                   #                                                   includeCSS("styles.css"),
-                   #                                                   includeScript("gomap.js")
-                   #                                                 ),
-                   #                                                 leafletOutput("VH_OU_SL_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
-                   #                                                 actionButton("Reset_VH_OU_SL_Habitat_Map", label = "Reset") ),
-                   #                                        tabPanel("Statistics", verbatimTextOutput("VH_OU_SL_Habitat_Stat"))
-                   #                                      )
-                   #                             )
-                   #                           )
-                   #                  ),
-                   #                  tabPanel("Species Stay",
-                   #                           tabsetPanel(
-                   #                             tabPanel("Map", 
-                   #                                      tags$head(
-                   #                                        # Include our custom CSS
-                   #                                        includeCSS("styles.css"),
-                   #                                        includeScript("gomap.js")
-                   #                                      ),
-                   #                                      leafletOutput("VH_OU_SS_Map", width = "800", height = "600") %>% withSpinner(),
-                   #                                      actionButton("Reset_VH_OU_SS_Map", label = "Reset") ),
-                   #                             tabPanel("Habitat Type",
-                   #                                      tabsetPanel(
-                   #                                        tabPanel("Map", 
-                   #                                                 tags$head(
-                   #                                                   # Include our custom CSS
-                   #                                                   includeCSS("styles.css"),
-                   #                                                   includeScript("gomap.js")
-                   #                                                 ),
-                   #                                                 leafletOutput("VH_OU_SS_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
-                   #                                                 actionButton("Reset_VH_OU_SS_Habitat_Map", label = "Reset") ),
-                   #                                        tabPanel("Statistics", verbatimTextOutput("VH_OU_SS_Habitat_Stat"))
-                   #                                      )
-                   #                             )
-                   #                           )
-                   #                  ),
-                   #                  tabPanel("Species Introduction",
-                   #                           tabsetPanel(
-                   #                             tabPanel("Map", 
-                   #                                      tags$head(
-                   #                                        # Include our custom CSS
-                   #                                        includeCSS("styles.css"),
-                   #                                        includeScript("gomap.js")
-                   #                                      ),
-                   #                                      leafletOutput("VH_OU_SI_Map", width = "800", height = "600") %>% withSpinner(),
-                   #                                      actionButton("Reset_VH_OU_SI_Map", label = "Reset") ),
-                   #                             tabPanel("Habitat Type",
-                   #                                      tabsetPanel(
-                   #                                        tabPanel("Map", 
-                   #                                                 tags$head(
-                   #                                                   # Include our custom CSS
-                   #                                                   includeCSS("styles.css"),
-                   #                                                   includeScript("gomap.js")
-                   #                                                 ),
-                   #                                                 leafletOutput("VH_OU_SI_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
-                   #                                                 actionButton("Reset_VH_OU_SI_Habitat_Map", label = "Reset") ),
-                   #                                        tabPanel("Statistics", verbatimTextOutput("VH_OU_SI_Habitat_Stat"))
-                   #                                      )
-                   #                             )
-                   #                           )
-                   #                  )
-                   #                )
-                   #              )
-                   #            )
-                   #   )
-                   # )
-                   
-          # ),          
+          #          tabsetPanel(
+          #            tabPanel(VH_Name_Analysis, fluid = TRUE,
+          #                     tags$hr(),
+          #                     fluidRow(
+          #                       sidebarPanel(width = 3, Fluid = TRUE,
+          #                                    uiOutput("VH_CA_Species")
+          #                       ),
+          #                       sidebarPanel(width = 3, Fluid = TRUE,
+          #                                    uiOutput("VH_CA_Col_Box_02")
+          # 
+          #                       ),
+          #                       sidebarPanel(width = 3,
+          #                                    uiOutput("VH_CA_SDM_model"),
+          #                                    tags$hr(),
+          # 
+          #                                    uiOutput("VH_CA_Habitat_Weighting"),
+          #                                    tags$hr(),
+          # 
+          #                                    actionButton('reset_VH_CA', label = "Reset"),
+          #                                    tags$hr(),
+          # 
+          #                                    actionButton("VH_VA_Action_SR", label = "Species Richness"),
+          #                                    br(),
+          #                                    actionButton("VH_VA_Action_SRL", label = "Species Richness Loss"),
+          #                                    tags$hr(),
+          #                                    actionButton("VH_VA_Action_SSA", label = "Species Stay Area"),
+          #                                    br(),
+          #                                    actionButton("VH_VA_Action_SLA", label = "Species Loss Area"),
+          #                                    br(),
+          #                                    actionButton("VH_VA_Action_SIA", label = "Species Introduction Area")
+          # 
+          #                       )
+          #                     )
+          # 
+          #            ),
+          # 
+          #            tabPanel(VH_Name_Out, fluid = TRUE,
+          #                     tags$hr(),
+          #                     sidebarLayout(
+          #                       sidebarPanel(width = 3, Fluid = TRUE,
+          # 
+          #                                    uiOutput("VH_AO_Species"),
+          #                                    tags$hr(),
+          # 
+          #                                    uiOutput("VH_AO_SDM_model"),
+          # 
+          #                                    uiOutput("VH_AO_DT_CM_CS_PY"),
+          #                                    hr(),
+          #                                    actionButton('reset_VH_AO', label = "Reset")
+          # 
+          #                       ),
+          # 
+          #                       # Main panel for displaying outputs ----
+          #                       mainPanel(
+          #                         tabsetPanel(
+          #                           tabPanel("Species Richness",
+          #                                    tabsetPanel(
+          #                                      tabPanel("Map",
+          #                                               tags$head(
+          #                                                 # Include our custom CSS
+          #                                                 includeCSS("styles.css"),
+          #                                                 includeScript("gomap.js")
+          #                                               ),
+          #                                               leafletOutput("VH_OU_SR_Map", width = "800", height = "600") %>% withSpinner(),
+          #                                               actionButton("Reset_VH_OU_SR_Map", label = "Reset") ),
+          #                                      tabPanel("Habitat Type",
+          #                                               tabsetPanel(
+          #                                                 tabPanel("Map",
+          #                                                          tags$head(
+          #                                                            # Include our custom CSS
+          #                                                            includeCSS("styles.css"),
+          #                                                            includeScript("gomap.js")
+          #                                                          ),
+          #                                                          leafletOutput("VH_OU_SR_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
+          #                                                          actionButton("Reset_VH_OU_SR_Habitat_Map", label = "Reset") ),
+          #                                                 tabPanel("Statistics", plotOutput("VH_OU_SR_Habitat_Stat"))
+          #                                               )
+          #                                      )
+          #                                    )
+          #                           ),
+          #                           tabPanel("Species Richness Loss",
+          #                                    tabsetPanel(
+          #                                      tabPanel("Map",
+          #                                               tags$head(
+          #                                                 # Include our custom CSS
+          #                                                 includeCSS("styles.css"),
+          #                                                 includeScript("gomap.js")
+          #                                               ),
+          #                                               leafletOutput("VH_OU_SRL_Map", width = "800", height = "600") %>% withSpinner(),
+          #                                               actionButton("Reset_VH_OU_SRL_Map", label = "Reset") ),
+          #                                      tabPanel("Habitat Type",
+          #                                               tabsetPanel(
+          #                                                 tabPanel("Map",
+          #                                                          tags$head(
+          #                                                            # Include our custom CSS
+          #                                                            includeCSS("styles.css"),
+          #                                                            includeScript("gomap.js")
+          #                                                          ),
+          #                                                          leafletOutput("VH_OU_SRL_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
+          #                                                          actionButton("Reset_VH_OU_SRL_Habitat_Map", label = "Reset") ),
+          #                                                 tabPanel("Statistics", verbatimTextOutput("VH_OU_SRL_Habitat_Stat"))
+          #                                               )
+          #                                      )
+          #                                    )
+          #                           ),
+          #                           tabPanel("Species Loss",
+          #                                    tabsetPanel(
+          #                                      tabPanel("Map",
+          #                                               tags$head(
+          #                                                 # Include our custom CSS
+          #                                                 includeCSS("styles.css"),
+          #                                                 includeScript("gomap.js")
+          #                                               ),
+          #                                               leafletOutput("VH_OU_SL_Map", width = "800", height = "600") %>% withSpinner(),
+          #                                               actionButton("Reset_VH_OU_SL_Map", label = "Reset") ),
+          #                                      tabPanel("Habitat Type",
+          #                                               tabsetPanel(
+          #                                                 tabPanel("Map",
+          #                                                          tags$head(
+          #                                                            # Include our custom CSS
+          #                                                            includeCSS("styles.css"),
+          #                                                            includeScript("gomap.js")
+          #                                                          ),
+          #                                                          leafletOutput("VH_OU_SL_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
+          #                                                          actionButton("Reset_VH_OU_SL_Habitat_Map", label = "Reset") ),
+          #                                                 tabPanel("Statistics", verbatimTextOutput("VH_OU_SL_Habitat_Stat"))
+          #                                               )
+          #                                      )
+          #                                    )
+          #                           ),
+          #                           tabPanel("Species Stay",
+          #                                    tabsetPanel(
+          #                                      tabPanel("Map",
+          #                                               tags$head(
+          #                                                 # Include our custom CSS
+          #                                                 includeCSS("styles.css"),
+          #                                                 includeScript("gomap.js")
+          #                                               ),
+          #                                               leafletOutput("VH_OU_SS_Map", width = "800", height = "600") %>% withSpinner(),
+          #                                               actionButton("Reset_VH_OU_SS_Map", label = "Reset") ),
+          #                                      tabPanel("Habitat Type",
+          #                                               tabsetPanel(
+          #                                                 tabPanel("Map",
+          #                                                          tags$head(
+          #                                                            # Include our custom CSS
+          #                                                            includeCSS("styles.css"),
+          #                                                            includeScript("gomap.js")
+          #                                                          ),
+          #                                                          leafletOutput("VH_OU_SS_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
+          #                                                          actionButton("Reset_VH_OU_SS_Habitat_Map", label = "Reset") ),
+          #                                                 tabPanel("Statistics", verbatimTextOutput("VH_OU_SS_Habitat_Stat"))
+          #                                               )
+          #                                      )
+          #                                    )
+          #                           ),
+          #                           tabPanel("Species Introduction",
+          #                                    tabsetPanel(
+          #                                      tabPanel("Map",
+          #                                               tags$head(
+          #                                                 # Include our custom CSS
+          #                                                 includeCSS("styles.css"),
+          #                                                 includeScript("gomap.js")
+          #                                               ),
+          #                                               leafletOutput("VH_OU_SI_Map", width = "800", height = "600") %>% withSpinner(),
+          #                                               actionButton("Reset_VH_OU_SI_Map", label = "Reset") ),
+          #                                      tabPanel("Habitat Type",
+          #                                               tabsetPanel(
+          #                                                 tabPanel("Map",
+          #                                                          tags$head(
+          #                                                            # Include our custom CSS
+          #                                                            includeCSS("styles.css"),
+          #                                                            includeScript("gomap.js")
+          #                                                          ),
+          #                                                          leafletOutput("VH_OU_SI_Habitat_Map", width = "800", height = "600") %>% withSpinner(),
+          #                                                          actionButton("Reset_VH_OU_SI_Habitat_Map", label = "Reset") ),
+          #                                                 tabPanel("Statistics", verbatimTextOutput("VH_OU_SI_Habitat_Stat"))
+          #                                               )
+          #                                      )
+          #                                    )
+          #                           )
+          #                         )
+          #                       )
+          #                     )
+          #            )
+          #          )
+          #          
+          # ),
 # =======
           # )         
 # >>>>>>> lx02jd2
@@ -2712,7 +2165,7 @@ shinyUI(
                                               hr(),
                                               # fileInput("myFile", "Choose a file", accept = c('image/png', 'image/jpeg')),
                                               # tags$hr(),
-                                              print("<Current>"),
+                                              h4("<Current>"),
                                               tags$img(src = "test.jpg", width = ww, height = hh, alt = "This is alternate text")
                                               
                                  ),
@@ -2726,15 +2179,15 @@ shinyUI(
                                      box(
                                        title = "[KMA - RCP4.5]", width = NULL, solidHeader = F, status = "info", collapsible = T,
                                        column(4, class = "text-center",
-                                              print("<2020>"),
+                                              h4("<2020>"),
                                               tags$img(src = "test.jpg", width = ww, height = hh)
                                        ),
                                        column(4, class = "text-center",
-                                              print("<2050>"),
+                                              h4("<2050>"),
                                               tags$img(src = "test.jpg", width = ww, height = hh)
                                        ),
                                        column(4, class = "text-center",
-                                              print("<2080>"),
+                                              h4("<2080>"),
                                               tags$img(src = "test.jpg", width = ww, height = hh)
                                        )
                                      )
@@ -2743,15 +2196,15 @@ shinyUI(
                                      box(
                                        title = "[KMA - RCP8.5]", width = NULL, solidHeader = F, status = "warning", collapsible = T,
                                        column(4, class = "text-center",
-                                              print("<2020>"),
+                                              h4("<2020>"),
                                               tags$img(src = "test.jpg", width = ww, height = hh)
                                        ),
                                        column(4, class = "text-center",
-                                              print("<2050>"),
+                                              h4("<2050>"),
                                               tags$img(src = "test.jpg", width = ww, height = hh)
                                        ),
                                        column(4, class = "text-center",
-                                              print("<2080>"),
+                                              h4("<2080>"),
                                               tags$img(src = "test.jpg", width = ww, height = hh)
                                        )
                                      )
@@ -2760,15 +2213,15 @@ shinyUI(
                                      box(
                                        title = "[KEI - RCP4.5]", width = NULL, solidHeader = F, status = "info", collapsible = T,
                                        column(4, class = "text-center",
-                                              print("<2020>"),
+                                              h4("<2020>"),
                                               tags$img(src = "test.jpg", width = ww, height = hh)
                                        ),
                                        column(4, class = "text-center",
-                                              print("<2050>"),
+                                              h4("<2050>"),
                                               tags$img(src = "test.jpg", width = ww, height = hh)
                                        ),
                                        column(4, class = "text-center",
-                                              print("<2080>"),
+                                              h4("<2080>"),
                                               tags$img(src = "test.jpg", width = ww, height = hh)
                                        )
                                      )
@@ -2777,15 +2230,15 @@ shinyUI(
                                      box(
                                        title = "[KEI - RCP8.5]", width = NULL, solidHeader = F, status = "warning", collapsible = T,
                                        column(4, class = "text-center",
-                                              print("<2020>"),
+                                              h4("<2020>"),
                                               tags$img(src = "test.jpg", width = ww, height = hh)
                                        ),
                                        column(4, class = "text-center",
-                                              print("<2050>"),
+                                              h4("<2050>"),
                                               tags$img(src = "test.jpg", width = ww, height = hh)
                                        ),
                                        column(4, class = "text-center",
-                                              print("<2080>"),
+                                              h4("<2080>"),
                                               tags$img(src = "test.jpg", width = ww, height = hh)
                                        )
                                      )
@@ -2804,7 +2257,7 @@ shinyUI(
                                   sidebarPanel(width=3,
                                                h3("확산범위별 취약성지수"),
                                                hr(),
-                                               print("<Current>"),
+                                               h4("<Current>"),
                                                tags$img(src = "test.jpg", width = ww, height = hh, alt = "This is alternate text")
                                                # fluidRow(
                                                #   fileInput("myFile", "Choose a file", accept = c('image/png', 'image/jpeg'))
@@ -2936,7 +2389,7 @@ shinyUI(
                                   sidebarPanel(width=3,
                                                h3("사용자 맞춤형 리포트"),
                                                hr(),
-                                               print("<Current>"),
+                                               h4("<Current>"),
                                                tags$img(src = "test.jpg", width = ww, height = hh, alt = "This is alternate text")
                                   ),
                                   mainPanel(
@@ -2979,10 +2432,12 @@ shinyUI(
                                 ),
                                 mainPanel(
                                   fluidRow(
+                                    h2("Hello")
                                     # valueBoxOutput("Value_TM_DF"),
                                     # valueBoxOutput("Value_TM_AV")
                                   ),
                                   fluidRow(
+                                    h2("Hello2")
                                     # valueBoxOutput("Value_TM_ES"),
                                     # valueBoxOutput("Value_TM_RM")
                                   )
