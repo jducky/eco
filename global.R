@@ -25,12 +25,22 @@ library(imager)
 library(jpeg)
 library(datasets)
 library(psych)
+library(foreign)
+require(foreign)
 
-# library(extrafont) ## 잊지마세요 package 불러오기!
-# font_import()
+# library('showtext')
+# font_add_google('Noto Sans KR', 'notosanskr')
+# showtext_auto()
 
+# library(extrafont)
+# font_import(pattern = "Nanumgothic")
+# font_import(pattern = "NanumGothicExtraBold")
+# font_import() ## 모두 불러오기
+
+# theme_update(text=element_text(family="Nanumgothic"))
 # theme_set(theme_get() + theme(text = element_text(family = 'Nanumgothic')))
 # theme(text = element_text(family = 'Nanumgothic'))
+
 
 # installing packages 
 CHK_packages <- setdiff(packages, rownames(installed.packages()))
@@ -559,7 +569,7 @@ G_FILE_modelresult <- read.csv("C:/MOTIVE_projects/model_result_list.csv", strin
 
 G$IS_VA_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
 # G$IS_AO_Dir_Folder <- paste(isolate(G$SE_Dir_Project), "/Invasive_Species", sep = "")
-G$IS_AO_Dir_Folder <- NULL
+# G$IS_AO_Dir_Folder <- NULL
 
 test1_WD_List_Dirs <- list.dirs(path = file.path(isolate(G$SE_Dir_Project), "Species_Distribution", "test1"), full.names = FALSE, recursive = FALSE)
 # test1_WD_List_Dirs <- list.dirs(path = file.path(isolate(G$SE_Dir_Project), "Species_Distribution", "교란종_식물11종"), full.names = FALSE, recursive = FALSE)

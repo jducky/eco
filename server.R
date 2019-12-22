@@ -187,14 +187,14 @@ shinyServer(function(input, output, session) {
 
   
   observeEvent(input$Reset_IS_AO_SR_Map, {
-    
+
     leafletProxy("IS_AO_SR_Map") %>%
       setView(lng = 128.00, lat = 36.00, zoom = 7)
-    
+
   })
   
   observeEvent(input$IS_AO_SR_Map_bounds, {
-    
+
     coords <- isolate(input$IS_AO_SR_Map_bounds)
     if (!is.null(coords)) {
       leafletProxy("IS_AO_SR_SIDO_Map") %>%
@@ -202,13 +202,12 @@ shinyServer(function(input, output, session) {
                   coords$south,
                   coords$east,
                   coords$north)
-      
+
     }
   })
-  
-  
+
   observeEvent(input$IS_AO_SR_SIDO_Map_bounds, {
-    
+
     coords <- isolate(input$IS_AO_SR_SIDO_Map_bounds)
     if (!is.null(coords)) {
       leafletProxy("IS_AO_SR_SGG_Map") %>%
@@ -216,7 +215,7 @@ shinyServer(function(input, output, session) {
                   coords$south,
                   coords$east,
                   coords$north)
-      
+
     }
   })
   
@@ -2410,7 +2409,7 @@ shinyServer(function(input, output, session) {
   output$SDM_OU_Species0 <- renderUI({
     volumes <- paste(G$SE_Dir_Project, "Species_Distribution", sep="/")
     SDM_Name_Species_list0 <- list.dirs(path = volumes, full.names = FALSE, recursive = FALSE)
-    SDM_Name_Species_selected0 <- SDM_Name_Species_list0[1]
+    SDM_Name_Species_selected0 <- SDM_Name_Species_list0[4]
     selectInput("SDM_OU_Species0", "Select Working Folder",
                 choices = c(SDM_Name_Species_list0),
                 selected = SDM_Name_Species_selected0
@@ -3891,9 +3890,9 @@ shinyServer(function(input, output, session) {
     G$IS_MI_Dir_Folder <<- G$IS_MO_Dir_Folder
     
     selfile2 <- paste(G$SE_Dir_Project, "Invasive_Species", input$IS_VA_Dir_Folder, sep="/")
-    G$IS_VA_Dir_Folder <<- selfile
+    G$IS_VA_Dir_Folder <<- selfile2
     G$IS_AO_Dir_Folder <<- G$IS_VA_Dir_Folder
-    
+ 
     IS_Name_Species_list <- list.dirs(path = selfile, full.names = FALSE, recursive = FALSE)
     IS_Name_Species_selected <- IS_Name_Species_list[1]
     selectInput("IS_AO_Species", "Select a species",
@@ -3928,32 +3927,6 @@ shinyServer(function(input, output, session) {
       addLegend(pal = pal, values = values(r), title = "Legend")  %>%
       setView(lng = 127.00, lat = 36.00, zoom = 7)
   })
-  
-#   output$IS_AO_SD_Map <- renderLeaflet({
-# # <<<<<<< HEAD
-#     dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$IS_AO_Species, "BIOMOD2")
-# # =======
-# #     validate(
-# #       need(input$data !="", "Please Select Data Folder...")
-# #     )
-# #     dir_path <- file.path(G$SE_Dir_Project, "Species_Distribution", input$IS_AO_Species, "BIOMOD2")
-# # >>>>>>> lx02jd2
-#     Map <- paste("PRED", "_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_Project_year, "_", input$IS_AO_Species, "_", input$IS_AO_SDM_model, ".tif", sep = "")
-#     r <- raster(file.path(dir_path, Map))
-#     crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
-#     pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r),
-#                         na.color = "transparent")
-#     
-#     leaflet() %>%
-#       addTiles(
-#         urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
-#         attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
-#       ) %>%        
-#       
-#       addRasterImage(r, colors = pal, opacity = 0.8,) %>%
-#       addLegend(pal = pal, values = values(r), title = "Legend")  %>%
-#       setView(lng = 127.00, lat = 36.00, zoom = 7)
-#   })  
   
   output$IS_AO_SD_Summary <- renderPrint({
     dir_path <- file.path(G$IS_MI_Dir_Folder, input$IS_AO_Species, "BIOMOD2")
@@ -4135,8 +4108,7 @@ shinyServer(function(input, output, session) {
               if (ly > 0) {
                 Map1 <- paste(o, "_", d, "_", c, "_", m, "_", y, ".tif", sep = "")
                 #                R_Map1 <- raster(file.path(isolate(G$IS_AO_Dir_Folder), Map1))
-                # r <- raster(file.path(isolate(G$IS_AO_Dir_Folder), Map1))
-                r <- raster(file.path(test3_Invasive_Dir, Map1))
+                r <- raster(file.path(isolate(G$IS_AO_Dir_Folder), Map1))
                 #                plot(R_Map1, main = Map1)
               }
             }
@@ -4157,13 +4129,75 @@ shinyServer(function(input, output, session) {
       ) %>%        
       
       addRasterImage(r, colors = pal, opacity = 0.8) %>%
-      addLegend(pal = pal, values = values(r), title = "Legend", position = "bottomright")  %>%
+      addLegend(pal = pal, values = values(r), title = "Legend")  %>%
       
       setView(lng = 128.00, lat = 36.00, zoom = 7)
   })
   
+  # output$IS_AO_SR_Map <- renderLeaflet({
+  #   
+  #   # setting Climate change scenarios, Future time, Species and current environmental path
+  #   #    slist <- input$IS_AO_Species
+  #   olist <- c("IS_SR")  # input$IS_AO_Output_option1
+  #   dlist <- input$IS_AO_Climate_model  # c("KMA") # c("KMA", "KEI", "WORLDCLIM")
+  #   clist <- input$IS_AO_Climate_scenario  # c("RCP4.5") # c("RCP4.5", "RCP8.5")
+  #   mlist <- input$IS_AO_SDM_model # c("PA1_Full_GLM_byROC")
+  #   ylist <- input$IS_AO_Project_year
+  #   #	dtlist <- input$SS_AO_Dispersal_type
+  #   
+  #   #    ls <- length(slist)
+  #   lo <- length(olist)
+  #   ld <- length(dlist)
+  #   lc <- length(clist)
+  #   lm <- length(mlist)
+  #   ly <- length(ylist)
+  #   
+  #   tl <- lo * ld * lc * lm * ly
+  #   nc <- 2
+  #   if (tl <  2) {
+  #     nr <- round(tl / nc) + 1
+  #   } else {
+  #     nr <- round((tl + 0.1) / nc)
+  #   }
+  #   
+  #   #    par(mfrow = c(nr,nc), cex.main = 1.2)
+  #   
+  #   for (o in olist) {
+  #     for (d in dlist) {
+  #       for (c in clist) {
+  #         for (m in mlist) {
+  #           for (y in ylist) {
+  #             if (ly > 0) {
+  #               Map1 <- paste(o, "_", d, "_", c, "_", m, "_", y, ".tif", sep = "")
+  #               #                R_Map1 <- raster(file.path(isolate(G$IS_AO_Dir_Folder), Map1))
+  #               # r <- raster(file.path(isolate(G$IS_AO_Dir_Folder), Map1))
+  #               r <- raster(file.path(test3_Invasive_Dir, Map1))
+  #               #                plot(R_Map1, main = Map1)
+  #             }
+  #           }
+  #         }
+  #       }
+  #     }
+  #   }
+  #   
+  #   crs(r) <- CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+  #   
+  #   pal <- colorNumeric(c("#0C2C84", "#FFFFCC", "#41B6C4"), values(r),
+  #                       na.color = "transparent")
+  #   
+  #   leaflet() %>%
+  #     addTiles(
+  #       urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+  #       attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+  #     ) %>%        
+  #     
+  #     addRasterImage(r, colors = pal, opacity = 0.8) %>%
+  #     addLegend(pal = pal, values = values(r), title = "Legend", position = "bottomright")  %>%
+  #     
+  #     setView(lng = 128.00, lat = 36.00, zoom = 7)
+  # })
+  
   output$IS_AO_SR_SIDO_Map <- renderLeaflet({
-    
     poly <- readOGR(file.path(isolate(G$IS_AO_Dir_Folder), paste("SD", ".shp", sep = "")))
     x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SD", ".csv", sep = "")))
     names(poly) <- c(names(x)[-1])
@@ -4209,26 +4243,138 @@ shinyServer(function(input, output, session) {
                 position = "bottomright")
   })
   
+  # output$IS_AO_SR_SIDO_Map <- renderLeaflet({
+  #   
+  #   poly <- readOGR(file.path(isolate(G$IS_AO_Dir_Folder), paste("SD", ".shp", sep = "")))
+  #   x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SD", ".csv", sep = "")))
+  #   names(poly) <- c(names(x)[-1])
+  #   X_NAME <- names(poly[5])
+  #   V_NAME <- paste("IS_SR_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_SDM_model, "_", input$IS_AO_Project_year, sep = "")
+  #   
+  #   bins <- c(0, 1, 2, 3, 4, 5, Inf)
+  #   pal <- colorBin("YlOrRd", domain = poly[[V_NAME]], bins = bins)
+  #   
+  #   labels <- sprintf(
+  #     "<strong>%s</strong><br/>%g Species", # people / mi<sup>2</sup>",
+  #     poly[[X_NAME]], poly[[V_NAME]]
+  #   ) %>% lapply(htmltools::HTML)
+  #   
+  #   leaflet(poly) %>%
+  #     setView(lng = 128.00, lat = 36.00, zoom = 7) %>%
+  #     addProviderTiles("MapBox", options = providerTileOptions(
+  #       id = "mapbox.light",
+  #       accessToken = Sys.getenv('MAPBOX_ACCESS_TOKEN'))) %>%
+  #     addTiles(
+  #       urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+  #       attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+  #     ) %>%   
+  #     addPolygons(
+  #       fillColor = ~pal(poly[[V_NAME]]),
+  #       weight = 2,
+  #       opacity = 1,
+  #       color = "grey",
+  #       dashArray = "3",
+  #       fillOpacity = 0.7,
+  #       highlight = highlightOptions(
+  #         weight = 5,
+  #         color = "#666",
+  #         dashArray = "",
+  #         fillOpacity = 0.7,
+  #         bringToFront = TRUE),
+  #       label = labels,
+  #       labelOptions = labelOptions(
+  #         style = list("font-weight" = "normal", padding = "3px 8px"),
+  #         textsize = "15px",
+  #         direction = "auto")) %>%
+  #     addLegend(pal = pal, values = ~poly[[V_NAME]], opacity = 0.7, title = NULL,
+  #               position = "bottomright")
+  # })
+  
   output$IS_AO_SR_SIDO_Stat <- renderPlot({
     
     df <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SD", ".csv", sep = "")))
     X_NAME <- names(df[6])
     V_NAME <- paste("IS_SR_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_SDM_model, "_", input$IS_AO_Project_year, sep="")
     
-    
     #		df2 <- data.frame(시도 = rep(c("서울", "경기도"), each=3),
     #							연도 = rep(c("Current", "2030", "2050"),2),
     #							외래종 = c(6.8, 15, 33, 4.2, 10, 29.5))
     #		head(df2)
     
-    ggplot(data=df, aes(x=df[[X_NAME]], y=df[[V_NAME]])) + #, fill=df[[X_NAME]])) +
+
+    # library(showtext)
+    # font_add_google('Noto Sans KR', 'notosanskr')
+    # showtext_auto()
+    
+    # library(extrafont)
+    # font_import(pattern = "Nanumgothic")
+    # font_import(pattern = "NanumGothicExtraBold")
+    # font_import() ## 모두 불러오기
+    
+    # theme_update(text=element_text(family="Nanumgothic"))
+    # theme_set(theme_get() + theme(text = element_text(family = 'Nanumgothic')))
+    # theme(text = element_text(family = 'Nanumgothic'))
+
+    # font family = "Nanumgothic" "NanumGothicExtraBold"
+    
+    ggplot(data=df, aes(x=df[[X_NAME]], y=df[[V_NAME]])) + 
+      # fill=df[[X_NAME]])) +
+      # coord_flip() +
       geom_bar(stat="identity", position=position_dodge()) +
-      geom_text(aes(label=df[[V_NAME]]), vjust=1.6, color="white",
-                position = position_dodge(0.9), size=3.5) +
-      scale_fill_brewer(palette="Paired") +
-      theme_minimal() +
-      labs(title = "시도 외래종 분포") + labs(x = "시도") + labs(y = "외래종수")
+      geom_text(aes(label=df[[V_NAME]]), family = "NanumGothicExtraBold", 
+                vjust=1.6, color="white", face="bold", position = position_dodge(0.9), size=5) +
+      # scale_fill_brewer(palette="Paired") +
+      # theme_minimal() +
+      # theme_dark() +
+      # theme(plot.subtitle=element_text(family = "NanumGothicExtraBold", face = "bold", hjust = 0.5, size = 20, color = "darkblue")) +
+      ggtitle("시도 외래종 분포") +
+      theme_gray(base_size = 15) +
+      theme(plot.title = element_text(family = "NanumGothicExtraBold",
+                                      face = "bold", hjust = 0.5, size = 20, color = "darkblue")) +
+      labs(x = "시도") +
+      labs(y = "외래종수") +
+      theme(axis.title = element_text(family = "NanumGothicExtraBold",
+                                      face = "bold", size = 15, color = "darkgrey"))
+      
+    
+    # ggplot(data=df, aes(x=df[[X_NAME]], y=df[[V_NAME]])) + #, fill=df[[X_NAME]])) +
+    #   # coord_flip() +
+    #   geom_bar(stat="identity", position=position_dodge()) +
+    #   geom_text(aes(label=df[[V_NAME]]), family = "NanumGothicExtraBold", vjust=1.6, color="white", face="bold", position = position_dodge(0.9), size=5) +
+    #   # scale_fill_brewer(palette="Paired") +
+    #   ggtitle("시도 외래종 분포") +
+    #   theme(plot.title = element_text(family = "NanumGothicExtraBold", face = "bold", hjust = 0.5, size = 20, color = "darkblue")) +
+    #   theme_minimal() +
+    #   # theme_dark() +
+    #   # theme(plot.subtitle=element_text(family = "NanumGothicExtraBold", face = "bold", hjust = 0.5, size = 20, color = "darkblue")) +
+    #   labs(x = "시도") +
+    #   labs(y = "외래종수")
+
   })
+  
+  # output$IS_AO_SR_SIDO_Stat <- renderPlot({
+  #   
+  #   df <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SD", ".csv", sep = "")))
+  #   df
+  #   df <- test3_Invasive_F("IS_SD")
+  #   X_NAME <- names(df[6])
+  #   V_NAME <- paste("IS_SR_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_SDM_model, "_", input$IS_AO_Project_year, sep="")
+  #   
+  #   
+  #   #		df2 <- data.frame(시도 = rep(c("서울", "경기도"), each=3),
+  #   #							연도 = rep(c("Current", "2030", "2050"),2),
+  #   #							외래종 = c(6.8, 15, 33, 4.2, 10, 29.5))
+  #   #		head(df2)
+  #   
+  #   ggplot(data=df, aes(x=df[[X_NAME]], y=df[[V_NAME]])) + #, fill=df[[X_NAME]])) +
+  #     geom_bar(stat="identity", position=position_dodge()) +
+  #     geom_text(aes(label=df[[V_NAME]]), vjust=1.6, color="white",
+  #               position = position_dodge(0.9), size=3.5) +
+  #     scale_fill_brewer(palette="Paired") +
+  #     theme_minimal() +
+  #     labs(title = "시도 외래종 분포") + labs(x = "시도") + labs(y = "외래종수")
+  # })
+  #	geom_text(aes(label = Vulnerability_Area_Loss_Ratio), size = 3, hjust = 0.5, vjust = 3) + 
   
   # output$IS_AO_SR_SIDO_Stat <- renderPlot({
   #   
@@ -4263,7 +4409,7 @@ shinyServer(function(input, output, session) {
   #	geom_text(aes(label = Vulnerability_Area_Loss_Ratio), size = 3, hjust = 0.5, vjust = 3) + 
   
   output$IS_AO_SR_SGG_Map <- renderLeaflet({
-    poly <- readOGR(file.path(isolate(G$SE_Dir_GIS), paste("O_SGG", ".shp", sep = "")))
+    poly <- readOGR(file.path(isolate(G$IS_AO_Dir_Folder), paste("SGG", ".shp", sep = "")))
     x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SGG", ".csv", sep = "")))
     names(poly) <- c(names(x[-1]))
     X_NAME <- names(poly[2])
@@ -4307,6 +4453,52 @@ shinyServer(function(input, output, session) {
       addLegend(pal = pal, values = ~poly[[V_NAME]], opacity = 0.7, title = NULL,
                 position = "bottomright")
   })
+  
+  # output$IS_AO_SR_SGG_Map <- renderLeaflet({
+  #   poly <- readOGR(file.path(isolate(G$SE_Dir_GIS), paste("O_SGG", ".shp", sep = "")))
+  #   x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SGG", ".csv", sep = "")))
+  #   names(poly) <- c(names(x[-1]))
+  #   X_NAME <- names(poly[2])
+  #   V_NAME <- paste("IS_SR_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_SDM_model, "_", input$IS_AO_Project_year, sep = "")
+  #   
+  #   #	  bins <- c(0, 1, 2, 3, 4, 5, Inf)
+  #   pal <- colorBin("YlOrRd", domain = poly[[V_NAME]], bins = 7)
+  #   
+  #   labels <- sprintf(
+  #     "<strong>%s</strong><br/>%g people / mi<sup>2</sup>",
+  #     poly[[X_NAME]], poly[[V_NAME]]
+  #   ) %>% lapply(htmltools::HTML)
+  #   
+  #   leaflet(poly) %>%
+  #     setView(lng = 128.00, lat = 36.00, zoom = 7) %>%
+  #     addProviderTiles("MapBox", options = providerTileOptions(
+  #       id = "mapbox.light",
+  #       accessToken = Sys.getenv('MAPBOX_ACCESS_TOKEN'))) %>%
+  #     addTiles(
+  #       urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+  #       attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+  #     ) %>%   
+  #     addPolygons(
+  #       fillColor = ~pal(poly[[V_NAME]]),
+  #       weight = 2,
+  #       opacity = 1,
+  #       color = "grey",
+  #       dashArray = "3",
+  #       fillOpacity = 0.7,
+  #       highlight = highlightOptions(
+  #         weight = 5,
+  #         color = "#666",
+  #         dashArray = "",
+  #         fillOpacity = 0.7,
+  #         bringToFront = TRUE),
+  #       label = labels,
+  #       labelOptions = labelOptions(
+  #         style = list("font-weight" = "normal", padding = "3px 8px"),
+  #         textsize = "15px",
+  #         direction = "auto")) %>%
+  #     addLegend(pal = pal, values = ~poly[[V_NAME]], opacity = 0.7, title = NULL,
+  #               position = "bottomright")
+  # })
   
   # output$IS_AO_SR_SGG_Map <- renderLeaflet({
   #   poly <- readOGR(file.path(isolate(G$SE_Dir_Admin), paste("O_SGG", ".shp", sep = "")))
@@ -4358,16 +4550,16 @@ shinyServer(function(input, output, session) {
   # })
   
   output$IS_AO_SR_SGG_Stat <- renderPlot({
-    
-    #	  df <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_", input$IS_VA_Admin, ".csv", sep = "")))
-    df <- read.dbf(file.path(isolate(G$SE_Dir_Admin), paste("O_SGG", ".dbf", sep = "")))
+    #	df <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_", input$IS_VA_Admin, ".csv", sep = "")))
+    df <- read.dbf(file.path(isolate(G$SE_Dir_GIS), paste("O_SGG", ".dbf", sep = "")))
+    # df <- dbf.read(file.path(isolate(G$SE_Dir_GIS), paste("O_SGG", ".dbf", sep = "")))
+    # df <- read.dbf("C:/MOTIVE_Ecosystem/DATA/GIS_new/SGG.dbf")
+    # df <- read.dbf("C:/MOTIVE_Ecosystem/DATA/GIS/O_SGG.dbf")
     df[df[, 2] == "gun",]
-    # x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SGG", ".csv", sep = "")))
-    x <- test3_Invasive_F("IS_SGG")
+    x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SGG", ".csv", sep = "")))
     names(df) <- c(names(x[-1]))
     X_NAME <- names(df[2])
     V_NAME <- paste("IS_SR_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_SDM_model, "_", input$IS_AO_Project_year, sep="")
-    
     
     #		df2 <- data.frame(시도 = rep(c("서울", "경기도"), each=3),
     #							연도 = rep(c("Current", "2030", "2050"),2),
@@ -4379,9 +4571,34 @@ shinyServer(function(input, output, session) {
       geom_text(aes(label=df[[V_NAME]]), vjust=1.6, color="white",
                 position = position_dodge(0.9), size=3.5) +
       scale_fill_brewer(palette="Paired") +
-      theme_minimal() +
-      coord_flip()
+      theme_minimal()
   })
+  
+  # output$IS_AO_SR_SGG_Stat <- renderPlot({
+  #   
+  #   #	  df <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_", input$IS_VA_Admin, ".csv", sep = "")))
+  #   df <- read.dbf(file.path(isolate(G$SE_Dir_Admin), paste("O_SGG", ".dbf", sep = "")))
+  #   df[df[, 2] == "gun",]
+  #   # x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SGG", ".csv", sep = "")))
+  #   x <- test3_Invasive_F("IS_SGG")
+  #   names(df) <- c(names(x[-1]))
+  #   X_NAME <- names(df[2])
+  #   V_NAME <- paste("IS_SR_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_SDM_model, "_", input$IS_AO_Project_year, sep="")
+  #   
+  #   
+  #   #		df2 <- data.frame(시도 = rep(c("서울", "경기도"), each=3),
+  #   #							연도 = rep(c("Current", "2030", "2050"),2),
+  #   #							외래종 = c(6.8, 15, 33, 4.2, 10, 29.5))
+  #   #		head(df2)
+  #   
+  #   ggplot(data=df, aes(x=df[[X_NAME]], y=df[[V_NAME]])) + #, fill=df[[X_NAME]])) +
+  #     geom_bar(stat="identity", position=position_dodge()) +
+  #     geom_text(aes(label=df[[V_NAME]]), vjust=1.6, color="white",
+  #               position = position_dodge(0.9), size=3.5) +
+  #     scale_fill_brewer(palette="Paired") +
+  #     theme_minimal() +
+  #     coord_flip()
+  # })
   
   output$IS_AO_SI_Map <- renderLeaflet({
     
@@ -4445,13 +4662,11 @@ shinyServer(function(input, output, session) {
       setView(lng = 128.00, lat = 36.00, zoom = 7)
   })
   
-  
   output$IS_AO_SI_SIDO_Map <- renderLeaflet({
     
-    poly <- readOGR(file.path(isolate(G$SE_Dir_Admin), paste("O_SD", ".shp", sep = "")))
-    # x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SD", ".csv", sep = "")))
-    x <- test3_Invasive_F("IS_SD")
-    names(poly) <- c(names(x))
+    poly <- readOGR(file.path(isolate(G$IS_AO_Dir_Folder), paste("SD", ".shp", sep = "")))
+    x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SD", ".csv", sep = "")))
+    names(poly) <- c(names(x)[-1])
     X_NAME <- names(poly[5])
     V_NAME <- paste("IS_GAIN_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_SDM_model, "_", input$IS_AO_Project_year, sep = "")
     
@@ -4459,7 +4674,7 @@ shinyServer(function(input, output, session) {
     pal <- colorBin("YlOrRd", domain = poly[[V_NAME]], bins = bins)
     
     labels <- sprintf(
-      "<strong>%s</strong><br/>%g people / mi<sup>2</sup>",
+      "<strong>%s</strong><br/>%g Species", #people / mi<sup>2</sup>",
       poly[[X_NAME]], poly[[V_NAME]]
     ) %>% lapply(htmltools::HTML)
     
@@ -4493,6 +4708,54 @@ shinyServer(function(input, output, session) {
       addLegend(pal = pal, values = ~poly[[V_NAME]], opacity = 0.7, title = NULL,
                 position = "bottomright")
   })
+  
+  # output$IS_AO_Si_SIDO_Map <- renderLeaflet({
+  #   
+  #   poly <- readOGR(file.path(isolate(G$SE_Dir_Admin), paste("O_SD", ".shp", sep = "")))
+  #   # x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SD", ".csv", sep = "")))
+  #   x <- test3_Invasive_F("IS_SD")
+  #   names(poly) <- c(names(x))
+  #   X_NAME <- names(poly[5])
+  #   V_NAME <- paste("IS_GAIN_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_SDM_model, "_", input$IS_AO_Project_year, sep = "")
+  #   
+  #   bins <- c(0, 1, 2, 3, 4, 5, Inf)
+  #   pal <- colorBin("YlOrRd", domain = poly[[V_NAME]], bins = bins)
+  #   
+  #   labels <- sprintf(
+  #     "<strong>%s</strong><br/>%g people / mi<sup>2</sup>",
+  #     poly[[X_NAME]], poly[[V_NAME]]
+  #   ) %>% lapply(htmltools::HTML)
+  #   
+  #   leaflet(poly) %>%
+  #     setView(lng = 128.00, lat = 36.00, zoom = 7) %>%
+  #     addProviderTiles("MapBox", options = providerTileOptions(
+  #       id = "mapbox.light",
+  #       accessToken = Sys.getenv('MAPBOX_ACCESS_TOKEN'))) %>%
+  #     addTiles(
+  #       urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+  #       attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+  #     ) %>%   
+  #     addPolygons(
+  #       fillColor = ~pal(poly[[V_NAME]]),
+  #       weight = 2,
+  #       opacity = 1,
+  #       color = "grey",
+  #       dashArray = "3",
+  #       fillOpacity = 0.7,
+  #       highlight = highlightOptions(
+  #         weight = 5,
+  #         color = "#666",
+  #         dashArray = "",
+  #         fillOpacity = 0.7,
+  #         bringToFront = TRUE),
+  #       label = labels,
+  #       labelOptions = labelOptions(
+  #         style = list("font-weight" = "normal", padding = "3px 8px"),
+  #         textsize = "15px",
+  #         direction = "auto")) %>%
+  #     addLegend(pal = pal, values = ~poly[[V_NAME]], opacity = 0.7, title = NULL,
+  #               position = "bottomright")
+  # })
   
   output$IS_AO_SI_SIDO_Stat <- renderPlot({
     
@@ -4589,14 +4852,24 @@ shinyServer(function(input, output, session) {
   })
   
   output$VH_CA_Species <- renderUI({
-    input$reset_VH_CA
-    VH_Name_Species_lVHt <- test1_WD_List_Dirs
+    VH_Name_Species_lVHt <- list.dirs(path = file.path(G$SE_Dir_Project, "Species_Distribution"), full.names = FALSE, recursive = FALSE)
     VH_Name_Species_selected <- VH_Name_Species_lVHt[1]
     checkboxGroupInput("VH_CA_Species", "Select a species",
                        choices = c(VH_Name_Species_lVHt),
                        selected = VH_Name_Species_selected
     )
   })
+  
+  # HS
+  # output$VH_CA_Species <- renderUI({
+  #   input$reset_VH_CA
+  #   VH_Name_Species_lVHt <- test1_WD_List_Dirs
+  #   VH_Name_Species_selected <- VH_Name_Species_lVHt[1]
+  #   checkboxGroupInput("VH_CA_Species", "Select a species",
+  #                      choices = c(VH_Name_Species_lVHt),
+  #                      selected = VH_Name_Species_selected
+  #   )
+  # })
   
   output$VH_CA_SDM_model <- renderUI({
     destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$VH_CA_Species, "BIOMOD2", paste(as.name(paste(input$VH_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
@@ -4610,15 +4883,39 @@ shinyServer(function(input, output, session) {
     )
   })
   
+  output$VH_AO_Species0 <- renderUI({
+    # volumes <- paste(G$SE_Dir_Project, "Vulnerable_Species", sep="/")
+    volumes <- paste(G$SE_Dir_Project, "Species_Distribution", sep="/")
+    VH_Name_Species_lVHt0 <- list.dirs(path = volumes, full.names = FALSE, recursive = FALSE)
+    VH_Name_Species_selected0 <- VH_Name_Species_lVHt0[1]
+    selectInput("VH_AO_Species0", "Select Working Folder",
+                choices = c(VH_Name_Species_lVHt0),
+                selected = VH_Name_Species_selected0
+    )
+  })
+  
   output$VH_AO_Species <- renderUI({
-    input$reset_VH_AO
-    VH_Name_Species_lVHt <- test1_WD_List_Dirs
-    VH_Name_Species_selected <- VH_Name_Species_lVHt[1]
+    # selfile <- paste(G$SE_Dir_Project, "Vulnerable_Species", input$VH_AO_Species0, sep="/")
+    selfile <- paste(G$SE_Dir_Project, "Species_Distribution", input$VH_AO_Species0, sep="/")
+    G$VH_AO_Dir_Folder <<- selfile
+    VH_Name_Species_list <- list.dirs(path = selfile, full.names = FALSE, recursive = FALSE)
+    VH_Name_Species_selected <- VH_Name_Species_list[1]
     checkboxGroupInput("VH_AO_Species", "Select a species",
                        choices = c(VH_Name_Species_lVHt),
                        selected = VH_Name_Species_selected
     )
   })
+  
+  # HS
+  # output$VH_AO_Species <- renderUI({
+  #   input$reset_VH_AO
+  #   VH_Name_Species_lVHt <- test1_WD_List_Dirs
+  #   VH_Name_Species_selected <- VH_Name_Species_lVHt[1]
+  #   checkboxGroupInput("VH_AO_Species", "Select a species",
+  #                      choices = c(VH_Name_Species_lVHt),
+  #                      selected = VH_Name_Species_selected
+  #   )
+  # })
   
   observeEvent(input$VH_AO_Dir_Folder, {
     volumes <- c(main = isolate(G$SE_Dir_Project))
@@ -4628,21 +4925,31 @@ shinyServer(function(input, output, session) {
   })
   
   output$VH_AO_SDM_model <- renderUI({
-    input$reset_VH_AO
-    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$VH_AO_Species, "BIOMOD2", paste(as.name(paste(input$VH_AO_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+    destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", input$VH_CA_Species[1], "BIOMOD2", paste(as.name(paste(input$VH_CA_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
     all_eval <- read.csv(destfile)
     G_FILE_species_evaluation <<- all_eval
-    VH_Name_Models_lVHt <- as.character(G_FILE_species_evaluation$Prediction)
-    VH_Name_Models_selected <- VH_Name_Models_lVHt[1]
+    VH_Name_Models_list <- as.character(G_FILE_species_evaluation$Prediction)
+    VH_Name_Models_selected <- VH_Name_Models_list[1]
     radioButtons("VH_AO_SDM_model", "Select models",
-                 choices = c(VH_Name_Models_lVHt),
+                 choices = c(VH_Name_Models_list),
                  selected = VH_Name_Models_selected
     )
   })
   
-  
-  
-  
+  # HS
+  # output$VH_AO_SDM_model <- renderUI({
+  #   input$reset_VH_AO
+  #   destfile <- file.path(G$SE_Dir_Project, "Species_Distribution", "test1", input$VH_AO_Species, "BIOMOD2", paste(as.name(paste(input$VH_AO_Species, "_ALL_eval.csv", sep = "")), sep = "", collapse = "--"))
+  #   all_eval <- read.csv(destfile)
+  #   G_FILE_species_evaluation <<- all_eval
+  #   VH_Name_Models_lVHt <- as.character(G_FILE_species_evaluation$Prediction)
+  #   VH_Name_Models_selected <- VH_Name_Models_lVHt[1]
+  #   radioButtons("VH_AO_SDM_model", "Select models",
+  #                choices = c(VH_Name_Models_lVHt),
+  #                selected = VH_Name_Models_selected
+  #   )
+  # })
+
   output$VH_OU_SR_Habitat_Stat <- renderPlot({
     df2 <- data.frame(서식지 = rep(c("백두대간", "지리산국립공원"), each=3),
                          연도 = rep(c("Current", "2030", "2050"),2),
