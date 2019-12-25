@@ -1764,9 +1764,6 @@ shinyServer(function(input, output, session) {
     })
   })
   
-  
-  
-  
   output$radio_Table <- renderText({
     
       radioTable(tbl = head(Temp_G_FILE_speciesinfo_02[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]),
@@ -1786,19 +1783,12 @@ shinyServer(function(input, output, session) {
   
   output$choice_radio_Table <- renderText(input$chooseSpecies)
   
-  
-  
   output$SP_Info <- DT::renderDataTable({
     Temp_G_FILE_speciesinfo_02[, c("ID", "INSTITUTE", "TYPE", "K_NAME", "n"), drop = F]
   }, server = TRUE)
   
-
-  
   output$MR_Info <- renderText({
-    
     # G_FILE_modelresult[, 	c('project',	'species',	'work',	'remark'), drop = F]
-    
-    
     radioTable( 
                tbl = G_FILE_modelresult[, 	c('PROJECT', 'CREATOR', 'WORK',	'REMARK'), drop = F],
                inputId = "ModelIndex",
@@ -1815,9 +1805,6 @@ shinyServer(function(input, output, session) {
                #   sprinkle_colnames('rownames(head(Temp_G_FILE_speciesinfo_02[,, drop = F]))' = "",
                #                     control = "")
     )
-    
-    
-    
   })
   
   output$MR_Result <- renderPlot({
@@ -3308,28 +3295,20 @@ shinyServer(function(input, output, session) {
                   Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
                   R_Map1 <- raster(file.path(dir_path, Map1))
                   plot(R_Map1, main = Map1, family="Nanumgothic")
-                  # plot(R_Map1, main = Map1, family=G$fontFamily)
-                  # plot(R_Map1, main = Map1)
                 } else if (ly > 1 && ylist[1] == "2000") {
                   Map1 <- paste("PRED", "_", d, "_", c, "_", ylist[1], "_", s, "_", m, ".tif", sep = "")
                   R_Map1 <- raster(file.path(dir_path, Map1))
                   plot(R_Map1, main = Map1, family="Nanumgothic")
-                  # plot(R_Map1, main = Map1, family=G$fontFamily)
-                  # plot(R_Map1, main = Map1)
                   for (y in 2:ly) {
                     Map2 <- paste("GAP_", "PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
                     R_Map2 <- raster(file.path(dir_path, Map2))
                     plot(R_Map2, main = Map2, family="Nanumgothic")
-                    # plot(R_Map2, main = Map2, family=G$fontFamily)
-                    # plot(R_Map2, main = Map2)
                   }
                 } else {
                   for (y in 1:ly) {
                     Map2 <- paste("GAP_", "PRED", "_", d, "_", c, "_", ylist[y], "_", s, "_", m, ".tif", sep = "")
                     R_Map2 <- raster(file.path(dir_path, Map2))
                     plot(R_Map2, main = Map2, family="Nanumgothic")
-                    # plot(R_Map2, main = Map2, family=G$fontFamily)
-                    # plot(R_Map2, main = Map2)
                   }
                 }
               }
@@ -4293,9 +4272,11 @@ shinyServer(function(input, output, session) {
   output$IS_AO_SR_SIDO_Stat <- renderPlot({
     
     df <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SD", ".csv", sep = "")))
-    X_NAME <- names(df[6])
+    X_NAME <- names(df[5])
     V_NAME <- paste("IS_SR_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_SDM_model, "_", input$IS_AO_Project_year, sep="")
-    
+    # x$name <- factor(x$name, levels = x$name[order(x$val)])
+    # df$X_NAME <- factor(df$X_NAME, levels = df$name[order(df$V_NAME)])
+
     #		df2 <- data.frame(시도 = rep(c("서울", "경기도"), each=3),
     #							연도 = rep(c("Current", "2030", "2050"),2),
     #							외래종 = c(6.8, 15, 33, 4.2, 10, 29.5))
@@ -4317,39 +4298,32 @@ shinyServer(function(input, output, session) {
 
     # font family = "Nanumgothic" "NanumGothicExtraBold"
     
+    # mutate(X_NAME = fct_reorder(X_NAME, V_NAME)) +
     ggplot(data=df, aes(x=df[[X_NAME]], y=df[[V_NAME]])) + 
+    # ggplot(data=df, aes(x=df[[X_NAME]], y=df[[V_NAME]])) + 
       # fill=df[[X_NAME]])) +
       # coord_flip() +
       geom_bar(stat="identity", position=position_dodge()) +
-      geom_text(aes(label=df[[V_NAME]]), family = "NanumGothicExtraBold", 
+      geom_bar(stat="identity", width=0.6) +
+      # geom_tile() +
+      geom_text(aes(label=df[[V_NAME]]), # family = "NanumGothicExtraBold", 
                 vjust=1.6, color="white", face="bold", position = position_dodge(0.9), size=5) +
-      # scale_fill_brewer(palette="Paired") +
-      # theme_minimal() +
-      # theme_dark() +
-      # theme(plot.subtitle=element_text(family = "NanumGothicExtraBold", face = "bold", hjust = 0.5, size = 20, color = "darkblue")) +
+      scale_fill_brewer(palette="Paired") +
       ggtitle("시도 외래종 분포") +
-      theme_gray(base_size = 15) +
-      theme(plot.title = element_text(family = "NanumGothicExtraBold",
-                                      face = "bold", hjust = 0.5, size = 20, color = "darkblue")) +
       labs(x = "시도") +
       labs(y = "외래종수") +
+      # theme_gray(base_size = 15) +
+      # theme_minimal() +
+      # theme_dark() +
+      # theme_void(base_size = 15) +
+      theme(plot.title = element_text(family = "NanumGothicExtraBold",
+                                      face = "bold", hjust = 0.5, size = 20)) +
+      # theme(plot.subtitle=element_text(family = "NanumGothicExtraBold", face = "bold", hjust = 0.5, size = 20, color = "darkblue")) +
       theme(axis.title = element_text(family = "NanumGothicExtraBold",
-                                      face = "bold", size = 15, color = "darkgrey"))
-      
-    
-    # ggplot(data=df, aes(x=df[[X_NAME]], y=df[[V_NAME]])) + #, fill=df[[X_NAME]])) +
-    #   # coord_flip() +
-    #   geom_bar(stat="identity", position=position_dodge()) +
-    #   geom_text(aes(label=df[[V_NAME]]), family = "NanumGothicExtraBold", vjust=1.6, color="white", face="bold", position = position_dodge(0.9), size=5) +
-    #   # scale_fill_brewer(palette="Paired") +
-    #   ggtitle("시도 외래종 분포") +
-    #   theme(plot.title = element_text(family = "NanumGothicExtraBold", face = "bold", hjust = 0.5, size = 20, color = "darkblue")) +
-    #   theme_minimal() +
-    #   # theme_dark() +
-    #   # theme(plot.subtitle=element_text(family = "NanumGothicExtraBold", face = "bold", hjust = 0.5, size = 20, color = "darkblue")) +
-    #   labs(x = "시도") +
-    #   labs(y = "외래종수")
-
+                                      face = "bold", size = 15, color = "darkblue")) +
+      theme(axis.text.x = element_text(family = "Nanumgothic",
+                                       face = "bold", size = 13, color = "darkgrey")) +
+      theme(axis.text.y = element_text(family = "Nanumgothic", size = 13))
   })
   
   # output$IS_AO_SR_SIDO_Stat <- renderPlot({
@@ -4549,29 +4523,48 @@ shinyServer(function(input, output, session) {
   #               position = "bottomright")
   # })
   
+  output$IS_AO_SR_SGG_UI <- renderUI({
+    df <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SGG", ".csv", sep = "")))
+    IS_Name_SD_list <- c("강원도", "경기도", "경상남도", "경상북도", "광주시",  "대구시",  "대전시",  "부산시",  "서울시",  "세종시",  "울산시",  "인천시",  "전라남도", "전라북도", "제주도",  "충청남도", "충청북도") # unique(df$SD_KOR)
+    IS_Name_SD_selected <- IS_Name_SD_list[1]
+    
+    selectInput("IS_AO_SR_SGG_UI", "시도",
+                choices = c(IS_Name_SD_list),
+                selected = IS_Name_SD_selected
+    )
+  })
+  
   output$IS_AO_SR_SGG_Stat <- renderPlot({
-    #	df <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_", input$IS_VA_Admin, ".csv", sep = "")))
-    df <- read.dbf(file.path(isolate(G$SE_Dir_GIS), paste("O_SGG", ".dbf", sep = "")))
-    # df <- dbf.read(file.path(isolate(G$SE_Dir_GIS), paste("O_SGG", ".dbf", sep = "")))
     # df <- read.dbf("C:/MOTIVE_Ecosystem/DATA/GIS_new/SGG.dbf")
     # df <- read.dbf("C:/MOTIVE_Ecosystem/DATA/GIS/O_SGG.dbf")
-    df[df[, 2] == "gun",]
-    x <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SGG", ".csv", sep = "")))
-    names(df) <- c(names(x[-1]))
-    X_NAME <- names(df[2])
+    #	  df <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_", input$IS_VA_Admin, ".csv", sep = "")))
+    #	  df <- read.dbf(file.path(isolate(G$SE_Dir_GIS), paste("O_SGG", ".dbf", sep = "")))
+    #	  df[df[, 2] == "gun",]
+    angleX <- 20
+    print(input$IS_AO_SR_SGG_UI)
+    # if (input$IS_AO_SR_SGG_UI == "경기도" | input$IS_AO_SR_SGG_UI == "경상남도") angleX <- 60
+    if (input$IS_AO_SR_SGG_UI == "경기도") angleX <- 40
+    df <- read.csv(file.path(isolate(G$IS_AO_Dir_Folder), paste("IS_SGG", ".csv", sep = "")))
+    df <- df[which(df$SD_KOR==input$IS_AO_SR_SGG_UI), ]
+    #	  names(df) <- c(names(x[-1]))
+    X_NAME <- names(df[8])
     V_NAME <- paste("IS_SR_", input$IS_AO_Climate_model, "_", input$IS_AO_Climate_scenario, "_", input$IS_AO_SDM_model, "_", input$IS_AO_Project_year, sep="")
-    
-    #		df2 <- data.frame(시도 = rep(c("서울", "경기도"), each=3),
-    #							연도 = rep(c("Current", "2030", "2050"),2),
-    #							외래종 = c(6.8, 15, 33, 4.2, 10, 29.5))
-    #		head(df2)
     
     ggplot(data=df, aes(x=df[[X_NAME]], y=df[[V_NAME]])) + #, fill=df[[X_NAME]])) +
       geom_bar(stat="identity", position=position_dodge()) +
       geom_text(aes(label=df[[V_NAME]]), vjust=1.6, color="white",
-                position = position_dodge(0.9), size=3.5) +
+                position = position_dodge(0.9), size=5) +
       scale_fill_brewer(palette="Paired") +
-      theme_minimal()
+      # theme_minimal() +
+      labs(title = "시군구 외래종 분포") + labs(x = "시군구") + labs(y = "외래종수") +
+      theme(plot.title = element_text(family = "NanumGothicExtraBold",
+                                      face = "bold", hjust = 0.5, size = 20)) +
+      # theme(plot.subtitle=element_text(family = "NanumGothicExtraBold", face = "bold", hjust = 0.5, size = 20, color = "darkblue")) +
+      theme(axis.title = element_text(family = "NanumGothicExtraBold", face = "bold",
+                                      size = 15, color = "darkblue")) +
+      theme(axis.text.x = element_text(family = "Nanumgothic",
+                                       angle = angleX, face = "bold", size = 13, color = "darkgrey")) +
+      theme(axis.text.y = element_text(family = "Nanumgothic", size = 13))
   })
   
   # output$IS_AO_SR_SGG_Stat <- renderPlot({

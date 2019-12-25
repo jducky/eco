@@ -27,6 +27,7 @@ library(datasets)
 library(psych)
 library(foreign)
 require(foreign)
+library(forcats)
 
 # library('showtext')
 # font_add_google('Noto Sans KR', 'notosanskr')

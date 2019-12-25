@@ -4,48 +4,7 @@ library(shinythemes)
 shinyUI(
   dashboardPage(
     skin = "green",
-    # <<<<<<< HEAD
-    # dashboardHeader(title = tags$a(href='http://mycompanyishere.com',
-    #                                tags$img(src='logo3.png')),  tags$li(class = "dropdown",
-    #                                                                     tags$style(".main-header {max-height: 65px;}"),
-    #                                                                     tags$style(".main-header .logo {height: 65px}") ),
-    #                 dropdownMenu(
-    #                   # type = "notifications",
-    #                   icon = icon("question-circle"),
-    #                   # tags$li(src='logo3.png'),
-    #                   badgeStatus = NULL,
-    #                   # headerText = "See also:",
-    #
-    #                   notificationItem("shiny", icon = icon("file"),
-    #                                    href = "http://shiny.rstudio.com/"),
-    #                   notificationItem("shinydashboard", icon = icon("file"),
-    #                                    href = "https://rstudio.github.io/shinydashboard/")
-    #                 )
-    #                 ),
-    # dashboardSidebar(
-    #
-    #   # sidebarUserPanel("User Name",
-    #   #                  subtitle = a(href = "#", icon("circle", class = "text-success"), "Online"),
-    #   #                  # Image file should be in www/ subdir
-    #   #                  image = "userimage.png"
-    #   # ),
-    #   # sidebarSearchForm(label = "Enter a number", "searchText", "searchButton"),
-    #
-    #
-    #   # sidebarMenu(
-    #   #   # Setting id makes input$tabs give the tabName of currently-selected tab
-    #   #   id = "tabs",
-    #   #   menuItem("모형개요", tabName = "dashboard", icon = icon("dashboard")),
-    #   #   menuItem("Widgets", icon = icon("th"), tabName = "widgets", badgeLabel = "new",
-    #   #            badgeColor = "green"),
-    #   #   menuItem("Charts", icon = icon("bar-chart-o"),
-    #   #            menuSubItem("Sub-item 1", tabName = "subitem1"),
-    #   #            menuSubItem("Sub-item 2", tabName = "subitem2")
-    #   #   )
-    #   # )
-    #
-    # ),
-    # =======
+
     dashboardHeader(
       title = "MOTIVE Ecosystem",
       disable = F,
@@ -121,7 +80,6 @@ shinyUI(
       )
     ),
 
-    # >>>>>>> lx02jd2
     dashboardBody(
       tags$head(
         tags$style(
@@ -240,16 +198,10 @@ shinyUI(
                 .icon02 {
                   color: blue;
                 }
-                
-         
-
-                
-                
              "))),
 
 
           shinyjs::useShinyjs(),
-
 
           tags$script(HTML(
             'document.querySelector("body").classList.add("sidebar-collapse");'
@@ -263,8 +215,6 @@ shinyUI(
           #           "위"
           #   )
           # ),
-
-
 
           fluidPage(div(
             h4(System_Name, style = "display: inline-block; color: white; font-size: 200%; margin-left: 20px; position: absolute; line-height: 8vh;"),
@@ -327,10 +277,6 @@ shinyUI(
                   4,
                   plotOutput("MR_Result")
                 )
-                # br(),br(),br(),br(),
-                # sidebarPanel(width = 4, Fluid = TRUE,
-                #              plotOutput("MR_Result")
-                # )
               ),
               fluidRow(
                 box(
@@ -508,8 +454,6 @@ shinyUI(
                 )
               )
             ),
-
-
 
             tabPanel(LD_Name,
               fluid = TRUE, icon = icon("folder-open"),
@@ -806,7 +750,6 @@ shinyUI(
               )
             ),
 
-
             tabPanel(SS_Name,
               icon = icon("table"),
               tags$hr(),
@@ -981,105 +924,7 @@ shinyUI(
                     )
                   )
                 ),
-
-                # Main panel for displaying outputs ---- SEO
-                # mainPanel(
-                #   tabsetPanel(
-                #     tabPanel(IS_Name_Out_Species, 
-                #              tags$head(
-                #                # Include our custom CSS
-                #                includeCSS("styles.css"),
-                #                includeScript("gomap.js")
-                #              ),
-                #              tags$hr(),
-                #              column(6, leafletOutput("IS_AO_SD_Map", width = "800", height = "650")),
-                #              tags$hr(),
-                #              column(10, verbatimTextOutput("IS_AO_SD_Summary")),
-                #              column(10, plotOutput("IS_AO_SD_Histogram"))
-                #     ),
-                #     tabPanel(IS_Name_Out_SR,
-                #              tabsetPanel(
-                #                tabPanel(IS_Name_Out_Map,
-                #                         tags$head(
-                #                           # Include our custom CSS
-                #                           includeCSS("styles.css"),
-                #                           includeScript("gomap.js")
-                #                         ),
-                #                         leafletOutput("IS_AO_SR_Map", width = "800", height = "600")),
-                #                tabPanel(IS_Name_Out_SIDO,
-                #                         tabsetPanel(
-                #                           tabPanel(IS_Name_Out_Map, 
-                #                                    tags$head(
-                #                                      # Include our custom CSS
-                #                                      includeCSS("styles.css"),
-                #                                      includeScript("gomap.js")
-                #                                    ),
-                #                                    leafletOutput("IS_AO_SR_SIDO_Map", width = "800", height = "600")
-                #                           ),
-                #                           tabPanel(IS_Name_Out_Stat, 
-                #                                    plotOutput("IS_AO_SR_SIDO_Stat")
-                #                           )
-                #                         )
-                #                ),
-                #                tabPanel(IS_Name_Out_SGG,
-                #                         tabsetPanel(
-                #                           tabPanel(IS_Name_Out_Map, 
-                #                                    tags$head(
-                #                                      # Include our custom CSS
-                #                                      includeCSS("styles.css"),
-                #                                      includeScript("gomap.js")
-                #                                    ),
-                #                                    leafletOutput("IS_AO_SR_SGG_Map", width = "800", height = "600")),
-                #                           tabPanel(IS_Name_Out_Stat, 
-                #                                    plotOutput("IS_AO_SR_SGG_Stat")
-                #                           )
-                #                         )
-                #                )
-                #              )
-                #     ),
-                #     tabPanel(IS_Name_Out_SI,
-                #              tabsetPanel(
-                #                tabPanel(IS_Name_Out_Map,
-                #                         tags$head(
-                #                           # Include our custom CSS
-                #                           includeCSS("styles.css"),
-                #                           includeScript("gomap.js")
-                #                         ),
-                #                         leafletOutput("IS_AO_SI_Map", width = "800", height = "600")),
-                #                tabPanel(IS_Name_Out_SIDO,
-                #                         tabsetPanel(
-                #                           tabPanel(IS_Name_Out_Map, 
-                #                                    tags$head(
-                #                                      # Include our custom CSS
-                #                                      includeCSS("styles.css"),
-                #                                      includeScript("gomap.js")
-                #                                    ),
-                #                                    leafletOutput("IS_AO_Si_SIDO_Map", width = "800", height = "600")
-                #                           ),
-                #                           tabPanel(IS_Name_Out_Stat, 
-                #                                    plotOutput("IS_AO_SI_SIDO_Stat")
-                #                           )
-                #                         )
-                #                ),
-                #                tabPanel(IS_Name_Out_SGG,
-                #                         tabsetPanel(
-                #                           tabPanel(IS_Name_Out_Map, 
-                #                                    tags$head(
-                #                                      # Include our custom CSS
-                #                                      includeCSS("styles.css"),
-                #                                      includeScript("gomap.js")
-                #                                    ),
-                #                                    leafletOutput("IS_AO_Si_SGG_Map", width = "800", height = "600")),
-                #                           tabPanel(IS_Name_Out_Stat, 
-                #                                    plotOutput("IS_AO_SI_SGG_Stat")
-                #                           )
-                #                         )
-                #                )
-                #              )
-                #     )
-                #   )
-                # )
-                
+ 
                 # Main panel for displaying outputs ----
                 mainPanel(
                   fluidRow(
@@ -1111,7 +956,6 @@ shinyUI(
                     tabPanel(
                       IS_Name_Out_SR,
                       tags$br(), 
-                      # tags$br(),
 
                       # fluidRow(
                       #   valueBoxOutput("IS_Value_CM"),
@@ -1119,32 +963,26 @@ shinyUI(
                       #   valueBoxOutput("IS_Value_YR")
                       # ),
                       
-                      fluidRow(
-                        column(4,
-                          class = "text-center",
-                          h4("< 외래종 풍부도 >"),
-                          leafletOutput("IS_AO_SR_Map", width = "360", height = "600") %>% withSpinner(),
-                          tags$br(),
-                          actionButton("Reset_IS_AO_SR_Map", label = "Reset")
-                        ),
-                        column(4,
-                          class = "text-center",
-                          h4("< 시도 지도 >"),
-                          leafletOutput("IS_AO_SR_SIDO_Map", width = "360", height = "600") %>% withSpinner(),
-                          tags$br(),
-                          # plotOutput("IS_AO_SR_SIDO_Stat")
-                        ),
-                        column(4,
-                          class = "text-center",
-                          h4("< 시군구 지도 >"),
-                          leafletOutput("IS_AO_SR_SGG_Map", width = "360", height = "600") %>% withSpinner()
-                        )
-                        # column(4, class = "text-center",
-                        #        h4("< 시군구 통계 >"),
-                               # leafletOutput("IS_AO_SR_SGG_Map", width = "360", height = "600") %>% withSpinner()
-                        # plotOutput("IS_AO_SR_SGG_Stat")
-                        # )
-                      ),
+                      # fluidRow(
+                      #   column(4,
+                      #     class = "text-center",
+                      #     h4("< 외래종 풍부도 >"),
+                      #     leafletOutput("IS_AO_SR_Map", width = "360", height = "600") %>% withSpinner(),
+                      #     tags$br(),
+                      #     actionButton("Reset_IS_AO_SR_Map", label = "Reset")
+                      #   ),
+                      #   column(4,
+                      #     class = "text-center",
+                      #     h4("< 시도 지도 >"),
+                      #     leafletOutput("IS_AO_SR_SIDO_Map", width = "360", height = "600") %>% withSpinner(),
+                      #     tags$br(),
+                      #   ),
+                      #   column(4,
+                      #     class = "text-center",
+                      #     h4("< 시군구 지도 >"),
+                      #     leafletOutput("IS_AO_SR_SGG_Map", width = "360", height = "600") %>% withSpinner()
+                      #   )
+                      # ),
 
                       fluidRow(
                         tags$hr(),
@@ -1152,6 +990,8 @@ shinyUI(
                       ),
                       
                       fluidRow(
+                        tags$hr(),
+                        uiOutput("IS_AO_SR_SGG_UI"),
                         plotOutput("IS_AO_SR_SGG_Stat")
                       )
                     ),
