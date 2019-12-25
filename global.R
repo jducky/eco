@@ -44,7 +44,8 @@ rm(list = ls())
 
 ##### Path
 G <- reactiveValues()
-G$SE_Dir_Project <- "C:/MOTIVE_projects/project20191120"
+G$SE_Dir_Project <- "C:/MOTIVE_projects/report_Final"
+# G$SE_Dir_Project <- "C:/MOTIVE_projects/project20191120"
 G$SE_Dir_Climate <- "C:/MOTIVE_Ecosystem/DATA/Climate2"
 G$SE_Dir_Link <- "C:/MOTIVE_Ecosystem/DATA/Link" 
 G$SE_Dir_Species <- "C:/MOTIVE_Ecosystem/DATA/Species"
